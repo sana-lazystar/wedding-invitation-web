@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보(레이스 타원 카드, 디자인 논의 T50) · Scene3 인사 예시(쪽지 + 회색 원 자리표시, T51) · 4쪽 자리표시 · 떠 있는 메뉴를 옮긴 것입니다.
+// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보(레이스 타원 카드, 디자인 논의 T50) · Scene3 인사(쪽지 + 수달·토끼 캐릭터, T51~T52) · 4쪽 자리표시 · 떠 있는 메뉴를 옮긴 것입니다.
 // 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
 // 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T49). 편지지는 커버 자체이고, 봉투 안에서 봉투 폭의 92%로 있다가 봉투가 내려가는 것과 동시에 올라오고, 이어서 화면 전체로 커집니다. 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -198,12 +198,12 @@ export default function Home() {
         <section id="greeting" className="block greeting">
           <div className="note note--right">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <div className="note__who" aria-hidden="true" />
+            <img className="note__who" src="/character/otter-basic.png" alt="" />
             <p className="note__text">안녕하세요. 10월의 신랑, 이산하</p>
           </div>
           <div className="note note--left">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <div className="note__who" aria-hidden="true" />
+            <img className="note__who" src="/character/rabbit-basic.png" alt="" />
             <p className="note__text">
               신부 송시야입니다!
               <br />
