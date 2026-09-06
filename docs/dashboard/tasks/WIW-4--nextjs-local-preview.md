@@ -116,3 +116,5 @@ related: []
 2026-09-07 01:36:11 · develop · 07eecea · 컷아웃 음수 여백 제거(마지막 줄 가림), 장면 간격 통일, Scene6·7 둘째 아이콘 반대쪽(디자인 논의 T67~T69). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-07 01:41:00 · develop · c903c85 · favicon · 앱 아이콘 · 매니페스트 · 테마색(디자인 논의 T70). `src/app/layout.tsx` `src/app/manifest.ts` `src/app/{favicon.ico,icon1~4.png,apple-icon.png}` `public/{android-icon,ms-icon}-*.png` `public/browserconfig.xml`.
+
+2026-09-07 01:43:00 · develop · 1f1df85 · 페이지 제목·설명 변경(이산하 편집, 디자인 논의 T71). `src/app/layout.tsx`.
