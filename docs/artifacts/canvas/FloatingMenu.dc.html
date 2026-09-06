@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+  <style>
+    body { margin: 0; background: #F3ECDF; }
+    a { color: #2F2A25; } a:hover { color: #7E5A33; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 360px; background: #F3ECDF; color: #2F2A25; font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; position: relative; overflow: hidden;">
+  <div style="position: absolute; left: 24px; top: 24px; font-size: 13px; color: #7A6F63; line-height: 1.6;">떠 있는 버튼을 눌렀을 때.<br>메뉴를 고르면 그 블록으로 스크롤합니다.</div>
+
+  <div style="position: absolute; right: 20px; bottom: 84px; width: 176px; display: flex; flex-direction: column; background: #FBF7EF; border-radius: 14px; box-shadow: 0 16px 32px -12px rgba(70, 48, 24, 0.45); overflow: hidden;">
+    <a href="#directions" style="display: flex; align-items: center; justify-content: space-between; height: 48px; padding: 0 18px; font-size: 15px; font-weight: 500; text-decoration: none; color: #2F2A25; border-bottom: 1px solid #EDE4D3;">오시는 길<span style="width: 6px; height: 6px; border-radius: 50%; background: #B98E5E;"></span></a>
+    <a href="#contact" style="display: flex; align-items: center; justify-content: space-between; height: 48px; padding: 0 18px; font-size: 15px; font-weight: 500; text-decoration: none; color: #2F2A25; border-bottom: 1px solid #EDE4D3;">연락처<span style="width: 6px; height: 6px; border-radius: 50%; background: #B98E5E;"></span></a>
+    <a href="#gift" style="display: flex; align-items: center; justify-content: space-between; height: 48px; padding: 0 18px; font-size: 15px; font-weight: 500; text-decoration: none; color: #2F2A25;">마음 전하는 곳<span style="width: 6px; height: 6px; border-radius: 50%; background: #B98E5E;"></span></a>
+  </div>
+
+  <button type="button" aria-label="메뉴 닫기" style="position: absolute; right: 20px; bottom: 20px; width: 52px; height: 52px; border-radius: 50%; border: 0; padding: 0; background: #B98E5E; color: #FBF7EF; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px -8px rgba(70, 48, 24, 0.55); cursor: pointer;">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M6 6l10 10M16 6L6 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+  </button>
+</div>
+</x-dc>
+</body>
+</html>

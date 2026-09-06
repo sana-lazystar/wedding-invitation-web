@@ -7,7 +7,7 @@
 <body>
 <x-dc>
 <helmet>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Cormorant+Garamond:wght@500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Gowun+Batang:wght@400;700&family=Cormorant+Garamond:wght@500;600&display=swap">
   <style>
     body { margin: 0; background: #F3ECDF; }
     a { color: #7E5A33; } a:hover { color: #5C401F; }
@@ -15,7 +15,7 @@
 </helmet>
 <div style="width: 390px; height: 844px; background: #F3ECDF; color: #2F2A25; font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; position: relative; overflow: hidden;">
 
-  <section id="cover" style="position: relative; width: 390px; height: 844px; box-sizing: border-box; padding: 52px 24px 56px; display: flex; flex-direction: column; align-items: center;">
+  <section id="cover" style="position: relative; width: 390px; height: 844px; box-sizing: border-box; padding: 52px 24px 40px; display: flex; flex-direction: column; align-items: center;">
     <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: #7A6F63; line-height: 1.4;">Wedding Invitation</div>
     <div style="margin-top: 10px; font-size: 15px; line-height: 1.7; color: #4A423B;">우리의 삶을 함께 써 주신 당신께</div>
 
@@ -26,18 +26,15 @@
       <div style="position: absolute; left: 0; top: 0; width: 302px; height: 470px; border-radius: 16px; box-shadow: inset 0 0 36px 14px rgba(243, 236, 223, 0.55); pointer-events: none;"></div>
     </div>
 
-    <div style="margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+    <div style="margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-family: 'Gowun Batang', 'Apple SD Gothic Neo', serif;">
       <div style="font-size: 24px; font-weight: 700; letter-spacing: 0.1em; line-height: 1.4;">이산하</div>
-      <div style="font-size: 13px; color: #7A6F63; line-height: 1.4;">그리고</div>
+      <div style="font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; font-size: 13px; color: #7A6F63; line-height: 1.4;">그리고</div>
       <div style="font-size: 24px; font-weight: 700; letter-spacing: 0.1em; line-height: 1.4;">송시야</div>
     </div>
 
-    <svg width="22" height="12" viewBox="0 0 22 12" fill="none" style="position: absolute; left: 184px; bottom: 72px;" aria-hidden="true"><path d="M2 2 L11 10 L20 2" stroke="#B98E5E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-
-    <div style="position: absolute; left: 0; bottom: 0; width: 390px; height: 56px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); background: #FBF7EF; border-top: 1px solid #DCD0BC; font-size: 15px; font-weight: 500;">
-      <a href="#directions" style="display: flex; align-items: center; justify-content: center; color: #2F2A25; text-decoration: none; border-right: 1px solid #DCD0BC;">오시는 길</a>
-      <a href="#contact" style="display: flex; align-items: center; justify-content: center; color: #2F2A25; text-decoration: none;">연락처</a>
-    </div>
+    <button type="button" aria-label="바로 가기 메뉴" style="position: absolute; right: 20px; bottom: 20px; width: 52px; height: 52px; border-radius: 50%; border: 0; padding: 0; background: #B98E5E; color: #FBF7EF; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px -8px rgba(70, 48, 24, 0.55); cursor: pointer;">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M4 6.5h14M4 11h14M4 15.5h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+    </button>
   </section>
 </div>
 </x-dc>

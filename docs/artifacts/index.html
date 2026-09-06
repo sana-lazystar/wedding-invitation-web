@@ -8,7 +8,7 @@
   <!-- 글꼴 후보. 시안 확인용으로 여럿을 싣습니다. 확정되면 쓰는 것만 남깁니다 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;600&family=Hahmlet:wght@400;600&family=Song+Myung&family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500;700&family=Nanum+Gothic:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500&family=Cormorant+Garamond:wght@500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;600&family=Hahmlet:wght@400;600&family=Song+Myung&family=Diphylleia&family=Grandiflora+One&family=Nanum+Pen+Script&family=Nanum+Brush+Script&family=Gaegu:wght@400;700&family=Hi+Melody&family=Gamja+Flower&family=Gowun+Dodum&family=Nanum+Gothic:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500&family=Cormorant+Garamond:wght@500;600&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <style>
     :root {
@@ -18,14 +18,15 @@
       --ink-soft: #4A423B;
       --muted: #7A6F63;
       --oak: #B98E5E;
-      --rule: #DCD0BC;
+      --rule: #EDE4D3;
+      --font-name: 'Gowun Batang', 'Apple SD Gothic Neo', serif;
       --font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
       --font-ui: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
       --font-latin: 'Cormorant Garamond', Georgia, serif;
-      --bar-h: 56px;
     }
     * { box-sizing: border-box; }
-    html { color-scheme: light only; }
+    html { color-scheme: light only; scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     body {
       margin: 0;
       background: #E9E1D2;
@@ -42,7 +43,7 @@
       background: var(--paper-bg);
       box-shadow: 0 0 40px -20px rgba(70, 48, 24, 0.5);
     }
-    .block { position: relative; padding-bottom: var(--bar-h); }
+    .block { position: relative; }
     .block--fixed { min-height: 100dvh; }
 
     /* 1. 커버 */
@@ -50,7 +51,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 52px 24px calc(var(--bar-h) + 20px);
+      padding: 52px 24px 40px;
     }
     .eyebrow {
       font-family: var(--font-latin);
@@ -61,13 +62,13 @@
       color: var(--muted);
       line-height: 1.4;
     }
-    .tagline { margin-top: 10px; font-size: 15px; color: var(--ink-soft); }
+    .tagline { margin: 10px 0 0; font-size: 15px; color: var(--ink-soft); }
     .popup {
       position: relative;
       margin-top: 24px;
       width: min(302px, 78vw);
       aspect-ratio: 302 / 470;
-      max-height: calc(100dvh - 380px);
+      max-height: calc(100dvh - 360px);
       border-radius: 16px;
       overflow: hidden;
       background: #E7DCC8;
@@ -87,23 +88,46 @@
     }
     .popup__fade { position: absolute; inset: 0; border-radius: 16px; box-shadow: inset 0 0 36px 14px rgba(243, 236, 223, 0.55); pointer-events: none; }
     .names { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .names__name { font-size: 24px; font-weight: 700; letter-spacing: 0.1em; line-height: 1.4; }
+    .names__name { font-family: var(--font-name); font-size: 24px; font-weight: 700; letter-spacing: 0.1em; line-height: 1.4; }
     .names__and { font-family: var(--font-ui); font-size: 13px; color: var(--muted); line-height: 1.4; }
-    .scroll-cue { position: absolute; left: 50%; bottom: calc(var(--bar-h) + 16px); transform: translateX(-50%); }
 
-    /* 하단 고정 바 */
-    .bar {
-      position: fixed; left: 50%; bottom: 0; transform: translateX(-50%);
-      width: 100%; max-width: 430px; height: var(--bar-h);
-      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-      background: var(--paper); border-top: 1px solid var(--rule);
-      font-family: var(--font-ui); font-size: 15px; font-weight: 500;
-      padding-bottom: env(safe-area-inset-bottom);
+    /* 떠 있는 바로 가기 버튼 */
+    .fab {
+      position: fixed;
+      right: max(20px, calc((100vw - 430px) / 2 + 20px));
+      bottom: calc(20px + env(safe-area-inset-bottom));
       z-index: 10;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+      font-family: var(--font-ui);
     }
-    .bar a { display: flex; align-items: center; justify-content: center; color: var(--ink); text-decoration: none; }
-    .bar a + a { border-left: 1px solid var(--rule); }
-    .bar a:focus-visible { outline: 2px solid var(--oak); outline-offset: -4px; }
+    .fab__menu {
+      width: 176px;
+      display: flex; flex-direction: column;
+      background: var(--paper);
+      border-radius: 14px;
+      box-shadow: 0 16px 32px -12px rgba(70, 48, 24, 0.45);
+      overflow: hidden;
+    }
+    .fab__menu a {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 48px; padding: 0 18px;
+      font-size: 15px; font-weight: 500;
+      color: var(--ink); text-decoration: none;
+    }
+    .fab__menu a + a { border-top: 1px solid var(--rule); }
+    .fab__menu a::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--oak); }
+    .fab__menu a:focus-visible { outline: 2px solid var(--oak); outline-offset: -4px; }
+    .fab__button {
+      width: 52px; height: 52px; border-radius: 50%; border: 0; padding: 0;
+      background: var(--oak); color: var(--paper);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 10px 20px -8px rgba(70, 48, 24, 0.55);
+      cursor: pointer;
+    }
+    .fab__button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+    .fab__button .icon-close { display: none; }
+    .fab[data-open="true"] .fab__button .icon-open { display: none; }
+    .fab[data-open="true"] .fab__button .icon-close { display: block; }
 
     /* 글꼴 확인 패널. 시안 확인용이며 확정 후 지웁니다 */
     .fontbar {
@@ -113,8 +137,8 @@
       border: 1px solid var(--rule); border-radius: 8px;
       font: 12px/1.4 -apple-system, 'Apple SD Gothic Neo', sans-serif; color: var(--ink);
     }
-    .fontbar label { display: flex; align-items: center; gap: 6px; }
-    .fontbar select { font-size: 12px; max-width: 170px; }
+    .fontbar label { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .fontbar select { font-size: 12px; max-width: 190px; }
     .fontbar button { font-size: 11px; align-self: flex-end; }
   </style>
 </head>
@@ -135,26 +159,47 @@
         <div class="names__and">그리고</div>
         <div class="names__name">송시야</div>
       </div>
-      <svg class="scroll-cue" width="22" height="12" viewBox="0 0 22 12" fill="none" aria-hidden="true"><path d="M2 2 L11 10 L20 2" stroke="#B98E5E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
     </section>
 
     <!-- 2쪽(핵심 정보)부터 여기 아래에 이어 붙입니다 -->
 
   </div>
 
-  <nav class="bar" aria-label="바로 가기">
-    <a href="#directions">오시는 길</a>
-    <a href="#contact">연락처</a>
+  <nav class="fab" id="fab" data-open="false" aria-label="바로 가기">
+    <div class="fab__menu" id="fabMenu" hidden>
+      <a href="#directions">오시는 길</a>
+      <a href="#contact">연락처</a>
+      <a href="#gift">마음 전하는 곳</a>
+    </div>
+    <button type="button" class="fab__button" id="fabButton" aria-expanded="false" aria-controls="fabMenu" aria-label="바로 가기 메뉴">
+      <svg class="icon-open" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M4 6.5h14M4 11h14M4 15.5h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+      <svg class="icon-close" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M6 6l10 10M16 6L6 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+    </button>
   </nav>
 
   <div class="fontbar" id="fontbar">
+    <label>이름 <select id="fontName">
+      <option value="'Gowun Batang', serif" selected>고운바탕 (Gowun Batang)</option>
+      <option value="'Nanum Myeongjo', serif">나눔명조 (Nanum Myeongjo)</option>
+      <option value="'Noto Serif KR', serif">노토 세리프 KR</option>
+      <option value="'Hahmlet', serif">함렛 (Hahmlet)</option>
+      <option value="'Song Myung', serif">송명 (Song Myung)</option>
+      <option value="'Diphylleia', serif">디필레이아 (Diphylleia)</option>
+      <option value="'Grandiflora One', serif">그랑디플로라 (Grandiflora One)</option>
+      <option value="'Nanum Pen Script', cursive">나눔손글씨 펜 (Nanum Pen Script)</option>
+      <option value="'Nanum Brush Script', cursive">나눔손글씨 붓 (Nanum Brush Script)</option>
+      <option value="'Gaegu', cursive">개구 (Gaegu)</option>
+      <option value="'Hi Melody', cursive">하이멜로디 (Hi Melody)</option>
+      <option value="'Gamja Flower', cursive">감자꽃 (Gamja Flower)</option>
+      <option value="'Noto Sans KR', sans-serif">노토 산스 KR</option>
+    </select></label>
     <label>본문 <select id="fontBody">
       <option value="'Noto Sans KR', sans-serif" selected>노토 산스 KR (Noto Sans KR)</option>
       <option value="'Gowun Batang', serif">고운바탕 (Gowun Batang)</option>
       <option value="'Nanum Myeongjo', serif">나눔명조 (Nanum Myeongjo)</option>
       <option value="'Noto Serif KR', serif">노토 세리프 KR</option>
       <option value="'Hahmlet', serif">함렛 (Hahmlet)</option>
-      <option value="'Song Myung', serif">송명 (Song Myung)</option>
+      <option value="'Diphylleia', serif">디필레이아 (Diphylleia)</option>
       <option value="'Pretendard', sans-serif">프리텐다드 (Pretendard)</option>
       <option value="'Gowun Dodum', sans-serif">고운돋움 (Gowun Dodum)</option>
     </select></label>
@@ -170,11 +215,28 @@
   <script>
     (function () {
       var root = document.documentElement;
-      var body = document.getElementById('fontBody');
-      var ui = document.getElementById('fontUi');
-      body.addEventListener('change', function () { root.style.setProperty('--font-body', body.value + ", 'Apple SD Gothic Neo'"); });
-      ui.addEventListener('change', function () { root.style.setProperty('--font-ui', ui.value + ", 'Apple SD Gothic Neo'"); });
+      var bind = function (id, cssVar) {
+        var el = document.getElementById(id);
+        el.addEventListener('change', function () { root.style.setProperty(cssVar, el.value + ", 'Apple SD Gothic Neo'"); });
+      };
+      bind('fontName', '--font-name');
+      bind('fontBody', '--font-body');
+      bind('fontUi', '--font-ui');
       document.getElementById('fontbarHide').addEventListener('click', function () { document.getElementById('fontbar').hidden = true; });
+
+      var fab = document.getElementById('fab');
+      var button = document.getElementById('fabButton');
+      var menu = document.getElementById('fabMenu');
+      var setOpen = function (open) {
+        fab.dataset.open = open ? 'true' : 'false';
+        button.setAttribute('aria-expanded', open ? 'true' : 'false');
+        button.setAttribute('aria-label', open ? '메뉴 닫기' : '바로 가기 메뉴');
+        menu.hidden = !open;
+      };
+      button.addEventListener('click', function () { setOpen(menu.hidden); });
+      menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+      document.addEventListener('click', function (e) { if (!fab.contains(e.target)) setOpen(false); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
     })();
   </script>
 </body>
