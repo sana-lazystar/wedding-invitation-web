@@ -50,14 +50,31 @@
     .block { position: relative; }
     .block--fixed { min-height: 100dvh; }
 
-    /* 1. 커버 */
+    /* 1. 커버. 커티지홀 사진이 화면을 가득 채우고, 두 사람은 가운데, 글은 위아래 그라데이션 위에 */
     #cover {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 80px 24px 24px;
+      justify-content: space-between;
+      padding: 64px 24px 64px;
+      overflow: hidden;
     }
-    .cover-head { display: flex; flex-direction: column; align-items: center; }
+    .cover-bg { position: absolute; inset: 0; z-index: 0; }
+    .cover-bg__hall { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; display: block; }
+    .cover-bg__shade-top { position: absolute; left: 0; right: 0; top: 0; height: 34%; background: linear-gradient(180deg, rgba(243, 236, 223, 0.94) 0%, rgba(243, 236, 223, 0.7) 45%, rgba(243, 236, 223, 0) 100%); }
+    .cover-bg__shade-bottom { position: absolute; left: 0; right: 0; bottom: 0; height: 36%; background: linear-gradient(0deg, rgba(243, 236, 223, 0.94) 0%, rgba(243, 236, 223, 0.7) 45%, rgba(243, 236, 223, 0) 100%); }
+    .cover-bg__shadow {
+      position: absolute; left: calc(50% + 10px); bottom: 37%;
+      width: 44%; height: 26px; transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(70, 48, 24, 0.32), rgba(70, 48, 24, 0) 70%);
+    }
+    .cover-bg__couple {
+      position: absolute; left: calc(50% + 10px); bottom: 38%;
+      height: 34%; width: auto; transform: translateX(-50%);
+      filter: drop-shadow(0 8px 8px rgba(70, 48, 24, 0.3));
+    }
+    .cover-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
     .eyebrow {
       font-family: var(--font-latin);
       font-size: 21px;
@@ -69,31 +86,7 @@
       white-space: nowrap;
     }
     .tagline { margin: 10px 0 0; font-family: var(--font-name); font-size: 15px; line-height: 1.7; color: var(--ink-soft); white-space: nowrap; }
-    .popup {
-      position: relative;
-      margin-top: 24px;
-      width: min(302px, 78vw);
-      aspect-ratio: 302 / 470;
-      max-height: calc(100dvh - 360px);
-      border-radius: 16px;
-      overflow: hidden;
-      background: #E7DCC8;
-      box-shadow: 0 24px 48px -20px rgba(70, 48, 24, 0.45);
-    }
-    .popup__hall { width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; display: block; }
-    .popup__shadow {
-      position: absolute; left: calc(50% + 10px); bottom: 12.5%;
-      width: 50%; height: 26px; transform: translateX(-50%);
-      border-radius: 50%;
-      background: radial-gradient(ellipse at center, rgba(70, 48, 24, 0.32), rgba(70, 48, 24, 0) 70%);
-    }
-    .popup__couple {
-      position: absolute; left: calc(50% + 10px); bottom: 14%;
-      height: 42.5%; width: auto; transform: translateX(-50%);
-      filter: drop-shadow(0 8px 8px rgba(70, 48, 24, 0.3));
-    }
-    .popup__fade { position: absolute; inset: 0; border-radius: 16px; box-shadow: inset 0 0 36px 14px rgba(243, 236, 223, 0.55); pointer-events: none; }
-    .names { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .names { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
     .names__name { font-family: var(--font-name); font-size: 24px; font-weight: 700; letter-spacing: 0.1em; line-height: 1.4; }
     .names__and { font-family: var(--font-ui); font-size: 13px; color: var(--muted); line-height: 1.4; }
 
@@ -271,15 +264,16 @@
   <div class="page">
 
     <section id="cover" class="block block--fixed">
+      <div class="cover-bg">
+        <img class="cover-bg__hall" src="../design/canvas/hall.jpg" alt="더채플앳청담 커티지홀">
+        <div class="cover-bg__shade-top"></div>
+        <div class="cover-bg__shade-bottom"></div>
+        <div class="cover-bg__shadow"></div>
+        <img class="cover-bg__couple" src="../design/canvas/couple.png" alt="이산하와 송시야">
+      </div>
       <div class="cover-head" id="coverHead">
         <div class="eyebrow">Wedding Invitation</div>
         <p class="tagline">우리의 삶을 함께 써 주신 당신께</p>
-      </div>
-      <div class="popup">
-        <img class="popup__hall" src="../design/canvas/hall.jpg" alt="더채플앳청담 커티지홀">
-        <div class="popup__shadow"></div>
-        <img class="popup__couple" src="../design/canvas/couple.png" alt="이산하와 송시야">
-        <div class="popup__fade"></div>
       </div>
       <div class="names">
         <div class="names__name">이산하</div>
