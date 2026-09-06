@@ -25,3 +25,27 @@
 4. 사진 교체. 같은 번호로 원본을 덮어쓰고 스크립트를 돌립니다. 스크립트는 원본이 바뀐 사진만 다시 만듭니다(잠정).
 
 상태: 스크립트 미작성(2026-09-06). 구현 task가 끝나면 이 줄을 갱신합니다.
+
+## inline-artifact.mjs — 조립본을 Artifact 발행용으로
+
+조립본 `docs/artifacts/index.html`이 상대 경로로 참조하는 이미지를 data URI로 심고 문서 껍데기를 벗깁니다(디자인 결정 4). Artifact 샌드박스가 외부 이미지를 막기 때문입니다. 이미지는 최대 1080px로 줄이고 작은 것은 키우지 않습니다. macOS `sips`만 쓰고 의존성이 없습니다.
+
+```sh
+node docs/scripts/inline-artifact.mjs docs/artifacts/index.html /tmp/preview.html --title "이산하 · 송시야 청첩장 미리보기"
+```
+
+## sync-globals.mjs — 조립본 CSS를 Next.js로
+
+조립본 `docs/artifacts/index.html`의 스타일 구간을 `src/app/globals.css`로 옮깁니다(WIW-4). 조립본이 정본이고 globals.css는 파생물입니다. 글꼴 토큰만 next/font 변수로 바꿉니다.
+
+```sh
+node docs/scripts/sync-globals.mjs
+```
+
+## unmatte.py — 컷아웃 가장자리 색 번짐 제거
+
+투명 배경 PNG의 반투명 가장자리 픽셀 색을 가장 가까운 불투명 픽셀 색으로 바꿉니다. 두 사람 컷아웃의 자홍색 테두리 잔상을 지울 때 썼습니다(디자인 논의 T30). 원본은 건드리지 않고 새 파일로 씁니다. macOS 시스템 python3의 Pillow·numpy를 씁니다.
+
+```sh
+python3 docs/scripts/unmatte.py docs/design/scene1/scene1--married-couple.PNG docs/design/scene1/scene1--married-couple--clean.png
+```

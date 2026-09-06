@@ -11,7 +11,7 @@
 - 진행 중 작업: `docs/dashboard/state.json`의 `activeWorks`. 세션을 시작하면 이 파일을 먼저 읽습니다. 터미널 보드 = `node docs/ontology/tools/board.mjs --watch`(읽기 전용)
 - 신규 문서 정본: `docs/dashboard/templates/`
 - 체계 설계·구조 결정 이력: `docs/dashboard/discussions/` 각 논의록의 결정 표
-- **지금 = 스택·인프라 논의 마무리 단계 (2026-09-06)**: 언어·프레임워크·호스팅은 `docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md` 결정 표에 있고, topology 서랍이 열렸습니다. 다음 논의는 "청첩장에 무엇이 들어가는가"입니다. 새 논의록을 열어 요구(REQ)·용어·미결(Q·U)을 원장에 적립하고, 목록이 확정되면 첫 story를 적재합니다. git과 훅은 설치돼 있습니다. 코드 착수와 Vercel 프로젝트 생성은 외부 반영 게이트 뒤입니다
+- **지금 = 디자인 시안 진행 중 · Scene1·2 완료, 다음 Scene3 (2026-09-06)**: 스택·인프라는 `docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md` 결정 표(15건)로 완결됐습니다. 시안은 Claude가 `/design` 캔버스와 조립본 `docs/artifacts/index.html`로 만들고, 와이어프레임을 한 쪽씩 이산하와 논의해 이어 붙입니다(디자인 결정 7·10). 진행 상태·링크·고치는 순서는 `docs/artifacts/README.md`, 턴별 기록은 `docs/dashboard/discussions/2026-09-06--design-mockups.md`입니다. Next.js 임시 적용(WIW-4, `src/app/`)은 develop에 커밋돼 있고 배포는 이산하가 합니다. 다음 쪽은 Scene3 인사(와이어프레임 4쪽)이고 캐릭터 그림이 필요합니다. 요구 원장(REQ)은 시안 확정 뒤 채우고, 그때 첫 story를 적재합니다
 
 # 2. 규격 — 무엇이 현재 참인가 (`docs/ontology/`)
 

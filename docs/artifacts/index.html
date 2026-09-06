@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <title>이산하 · 송시야 청첩장</title>
+  <!-- 글꼴 후보. 시안 확인용으로 여럿을 싣습니다. 확정되면 쓰는 것만 남깁니다 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;600&family=Hahmlet:wght@400;600&family=Song+Myung&family=Diphylleia&family=Grandiflora+One&family=Nanum+Pen+Script&family=Nanum+Brush+Script&family=Gaegu:wght@400;700&family=Hi+Melody&family=Gamja+Flower&family=Gowun+Dodum&family=Nanum+Gothic:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500&family=Cormorant+Garamond:wght@500;600&family=Dancing+Script:wght@500&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --paper-bg: #F3ECDF;
+      --paper: #FBF7EF;
+      --ink: #2F2A25;
+      --ink-soft: #4A423B;
+      --muted: #7A6F63;
+      --oak: #B98E5E;
+      --rule: #EDE4D3;
+      --envelope: #E4D6BE;
+      --envelope-front: #EEE2CC;
+      --envelope-flap: #DFCFB4;
+      --font-name: 'Gowun Batang', 'Apple SD Gothic Neo', serif;
+      --font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      --font-ui: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      --font-latin: 'Cormorant Garamond', Georgia, serif;
+      --font-script: 'Dancing Script', 'Snell Roundhand', cursive;
+    }
+    html { color-scheme: light only; scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      margin: 0;
+      background: #E9E1D2;
+      color: var(--ink);
+      font-family: var(--font-body);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .page {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+      margin: 0 auto;
+      background: var(--paper-bg);
+      box-shadow: 0 0 40px -20px rgba(70, 48, 24, 0.5);
+    }
+    .block { position: relative; }
+    .block--fixed { min-height: 100dvh; }
+
+    /* 1. 커버. 종이 무대 위의 두 사람. 홀 사진은 그대로(불투명도 1), 두 사람은 통로 위에 서며, 이름이 주인공입니다 */
+    #cover {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: calc(56px + env(safe-area-inset-top)) 24px calc(56px + env(safe-area-inset-bottom));
+      overflow: hidden;
+    }
+    .cover-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+    .cover-bg__hall {
+      width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; display: block;
+      filter: saturate(0.7);
+      animation: cover-zoom 16s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    }
+    /* 상단 1/4 흐림. 두 겹의 배경 흐림을 마스크로 겹쳐 위로 갈수록 더 흐려집니다 */
+    .cover-bg__blur { position: absolute; left: 0; right: 0; top: 0; pointer-events: none; }
+    .cover-bg__blur--soft { height: 26%; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%); }
+    .cover-bg__blur--strong { height: 16%; backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); mask-image: linear-gradient(to bottom, #000 0%, #000 30%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 30%, transparent 100%); }
+    .cover-bg__shadow {
+      position: absolute; left: calc(50% + 10px); bottom: 21.4%;
+      width: 40%; height: 18px; transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(70, 48, 24, 0.38), rgba(70, 48, 24, 0) 68%);
+    }
+    .cover-bg__couple {
+      position: absolute; left: calc(50% + 10px); bottom: 22%;
+      height: 27%; width: auto; transform: translateX(-50%);
+      filter: drop-shadow(0 2px 2px rgba(70, 48, 24, 0.28)) drop-shadow(0 18px 18px rgba(70, 48, 24, 0.18));
+      animation: cover-rise 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s both;
+    }
+    html.is-intro .cover-bg__hall, html.is-intro .cover-bg__couple { animation-play-state: paused; }
+    @keyframes cover-zoom { from { transform: scale(1.07); } to { transform: scale(1); } }
+    @keyframes cover-rise { from { opacity: 0; transform: translate(-50%, 14px); } to { opacity: 1; transform: translate(-50%, 0); } }
+    @media (prefers-reduced-motion: reduce) { .cover-bg__hall, .cover-bg__couple { animation: none; } }
+    .cover-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+    .eyebrow {
+      font-family: var(--font-latin);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.36em;
+      text-indent: 0.36em;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .tagline { margin: 10px 0 0; font-family: var(--font-name); font-size: 24px; line-height: 1.5; color: var(--ink-soft); white-space: nowrap; }
+    .names { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .names__name { font-family: var(--font-name); font-size: 30px; font-weight: 700; letter-spacing: 0.14em; text-indent: 0.14em; line-height: 1.35; color: var(--ink); }
+    .names__and { font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); line-height: 1.4; }
+
+    /* 2. 핵심 정보. 열린 봉투 일러스트 위 편지지에 날짜·시간·장소 */
+    #info { display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
+    .letter-card {
+      position: relative;
+      width: min(340px, 86vw, calc((100dvh - 80px) * 817 / 1438));
+      aspect-ratio: 817 / 1438;
+    }
+    .letter-card__art { display: block; width: 100%; height: 100%; }
+    .letter-card__text {
+      position: absolute; left: 22%; right: 22%; top: 13%; height: 46%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      text-align: center; font-size: 16px; line-height: 1.7; color: var(--ink-soft);
+    }
+    .letter-card__venue { font-size: 17px; font-weight: 500; color: var(--ink); }
+    .letter-card__rule { width: 28px; height: 1px; background: var(--oak); margin: 12px 0; }
+
+    /* 진입 장면. 기울어진 봉투가 열리고 표제가 적힌 편지지가 나오며 수평으로 펴진 뒤, 화면을 채우며 커버로 이어집니다 */
+    html.is-intro { overflow: hidden; }
+    html.is-intro .cover-head { visibility: hidden; }
+    #intro {
+      position: fixed; inset: 0; z-index: 30;
+      display: flex; align-items: center; justify-content: center;
+      background: #E9E1D2;
+      transition: opacity 0.35s ease;
+    }
+    #intro.is-done { opacity: 0; pointer-events: none; }
+    .stage {
+      position: relative;
+      width: 300px; height: 200px;
+      perspective: 1200px;
+      opacity: 0;
+      transform: rotate(-15deg) scale(0.96);
+      transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    #intro.is-shown .stage { opacity: 1; transform: rotate(-15deg) scale(1); }
+    .env__back, .env__front, .env__flap, .env__letter { position: absolute; }
+    .env__back {
+      inset: 0; z-index: 1;
+      background: var(--envelope);
+      border-radius: 8px;
+      box-shadow: 0 26px 44px -24px rgba(70, 48, 24, 0.55);
+    }
+    .env__letter {
+      left: 20px; top: 10px; width: 260px; height: 180px; z-index: 2;
+      background: var(--paper);
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1px rgba(185, 142, 94, 0.35), 0 10px 24px -14px rgba(70, 48, 24, 0.4);
+      translate: 0 0;
+      rotate: 0deg;
+      transition: translate 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    #intro.is-rising .env__letter { translate: 0 -210px; }
+    #intro.is-settling .env__letter {
+      z-index: 5;
+      translate: 0 0;
+      rotate: 15deg;
+      transition: translate 0.65s cubic-bezier(0.65, 0, 0.35, 1), rotate 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+      box-shadow: inset 0 0 0 1px rgba(185, 142, 94, 0.35), 0 22px 40px -18px rgba(70, 48, 24, 0.5);
+    }
+    #intro.is-expanding .env__letter {
+      z-index: 5;
+      transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1), background-color 0.85s ease, box-shadow 0.4s ease, border-radius 0.85s ease;
+      transform: scale(var(--letter-scale, 6));
+      background: var(--paper-bg);
+      box-shadow: none;
+      border-radius: 0;
+    }
+    .env__front {
+      inset: 0; z-index: 3;
+      background: var(--envelope-front);
+      border-radius: 8px;
+      clip-path: polygon(0 0, 50% 56%, 100% 0, 100% 100%, 0 100%);
+    }
+    .env__flap {
+      left: 0; top: 0; width: 300px; height: 112px; z-index: 4;
+      background: var(--envelope-flap);
+      border-radius: 8px 8px 0 0;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: 50% 0;
+      transform: rotateX(0deg);
+      transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    #intro.is-open .env__flap { transform: rotateX(180deg); }
+    #intro.is-rising .env__flap { z-index: 1; }
+    .env__note {
+      position: absolute; right: 18px; bottom: 12px; z-index: 3;
+      font-family: var(--font-script); font-size: 17px; font-weight: 500; line-height: 1.2;
+      color: #7E5A33; transform: rotate(-4deg); white-space: nowrap;
+    }
+    #intro.is-expanding .env__back, #intro.is-expanding .env__front, #intro.is-expanding .env__flap, #intro.is-expanding .env__note { opacity: 0; transition: opacity 0.4s ease; }
+    .intro-text {
+      position: absolute; left: 50%; top: 50%; z-index: 6;
+      translate: -50% -50%;
+      rotate: 0deg;
+      transform: scale(0.72);
+      display: flex; flex-direction: column; align-items: center;
+      transition: translate 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+      will-change: transform;
+    }
+    #intro.is-rising .intro-text { translate: -50% calc(-50% - 210px); }
+    #intro.is-settling .intro-text {
+      translate: -50% -50%;
+      rotate: 15deg;
+      transition: translate 0.65s cubic-bezier(0.65, 0, 0.35, 1), rotate 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    .intro-text > * { opacity: 0; transform: translateY(12px); transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1); }
+    .intro-text > .tagline { transition-delay: 0.12s; }
+    #intro.is-text .intro-text > * { opacity: 1; transform: translateY(0); }
+    #intro.is-expanding .intro-text {
+      transition: translate 0.85s cubic-bezier(0.65, 0, 0.35, 1), transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
+      translate: calc(-50% + var(--text-dx, 0px)) calc(-50% + var(--text-dy, 0px));
+      transform: scale(1);
+    }
+    .intro-skip {
+      position: absolute; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom));
+      border: 0; background: transparent; padding: 8px 10px;
+      font-family: var(--font-ui); font-size: 12px; color: var(--muted); cursor: pointer;
+    }
+    @media (prefers-reduced-motion: reduce) { #intro { display: none; } }
+
+    /* 떠 있는 바로 가기 버튼 */
+    .fab {
+      position: fixed;
+      right: max(20px, calc((100vw - 430px) / 2 + 20px));
+      bottom: calc(20px + env(safe-area-inset-bottom));
+      z-index: 10;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+      font-family: var(--font-ui);
+    }
+    .fab__menu {
+      width: 176px;
+      display: flex; flex-direction: column;
+      background: var(--paper);
+      border-radius: 14px;
+      box-shadow: 0 16px 32px -12px rgba(70, 48, 24, 0.45);
+      overflow: hidden;
+    }
+    .fab__menu a {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 48px; padding: 0 18px;
+      font-size: 15px; font-weight: 500;
+      color: var(--ink); text-decoration: none;
+    }
+    .fab__menu a + a { border-top: 1px solid var(--rule); }
+    .fab__menu a::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--oak); }
+    .fab__menu a:focus-visible { outline: 2px solid var(--oak); outline-offset: -4px; }
+    .fab__button {
+      width: 52px; height: 52px; border-radius: 50%; border: 0; padding: 0;
+      background: var(--oak); color: var(--paper);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 10px 20px -8px rgba(70, 48, 24, 0.55);
+      cursor: pointer;
+    }
+    .fab__button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+
+    /* 글꼴 확인 패널. 시안 확인용이며 확정 후 지웁니다 */
+    .fontbar {
+      position: fixed; top: 8px; right: 8px; z-index: 20;
+      display: flex; flex-direction: column; gap: 6px;
+      padding: 8px 10px; background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--rule); border-radius: 8px;
+      font: 12px/1.4 -apple-system, 'Apple SD Gothic Neo', sans-serif; color: var(--ink);
+    }
+    .fontbar label { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .fontbar select { font-size: 12px; max-width: 190px; }
+    .fontbar__row { display: flex; gap: 6px; justify-content: flex-end; }
+    .fontbar button { font-size: 11px; }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <section id="cover" class="block block--fixed">
+      <div class="cover-bg">
+        <img class="cover-bg__hall" src="../design/scene1/scene1--wedding-hall.PNG" alt="더채플앳청담 커티지홀">
+        <div class="cover-bg__blur cover-bg__blur--soft"></div>
+        <div class="cover-bg__blur cover-bg__blur--strong"></div>
+        <div class="cover-bg__shadow"></div>
+        <img class="cover-bg__couple" src="../design/canvas/couple.png" alt="이산하와 송시야">
+      </div>
+      <div class="cover-head" id="coverHead">
+        <div class="eyebrow">Wedding Invitation</div>
+        <p class="tagline">우리의 삶을 함께 써 주신 당신께</p>
+      </div>
+      <div class="names">
+        <div class="names__name">이산하</div>
+        <div class="names__and">그리고</div>
+        <div class="names__name">송시야</div>
+      </div>
+    </section>
+
+    <section id="info" class="block block--fixed">
+      <div class="letter-card">
+        <img class="letter-card__art" src="../design/canvas/opened-paper.png" alt="">
+        <div class="letter-card__text">
+          <div>2026년 10월 9일 금요일</div>
+          <div>오후 6시 30분</div>
+          <div class="letter-card__rule"></div>
+          <div class="letter-card__venue">더채플앳청담</div>
+          <div>3층 커티지홀</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3쪽(인사)부터 여기 아래에 이어 붙입니다 -->
+
+  </div>
+
+  <div id="intro" aria-hidden="true">
+    <div class="stage">
+      <div class="env__back"></div>
+      <div class="env__letter"></div>
+      <div class="env__front"></div>
+      <div class="env__note">Thanks to everyone.</div>
+      <div class="env__flap"></div>
+      <div class="intro-text" id="introText">
+        <div class="eyebrow">Wedding Invitation</div>
+        <p class="tagline">우리의 삶을 함께 써 주신 당신께</p>
+      </div>
+    </div>
+    <button type="button" class="intro-skip" id="introSkip">건너뛰기</button>
+  </div>
+
+  <nav class="fab" id="fab" data-open="false" aria-label="바로 가기">
+    <div class="fab__menu" id="fabMenu" hidden>
+      <a href="#directions">오시는 길</a>
+      <a href="#contact">연락처</a>
+      <a href="#gift">마음 전하는 곳</a>
+    </div>
+    <button type="button" class="fab__button" id="fabButton" aria-expanded="false" aria-controls="fabMenu" aria-label="바로 가기 메뉴">
+      <svg class="icon-open" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M4 6.5h14M4 11h14M4 15.5h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+      <svg class="icon-close" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true" style="display: none;"><path d="M6 6l10 10M16 6L6 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+    </button>
+  </nav>
+
+  <div class="fontbar" id="fontbar">
+    <label>이름·문장 <select id="fontName">
+      <option value="'Gowun Batang', serif" selected>고운바탕 (Gowun Batang)</option>
+      <option value="'Nanum Myeongjo', serif">나눔명조 (Nanum Myeongjo)</option>
+      <option value="'Noto Serif KR', serif">노토 세리프 KR</option>
+      <option value="'Hahmlet', serif">함렛 (Hahmlet)</option>
+      <option value="'Song Myung', serif">송명 (Song Myung)</option>
+      <option value="'Diphylleia', serif">디필레이아 (Diphylleia)</option>
+      <option value="'Grandiflora One', serif">그랑디플로라 (Grandiflora One)</option>
+      <option value="'Nanum Pen Script', cursive">나눔손글씨 펜 (Nanum Pen Script)</option>
+      <option value="'Nanum Brush Script', cursive">나눔손글씨 붓 (Nanum Brush Script)</option>
+      <option value="'Gaegu', cursive">개구 (Gaegu)</option>
+      <option value="'Hi Melody', cursive">하이멜로디 (Hi Melody)</option>
+      <option value="'Gamja Flower', cursive">감자꽃 (Gamja Flower)</option>
+      <option value="'Noto Sans KR', sans-serif">노토 산스 KR</option>
+    </select></label>
+    <label>본문 <select id="fontBody">
+      <option value="'Noto Sans KR', sans-serif" selected>노토 산스 KR (Noto Sans KR)</option>
+      <option value="'Gowun Batang', serif">고운바탕 (Gowun Batang)</option>
+      <option value="'Nanum Myeongjo', serif">나눔명조 (Nanum Myeongjo)</option>
+      <option value="'Noto Serif KR', serif">노토 세리프 KR</option>
+      <option value="'Hahmlet', serif">함렛 (Hahmlet)</option>
+      <option value="'Diphylleia', serif">디필레이아 (Diphylleia)</option>
+      <option value="'Pretendard', sans-serif">프리텐다드 (Pretendard)</option>
+      <option value="'Gowun Dodum', sans-serif">고운돋움 (Gowun Dodum)</option>
+    </select></label>
+    <label>안내 <select id="fontUi">
+      <option value="'Noto Sans KR', sans-serif" selected>노토 산스 KR (Noto Sans KR)</option>
+      <option value="'Gowun Dodum', sans-serif">고운돋움 (Gowun Dodum)</option>
+      <option value="'Pretendard', sans-serif">프리텐다드 (Pretendard)</option>
+      <option value="'Nanum Gothic', sans-serif">나눔고딕 (Nanum Gothic)</option>
+      <option value="'IBM Plex Sans KR', sans-serif">IBM Plex Sans KR</option>
+    </select></label>
+    <div class="fontbar__row">
+      <button type="button" id="introReplay">진입 장면 다시</button>
+      <button type="button" id="fontbarHide">패널 닫기</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var bind = function (id, cssVar) {
+        var el = document.getElementById(id);
+        el.addEventListener('change', function () { root.style.setProperty(cssVar, el.value + ", 'Apple SD Gothic Neo'"); });
+      };
+      bind('fontName', '--font-name');
+      bind('fontBody', '--font-body');
+      bind('fontUi', '--font-ui');
+      document.getElementById('fontbarHide').addEventListener('click', function () { document.getElementById('fontbar').hidden = true; });
+
+      var fab = document.getElementById('fab');
+      var button = document.getElementById('fabButton');
+      var menu = document.getElementById('fabMenu');
+      var iconOpen = button.querySelector('.icon-open');
+      var iconClose = button.querySelector('.icon-close');
+      var setOpen = function (open) {
+        fab.dataset.open = open ? 'true' : 'false';
+        button.setAttribute('aria-expanded', open ? 'true' : 'false');
+        button.setAttribute('aria-label', open ? '메뉴 닫기' : '바로 가기 메뉴');
+        iconOpen.style.display = open ? 'none' : '';
+        iconClose.style.display = open ? '' : 'none';
+        menu.hidden = !open;
+      };
+      button.addEventListener('click', function () { setOpen(menu.hidden); });
+      menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+      document.addEventListener('click', function (e) { if (!fab.contains(e.target)) setOpen(false); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+
+      /* 진입 장면. 순서: 봉투 등장 → 덮개 열림 → 편지지가 올라옴 → 표제 떠오름 → 편지지가 화면을 채우며 표제가 커버 자리로 → 걷힘 */
+      var intro = document.getElementById('intro');
+      var letter = intro.querySelector('.env__letter');
+      var introText = document.getElementById('introText');
+      var coverHead = document.getElementById('coverHead');
+      var timers = [];
+      var finished = false;
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var finish = function () {
+        if (finished) return;
+        finished = true;
+        timers.forEach(clearTimeout);
+        root.classList.remove('is-intro');
+        intro.classList.add('is-done');
+        timers.push(setTimeout(function () { intro.hidden = true; }, 400));
+      };
+      var play = function () {
+        finished = false;
+        timers.forEach(clearTimeout); timers = [];
+        window.scrollTo(0, 0);
+        intro.hidden = false;
+        intro.className = '';
+        letter.style.removeProperty('--letter-scale');
+        introText.style.removeProperty('--text-dx');
+        introText.style.removeProperty('--text-dy');
+        root.classList.add('is-intro');
+        void intro.offsetWidth;
+        timers.push(setTimeout(function () { intro.classList.add('is-shown'); }, 60));
+        timers.push(setTimeout(function () { intro.classList.add('is-open'); }, 500));
+        timers.push(setTimeout(function () { intro.classList.add('is-rising'); }, 1300));
+        timers.push(setTimeout(function () { intro.classList.add('is-settling'); }, 1950));
+        timers.push(setTimeout(function () { intro.classList.add('is-text'); }, 2050));
+        timers.push(setTimeout(function () {
+          var r = letter.getBoundingClientRect();
+          var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+          var scale = Math.max(2 * Math.max(cx, window.innerWidth - cx) / r.width, 2 * Math.max(cy, window.innerHeight - cy) / r.height) * 1.06;
+          letter.style.setProperty('--letter-scale', scale.toFixed(3));
+          var from = introText.getBoundingClientRect();
+          var to = coverHead.getBoundingClientRect();
+          var dx = to.left + to.width / 2 - (from.left + from.width / 2);
+          var dy = to.top + to.height / 2 - (from.top + from.height / 2);
+          /* 무대가 -15도 기울어 있으므로 화면 이동량을 무대 좌표계로 돌린다 */
+          var rad = 15 * Math.PI / 180, cs = Math.cos(rad), sn = Math.sin(rad);
+          introText.style.setProperty('--text-dx', (dx * cs - dy * sn).toFixed(1) + 'px');
+          introText.style.setProperty('--text-dy', (dx * sn + dy * cs).toFixed(1) + 'px');
+          intro.classList.add('is-expanding');
+        }, 2950));
+        timers.push(setTimeout(finish, 3850));
+      };
+      intro.addEventListener('click', function (e) { if (e.target.closest('.intro-skip')) finish(); });
+      document.getElementById('introReplay').addEventListener('click', function () { setOpen(false); play(); });
+      if (reduced) { intro.hidden = true; } else { play(); }
+    })();
+  </script>
+</body>
+</html>
