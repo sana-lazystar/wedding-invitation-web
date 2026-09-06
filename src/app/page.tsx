@@ -1,15 +1,13 @@
 "use client";
 
-// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보 · 진입 장면 · 떠 있는 메뉴를 옮긴 것입니다.
+/* eslint-disable @next/next/no-img-element */
+// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보 · 팝업북 진입 장면 · 떠 있는 메뉴를 옮긴 것입니다.
 import { useEffect, useRef, useState } from "react";
 
-const INTRO_STEPS = { shown: 60, open: 500, rising: 1300, settling: 1950, text: 2050, expanding: 2950, done: 3850 };
+const INTRO_STEPS = { shown: 60, open: 600, rising: 1450, diving: 2750, done: 3950 };
 
 export default function Home() {
   const introRef = useRef<HTMLDivElement>(null);
-  const letterRef = useRef<HTMLDivElement>(null);
-  const introTextRef = useRef<HTMLDivElement>(null);
-  const coverHeadRef = useRef<HTMLDivElement>(null);
   const fabRef = useRef<HTMLElement>(null);
   const finishRef = useRef<() => void>(() => {});
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,14 +15,20 @@ export default function Home() {
   useEffect(() => {
     const root = document.documentElement;
     const intro = introRef.current;
-    const letter = letterRef.current;
-    const text = introTextRef.current;
-    const head = coverHeadRef.current;
-    if (!intro || !letter || !text || !head) return;
+    if (!intro) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       intro.hidden = true;
       return;
     }
+    // 커버의 애니메이션(홀 사진 물러남 · 표제 · 이름 떠오름)은 진입 장면 동안 첫 프레임에서 멈춰 있다가 장면이 걷힐 때 시작한다
+    const animated = document.querySelectorAll<HTMLElement>(".cover-bg__hall, .cover-head, .names");
+    const restart = () => {
+      animated.forEach((el) => {
+        el.style.animation = "none";
+        void el.offsetWidth;
+        el.style.animation = "";
+      });
+    };
     const timers: number[] = [];
     let finished = false;
     const finish = () => {
@@ -37,40 +41,18 @@ export default function Home() {
     };
     finishRef.current = finish;
 
+    // 순서: 닫힌 책 등장 → 표지 젖힘(책이 가운데로) → 홀 조각·두 사람이 일어섬 → 시점이 내려오며 무대가 화면을 채움(조각이 커버 자리에 겹침) → 걷힘
     window.scrollTo(0, 0);
     intro.hidden = false;
-    intro.className = "";
-    letter.style.removeProperty("--letter-scale");
-    text.style.removeProperty("--text-dx");
-    text.style.removeProperty("--text-dy");
+    intro.className = "is-reset";
     root.classList.add("is-intro");
+    restart();
     void intro.offsetWidth;
+    intro.className = "";
     timers.push(window.setTimeout(() => intro.classList.add("is-shown"), INTRO_STEPS.shown));
     timers.push(window.setTimeout(() => intro.classList.add("is-open"), INTRO_STEPS.open));
     timers.push(window.setTimeout(() => intro.classList.add("is-rising"), INTRO_STEPS.rising));
-    timers.push(window.setTimeout(() => intro.classList.add("is-settling"), INTRO_STEPS.settling));
-    timers.push(window.setTimeout(() => intro.classList.add("is-text"), INTRO_STEPS.text));
-    timers.push(
-      window.setTimeout(() => {
-        const r = letter.getBoundingClientRect();
-        const cx = r.left + r.width / 2;
-        const cy = r.top + r.height / 2;
-        const scale =
-          Math.max((2 * Math.max(cx, window.innerWidth - cx)) / r.width, (2 * Math.max(cy, window.innerHeight - cy)) / r.height) * 1.06;
-        letter.style.setProperty("--letter-scale", scale.toFixed(3));
-        const from = text.getBoundingClientRect();
-        const to = head.getBoundingClientRect();
-        const dx = to.left + to.width / 2 - (from.left + from.width / 2);
-        const dy = to.top + to.height / 2 - (from.top + from.height / 2);
-        // 무대가 -15도 기울어 있으므로 화면 이동량을 무대 좌표계로 돌린다
-        const rad = (15 * Math.PI) / 180;
-        const cs = Math.cos(rad);
-        const sn = Math.sin(rad);
-        text.style.setProperty("--text-dx", `${(dx * cs - dy * sn).toFixed(1)}px`);
-        text.style.setProperty("--text-dy", `${(dx * sn + dy * cs).toFixed(1)}px`);
-        intro.classList.add("is-expanding");
-      }, INTRO_STEPS.expanding),
-    );
+    timers.push(window.setTimeout(() => intro.classList.add("is-diving"), INTRO_STEPS.diving));
     timers.push(window.setTimeout(finish, INTRO_STEPS.done));
 
     return () => {
@@ -99,15 +81,13 @@ export default function Home() {
       <div className="page">
         <section id="cover" className="block block--fixed">
           <div className="cover-bg">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="cover-bg__hall" src="/scene1/hall.png" alt="더채플앳청담 커티지홀" />
             <div className="cover-bg__blur cover-bg__blur--soft" />
             <div className="cover-bg__blur cover-bg__blur--strong" />
             <div className="cover-bg__shadow" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="cover-bg__couple" src="/scene1/couple.png" alt="이산하와 송시야" />
           </div>
-          <div className="cover-head" ref={coverHeadRef}>
+          <div className="cover-head">
             <div className="eyebrow">Wedding Invitation</div>
             <p className="tagline">우리의 삶을 함께 써 주신 당신께</p>
           </div>
@@ -119,7 +99,6 @@ export default function Home() {
         </section>
         <section id="info" className="block block--fixed">
           <div className="letter-card">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="letter-card__art" src="/scene2/opened-paper.png" alt="" />
             <div className="letter-card__text">
               <div>2026년 10월 9일 금요일</div>
@@ -135,14 +114,52 @@ export default function Home() {
 
       <div id="intro" ref={introRef} aria-hidden="true">
         <div className="stage">
-          <div className="env__back" />
-          <div className="env__letter" ref={letterRef} />
-          <div className="env__front" />
-          <div className="env__note">Thanks to everyone.</div>
-          <div className="env__flap" />
-          <div className="intro-text" ref={introTextRef}>
-            <div className="eyebrow">Wedding Invitation</div>
-            <p className="tagline">우리의 삶을 함께 써 주신 당신께</p>
+          <div className="book">
+            <div className="world">
+              <div className="floor">
+                <div className="leaf leaf--right">
+                  <img className="leaf__art" src="/intro/page.png" alt="" />
+                  <div className="leaf__shade" />
+                </div>
+                <div className="leaf leaf--cover">
+                  <div className="leaf__face leaf__inner">
+                    <img className="leaf__art" src="/intro/page.png" alt="" />
+                    <div className="leaf__shade" />
+                  </div>
+                  <div className="leaf__face leaf__outer">
+                    <img className="leaf__art" src="/intro/book-cover.png" alt="" />
+                    <div className="eyebrow">Wedding Invitation</div>
+                    <div className="leaf__rule" />
+                    <p className="leaf__tagline">
+                      우리의 삶을 함께
+                      <br />
+                      써 주신 당신께
+                    </p>
+                    <div className="leaf__note">Thanks to everyone.</div>
+                  </div>
+                </div>
+                <div className="floor__wall" />
+                <div className="floor__feet" />
+                <div className="pop pop--hall">
+                  <div className="pop__face pop__back">
+                    <img className="leaf__art" src="/intro/page.png" alt="" />
+                  </div>
+                  <div className="pop__face pop__front">
+                    <img src="/scene1/hall.png" alt="" />
+                    <div className="cover-bg__blur cover-bg__blur--soft" />
+                    <div className="cover-bg__blur cover-bg__blur--strong" />
+                  </div>
+                </div>
+                <div className="pop pop--couple">
+                  <div className="pop__face pop__back">
+                    <img src="/scene1/couple.png" alt="" />
+                  </div>
+                  <div className="pop__face pop__front">
+                    <img src="/scene1/couple.png" alt="" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <button type="button" className="intro-skip" onClick={() => finishRef.current()}>
