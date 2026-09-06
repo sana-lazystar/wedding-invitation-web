@@ -61,10 +61,12 @@ SVG 루트에 `width` · `height`(px)가 있어야 합니다. 배율 1.5에 256�
 
 | 것 | 자리 |
 | --- | --- |
-| 시간표 · CSS · 스크립트 | `index.html`의 "0. 진입 장면" 구간(`.intro*`, `@keyframes intro-*`)과 스크립트 앞부분. 배율 `--z0`는 높이 = 화면의 2/3, `--z1`은 폭 92%입니다. 봉투 하강 `--drop1` · 카드 값 `--card-*`는 스크립트가 화면 크기에서 계산해 넣습니다 |
+| 시간표 · CSS · 스크립트 | `index.html`의 "0. 진입 장면" 구간(`.intro*`, `@keyframes intro-*`)과 스크립트 앞부분. 배율 `--z0`는 높이 = 화면의 2/3, `--z1`은 폭 92%입니다. 봉투 하강 `--drop1` · 카드 값 `--card-*`는 스크립트가 화면 크기에서 계산해 넣고, 장면 중에 화면 크기가 바뀌면(`resize` · `visualViewport`) 다시 계산합니다(T72. 인앱 브라우저가 열린 직후 툴바를 자리 잡으며 높이를 바꾸면 봉투(화면 가운데 고정)와 편지지가 어긋나 편지지가 위로 튀어 보였습니다) |
 | 에셋 원본 | 봉투는 세 장입니다. `assets/envelope-back.svg`(뒷판, 그냥 네모) · `envelope-front.svg`(앞판. 옆 날개 둘 + 아래 날개, 입구는 투명) · `envelope-flap.svg`(뚜껑, 봉인은 따로) · `envelope-flap-inside.svg`(뚜껑 안쪽) · `wax-seal.svg`(봉인 앞면) · `wax-seal-back.svg`(봉인 뒷면, 어두운 밀랍) |
 | 산출 PNG | `public/intro/`. 앞판·뚜껑은 3배(확대 시작 장면에 보임), 뒷판은 1.5배(입구로만 보임), 봉인은 6배로 뽑습니다. 아래 명령 |
 | Next.js | `src/app/page.tsx`의 `intro*` 마크업과 첫 `useEffect`. 조립본 스크립트와 같은 계산입니다 |
+
+화면 높이 단위는 `svh`입니다(T72). 커버·핵심 정보의 `min-height`와 액자 폭 계산에 `dvh`를 쓰면 iOS·인앱 브라우저에서 툴바가 접히고 펴질 때 구획 높이가 변해 스크롤 중 아래 내용이 밀립니다(390px에서 툴바 60px이면 120px). 화자 아이콘·컷아웃·사진 `img`에는 원본 크기(`width` · `height`)를 적어 그림이 내려오기 전에도 비율만큼 자리를 잡습니다.
 
 카드는 커버 자체입니다(사본이 아닙니다). 봉투 안에서는 봉투 폭의 92%로 있다가 제 높이의 35%만큼 먼저 올라오고, 봉투가 사라진 뒤 화면 전체로 커집니다. 먼저 올라오는 양이 중요합니다. 올라오기 전에 봉투가 사라지면 세로 화면 비율 때문에 아랫변이 화면 밖에 있어 벽처럼 보이고, 확장이 아니라 밀려 올라가는 것으로 보입니다(T46 · T47). 층이 핵심입니다. 바탕(`.intro`, z 25) < 뒷판(`.intro-layer--back`, z 26) < 카드(z 30) < 앞판(`.intro-layer--front`, z 35) < 뚜껑(`.intro-layer--flap`, z 36) < 넘어가기(고정, z 40). 카드는 앞판 뒤, 뒷판 앞에 끼워져 입구(옆 날개 사이 삼각형)로 보이고(T42), 앞판이 카드를 자연히 가리므로 클립이 필요 없습니다. 카드가 봉투 밑변 아래로 삐져나오는 부분은 앞판 층 안의 바탕색 바닥(`.intro__floor`)이 가리고, 바닥은 봉투와 함께 내려가고 흐려지므로 봉투가 내려갈 때는 윗변을 따라, 흐려질 때는 같은 박자로 카드가 드러납니다(T44 · T48). 커버에는 transform만 걸립니다. 뚜껑은 옆면(90°)을 지나는 순간 z 28로 내려가 카드 뒤로 갑니다. 뒷판·앞판·뚜껑 층은 같은 확대·하강·흐려짐 애니메이션을 씁니다. Next.js에서 장면이 끝날 때 커버의 층 지정 해제는 봉투 층이 빠지는 렌더와 같은 프레임(useLayoutEffect)에 합니다. 먼저 지우면 바탕이 커버를 덮는 한 프레임이 생겨 깜빡입니다(T41). 커버의 글 상자 둘(`.cover-head` · `.names`)은 `transform: translateZ(0)` · `will-change`로 제 합성 층에 둡니다(T66). iOS Safari는 커버가 변환 애니메이션 중일 때 흐림 층(backdrop-filter)을 앞으로 올려 위쪽 글을 덮었습니다(폰에서 이산하가 봄. 데스크톱 WebKit·Chrome은 재현 안 됨). 다른 곳에 흐림 층 위 글을 둘 때도 같은 규칙입니다. 확대는 카드가 화면 세로 가운데에 선 상태에서 시작하므로 위 가운데 기준 변환이 곧 가운데 확대입니다. 마지막 키프레임은 변환·클립·필터가 없어 커버 정지 화면과 같습니다(프레임 픽셀 비교로 확인). 봉투 상자(600px)는 화면보다 넓을 수 있어 grid 정렬 대신 absolute + 음수 margin으로 가운데를 맞춥니다. 뚜껑은 원근이 있는 봉투 안에서 윗변을 축으로 돌고, 바깥면과 안쪽면 그림을 같은 자리에 겹쳐 90°에서 바꿉니다(3D 두 면을 쓰지 않습니다). 봉인은 뚜껑의 자식이라 함께 젖혀집니다. 앞면은 바깥면 위, 뒷면은 안쪽면 아래에 같은 자리로 두고 90°에서 바꾸므로, 젖혀진 뒤에는 뚜껑 끝보다 큰 봉인의 뒷면이 끝 둘레로 보입니다. 아래 날개와 봉인의 그늘은 PNG에 굽고, 위 날개와 봉투와 카드의 그늘은 CSS drop-shadow입니다.
 
@@ -103,7 +105,7 @@ Scene3 인사(디자인 논의 T50 제안 · T51 예시 · T52 캐릭터), Scene
 
 Scene4는 사진 종이(`.photo-paper`. 흰 테두리 4px에 사진을 붙인 것, 폭의 3/4에 오른쪽 정렬, -0.7° 기울임. T56)가 위, 토끼 메모지(`.note--memo`. 쪽지와 같은 부품, 왼쪽 위에 토끼 1)가 아래입니다. 메모지는 글 크기만큼입니다(T61. `width: fit-content` · 여백 20/16. 사진 종이 뒤로 26px 들어가 겹치므로 위만 44px이고 첫 줄은 사진 아래 18px에서 시작합니다). 어릴 적 사진 컷아웃(헬리콥터, `.note__stamp`, 높이 144px)은 본문(`p`) 안의 `float: right`이고 글이 그 네모 영역(여백 포함)을 피해 흐릅니다(T61 · T62. 실루엣이 아니라 네모입니다). 앞에 둔 빈 float(`.note__push`, 폭 0 · 두 줄 높이)를 `clear`로 넘어 셋째 줄부터 비킵니다. 컷아웃은 메모지 안에 온전히 있고(본문이 `display: flow-root`라 float 높이를 품습니다) 바깥쪽으로만 조금 나갑니다. 아래 여백을 음수로 두면 줄이 적은 넓은 화면에서 마지막 줄이 그림에 덮이므로 두지 않습니다(T67). 그래서 본문에 고정 줄바꿈(`<br>`)이 없고 낱말 단위로 흐릅니다(`word-break: keep-all`). Scene5(`#part1-bride`)는 좌우 대칭입니다. 사진 종이는 왼쪽(`.photo-paper--left`), 메모지(`.note--right.note--bride`)는 수달(신랑, 기본 표정)이 오른쪽 위에 있고 본문은 24px 오른쪽으로 들여 씁니다. 신부 컷아웃(`.note__stamp--left`, 216px. T60)은 `float: left`로 왼쪽에 서고 글이 오른쪽으로 비켜 흐릅니다.
 
-Scene6~8(`#part2-groom` · `#part2-bride` · `#part3`, T65)은 사진 종이와 메모지의 조합만 다릅니다. 이야기 구획(`.story`)은 항목 사이 22px이고, 사진 종이 바로 다음 메모지에는 `.note--tuck`(사진 뒤로 26px 겹침)을, 와이어프레임에서 들여 놓은 독백 메모지에는 `.note--indent`(왼쪽 20px)를 겁니다. 합창 메모지는 화자 아이콘 둘이 오른쪽 위에 나란히(`.note__who--inner`가 안쪽)입니다. 아이콘을 메모지 정렬과 반대쪽에 두려면 `.note--who-right` · `.note--who-left`입니다(T69. Scene6 관찰 = 오른쪽, Scene7 독백 = 왼쪽). 웨딩 사진 셋은 아직 없어 같은 크기(폭 3/4, 세로 3:4)의 빈 종이(`.photo-paper__blank`)에 이름표만 두었고, 사진이 오면 `.photo-paper__photo`로 바꿉니다. 아이콘 배정(이산하 T65). Scene6 합창 = 수달 기본 + 토끼 2, 관찰 = 토끼 3, 독백 = 토끼 4. Scene7 = 수달 1, 수달 2. Scene8 = 수달 3, 토끼 5, 합창 = 둘이 허그. 장면 사이 간격은 구획 위아래 여백 20px씩, 40px로 같습니다(T67). 컷아웃에는 흰 테두리가 없어 `docs/scripts/sticker-border.py`로 구웠습니다. 인사 블록이 0.3화면이라 사진 종이가 인사와 같은 화면에 걸쳐 보입니다. 쪽지는 화면에 들어올 때 한 번 8px 내려앉으며 나타납니다(0.45초, IntersectionObserver). 움직임 줄이기면 바로 보입니다. 블록 높이는 약 0.3화면(390×844에서 233px)이라 다음 블록의 사진 종이가 같은 화면에 걸쳐 보입니다.
+Scene6~8(`#part2-groom` · `#part2-bride` · `#part3`, T65)은 사진 종이와 메모지의 조합만 다릅니다. 이야기 구획(`.story`)은 항목 사이 22px이고, 사진 종이 바로 다음 메모지에는 `.note--tuck`(사진 뒤로 26px 겹침)을, 와이어프레임에서 들여 놓은 독백 메모지에는 `.note--indent`(왼쪽 20px)를 겁니다. 합창 메모지는 화자 아이콘 둘이 오른쪽 위에 나란히(`.note__who--inner`가 안쪽)입니다. 아이콘을 메모지 정렬과 반대쪽에 두려면 `.note--who-right` · `.note--who-left`입니다(T69 · T73. Scene6 독백 = 오른쪽, Scene7 독백 = 왼쪽). 사진 종이 뒤로 겹치는 메모지의 아이콘은 사진과 반대쪽에 둡니다. 같은 쪽이면 사진(앞 층)에 가려집니다(T73). 웨딩 사진 셋은 아직 없어 같은 크기(폭 3/4, 세로 3:4)의 빈 종이(`.photo-paper__blank`)에 이름표만 두었고, 사진이 오면 `.photo-paper__photo`로 바꿉니다. 아이콘 배정(이산하 T65). Scene6 합창 = 수달 기본 + 토끼 2, 관찰 = 토끼 3, 독백 = 토끼 4. Scene7 = 수달 1, 수달 2. Scene8 = 수달 3, 토끼 5, 합창 = 둘이 허그. 장면 사이 간격은 구획 위아래 여백 20px씩, 40px로 같습니다(T67). 컷아웃에는 흰 테두리가 없어 `docs/scripts/sticker-border.py`로 구웠습니다. 인사 블록이 0.3화면이라 사진 종이가 인사와 같은 화면에 걸쳐 보입니다. 쪽지는 화면에 들어올 때 한 번 8px 내려앉으며 나타납니다(0.45초, IntersectionObserver). 움직임 줄이기면 바로 보입니다. 블록 높이는 약 0.3화면(390×844에서 233px)이라 다음 블록의 사진 종이가 같은 화면에 걸쳐 보입니다.
 
 | 것 | 자리 |
 | --- | --- |
@@ -126,7 +128,9 @@ node docs/scripts/render-asset.mjs docs/artifacts/assets/note-paper.svg public/p
 
 ```sh
 sips -s format png -Z 900 원본.PNG --out docs/design/canvas/hall.png
-python3 docs/scripts/unmatte.py docs/design/scene1/scene1--married-couple.PNG docs/design/scene1/scene1--married-couple--clean.png
+python3 docs/scripts/unmatte.py docs/design/scene1/scene1--married-couple.png docs/design/scene1/scene1--married-couple--clean.png
+# 원본에 투명 여백이 있으면 알파 경계 상자로 잘라 꽉 찬 컷아웃으로 만듭니다(T74. CSS가 그림 상자 높이를 27%로 잡으므로 여백이 있으면 사람이 작아집니다)
+python3 -c "from PIL import Image; import numpy as np; p='docs/design/scene1/scene1--married-couple--clean.png'; im=Image.open(p).convert('RGBA'); a=np.array(im)[:,:,3]; ys,xs=np.where(a>=8); im.crop((xs.min(),ys.min(),xs.max()+1,ys.max()+1)).save(p)"
 sips -s format png -Z 400 docs/design/scene1/scene1--married-couple--clean.png --out docs/design/canvas/couple.png
 sips -s format png -Z 700 docs/design/scene1/scene1--married-couple--clean.png --out public/scene1/couple.png
 python3 docs/scripts/unmatte.py "docs/design/character/0_수달_기본.png" docs/design/character/otter-basic--clean.png

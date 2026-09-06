@@ -34,7 +34,7 @@ body {
   box-shadow: 0 0 40px -20px rgba(70, 48, 24, 0.5);
 }
 .block { position: relative; }
-.block--fixed { min-height: 100dvh; }
+.block--fixed { min-height: 100svh; }   /* dvh가 아니라 svh(T72). 툴바가 접히고 펴져도 높이가 변하지 않아 스크롤 중 아래 내용이 밀리지 않습니다 */
 
 /* 1. 커버. 종이 무대 위의 두 사람. 홀 사진은 그대로(불투명도 1), 두 사람은 통로 위에 서며, 이름이 주인공입니다 */
 #cover {
@@ -42,7 +42,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: calc(56px + env(safe-area-inset-top)) 24px 48px;   /* 아래 여백은 배경(커버 상자 = 100dvh) 아랫변 기준 48px. 안전 영역을 더하지 않습니다(T50) */
+  padding: calc(56px + env(safe-area-inset-top)) 24px 48px;   /* 아래 여백은 배경(커버 상자 = 100svh) 아랫변 기준 48px. 안전 영역을 더하지 않습니다(T50) */
   overflow: hidden;
   isolation: isolate;   /* 커버 안의 층 순서를 커버 안에서 닫습니다(T66) */
 }
@@ -88,7 +88,7 @@ body {
 #info { display: flex; align-items: center; justify-content: center; padding: 40px 12px; }
 .frame {
   position: relative;
-  width: min(100%, calc((100dvh - 80px) * 940 / 1672));
+  width: min(100%, calc((100svh - 80px) * 940 / 1672));
   aspect-ratio: 940 / 1672;
 }
 .frame__art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
@@ -137,7 +137,7 @@ body {
 .note--memo { width: fit-content; max-width: 100%; }   /* 메모지는 글 크기만큼(T61) */
 .note--tuck { margin-top: -48px; padding-top: 44px; }   /* 사진 종이 바로 다음 메모지. 사진 뒤로 26px 들어가 겹치고(T56) 위 여백은 첫 줄이 사진 아래 18px에서 시작하게 */
 .note--indent { margin-left: 20px; }   /* 와이어프레임의 들여 놓은 메모지(독백) */
-/* 아이콘을 메모지 정렬과 반대쪽에 두는 변형(T69). Scene6 관찰 메모지는 왼쪽 정렬에 아이콘 오른쪽, Scene7 독백 메모지는 오른쪽 정렬에 아이콘 왼쪽 */
+/* 아이콘을 메모지 정렬과 반대쪽에 두는 변형(T69 · T73). Scene6 독백 메모지는 왼쪽 정렬에 아이콘 오른쪽, Scene7 독백 메모지는 오른쪽 정렬에 아이콘 왼쪽. 사진 종이 뒤로 겹치는 메모지(`.note--tuck`)의 아이콘은 사진과 반대쪽에 둬야 가려지지 않습니다 */
 .note--left.note--who-right .note__who { left: auto; right: -8px; transform: rotate(6deg); }
 .note--right.note--who-left .note__who { right: auto; left: -9px; transform: rotate(-5deg); }
 /* 합창 메모지(T65). 화자 둘이 오른쪽 위에 나란히. 바깥쪽이 첫째, 안쪽(`--inner`)이 둘째 */

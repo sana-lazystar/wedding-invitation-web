@@ -39,22 +39,28 @@ export default function Home() {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     root.classList.add("is-intro");
-    const vw = root.clientWidth;
-    const vh = window.innerHeight;
-    const envW = Math.min(vw, 430) * 0.92; // 봉투 폭 = 화면 폭(페이지 폭 430까지)의 92%
-    const z1 = envW / 600;
-    const z0 = (vh * 2) / 3 / 400; // 시작 배율. 봉투 높이 = 화면 높이의 2/3
-    const envTop = vh / 2 - 200 * z1; // 물러난 뒤 봉투 윗변의 화면 y
-    const ty0 = envTop + 14 * z1; // 편지지가 봉투 안에 든 자리(윗변 바로 아래). 올라오면 0(최종 자리)
-    const s0 = (envW * 0.92) / cover.clientWidth; // 봉투 안에서의 배율. 편지지 폭 = 봉투 폭의 92%. 커지면 1
-    const ty1 = ty0 - cover.clientHeight * s0 * 0.35; // 조금 올라온 자리(제 높이의 35%). 이만큼 올라와야 봉투가 사라질 때 아랫변이 화면 안에 있습니다
-    const drop1 = Math.max(0, ty1 + cover.clientHeight * s0 - 70 - envTop); // 봉투가 내려가는 거리(화면 px). 윗변이 편지지 아랫변 70px 위까지 와서 편지지가 거의 다 보입니다
-    root.style.setProperty("--z0", String(z0));
-    root.style.setProperty("--z1", String(z1));
-    root.style.setProperty("--drop1", `${drop1 / z1}px`);
-    cover.style.setProperty("--card-ty0", `${ty0}px`);
-    cover.style.setProperty("--card-ty1", `${ty1}px`);
-    cover.style.setProperty("--card-s0", String(s0));
+    // 화면 크기에서 배율과 카드 값을 계산합니다. 인앱 브라우저는 열린 직후 툴바가 자리 잡으며 화면 높이를 바꾸므로, 장면 중에 크기가 바뀌면 다시 계산해 봉투(화면 가운데 고정)와 편지지가 어긋나지 않게 합니다(디자인 논의 T72)
+    const applyIntroMetrics = () => {
+      const vw = root.clientWidth;
+      const vh = window.innerHeight;
+      const envW = Math.min(vw, 430) * 0.92; // 봉투 폭 = 화면 폭(페이지 폭 430까지)의 92%
+      const z1 = envW / 600;
+      const z0 = (vh * 2) / 3 / 400; // 시작 배율. 봉투 높이 = 화면 높이의 2/3
+      const envTop = vh / 2 - 200 * z1; // 물러난 뒤 봉투 윗변의 화면 y
+      const ty0 = envTop + 14 * z1; // 편지지가 봉투 안에 든 자리(윗변 바로 아래). 올라오면 0(최종 자리)
+      const s0 = (envW * 0.92) / cover.clientWidth; // 봉투 안에서의 배율. 편지지 폭 = 봉투 폭의 92%. 커지면 1
+      const ty1 = ty0 - cover.clientHeight * s0 * 0.35; // 조금 올라온 자리(제 높이의 35%). 이만큼 올라와야 봉투가 사라질 때 아랫변이 화면 안에 있습니다
+      const drop1 = Math.max(0, ty1 + cover.clientHeight * s0 - 70 - envTop); // 봉투가 내려가는 거리(화면 px). 윗변이 편지지 아랫변 70px 위까지 와서 편지지가 거의 다 보입니다
+      root.style.setProperty("--z0", String(z0));
+      root.style.setProperty("--z1", String(z1));
+      root.style.setProperty("--drop1", `${drop1 / z1}px`);
+      cover.style.setProperty("--card-ty0", `${ty0}px`);
+      cover.style.setProperty("--card-ty1", `${ty1}px`);
+      cover.style.setProperty("--card-s0", String(s0));
+    };
+    applyIntroMetrics();
+    window.addEventListener("resize", applyIntroMetrics);
+    window.visualViewport?.addEventListener("resize", applyIntroMetrics);
     let started = false;
     let safety: number | undefined;
     const startIntro = () => {
@@ -78,6 +84,8 @@ export default function Home() {
       cover.removeEventListener("animationend", onAnimationEnd);
       document.removeEventListener("click", finishIntro);
       document.removeEventListener("touchmove", onIntroTouchMove);
+      window.removeEventListener("resize", applyIntroMetrics);
+      window.visualViewport?.removeEventListener("resize", applyIntroMetrics);
       root.classList.remove("is-intro", "is-intro-shown");
     };
   }, []);
@@ -197,12 +205,12 @@ export default function Home() {
         <section id="greeting" className="block greeting">
           <div className="note note--right">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/otter-basic.png" alt="" />
+            <img className="note__who" src="/character/otter-basic.png" width={240} height={194} alt="" />
             <p className="note__text">안녕하세요. 10월의 신랑, 이산하</p>
           </div>
           <div className="note note--left">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/rabbit-basic.png" alt="" />
+            <img className="note__who" src="/character/rabbit-basic.png" width={240} height={158} alt="" />
             <p className="note__text">
               신부 송시야입니다!
               <br />
@@ -213,14 +221,14 @@ export default function Home() {
         <section id="part1-groom" className="block story">
           <div className="photo-paper">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="photo-paper__photo" src="/scene4/groom-child.jpg" alt="신랑 어릴 적 사진" />
+            <img className="photo-paper__photo" src="/scene4/groom-child.jpg" width={650} height={900} alt="신랑 어릴 적 사진" />
           </div>
           <div className="note note--left note--memo note--tuck">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/rabbit-1.png" alt="" />
+            <img className="note__who" src="/character/rabbit-1.png" width={240} height={164} alt="" />
             <p className="note__text">
               <span className="note__push" />
-              <img className="note__stamp" src="/scene4/groom-child-ride.png" alt="" />
+              <img className="note__stamp" src="/scene4/groom-child-ride.png" width={401} height={324} alt="" />
               제 신랑은 어릴 때 시를 써서 상도 받던 문학소년이었대요. 무협지를 좋아해서 작가를 꿈꾸기도 했고요. 그랬던 아이는 커서 냉철하고 이성적인
               개발자가 됐어요!
             </p>
@@ -229,14 +237,14 @@ export default function Home() {
         <section id="part1-bride" className="block story">
           <div className="photo-paper photo-paper--left">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="photo-paper__photo" src="/scene5/bride-child.jpg" alt="신부 어릴 적 사진" />
+            <img className="photo-paper__photo" src="/scene5/bride-child.jpg" width={625} height={900} alt="신부 어릴 적 사진" />
           </div>
           <div className="note note--right note--memo note--tuck note--bride">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/otter-basic.png" alt="" />
+            <img className="note__who" src="/character/otter-basic.png" width={240} height={194} alt="" />
             <p className="note__text">
               <span className="note__push note__push--left" />
-              <img className="note__stamp note__stamp--left" src="/scene5/bride-child-cutout.png" alt="" />
+              <img className="note__stamp note__stamp--left" src="/scene5/bride-child-cutout.png" width={130} height={324} alt="" />
               제 신부는 다섯 살 때 빗소리가 좋다며 혼자 우산 쓰고 동네를 걷던 아이였대요. 글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고 다녔고요. 그랬던 아이는
               커서 상황을 분석하고 길을 찾는 사업전략가가 됐어요. 그래도 여전히 꿈을 꾸는 사람이고요.
             </p>
@@ -245,8 +253,8 @@ export default function Home() {
         <section id="part2-groom" className="block story">
           <div className="note note--right note--memo">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/otter-basic.png" alt="" />
-            <img className="note__who note__who--inner" src="/character/rabbit-2.png" alt="" />
+            <img className="note__who" src="/character/otter-basic.png" width={240} height={194} alt="" />
+            <img className="note__who note__who--inner" src="/character/rabbit-2.png" width={240} height={198} alt="" />
             <p className="note__text">저희는 같은 회사에서 만났어요!</p>
           </div>
           <div className="photo-paper photo-paper--right">
@@ -255,14 +263,14 @@ export default function Home() {
               <span>신랑 웨딩 사진</span>
             </div>
           </div>
-          <div className="note note--left note--memo note--tuck note--who-right">
+          <div className="note note--left note--memo note--tuck">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/rabbit-3.png" alt="" />
+            <img className="note__who" src="/character/rabbit-3.png" width={240} height={151} alt="" />
             <p className="note__text">신랑은 새벽에 퇴근하더라도 다음 날 꼭 정장에 머리까지 하고 나왔어요. 처음엔 차가워 보이는 데다 저와 너무 다른 사람 같아서 거리를 뒀는데, 알면 알수록 보석 같은 사람이더라고요!</p>
           </div>
-          <div className="note note--left note--memo note--indent">
+          <div className="note note--left note--memo note--indent note--who-right">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/rabbit-4.png" alt="" />
+            <img className="note__who" src="/character/rabbit-4.png" width={240} height={159} alt="" />
             <p className="note__text">&apos;이 사람 놓치면 안 되겠다, 남 주기 너무 아깝다! 아니, 싫다!&apos; 싶어서 콱 잡았죠.</p>
           </div>
         </section>
@@ -275,12 +283,12 @@ export default function Home() {
           </div>
           <div className="note note--right note--memo note--tuck">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/otter-1.png" alt="" />
+            <img className="note__who" src="/character/otter-1.png" width={240} height={183} alt="" />
             <p className="note__text">사실 저는 그때 연애 생각이 없었어요. 당분간 일에만 집중하자는 마음이었죠. 그런데 이 사람이 자꾸 제 주변을 맴돌더라고요.</p>
           </div>
           <div className="note note--right note--memo note--indent note--who-left">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/otter-2.png" alt="" />
+            <img className="note__who" src="/character/otter-2.png" width={238} height={240} alt="" />
             <p className="note__text">그러다 문득, 쉬는 날에도 시야를 떠올리는 저를 발견했어요. 아, 내가 설레고 있구나.</p>
           </div>
         </section>
@@ -293,17 +301,17 @@ export default function Home() {
           </div>
           <div className="note note--right note--memo note--tuck note--indent">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/otter-3.png" alt="" />
+            <img className="note__who" src="/character/otter-3.png" width={223} height={240} alt="" />
             <p className="note__text">어른이 되고는 꿈을 꾸지 않던 제가, 이 사람을 만나 다시 꿈꾸게 됐어요. 사랑도 많아졌고요.</p>
           </div>
           <div className="note note--left note--memo">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/rabbit-5.png" alt="" />
+            <img className="note__who" src="/character/rabbit-5.png" width={240} height={184} alt="" />
             <p className="note__text">마음이 여렸던 저는 이 사람 덕분에 많이 단단해졌어요! 누군가에게 기대는 법도 배웠고요!</p>
           </div>
           <div className="note note--right note--memo">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/hug.png" alt="" />
+            <img className="note__who" src="/character/hug.png" width={240} height={189} alt="" />
             <p className="note__text">MBTI 궁합이 &apos;파국&apos;으로 나올 만큼 성향이 다르지만, 달랐기에 서로의 빈틈을 채우고, 장점은 더 빛낼 수 있었어요.</p>
           </div>
         </section>
