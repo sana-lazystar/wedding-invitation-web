@@ -60,3 +60,5 @@ related: []
 2026-09-06 22:52:04 · develop · b1b9138 · 봉인은 뚜껑이 옆면을 지날 때 뚜껑 뒤로 숨음, 면 교체 2.42초(디자인 논의 T38). `src/app/globals.css`.
 
 2026-09-06 22:56:03 · develop · 50afd26 · 봉인 뒷면이 젖혀진 뚜껑 끝 둘레로 보임, 카드는 2.9초부터(디자인 논의 T39). `src/app/page.tsx` `src/app/globals.css` `public/intro/wax-seal-back.png`.
+
+2026-09-06 23:08:04 · develop · a49d92c · 진입 장면 세 층 구조, 줌아웃과 뚜껑 동시, 봉투 흐려짐, 2.6초(디자인 논의 T40). `src/app/page.tsx` `src/app/globals.css`.
