@@ -11,6 +11,7 @@
 | `sync-globals.mjs` | 조립본 CSS를 Next.js `globals.css`로 옮깁니다 | 있음 |
 | `inline-artifact.mjs` | 조립본을 Artifact 발행용으로 인라인합니다 | 있음. 디자인 결정 11로 쓰지 않음 |
 | `unmatte.py` | 컷아웃 가장자리 색 번짐을 지웁니다 | 있음 |
+| `sticker-border.py` | 컷아웃 PNG에 흰 스티커 테두리를 굽습니다. 사진 컷아웃을 캐릭터 스티커와 같은 문법으로 맞출 때 | 있음 (디자인 논의 T53) |
 | `gen-lace-frill.py` | 레이스 프릴 SVG(`docs/artifacts/assets/lace-frill.svg`)를 만듭니다. 타원 둘레를 호 길이로 균등 분할해 주름잎을 놓습니다 | 있음 (이산하가 다른 세션에서 작성. 디자인 논의 T50) |
 
 ## 사진 추가·순서 변경 절차
@@ -71,6 +72,14 @@ python3 docs/scripts/paper-back.py docs/design/canvas/couple.png {종이결.png}
 
 ```sh
 node docs/scripts/sync-globals.mjs
+```
+
+## sticker-border.py — 컷아웃에 흰 스티커 테두리
+
+캐릭터 그림에는 흰 테두리가 이미 있으므로, 사진 컷아웃(어릴 적 사진 등)을 같은 문법으로 맞출 때 씁니다(디자인 논의 T53). 알파의 경계 상자로 자르고 높이를 맞춘 뒤, 알파를 넓혀 흰 층을 깔고 원본을 위에 얹습니다. 원본이 화폭 변에서 잘려 있으면 그 변에서는 테두리를 끊습니다. `unmatte.py` 뒤, `quantize-png.py` 앞에 씁니다.
+
+```sh
+python3 docs/scripts/sticker-border.py docs/design/scene4/groom-child-ride--clean.png public/scene4/groom-child-ride.png 300 7
 ```
 
 ## unmatte.py — 컷아웃 가장자리 색 번짐 제거
