@@ -235,7 +235,7 @@ export default function Home() {
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="photo-paper__photo" src="/scene5/bride-child.jpg" alt="신부 어릴 적 사진" />
           </div>
-          <div className="note note--right note--memo">
+          <div className="note note--right note--memo note--bride">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/otter-basic.png" alt="" />
             <p className="note__text">

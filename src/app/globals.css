@@ -140,7 +140,10 @@ body {
 }
 /* 5. Part 1 신부(와이어프레임 6쪽). Scene4와 좌우 대칭입니다(T58). 사진 종이는 왼쪽, 메모지는 수달(신랑)이 오른쪽 위에, 신부 컷아웃이 왼쪽 아래에 */
 .photo-paper--left { align-self: flex-start; transform: rotate(0.7deg); }
-.note__stamp--left { right: auto; left: -12px; transform: rotate(-5deg); }
+/* 신부 메모지(T60). 본문은 24px 오른쪽으로. 신부 컷아웃은 1.5배(216px)라 본문 줄과 가로로 겹칠 수 없어 본문 아래 띠(152px 안 + 64px 밖)에 왼쪽 아래로 세웁니다. 아래 여백은 마지막 줄이 컷아웃 위 10px에서 끝나게 */
+.note--bride { padding-bottom: 162px; }
+.note--bride .note__text { padding-left: 24px; }
+.note__stamp--left { right: auto; left: -2px; bottom: -64px; height: 216px; transform: rotate(-4deg); }
 
 /* 떠 있는 바로 가기 버튼 */
 .fab {
