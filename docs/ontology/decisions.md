@@ -18,5 +18,6 @@
 | --- | --- | --- | --- | --- |
 | 부트스트랩 결정 N | `docs/dashboard/discussions/2026-09-06--workspace-bootstrap.md` | 7 | 진행 중 | 작업환경 부트스트랩 (ID 접두 · docs 동거 · state.json 형태 · 체계 계승 범위 · git 원격·계정 · 브랜치 역할) |
 | 스택 결정 N | `docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md` | 15 | 완결 (2026-09-06) | 기술 스택·인프라 선정 (언어·프레임워크 · 호스팅 · 이미지 · 저장소) |
+| 디자인 결정 N | `docs/dashboard/discussions/2026-09-06--design-mockups.md` | 6 | 진행 중 | 디자인 시안 (IA 단위 · 명세 서랍 · 시안 위치 · 확인 방식 · 생산 흐름 · 개인정보 자리표시) |
 
 새 논의록을 열어 접두를 늘리면 이 표와 `docs/ontology/tools/check-refs.mjs`의 NS 표를 함께 고칩니다. "결정 수"는 `check-refs.mjs`가 표 실제 행 수와 대조합니다.

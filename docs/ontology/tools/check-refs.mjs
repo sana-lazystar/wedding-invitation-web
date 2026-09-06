@@ -78,6 +78,7 @@ function decisionRows(file) {
 const NS = {
   '부트스트랩': 'docs/dashboard/discussions/2026-09-06--workspace-bootstrap.md',
   '스택': 'docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md',
+  '디자인': 'docs/dashboard/discussions/2026-09-06--design-mockups.md',
 };
 const decisionCache = new Map();
 function decisionsOf(relPath) {
