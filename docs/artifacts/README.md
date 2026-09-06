@@ -5,10 +5,10 @@
 ## 지금 상태 (2026-09-07)
 
 - 완료: 진입 장면(편지봉투) · Scene1 커버(와이어프레임 2쪽) · Scene2 핵심 정보(3쪽, 레이스 타원 카드) · 떠 있는 바로 가기 메뉴
-- 예시: Scene3 인사(4쪽)를 쪽지 두 장 + 회색 원 자리표시로 붙였습니다(T51). 캐릭터 그림이 오면 원 자리에 넣습니다. 4쪽(Part 1 신랑)은 사진 종이 자리표시만 있습니다. 아래 "인사 (쪽지)"
+- Scene3 인사(4쪽)는 쪽지 두 장에 수달(신랑) · 토끼(신부) 스티커 캐릭터가 걸칩니다(T51 예시 · T52 캐릭터). 4쪽(Part 1 신랑)은 사진 종이 자리표시만 있습니다. 아래 "인사 (쪽지)"
 - 진입 장면(로딩)은 편지봉투입니다(T35 에셋 · T36~T49 장면). 봉투가 확대돼 있다가 물러나고, 뚜껑이 봉인을 단 채 젖혀지고, 커버가 카드로 빠져나오며 화면을 채웁니다. 아래 "진입 장면 (로딩)"
 - 핵심 정보(Scene2)는 레이스 프릴을 두른 타원 카드입니다(T50). 그림 세 장을 겹치고 글은 HTML로 얹습니다. 아래 "핵심 정보 (레이스 타원 카드)"
-- 다음: 이산하의 Scene3 예시 판정과 캐릭터 그림(토끼 = 신부 · 수달 = 신랑). 이산하가 재료를 줍니다(Q11). 구성 제안과 재료 규격은 디자인 논의 T50에 있습니다. 받으면 Scene3에 넣고 4쪽부터 이어 붙입니다
+- 다음: 이산하의 Scene3 판정, 그다음 4쪽(Part 1 신랑. 어릴 적 사진 + 토끼 메모지). 캐릭터 원본은 `../design/character/`에 기본 표정 둘과 다른 포즈 아홉(수달 1~3, 토끼 1~5, 둘이 허그)이 있습니다(T52)
 - 콘셉트: 팝업북. 책은 서양 고서(앤티크)이고 붉은 가죽에 금박입니다. 질감 에셋은 CSS로 흉내 내지 않고 SVG → PNG로 만듭니다(디자인 결정 11, 아래 "질감 에셋 만들기")
 - Next.js 임시 적용(WIW-4)은 develop에 커밋돼 있습니다. develop → main PR과 배포는 이산하가 합니다
 
@@ -31,9 +31,9 @@ Artifact 발행은 2026-09-06 T31에 중단했습니다(디자인 결정 11). �
 | `canvas/FloatingMenu.dc.html` | 떠 있는 바로 가기 버튼의 열린 상태 | 커밋 |
 | `canvas/canvas.json` | 아트보드 배치와 메모 | 커밋 |
 | `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 편지봉투 여섯(`envelope-back` · `envelope-front` · `envelope-flap` · `envelope-flap-inside` · `wax-seal` · `wax-seal-back`, T35~T42)과 레이스 셋(`lace-frill` · `oval-card` · `fleuron`, 이산하가 다른 세션에서 만듦, T50), 쪽지 종이(`note-paper`, T51)입니다 | 커밋 |
-| `../design/scene1/`, `../design/scene2/` | 이산하가 준 원본 이미지 | 제외 (`docs/design/`) |
+| `../design/scene1/`, `../design/scene2/`, `../design/character/` | 이산하가 준 원본 이미지. 캐릭터는 스티커(흰 테두리 포함) PNG이고 `*--clean.png`는 가장자리 색 번짐을 지운 것 | 제외 (`docs/design/`) |
 | `../design/canvas/*.png` | 캔버스용 축소본(PNG 무손실). 아트보드가 파일명으로 참조합니다 | 제외 |
-| `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/lace/`, `public/paper/` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
+| `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/lace/`, `public/paper/`, `public/character/` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
 | 조립된 발행 파일 | Claude 세션 스크래치패드 | 커밋하지 않음 |
 
 ## 고치는 순서
@@ -100,13 +100,13 @@ node docs/scripts/render-asset.mjs docs/artifacts/assets/fleuron.svg public/lace
 
 ## 인사 (쪽지)
 
-Scene3 예시입니다(디자인 논의 T50 제안 · T51 예시). 말풍선 대신 쪽지입니다. 한 줄 인사를 종이 쪽지에 쓰고, 화자 캐릭터가 쪽지의 위 모서리 하나에 다이컷 조각(종이 테두리 + 그늘)으로 걸칩니다. 신랑(수달) 쪽지는 오른쪽 정렬에 오른쪽 위 모서리, 신부(토끼) 쪽지는 왼쪽 정렬에 왼쪽 위 모서리입니다. 지금 화자는 회색 원 자리표시(`.note__who`)이고, 캐릭터 그림이 오면 그 자리에 상반신 컷아웃을 넣습니다. 쪽지는 화면에 들어올 때 한 번 8px 내려앉으며 나타납니다(0.45초, IntersectionObserver). 움직임 줄이기면 바로 보입니다. 블록 높이는 약 0.3화면(390×844에서 233px)이라 다음 블록의 사진 종이가 같은 화면에 걸쳐 보입니다. 그것을 확인하려고 4쪽 자리표시(`#part1-groom`, 사진 종이 한 장)를 두었고 4쪽을 만들 때 걷어냅니다.
+Scene3입니다(디자인 논의 T50 제안 · T51 예시 · T52 캐릭터). 말풍선 대신 쪽지입니다. 한 줄 인사를 종이 쪽지에 쓰고, 화자 캐릭터가 쪽지의 위 모서리 하나에 스티커(흰 테두리는 그림에 있고 그늘은 CSS)로 걸칩니다. 신랑(수달) 쪽지는 오른쪽 정렬에 오른쪽 위 모서리, 신부(토끼) 쪽지는 왼쪽 정렬에 왼쪽 위 모서리입니다. 캐릭터(`.note__who`)는 높이 72px이고 쪽지 위로 54px 올라가 아래가 쪽지 안 18px까지 옵니다. 첫 줄은 위 여백 22px 아래라 겹치지 않습니다. 붙인 스티커처럼 6° · -5° 기울입니다. 쪽지는 화면에 들어올 때 한 번 8px 내려앉으며 나타납니다(0.45초, IntersectionObserver). 움직임 줄이기면 바로 보입니다. 블록 높이는 약 0.3화면(390×844에서 233px)이라 다음 블록의 사진 종이가 같은 화면에 걸쳐 보입니다. 그것을 확인하려고 4쪽 자리표시(`#part1-groom`, 사진 종이 한 장)를 두었고 4쪽을 만들 때 걷어냅니다.
 
 | 것 | 자리 |
 | --- | --- |
 | CSS · 마크업 | `index.html`의 "3. 인사" 구간(`.greeting` · `.note*` · `.story` · `.photo-paper`)과 스크립트의 쪽지 등장 부분 |
-| 에셋 원본 | `assets/note-paper.svg`(결 있는 종이 + 얼룩. 720×480. 그늘·모서리는 CSS) |
-| 산출 PNG | `public/paper/note.png`(1배, 214KB). 쪽지마다 `object-fit: cover`로 깔리므로 크기가 달라도 결이 늘어나지 않습니다. 4~8쪽의 메모지도 같은 그림을 씁니다 |
+| 에셋 원본 | `assets/note-paper.svg`(결 있는 종이 + 얼룩. 720×480. 그늘·모서리는 CSS). 캐릭터는 `../design/character/0_수달_기본.png` · `0_토끼_기본.png`(이산하, T52) |
+| 산출 PNG | `public/paper/note.png`(1배, 214KB). 쪽지마다 `object-fit: cover`로 깔리므로 크기가 달라도 결이 늘어나지 않습니다. 4~8쪽의 메모지도 같은 그림을 씁니다. 캐릭터는 `public/character/otter-basic.png` · `rabbit-basic.png`(높이 240px, 69KB · 58KB. 아래 "이미지 축소") |
 | Next.js | `src/app/page.tsx`의 `#greeting` · `#part1-groom` 마크업과 쪽지 등장 `useEffect` |
 
 ```sh
@@ -126,6 +126,10 @@ sips -s format png -Z 900 원본.PNG --out docs/design/canvas/hall.png
 python3 docs/scripts/unmatte.py docs/design/scene1/scene1--married-couple.PNG docs/design/scene1/scene1--married-couple--clean.png
 sips -s format png -Z 400 docs/design/scene1/scene1--married-couple--clean.png --out docs/design/canvas/couple.png
 sips -s format png -Z 700 docs/design/scene1/scene1--married-couple--clean.png --out public/scene1/couple.png
+python3 docs/scripts/unmatte.py "docs/design/character/0_수달_기본.png" docs/design/character/otter-basic--clean.png
+sips -s format png -Z 240 docs/design/character/otter-basic--clean.png --out public/character/otter-basic.png
 ```
+
+캐릭터 스티커도 두 사람 컷아웃처럼 반투명 가장자리에 자홍색 번짐이 있어 `unmatte.py`를 먼저 거칩니다(T52). 화면에서 72px 높이로 쓰므로 240px이면 3배 화면까지 충분합니다. 토끼(`0_토끼_기본.png` → `rabbit-basic`)도 같은 두 줄입니다.
 
 Next.js에는 원본을 `public/scene*/`로 복사합니다(최적화 전. 발송본은 이미지 파이프라인을 거칩니다). 열린 봉투 일러스트(`scene2--opened-paper.png`)는 T50에서 레이스 타원 카드로 바뀌어 더 쓰지 않습니다. 원본은 `docs/design/scene2/`에 그대로 있습니다.

@@ -112,11 +112,11 @@
     .lace__small { font-size: 3.5cqw; line-height: 1.7; color: var(--ink-soft); }
     .lace__gap { height: 3.5cqw; }
 
-    /* 3. 인사(와이어프레임 4쪽, 0.3화면). 쪽지 두 장에 한 줄씩. 화자 캐릭터는 쪽지 위 모서리에 다이컷 조각(종이 테두리 + 그늘)으로 걸칩니다. 지금은 회색 원 자리표시입니다(T51). 신랑 쪽지는 오른쪽 정렬에 오른쪽 위, 신부 쪽지는 왼쪽 정렬에 왼쪽 위. 종이 결은 그림(`public/paper/note.png`), 그늘·기울기는 CSS */
+    /* 3. 인사(와이어프레임 4쪽, 0.3화면). 쪽지 두 장에 한 줄씩. 화자 캐릭터(수달 = 신랑, 토끼 = 신부. 이산하가 준 스티커 그림, T52)가 쪽지 위 모서리에 걸칩니다. 신랑 쪽지는 오른쪽 정렬에 오른쪽 위, 신부 쪽지는 왼쪽 정렬에 왼쪽 위. 종이 결은 그림(`public/paper/note.png`), 그늘·기울기는 CSS */
     .greeting { display: flex; flex-direction: column; gap: 22px; padding: 40px 24px 14px; }
     .note {
       position: relative; width: 80%;
-      padding: 22px 16px 20px;   /* 와이어프레임 메모지 안쪽 여백 좌우 16 · 위아래 20. 위는 화자 원(아래가 +20px까지 옴)을 피해 2px 더 */
+      padding: 22px 16px 20px;   /* 와이어프레임 메모지 안쪽 여백 좌우 16 · 위아래 20. 위는 화자 얼굴(아래가 +18px까지 옴)을 피해 2px 더 */
       border-radius: 3px;
       box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
       font-family: var(--font-name); font-size: 15px; line-height: 1.7; color: var(--ink);
@@ -129,14 +129,13 @@
     .note--left { --tilt: -0.8deg; align-self: flex-start; }
     .note__paper { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 3px; }
     .note__text { position: relative; margin: 0; }
-    /* 화자 자리표시. 회색 원에 종이 테두리(다이컷)와 그늘. 캐릭터 그림이 오면 이 자리에 상반신 컷아웃이 들어갑니다 */
+    /* 화자. 흰 테두리(다이컷)는 그림에 이미 있어 그늘만 CSS로 붙입니다. 높이 72px, 아래가 쪽지 안 +18px까지 와서 첫 줄(위 여백 22px)과 겹치지 않습니다. 살짝 기울여 붙인 스티커처럼 */
     .note__who {
-      position: absolute; top: -34px; width: 54px; height: 54px; border-radius: 50%;
-      background: #CBC2B3;
-      box-shadow: 0 0 0 4px #FFFDF8, 0 1px 2px rgba(70, 48, 24, 0.22), 0 8px 14px -6px rgba(70, 48, 24, 0.45);
+      position: absolute; top: -54px; height: 72px; width: auto;
+      filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.22)) drop-shadow(0 6px 10px rgba(70, 48, 24, 0.28));
     }
-    .note--right .note__who { right: -12px; }
-    .note--left .note__who { left: -12px; }
+    .note--right .note__who { right: -16px; transform: rotate(6deg); }
+    .note--left .note__who { left: -18px; transform: rotate(-5deg); }
     /* 4쪽(Part 1 신랑) 자리표시. 인사 블록이 0.3화면이라 다음 블록의 사진 종이가 같은 화면에 걸쳐 보이는 것을 확인하기 위한 것입니다. 4쪽을 만들 때 걷어냅니다 */
     .story { padding: 20px 24px 48px; }
     .photo-paper {
@@ -322,12 +321,12 @@
     <section id="greeting" class="block greeting">
       <div class="note note--right">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
-        <div class="note__who" aria-hidden="true"></div>
+        <img class="note__who" src="../../public/character/otter-basic.png" alt="">
         <p class="note__text">안녕하세요. 10월의 신랑, 이산하</p>
       </div>
       <div class="note note--left">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
-        <div class="note__who" aria-hidden="true"></div>
+        <img class="note__who" src="../../public/character/rabbit-basic.png" alt="">
         <p class="note__text">신부 송시야입니다!<br>잠깐 저희에 대해 얘기해 드릴게요!</p>
       </div>
     </section>
