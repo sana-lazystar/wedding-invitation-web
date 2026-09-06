@@ -8,7 +8,7 @@
   <!-- 글꼴 후보. 시안 확인용으로 여럿을 싣습니다. 확정되면 쓰는 것만 남깁니다 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;600&family=Hahmlet:wght@400;600&family=Song+Myung&family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500&family=Nanum+Gothic:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500&family=Cormorant+Garamond:wght@500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;600&family=Hahmlet:wght@400;600&family=Song+Myung&family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500;700&family=Nanum+Gothic:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500&family=Cormorant+Garamond:wght@500;600&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <style>
     :root {
@@ -19,8 +19,8 @@
       --muted: #7A6F63;
       --oak: #B98E5E;
       --rule: #DCD0BC;
-      --font-serif: 'Gowun Batang', 'Apple SD Gothic Neo', 'Noto Serif KR', serif;
-      --font-sans: 'Gowun Dodum', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      --font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      --font-ui: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
       --font-latin: 'Cormorant Garamond', Georgia, serif;
       --bar-h: 56px;
     }
@@ -30,7 +30,7 @@
       margin: 0;
       background: #E9E1D2;
       color: var(--ink);
-      font-family: var(--font-serif);
+      font-family: var(--font-body);
       line-height: 1.7;
       -webkit-font-smoothing: antialiased;
     }
@@ -54,24 +54,24 @@
     }
     .eyebrow {
       font-family: var(--font-latin);
-      font-size: 13px;
+      font-size: 18px;
       font-weight: 600;
-      letter-spacing: 0.3em;
+      letter-spacing: 0.26em;
       text-transform: uppercase;
       color: var(--muted);
       line-height: 1.4;
     }
-    .tagline { margin-top: 12px; font-size: 15px; color: var(--ink-soft); }
+    .tagline { margin-top: 10px; font-size: 15px; color: var(--ink-soft); }
     .popup {
       position: relative;
-      margin-top: 26px;
+      margin-top: 24px;
       width: min(302px, 78vw);
       aspect-ratio: 302 / 470;
       max-height: calc(100dvh - 380px);
       border-radius: 16px;
       overflow: hidden;
       background: #E7DCC8;
-      box-shadow: 0 0 0 6px var(--paper), 0 26px 40px -24px rgba(70, 48, 24, 0.55);
+      box-shadow: 0 24px 48px -20px rgba(70, 48, 24, 0.45);
     }
     .popup__hall { width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; display: block; }
     .popup__shadow {
@@ -85,9 +85,10 @@
       height: 42.5%; width: auto; transform: translateX(-50%);
       filter: drop-shadow(0 8px 8px rgba(70, 48, 24, 0.3));
     }
-    .names { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-    .names__name { font-size: 28px; font-weight: 700; letter-spacing: 0.08em; line-height: 1.4; }
-    .names__and { font-family: var(--font-sans); font-size: 13px; color: var(--muted); line-height: 1.4; }
+    .popup__fade { position: absolute; inset: 0; border-radius: 16px; box-shadow: inset 0 0 36px 14px rgba(243, 236, 223, 0.55); pointer-events: none; }
+    .names { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .names__name { font-size: 24px; font-weight: 700; letter-spacing: 0.1em; line-height: 1.4; }
+    .names__and { font-family: var(--font-ui); font-size: 13px; color: var(--muted); line-height: 1.4; }
     .scroll-cue { position: absolute; left: 50%; bottom: calc(var(--bar-h) + 16px); transform: translateX(-50%); }
 
     /* 하단 고정 바 */
@@ -96,7 +97,7 @@
       width: 100%; max-width: 430px; height: var(--bar-h);
       display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
       background: var(--paper); border-top: 1px solid var(--rule);
-      font-family: var(--font-sans); font-size: 15px;
+      font-family: var(--font-ui); font-size: 15px; font-weight: 500;
       padding-bottom: env(safe-area-inset-bottom);
       z-index: 10;
     }
@@ -127,6 +128,7 @@
         <img class="popup__hall" src="../design/canvas/hall.jpg" alt="더채플앳청담 커티지홀">
         <div class="popup__shadow"></div>
         <img class="popup__couple" src="../design/canvas/couple.png" alt="이산하와 송시야">
+        <div class="popup__fade"></div>
       </div>
       <div class="names">
         <div class="names__name">이산하</div>
@@ -146,8 +148,9 @@
   </nav>
 
   <div class="fontbar" id="fontbar">
-    <label>본문 <select id="fontSerif">
-      <option value="'Gowun Batang', serif" selected>고운바탕 (Gowun Batang)</option>
+    <label>본문 <select id="fontBody">
+      <option value="'Noto Sans KR', sans-serif" selected>노토 산스 KR (Noto Sans KR)</option>
+      <option value="'Gowun Batang', serif">고운바탕 (Gowun Batang)</option>
       <option value="'Nanum Myeongjo', serif">나눔명조 (Nanum Myeongjo)</option>
       <option value="'Noto Serif KR', serif">노토 세리프 KR</option>
       <option value="'Hahmlet', serif">함렛 (Hahmlet)</option>
@@ -155,10 +158,10 @@
       <option value="'Pretendard', sans-serif">프리텐다드 (Pretendard)</option>
       <option value="'Gowun Dodum', sans-serif">고운돋움 (Gowun Dodum)</option>
     </select></label>
-    <label>안내 <select id="fontSans">
-      <option value="'Gowun Dodum', sans-serif" selected>고운돋움 (Gowun Dodum)</option>
+    <label>안내 <select id="fontUi">
+      <option value="'Noto Sans KR', sans-serif" selected>노토 산스 KR (Noto Sans KR)</option>
+      <option value="'Gowun Dodum', sans-serif">고운돋움 (Gowun Dodum)</option>
       <option value="'Pretendard', sans-serif">프리텐다드 (Pretendard)</option>
-      <option value="'Noto Sans KR', sans-serif">노토 산스 KR</option>
       <option value="'Nanum Gothic', sans-serif">나눔고딕 (Nanum Gothic)</option>
       <option value="'IBM Plex Sans KR', sans-serif">IBM Plex Sans KR</option>
     </select></label>
@@ -167,10 +170,10 @@
   <script>
     (function () {
       var root = document.documentElement;
-      var serif = document.getElementById('fontSerif');
-      var sans = document.getElementById('fontSans');
-      serif.addEventListener('change', function () { root.style.setProperty('--font-serif', serif.value + ", 'Apple SD Gothic Neo'"); });
-      sans.addEventListener('change', function () { root.style.setProperty('--font-sans', sans.value + ", 'Apple SD Gothic Neo'"); });
+      var body = document.getElementById('fontBody');
+      var ui = document.getElementById('fontUi');
+      body.addEventListener('change', function () { root.style.setProperty('--font-body', body.value + ", 'Apple SD Gothic Neo'"); });
+      ui.addEventListener('change', function () { root.style.setProperty('--font-ui', ui.value + ", 'Apple SD Gothic Neo'"); });
       document.getElementById('fontbarHide').addEventListener('click', function () { document.getElementById('fontbar').hidden = true; });
     })();
   </script>
