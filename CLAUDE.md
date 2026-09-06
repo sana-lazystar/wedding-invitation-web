@@ -41,4 +41,5 @@
 - `docs/dashboard/discussions/` = AI 작업 논의. 외부 사람과의 협업 기록이 필요해지면 `docs/cooperation/`을 그때 만듭니다
 - ontology에는 살아있는 정본만 둡니다. 시점 기록은 `docs/ontology/references/`에 동결(무편집 + 상태 헤더)
 - **문체**: Claude가 작성·수정하는 모든 문서(md 파일 등)는 `docs/WRITER.md`를 토대로 씁니다. 논의록·원장·서랍 문서·동결본 헤더·이 파일도 예외가 아닙니다. pre-commit 훅이 ID 참조 무결성과 작업 문서 문체 게이트를 겁니다. 클론·재설정 시 `sh docs/ontology/tools/install-hook.sh` 1회
+- 재사용 스크립트(이미지 산출 등)는 `docs/scripts/`에 둡니다(스택 결정 10). 원본 사진은 `docs/gallery/`, 디자인 에셋은 `docs/designs/`이고 둘은 git 제외 대상입니다(WIW-1)
 - 시간 기입은 `date '+%Y-%m-%d %H:%M:%S'` 실측값
