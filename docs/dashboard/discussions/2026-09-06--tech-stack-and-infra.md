@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 16:53:09
-updated: 2026-09-06 17:43:58
+updated: 2026-09-06 17:44:52
 completed:
 participants: 이산하, Claude
 related: []
@@ -117,6 +117,10 @@ jira:
 - U-3 닫힘. Vercel 연동 절차를 topology §11에 적었습니다. 핵심은 둘입니다. Vercel에 연결된 GitHub 사용자가 레포 Owner(`sana-lazystar`)여야 하고, Next.js 스캐폴드가 `main`에 오른 뒤에 import해야 합니다. 그 전에 import하면 레포 루트가 정적 사이트로 배포돼 docs가 노출됩니다.
 - U-4 닫힘. 영상은 없고 배경음악 한 곡·일러스트·폰트입니다. 전송량은 사진 15GB + 음악 25GB로 40GB 안팎이라 한도 100GB 안입니다. 폰트는 CDN도 무료이고, next/font를 쓰면 빌드 때 받아 자체 호스팅되므로 어느 쪽이든 한도 영향이 없습니다. 선택은 디자인 논의에서 합니다.
 
+### 2026-09-06 17:44:52 · Claude (T5 추기)
+
+- 커밋 직후 `docs/designs/`가 `docs/design/`으로 바뀐 것을 확인했습니다(이산하가 이름을 바꾼 것으로 봅니다). WIW-1·CLAUDE.md·topology의 경로를 고쳤습니다. 결정 11은 행 불변 규칙에 따라 폐기하고 폴더명만 정정한 결정 13으로 대체했습니다.
+
 ## 결정
 
 행의 내용은 불변입니다. 상태 칸만 갱신할 수 있습니다.
@@ -134,8 +138,9 @@ jira:
 | 8 | Vercel Fair Use의 기부 조항은 감수합니다. R1은 감수 확정으로 옮기고, 정지되면 이전 경로로 옮깁니다 | 이산하 | 확정 |
 | 9 | 배포 경로는 GitHub push → Vercel Git 연동입니다. `main` → production, 그 밖의 브랜치 → preview. 부트스트랩 결정 7과 짝입니다 | Claude 제안 | 확정 (이산하, 2026-09-06) |
 | 10 | 재사용 스크립트(이미지 산출 등)는 `docs/scripts/`에 둡니다. 레포 루트에서 `node docs/scripts/{이름}.mjs`로 실행하고 의존성은 레포 루트 package.json이 가집니다 | 이산하 (위치), Claude (실행 규약) | 확정 |
-| 11 | git 제외는 원본·에셋 폴더 두 개(`docs/gallery/`, `docs/designs/`)만 합니다. `docs/` 나머지는 추적을 유지합니다. 반영은 WIW-1 | Claude 제안 | 잠정 (이산하 확인 대기, Q6) |
+| 11 | git 제외는 원본·에셋 폴더 두 개(`docs/gallery/`, `docs/designs/`)만 합니다. `docs/` 나머지는 추적을 유지합니다. 반영은 WIW-1 | Claude 제안 | 폐기 — 결정 13으로 대체 (폴더명 `designs`→`design` 정정) |
 | 12 | 사진 원본 파일명은 촬영 시각 순 두 자리 번호(`01.jpg`~)입니다. 새 사진은 다음 번호를 받습니다. 표시 순서는 매니페스트가 정하고 파일명은 ID일 뿐입니다 | Claude 제안 | 잠정 (이산하 확인 대기) |
+| 13 | git 제외는 원본·에셋 폴더 두 개(`docs/gallery/`, `docs/design/`)만 합니다. `docs/` 나머지는 추적을 유지합니다. 반영은 WIW-1. 결정 11의 폴더명만 정정했습니다 | Claude 제안 | 잠정 (이산하 확인 대기, Q6) |
 
 ## 정본 반영 점검 (완결 전)
 

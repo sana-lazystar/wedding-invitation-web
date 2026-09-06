@@ -3,7 +3,7 @@ id: WIW-1
 type: task
 status: todo
 created: 2026-09-06 17:43:58
-updated: 2026-09-06 17:43:58
+updated: 2026-09-06 17:44:52
 completed:
 epic:
 jira:
@@ -25,7 +25,7 @@ related: []
 
 ```
 docs/gallery/
-docs/designs/
+docs/design/
 ```
 
 하지 않는 것은 다음과 같습니다. `docs/` 전체를 제외하지 않습니다(Q6). 이미 추적 중인 파일을 지우지 않습니다. 두 폴더 안에 추적 중인 파일은 없습니다.
@@ -37,7 +37,7 @@ docs/designs/
 ## 완료 기준
 
 - [ ] `.gitignore`에 두 줄 추가
-- [ ] `git status`에 `docs/gallery/`·`docs/designs/`가 보이지 않음
+- [ ] `git status`에 `docs/gallery/`·`docs/design/`가 보이지 않음
 - [ ] `git check-ignore -v docs/gallery/01.jpg`가 규칙을 출력
 - [ ] 구현 기록 기입 (브랜치·커밋)
 
