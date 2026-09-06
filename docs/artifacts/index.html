@@ -97,6 +97,22 @@
     .names__name { font-family: var(--font-name); font-size: 24px; font-weight: 700; letter-spacing: 0.1em; line-height: 1.4; }
     .names__and { font-family: var(--font-ui); font-size: 13px; color: var(--muted); line-height: 1.4; }
 
+    /* 2. 핵심 정보. 열린 봉투 일러스트 위 편지지에 날짜·시간·장소 */
+    #info { display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
+    .letter-card {
+      position: relative;
+      width: min(340px, 86vw, calc((100dvh - 80px) * 817 / 1438));
+      aspect-ratio: 817 / 1438;
+    }
+    .letter-card__art { display: block; width: 100%; height: 100%; }
+    .letter-card__text {
+      position: absolute; left: 22%; right: 22%; top: 13%; height: 46%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      text-align: center; font-size: 16px; line-height: 1.7; color: var(--ink-soft);
+    }
+    .letter-card__venue { font-size: 17px; font-weight: 500; color: var(--ink); }
+    .letter-card__rule { width: 28px; height: 1px; background: var(--oak); margin: 12px 0; }
+
     /* 진입 장면. 기울어진 봉투가 열리고 표제가 적힌 편지지가 나오며 수평으로 펴진 뒤, 화면을 채우며 커버로 이어집니다 */
     html.is-intro { overflow: hidden; }
     html.is-intro .cover-head { visibility: hidden; }
@@ -112,10 +128,10 @@
       width: 300px; height: 200px;
       perspective: 1200px;
       opacity: 0;
-      transform: translate(24px, 90px) rotate(-15deg) scale(0.96);
+      transform: rotate(-15deg) scale(0.96);
       transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
     }
-    #intro.is-shown .stage { opacity: 1; transform: translate(24px, 90px) rotate(-15deg) scale(1); }
+    #intro.is-shown .stage { opacity: 1; transform: rotate(-15deg) scale(1); }
     .env__back, .env__front, .env__flap, .env__letter { position: absolute; }
     .env__back {
       inset: 0; z-index: 1;
@@ -130,9 +146,16 @@
       box-shadow: inset 0 0 0 1px rgba(185, 142, 94, 0.35), 0 10px 24px -14px rgba(70, 48, 24, 0.4);
       translate: 0 0;
       rotate: 0deg;
-      transition: translate 0.85s cubic-bezier(0.22, 0.61, 0.36, 1), rotate 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s;
+      transition: translate 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
     }
-    #intro.is-rising .env__letter { translate: 0 -210px; rotate: 15deg; }
+    #intro.is-rising .env__letter { translate: 0 -210px; }
+    #intro.is-settling .env__letter {
+      z-index: 5;
+      translate: 0 0;
+      rotate: 15deg;
+      transition: translate 0.65s cubic-bezier(0.65, 0, 0.35, 1), rotate 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+      box-shadow: inset 0 0 0 1px rgba(185, 142, 94, 0.35), 0 22px 40px -18px rgba(70, 48, 24, 0.5);
+    }
     #intro.is-expanding .env__letter {
       z-index: 5;
       transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1), background-color 0.85s ease, box-shadow 0.4s ease, border-radius 0.85s ease;
@@ -170,16 +193,21 @@
       rotate: 0deg;
       transform: scale(0.72);
       display: flex; flex-direction: column; align-items: center;
-      transition: translate 0.85s cubic-bezier(0.22, 0.61, 0.36, 1), rotate 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s;
+      transition: translate 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
       will-change: transform;
     }
-    #intro.is-rising .intro-text { translate: -50% calc(-50% - 210px); rotate: 15deg; }
+    #intro.is-rising .intro-text { translate: -50% calc(-50% - 210px); }
+    #intro.is-settling .intro-text {
+      translate: -50% -50%;
+      rotate: 15deg;
+      transition: translate 0.65s cubic-bezier(0.65, 0, 0.35, 1), rotate 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+    }
     .intro-text > * { opacity: 0; transform: translateY(12px); transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1); }
     .intro-text > .tagline { transition-delay: 0.12s; }
     #intro.is-text .intro-text > * { opacity: 1; transform: translateY(0); }
     #intro.is-expanding .intro-text {
       transition: translate 0.85s cubic-bezier(0.65, 0, 0.35, 1), transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
-      translate: calc(-50% + var(--text-dx, 0px)) calc(-50% - 210px + var(--text-dy, 0px));
+      translate: calc(-50% + var(--text-dx, 0px)) calc(-50% + var(--text-dy, 0px));
       transform: scale(1);
     }
     .intro-skip {
@@ -260,7 +288,20 @@
       </div>
     </section>
 
-    <!-- 2쪽(핵심 정보)부터 여기 아래에 이어 붙입니다 -->
+    <section id="info" class="block block--fixed">
+      <div class="letter-card">
+        <img class="letter-card__art" src="../design/canvas/opened-paper.png" alt="">
+        <div class="letter-card__text">
+          <div>2026년 10월 9일 금요일</div>
+          <div>오후 6시 30분</div>
+          <div class="letter-card__rule"></div>
+          <div class="letter-card__venue">더채플앳청담</div>
+          <div>3층 커티지홀</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3쪽(인사)부터 여기 아래에 이어 붙입니다 -->
 
   </div>
 
@@ -389,7 +430,8 @@
         timers.push(setTimeout(function () { intro.classList.add('is-shown'); }, 60));
         timers.push(setTimeout(function () { intro.classList.add('is-open'); }, 500));
         timers.push(setTimeout(function () { intro.classList.add('is-rising'); }, 1300));
-        timers.push(setTimeout(function () { intro.classList.add('is-text'); }, 1750));
+        timers.push(setTimeout(function () { intro.classList.add('is-settling'); }, 1950));
+        timers.push(setTimeout(function () { intro.classList.add('is-text'); }, 2050));
         timers.push(setTimeout(function () {
           var r = letter.getBoundingClientRect();
           var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
@@ -404,8 +446,8 @@
           introText.style.setProperty('--text-dx', (dx * cs - dy * sn).toFixed(1) + 'px');
           introText.style.setProperty('--text-dy', (dx * sn + dy * cs).toFixed(1) + 'px');
           intro.classList.add('is-expanding');
-        }, 2800));
-        timers.push(setTimeout(finish, 3700));
+        }, 2950));
+        timers.push(setTimeout(finish, 3850));
       };
       intro.addEventListener('click', function (e) { if (e.target.closest('.intro-skip')) finish(); });
       document.getElementById('introReplay').addEventListener('click', function () { setOpen(false); play(); });

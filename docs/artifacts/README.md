@@ -6,7 +6,7 @@
 
 | 것 | 자리 | git |
 | --- | --- | --- |
-| `canvas/Main.dc.html` | Claude Design 캔버스의 아트보드. 청첩장 한 페이지를 위에서부터 이어 붙입니다(디자인 결정 7) | 커밋 |
+| `canvas/Main.dc.html` | Claude Design 캔버스의 아트보드. 청첩장 한 페이지를 위에서부터 이어 붙입니다(디자인 결정 7). 2026-09-06 현재 Scene1 커버 + Scene2 핵심 정보 | 커밋 |
 | `canvas/FloatingMenu.dc.html` | 떠 있는 바로 가기 버튼의 열린 상태. 정적 아트보드라 동작은 조립본에서 확인합니다 | 커밋 |
 | `canvas/canvas.json` | 아트보드 배치와 메모 | 커밋 |
 | `../design/canvas/*.png`, `*.jpg` | 캔버스용 축소 이미지. 아트보드가 파일명으로 참조합니다 | 제외 (`docs/design/`) |
