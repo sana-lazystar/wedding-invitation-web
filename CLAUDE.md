@@ -11,7 +11,7 @@
 - 진행 중 작업: `docs/dashboard/state.json`의 `activeWorks`. 세션을 시작하면 이 파일을 먼저 읽습니다. 터미널 보드 = `node docs/ontology/tools/board.mjs --watch`(읽기 전용)
 - 신규 문서 정본: `docs/dashboard/templates/`
 - 체계 설계·구조 결정 이력: `docs/dashboard/discussions/` 각 논의록의 결정 표
-- **지금 = 디자인 시안 진행 중 · Scene1·2 완료, 다음 Scene3 (2026-09-06)**: 스택·인프라는 `docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md` 결정 표(15건)로 완결됐습니다. 시안은 Claude가 조립본 `docs/artifacts/index.html`과 Next.js 로컬 적용으로 만들고, 와이어프레임을 한 쪽씩 이산하와 논의해 이어 붙입니다(디자인 결정 11. Artifact·캔버스 발행은 중단). 콘셉트는 팝업북이고 질감 에셋은 SVG → PNG로 만듭니다. 진입 장면(로딩)은 편지봉투입니다(T35 에셋 · T36~T37 장면. 봉투가 열리고 커버가 카드로 올라오며 봉투는 내려갑니다). 진행 상태·보는 곳·고치는 순서는 `docs/artifacts/README.md`, 턴별 기록은 `docs/dashboard/discussions/2026-09-06--design-mockups.md`입니다. Next.js 임시 적용(WIW-4, `src/app/`)은 develop에 커밋돼 있고 배포는 이산하가 합니다. 다음 쪽은 Scene3 인사(와이어프레임 4쪽)이고 캐릭터 그림이 필요합니다. 요구 원장(REQ)은 시안 확정 뒤 채우고, 그때 첫 story를 적재합니다
+- **지금 = 디자인 시안 진행 중 · Scene1·2 완료, 다음 Scene3 (2026-09-06)**: 스택·인프라는 `docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md` 결정 표(15건)로 완결됐습니다. 시안은 Claude가 조립본 `docs/artifacts/index.html`과 Next.js 로컬 적용으로 만들고, 와이어프레임을 한 쪽씩 이산하와 논의해 이어 붙입니다(디자인 결정 11. Artifact·캔버스 발행은 중단). 콘셉트는 팝업북이고 질감 에셋은 SVG → PNG로 만듭니다. 진입 장면(로딩)은 편지봉투입니다(T35 에셋 · T36~T38 장면. 봉투가 열리고 커버가 카드로 올라오며 봉투는 내려갑니다). 진행 상태·보는 곳·고치는 순서는 `docs/artifacts/README.md`, 턴별 기록은 `docs/dashboard/discussions/2026-09-06--design-mockups.md`입니다. Next.js 임시 적용(WIW-4, `src/app/`)은 develop에 커밋돼 있고 배포는 이산하가 합니다. 다음 쪽은 Scene3 인사(와이어프레임 4쪽)이고 캐릭터 그림이 필요합니다. 요구 원장(REQ)은 시안 확정 뒤 채우고, 그때 첫 story를 적재합니다
 
 # 2. 규격 — 무엇이 현재 참인가 (`docs/ontology/`)
 
