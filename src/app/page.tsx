@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 // WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보 · 떠 있는 메뉴를 옮긴 것입니다.
 // 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
-// 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T41). 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
+// 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T43). 편지지는 커버 자체를 1:1로 끼운 것이라 확대가 없습니다. 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export default function Home() {
@@ -41,28 +41,21 @@ export default function Home() {
     root.classList.add("is-intro");
     const vw = root.clientWidth;
     const vh = window.innerHeight;
-    const coverW = cover.clientWidth;
     const coverH = cover.clientHeight;
-    const envW = Math.min(vw, 430) * 0.8; // 봉투 폭 = 화면 폭(페이지 폭 430까지)의 80%
+    const envW = Math.min(vw, 430) * 1.08; // 봉투 폭 = 화면 폭(페이지 폭 430까지)의 108%. 편지지(봉투의 92%)가 화면 폭이 됩니다
     const z1 = envW / 600;
-    const z0 = vh / 400;
-    const envTop = vh / 2 - 200 * z1; // 전체가 보일 때 봉투 윗변의 화면 y
+    const z0 = (vh * 2) / 3 / 400; // 시작 배율. 봉투 높이 = 화면 높이의 2/3
+    const envTop = vh / 2 - 200 * z1; // 물러난 뒤 봉투 윗변의 화면 y
     const envBottom = envTop + 400 * z1; // 밑변
-    const s0 = (envW * 0.92) / coverW; // 카드 폭 = 봉투 폭의 92%
-    const ty0 = envTop + 14 * z1; // 카드가 봉투 안에 든 자리(윗변 바로 아래)
-    const ty1 = (vh - coverH * s0) / 2; // 올라온 카드의 윗변. 카드가 화면 세로 가운데에 와서 다음 확대가 가운데 기준이 됩니다
-    const drop1 = Math.max(0, ty1 + coverH * s0 * 0.65 - envTop); // 봉투가 조금 내려가는 거리(화면 px). 카드가 65% 나오도록
-    const drop2 = vh - envTop + 40; // 그다음 화면 아래로 완전히 빠져나가는 거리
-    const b0 = coverH - (envBottom - ty0) / s0; // 봉투 밑변 아래로 삐져나온 카드를 가리는 클립(커버 좌표)
-    const b1 = coverH - (envBottom + drop1 - ty1) / s0; // 올라오기 끝
-    const b2 = coverH - (envBottom + drop2 - ty1) / s0; // 봉투가 빠져나간 뒤(음수 = 클립 없음)
+    const ty0 = envTop + 14 * z1; // 편지지가 봉투 안에 든 자리(윗변 바로 아래). 올라오면 0(최종 자리)
+    const drop2 = vh - envTop + 40; // 봉투가 화면 아래로 완전히 빠져나가는 거리
+    const b0 = coverH - (envBottom - ty0); // 봉투 밑변 아래로 삐져나온 편지지를 가리는 클립(커버 좌표. 확대가 없어 1:1)
+    const b1 = coverH - envBottom; // 올라온 뒤
+    const b2 = coverH - (envBottom + drop2); // 봉투가 빠져나간 뒤(음수 = 클립 없음)
     root.style.setProperty("--z0", String(z0));
     root.style.setProperty("--z1", String(z1));
-    root.style.setProperty("--drop1", `${drop1 / z1}px`);
     root.style.setProperty("--drop2", `${drop2 / z1}px`);
-    cover.style.setProperty("--card-s0", String(s0));
     cover.style.setProperty("--card-ty0", `${ty0}px`);
-    cover.style.setProperty("--card-ty1", `${ty1}px`);
     cover.style.setProperty("--card-b0", `${b0}px`);
     cover.style.setProperty("--card-b1", `${b1}px`);
     cover.style.setProperty("--card-b2", `${b2}px`);
@@ -72,13 +65,13 @@ export default function Home() {
       if (started || finished) return;
       started = true;
       root.classList.add("is-intro-shown");
-      safety = window.setTimeout(finishIntro, 6500);
+      safety = window.setTimeout(finishIntro, 7000);
     };
     const imgs = layers.flatMap((el) => Array.from(el!.querySelectorAll("img")));
     Promise.all(imgs.map((im) => (im.decode ? im.decode().catch(() => undefined) : Promise.resolve()))).then(startIntro);
     const fallback = window.setTimeout(startIntro, 2500);
     const onAnimationEnd = (e: AnimationEvent) => {
-      if (e.animationName === "intro-card-grow") finishIntro();
+      if (e.animationName === "intro-card-clip-out") finishIntro();
     };
     cover.addEventListener("animationend", onAnimationEnd);
     document.addEventListener("click", finishIntro);
