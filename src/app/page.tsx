@@ -21,15 +21,6 @@ export default function Home() {
       intro.hidden = true;
       return;
     }
-    // 커버의 홀 사진 물러남은 진입 장면 동안 첫 프레임에서 멈춰 있다가 장면이 걷힐 때 시작한다
-    const animated = document.querySelectorAll<HTMLElement>(".cover-bg__hall");
-    const restart = () => {
-      animated.forEach((el) => {
-        el.style.animation = "none";
-        void el.offsetWidth;
-        el.style.animation = "";
-      });
-    };
     const timers: number[] = [];
     let finished = false;
     const finish = () => {
@@ -47,7 +38,6 @@ export default function Home() {
     intro.hidden = false;
     intro.className = "is-reset";
     root.classList.add("is-intro");
-    restart();
     void intro.offsetWidth;
     intro.className = "";
     timers.push(window.setTimeout(() => intro.classList.add("is-shown"), INTRO_STEPS.shown));
@@ -177,6 +167,10 @@ export default function Home() {
                     <img src="/scene1/hall.png" alt="" />
                     <div className="cover-bg__blur cover-bg__blur--soft" />
                     <div className="cover-bg__blur cover-bg__blur--strong" />
+                    <div className="cover-head pop__title">
+                      <div className="eyebrow">Wedding Invitation</div>
+                      <p className="tagline">우리의 삶을 함께 써 주신 당신께</p>
+                    </div>
                   </div>
                 </div>
                 <div className="pop pop--couple">
@@ -191,10 +185,6 @@ export default function Home() {
             </div>
           </div>
           <div className="stage__text">
-            <div className="cover-head">
-              <div className="eyebrow">Wedding Invitation</div>
-              <p className="tagline">우리의 삶을 함께 써 주신 당신께</p>
-            </div>
             <div className="names">
               <div className="names__name">이산하</div>
               <div className="names__and">그리고</div>

@@ -52,7 +52,6 @@ body {
 .cover-bg__hall {
   width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; display: block;
   filter: saturate(0.7);
-  animation: cover-zoom 16s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 /* 상단 1/4 흐림. 두 겹의 배경 흐림을 마스크로 겹쳐 위로 갈수록 더 흐려집니다 */
 .cover-bg__blur { position: absolute; left: 0; right: 0; top: 0; pointer-events: none; }
@@ -69,10 +68,7 @@ body {
   height: 27%; width: auto; transform: translateX(-50%);
   filter: drop-shadow(0 2px 2px rgba(70, 48, 24, 0.28)) drop-shadow(0 18px 18px rgba(70, 48, 24, 0.18));
 }
-/* 진입 장면이 끝나면 홀 사진이 천천히 물러납니다. 장면 동안은 첫 프레임에서 멈춰 있습니다 */
-html.is-intro .cover-bg__hall { animation-play-state: paused; }
-@keyframes cover-zoom { from { transform: scale(1.07); } to { transform: scale(1); } }
-@media (prefers-reduced-motion: reduce) { .cover-bg__hall { animation: none; } }
+/* 커버 자체는 움직이지 않습니다. 등장 연출은 진입 장면 안에서 끝납니다(디자인 논의 T33) */
 .cover-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
 .eyebrow {
   font-family: var(--font-latin);
@@ -109,10 +105,10 @@ html.is-intro .cover-bg__hall { animation-play-state: paused; }
 /* 진입 장면. 붉은 가죽 고서가 위에서 내려다보는 시점으로 떠오르고, 앞쪽 반이 젖혀지면 접혀 있던 홀 배경과 두 사람이 종이처럼 일어서며, 시점이 내려와 그 장면이 그대로 커버가 됩니다.
    무대는 커버와 같은 크기(--W × --H)이고 바닥선은 커버에서 두 사람의 발 위치(아래 22%)입니다. 책의 종이 면이 바닥선에 놓이고 종이 뭉치는 그 아래로 내려갑니다. 장면 끝에서 홀 조각·두 사람·표제·이름이 커버의 같은 자리에 겹칩니다 */
 html.is-intro { overflow: hidden; }
-/* 커버의 표제·이름·메뉴 버튼은 장면 동안 숨기고, 장면 안의 사본이 마지막에 같은 자리에서 떠오릅니다. 걷힐 때 사본과 원본이 겹쳐 바뀌므로 아무것도 튀지 않습니다 */
+/* 커버의 표제·이름은 장면 동안 숨깁니다. 표제는 홀 조각에 찍혀 있고 이름은 사본이 같은 자리에서 떠오르므로, 걷힐 때 원본과 겹쳐 바뀌어 아무것도 튀지 않습니다. 메뉴 버튼은 걷힘과 같은 0.35초에 함께 나타납니다 */
 #cover .cover-head, #cover .names { transition: opacity 0.35s ease; }
 html.is-intro #cover .cover-head, html.is-intro #cover .names { opacity: 0; }
-.fab { transition: opacity 0.6s ease 0.25s; }
+.fab { transition: opacity 0.35s ease; }
 html.is-intro .fab { opacity: 0; pointer-events: none; }
 #intro {
   position: fixed; inset: 0; z-index: 30;
@@ -138,7 +134,7 @@ html.is-intro .fab { opacity: 0; pointer-events: none; }
 #intro.is-open .stage { transform: translate(-50%, -20%) scale(0.75); transition: opacity 0.5s ease, transform 1.6s cubic-bezier(0.65, 0, 0.35, 1); }
 #intro.is-diving .stage { transform: translate(-50%, 0) scale(1); transition: opacity 0.5s ease, transform 1.2s cubic-bezier(0.65, 0, 0.35, 1); }
 .stage__aisle { position: absolute; inset: 0; overflow: hidden; clip-path: inset(78% 0 0 0); opacity: 0; }
-.stage__aisle img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; display: block; filter: saturate(0.7); transform: scale(1.07); }
+.stage__aisle img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; display: block; filter: saturate(0.7); }
 #intro.is-diving .stage__aisle { opacity: 1; transition: opacity 0.5s ease 0.55s; }
 .book { position: absolute; inset: 0; perspective: 1600px; perspective-origin: 50% 50%; transition: perspective-origin 1.2s cubic-bezier(0.65, 0, 0.35, 1); }
 #intro.is-diving .book { perspective-origin: 50% 78%; }
@@ -207,39 +203,43 @@ html.is-intro .fab { opacity: 0; pointer-events: none; }
 .pop--hall .pop__back img { filter: brightness(0.965); }
 .pop--couple .pop__back { overflow: visible; }
 .pop--couple .pop__back img { filter: brightness(0.965) drop-shadow(0 0.5px 0.8px rgba(70, 48, 24, 0.35)); }
+/* 조각은 접혀 있을 때 종이와 겹치지 않도록 제 면에서 살짝 뜹니다(회전 뒤의 translateZ라 서면 보는 쪽으로 향합니다). 시점이 내려올 때 0으로 되돌려 커버와 정확히 겹칩니다 */
 .pop--hall {
   width: var(--W); height: var(--hall-h);
-  transform: translateX(-50%) translateZ(1.5px) rotateX(0deg);
+  transform: translateX(-50%) rotateX(0deg) translateZ(1.5px);
   transition: transform 1s cubic-bezier(0.34, 1.25, 0.64, 1), visibility 0s 0.62s;
 }
-#intro.is-rising .pop--hall { transform: translateX(-50%) translateZ(1.5px) rotateX(90deg); }
+#intro.is-rising .pop--hall { transform: translateX(-50%) rotateX(90deg) translateZ(1.5px); }
+#intro.is-diving .pop--hall { transform: translateX(-50%) rotateX(90deg) translateZ(0); transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1), visibility 0s 0.62s; }
 /* 장면 동안은 홀 조각의 위쪽 46%(선 채로 봤을 때 윗부분)를 잘라 책 깊이에 맞추고, 시점이 내려올 때 끝까지 폅니다. 자르기는 면에 겁니다(3D 컨테이너에 걸면 평면화됩니다) */
 .pop--hall .pop__front { clip-path: inset(46% 0 0 0); transition: clip-path 1.2s cubic-bezier(0.65, 0, 0.35, 1); }
 .pop--hall .pop__back { clip-path: inset(0 0 46% 0); transition: clip-path 1.2s cubic-bezier(0.65, 0, 0.35, 1); }
 #intro.is-diving .pop--hall .pop__face { clip-path: inset(0 0 0 0); }
-.pop--hall .pop__front img { position: absolute; left: 0; top: 0; width: var(--W); height: var(--H); object-fit: cover; object-position: 50% 50%; display: block; filter: saturate(0.7); transform: scale(1.07); }
+.pop--hall .pop__front img { position: absolute; left: 0; top: 0; width: var(--W); height: var(--H); object-fit: cover; object-position: 50% 50%; display: block; filter: saturate(0.7); }
 .pop--hall .cover-bg__blur--soft { height: calc(var(--H) * 0.26); }
 .pop--hall .cover-bg__blur--strong { height: calc(var(--H) * 0.16); }
 .pop--couple {
   left: 10px; top: var(--couple-z); width: var(--couple-w); height: var(--couple-h);
-  transform: translate(-50%, 0) translateZ(2px) rotateX(0deg);
+  transform: translate(-50%, 0) rotateX(0deg) translateZ(2px);
   transition: transform 0.85s cubic-bezier(0.34, 1.3, 0.64, 1) 0.2s, visibility 0s 0.62s;
 }
-#intro.is-rising .pop--couple { transform: translate(-50%, 0) translateZ(2px) rotateX(90deg); }
-/* 시점이 내려올 때 두 사람이 홀 조각 평면(z=0)으로 물러나 커버의 자리와 정확히 겹칩니다 */
-#intro.is-diving .pop--couple { transform: translate(-50%, calc(-1 * var(--couple-z))) translateZ(2px) rotateX(90deg); transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1), visibility 0s 0.62s; }
+#intro.is-rising .pop--couple { transform: translate(-50%, 0) rotateX(90deg) translateZ(2px); }
+/* 시점이 내려올 때 두 사람이 홀 조각 평면으로 물러나 커버의 자리와 정확히 겹칩니다 */
+#intro.is-diving .pop--couple { transform: translate(-50%, calc(-1 * var(--couple-z))) rotateX(90deg) translateZ(0); transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1), visibility 0s 0.62s; }
 .pop--couple .pop__face { box-shadow: none; }
 .pop--couple img { display: block; width: 100%; height: 100%; }
 .pop--couple .pop__front img { filter: drop-shadow(0 2px 2px rgba(70, 48, 24, 0.28)) drop-shadow(0 18px 18px rgba(70, 48, 24, 0.18)); }
 /* 두 사람 뒷면은 public/intro/couple-back.png(docs/scripts/paper-back.py가 종이 결을 두 사람 윤곽으로 오리고 위아래를 뒤집은 것)입니다. 접힌 종이의 뒷면이라 머리가 보는 쪽에 옵니다. 브라우저 마스크는 3D 변환 안에서 그려지지 않아 그림 파일로 둡니다 */
-/* 표제·이름 사본. 커버(#cover)와 같은 배치이고 시점이 내려올 때 떠오릅니다 */
+/* 표제는 홀 조각 윗부분에 찍혀 있어 조각이 위로 펴질 때 드러납니다. 커버의 표제와 같은 자리(위 56px + 안전 영역) */
+.pop__title { position: absolute; left: 24px; right: 24px; top: calc(56px + env(safe-area-inset-top)); }
+/* 이름 사본. 커버(#cover)와 같은 배치이고 통로와 같은 박자로 떠오릅니다 */
 .stage__text {
   position: absolute; inset: 0; z-index: 2;
-  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
   padding: calc(56px + env(safe-area-inset-top)) 24px calc(56px + env(safe-area-inset-bottom));
   pointer-events: none; opacity: 0;
 }
-#intro.is-diving .stage__text { opacity: 1; transition: opacity 0.7s ease 0.85s; }
+#intro.is-diving .stage__text { opacity: 1; transition: opacity 0.5s ease 0.55s; }
 .intro-skip {
   position: absolute; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom));
   border: 0; background: transparent; padding: 8px 10px;
