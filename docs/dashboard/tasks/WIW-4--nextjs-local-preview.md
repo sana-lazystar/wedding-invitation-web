@@ -86,3 +86,5 @@ related: []
 2026-09-07 00:33:39 · develop · eaecfce · Scene2 글 네 줄·크기 둘, Scene3 인사 예시(쪽지 + 회색 원)와 4쪽 자리표시, `public/paper/note.png` 추가(디자인 논의 T51). `src/app/page.tsx` `src/app/globals.css` `public/paper/`.
 
 2026-09-07 00:40:07 · develop · cb68363 · Scene3 화자 자리에 수달·토끼 캐릭터 그림, `public/character/` 추가(디자인 논의 T52). `src/app/page.tsx` `src/app/globals.css` `public/character/`.
+
+2026-09-07 00:46:03 · develop · 48c3f36 · Scene4 Part 1 신랑(사진 종이 + 토끼 메모지 + 컷아웃 스티커), 종이 흰색, 캐릭터 아이콘 36px, `public/scene4/` 추가(디자인 논의 T53). `src/app/page.tsx` `src/app/globals.css` `public/paper/` `public/character/` `public/scene4/`.
