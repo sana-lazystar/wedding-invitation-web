@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 18:25:07
-updated: 2026-09-06 20:06:14
+updated: 2026-09-06 20:08:44
 completed:
 participants: 이산하, Claude
 related: []
@@ -284,6 +284,14 @@ jira:
 ### 2026-09-06 20:06:14 · Claude (T26)
 
 - WEDDING INVITATION 14px → 10px(자간 0.36em 유지), 문장 20px → 24px(줄 간격 1.5), 이름 사이 간격 2px → 10px. 조립본·Next.js·캔버스·미리보기 반영, 로컬 200.
+
+### 2026-09-06 20:08:44 이전 · 이산하 (T27)
+
+- WEDDING INVITATION과 문장 사이의 짧은 선, "그리고" 양옆의 선을 지워 달라.
+
+### 2026-09-06 20:08:44 · Claude (T27)
+
+- 둘 다 지웠다. 표제 아래 26px 오크 선과 "그리고" 양옆 18px 선. 조립본·Next.js·캔버스·미리보기 반영, 로컬 200.
 
 ## 결정
 

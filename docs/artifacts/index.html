@@ -93,12 +93,10 @@
       line-height: 1.4;
       white-space: nowrap;
     }
-    .eyebrow::after { content: ''; display: block; width: 26px; height: 1px; margin: 12px auto 0; background: var(--oak); }
     .tagline { margin: 10px 0 0; font-family: var(--font-name); font-size: 24px; line-height: 1.5; color: var(--ink-soft); white-space: nowrap; }
     .names { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; }
     .names__name { font-family: var(--font-name); font-size: 30px; font-weight: 700; letter-spacing: 0.14em; text-indent: 0.14em; line-height: 1.35; color: var(--ink); }
-    .names__and { display: flex; align-items: center; gap: 10px; font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); line-height: 1.4; }
-    .names__and::before, .names__and::after { content: ''; width: 18px; height: 1px; background: rgba(185, 142, 94, 0.7); }
+    .names__and { font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); line-height: 1.4; }
 
     /* 2. 핵심 정보. 열린 봉투 일러스트 위 편지지에 날짜·시간·장소 */
     #info { display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
