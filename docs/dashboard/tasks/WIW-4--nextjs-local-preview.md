@@ -118,3 +118,5 @@ related: []
 2026-09-07 01:41:00 · develop · c903c85 · favicon · 앱 아이콘 · 매니페스트 · 테마색(디자인 논의 T70). `src/app/layout.tsx` `src/app/manifest.ts` `src/app/{favicon.ico,icon1~4.png,apple-icon.png}` `public/{android-icon,ms-icon}-*.png` `public/browserconfig.xml`.
 
 2026-09-07 01:43:00 · develop · 1f1df85 · 페이지 제목·설명 변경(이산하 편집, 디자인 논의 T71). `src/app/layout.tsx`.
+
+2026-09-07 01:57:46 · develop · b33459e · 100svh, 진입 장면 크기 변화 재계산, img 크기 속성(디자인 논의 T72). `src/app/page.tsx` `src/app/globals.css`.
