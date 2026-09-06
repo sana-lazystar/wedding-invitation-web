@@ -74,3 +74,5 @@ related: []
 2026-09-06 23:47:37 · develop · 5a0839e · 봉투 열린 뒤 바로 흐려짐, 편지지 올라오며 확대, 3.9초(디자인 논의 T45). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-06 23:53:46 · develop · ad321d7 · 편지지 봉투 폭의 55%, 뚜껑 80%부터 조금 올라오고 봉투가 사라진 뒤 화면 전체로 커짐, 4.0초(디자인 논의 T46). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-06 23:56:52 · develop · b267628 · 봉투 흐려짐 0.3초, 확대 2.7초부터, 편지지 92%로 복귀, 3.8초(디자인 논의 T47). `src/app/page.tsx` `src/app/globals.css`.
