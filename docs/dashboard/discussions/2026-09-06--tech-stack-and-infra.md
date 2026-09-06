@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 16:53:09
-updated: 2026-09-06 17:54:34
+updated: 2026-09-06 17:56:12
 completed:
 participants: 이산하, Claude
 related: []
@@ -141,6 +141,18 @@ jira:
 - 복구. 같은 문서 변경만 다시 커밋해(c8a4f07) `--force-with-lease`로 origin/develop을 덮어썼습니다. `git ls-tree origin/develop`에 gallery·design 경로가 없는 것을 확인했습니다. bd3f8e1은 로컬 reflog와 GitHub의 미참조 객체로 남을 수 있습니다. 해시를 알아야 접근할 수 있고 GitHub가 주기적으로 정리하지만, 완전 삭제가 필요하면 GitHub Support에 요청해야 합니다.
 - 재발 방지. `docs/dashboard/README.md` §git 규약에 "add는 경로 명시, `git add docs`·`-A`·`.` 금지"를 넣었습니다. WIW-1이 develop에 머지되기 전까지는 두 폴더가 develop에서 무방비이므로 특히 지킵니다.
 
+### 2026-09-06 17:56:12 이전 · 이산하 (T7)
+
+- Vercel을 연동해 두려면 Next.js 기본 스캐폴드를 만들어야 할 것 같다. 맞는지 묻는다. 지금은 develop에 push하고 있지만 나중에는 옮겨서 작업해야 할 것이다. 이상한 버전이 배포되지 않도록, 아마 규칙에 따라 story 브랜치를 따야 할 것이다.
+- 스캐폴드는 공식 홈페이지 명령어로 만들고, npm을 쓰면 된다.
+
+### 2026-09-06 17:56:12 · Claude (T7)
+
+- 맞습니다. Vercel import는 production 브랜치(`main`)를 즉시 빌드하므로 `main`에 Next.js 앱이 있어야 합니다. 순서는 WIW-1 PR 머지 → WIW-2 스캐폴드(feature 브랜치, develop PR) → develop→main PR → WIW-3 Vercel 연동입니다. 두 task를 적재했습니다. 목적이 다르고(코드 골격 / 호스팅 자원) 수행자도 달라 epic으로 묶지 않고 단독 task 둘로 두었습니다.
+- 배포 걱정에 대한 답. production은 `main`에서만 나옵니다. develop·story·feature 브랜치의 push는 preview 주소만 만들고 하객이 받는 주소에는 영향이 없습니다. 그래서 develop에 문서를 올리는 지금 방식은 배포와 무관합니다. story 브랜치는 요구 정의 논의에서 첫 story를 적재할 때 develop에서 냅니다. 스캐폴드는 story 밖 잔일이라 규칙대로 develop 직분기 feature 브랜치입니다.
+- 스캐폴드 명령은 공식 CLI `npx create-next-app@latest`(Next.js 16.3.4 문서 기준, 2026-08-25)입니다. `--yes`는 이 Mac에 저장된 이전 선택을 재사용할 수 있어 재현이 안 되므로, 기본값과 같은 내용을 플래그로 명시합니다(TypeScript · App Router · Tailwind · ESLint · Turbopack · `@/*`). 더한 것은 `--src-dir`(코드를 `src/`에)와 `--empty`(홍보 페이지 대신 빈 페이지, production 자리표시자용)입니다. 기본값 `--agents-md`가 `AGENTS.md`와 `CLAUDE.md`를 함께 만드는데, 생성된 `CLAUDE.md`는 라우터와 충돌하므로 버리고 `AGENTS.md`만 남깁니다. 결정 15(잠정)입니다.
+- 레포 루트에 `CLAUDE.md`·`docs/`가 있어 CLI가 비어 있지 않은 디렉토리를 거부할 수 있으므로 임시 디렉토리에 만들어 옮기고 `.gitignore`·`README.md`를 병합합니다. WIW-2 실행은 WIW-1 머지 뒤, 이산하의 명시 승인이 있을 때 합니다.
+
 ## 결정
 
 행의 내용은 불변입니다. 상태 칸만 갱신할 수 있습니다.
@@ -162,6 +174,7 @@ jira:
 | 12 | 사진 원본 파일명은 촬영 시각 순 두 자리 번호(`01.jpg`~)입니다. 새 사진은 다음 번호를 받습니다. 표시 순서는 매니페스트가 정하고 파일명은 ID일 뿐입니다 | Claude 제안 | 확정 (이산하, 2026-09-06. 조건: 순서 변경 절차를 docs에 둠, `docs/scripts/README.md`) |
 | 13 | git 제외는 원본·에셋 폴더 두 개(`docs/gallery/`, `docs/design/`)만 합니다. `docs/` 나머지는 추적을 유지합니다. 반영은 WIW-1. 결정 11의 폴더명만 정정했습니다 | Claude 제안 | 확정 (이산하, 2026-09-06) |
 | 14 | GitHub 레포는 public을 유지합니다. R2는 감수하고, 문서와 코드에는 사이트에 실을 정보만 적습니다. 하객 명단·상세 주소·사이트에 싣지 않는 연락처는 적지 않습니다 | 이산하 (유지), Claude (감수 조건) | 확정 |
+| 15 | Next.js 스캐폴드는 공식 CLI `npx create-next-app@latest`(npm)로 만듭니다. 구성은 TypeScript · App Router · `src/` · Tailwind CSS · ESLint · Turbopack · alias `@/*` · `--empty` · `AGENTS.md` 포함이고, 생성된 `CLAUDE.md`는 버리고 라우터 `CLAUDE.md`에 `AGENTS.md` 포인터를 둡니다. 임시 디렉토리에 만들어 레포 루트로 옮기며 `.gitignore`·`README.md`는 병합합니다 | 이산하 (공식 CLI·npm), Claude (옵션) | 잠정 (이산하 확인 대기) |
 
 ## 정본 반영 점검 (완결 전)
 
@@ -172,3 +185,5 @@ jira:
 이 논의에서 생성된 epic·task·bugfix ID를 분해 승인 후 적습니다.
 
 - WIW-1 원본·에셋 폴더 git 제외 (단독 task, 2026-09-06 적재 · 같은 날 completed, 528c02d, archive/tasks)
+- WIW-2 Next.js 기본 스캐폴드 (단독 task, todo, 2026-09-06)
+- WIW-3 Vercel 프로젝트 연동 (단독 task, todo, 2026-09-06. 대기: WIW-2의 main 반영)
