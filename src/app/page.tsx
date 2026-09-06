@@ -101,6 +101,8 @@ export default function Home() {
           <div className="cover-bg">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="cover-bg__hall" src="/scene1/hall.png" alt="더채플앳청담 커티지홀" />
+            <div className="cover-bg__blur cover-bg__blur--soft" />
+            <div className="cover-bg__blur cover-bg__blur--strong" />
             <div className="cover-bg__shadow" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="cover-bg__couple" src="/scene1/couple.png" alt="이산하와 송시야" />
