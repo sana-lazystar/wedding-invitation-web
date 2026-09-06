@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보(액자, 디자인 논의 T55) · Scene3 인사(쪽지 + 수달·토끼 캐릭터, T51~T52) · Scene4 Part 1 신랑(사진 종이 + 토끼 메모지, T53) · 떠 있는 메뉴를 옮긴 것입니다.
+// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보(액자, 디자인 논의 T55·T58) · Scene3 인사(쪽지 + 수달·토끼 캐릭터, T51~T52) · Scene4 Part 1 신랑(사진 종이 + 토끼 메모지, T53) · Scene5 Part 1 신부(대칭, T58) · 떠 있는 메뉴를 옮긴 것입니다.
 // 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
 // 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T49). 편지지는 커버 자체이고, 봉투 안에서 봉투 폭의 92%로 있다가 봉투가 내려가는 것과 동시에 올라오고, 이어서 화면 전체로 커집니다. 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -191,26 +191,6 @@ export default function Home() {
               <div className="frame__gap" />
               <div className="frame__small">더채플앳청담 3층 커티지홀</div>
               <div className="frame__small">강남구 선릉로 757</div>
-              <div className="cal" aria-label="2026년 10월 달력, 9일 금요일">
-                <img className="note__paper" src="/paper/note.png" alt="" />
-                <div className="cal__head">October 2026</div>
-                <div className="cal__grid">
-                  {["일", "월", "화", "수", "목", "금", "토"].map((d) => (
-                    <span key={d} className="cal__dow">
-                      {d}
-                    </span>
-                  ))}
-                  {/* 2026년 10월 1일은 목요일이라 빈칸 넷, 31일까지 */}
-                  {Array.from({ length: 4 }, (_, i) => (
-                    <span key={`e${i}`} className="cal__day cal__day--empty" />
-                  ))}
-                  {Array.from({ length: 31 }, (_, i) => (
-                    <span key={i + 1} className={i + 1 === 9 ? "cal__day cal__day--wedding" : "cal__day"}>
-                      {i + 1}
-                    </span>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         </section>
@@ -250,7 +230,31 @@ export default function Home() {
             <img className="note__stamp" src="/scene4/groom-child-ride.png" alt="" />
           </div>
         </section>
-        {/* 5쪽(Part 1 신부)부터 여기 아래에 이어 붙입니다 */}
+        <section id="part1-bride" className="block story">
+          <div className="photo-paper photo-paper--left">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="photo-paper__photo" src="/scene5/bride-child.jpg" alt="신부 어릴 적 사진" />
+          </div>
+          <div className="note note--right note--memo">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="note__who" src="/character/otter-basic.png" alt="" />
+            <p className="note__text">
+              제 신부는 다섯 살 때 빗소리가 좋다며
+              <br />
+              혼자 우산 쓰고 동네를 걷던 아이였대요.
+              <br />
+              글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고
+              <br />
+              다녔고요. 그랬던 아이는 커서 상황을
+              <br />
+              분석하고 길을 찾는 사업전략가가 됐어요.
+              <br />
+              그래도 여전히 꿈을 꾸는 사람이고요.
+            </p>
+            <img className="note__stamp note__stamp--left" src="/scene5/bride-child-cutout.png" alt="" />
+          </div>
+        </section>
+        {/* 6쪽(Part 2 신랑)부터 여기 아래에 이어 붙입니다 */}
       </div>
 
       <nav className="fab" ref={fabRef} data-open={menuOpen ? "true" : "false"} aria-label="바로 가기">
