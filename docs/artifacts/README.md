@@ -35,6 +35,7 @@ Artifact 발행은 2026-09-06 T31에 중단했습니다(디자인 결정 11). �
 | `../design/canvas/*.png` | 캔버스용 축소본(PNG 무손실). 아트보드가 파일명으로 참조합니다 | 제외 |
 | `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/scene2/`, `public/paper/`, `public/character/`, `public/scene4/`, `public/scene5/` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
 | 조립된 발행 파일 | Claude 세션 스크래치패드 | 커밋하지 않음 |
+| `src/app/favicon.ico` · `icon1~4.png` · `apple-icon.png` · `manifest.ts`, `public/android-icon-*.png` · `ms-icon-*.png` · `browserconfig.xml` | 사이트 아이콘(T70). 이산하가 생성기로 만든 묶음이고 원본 전체는 `../design/favicon/`(git 제외). Next.js 파일 규약(favicon · icon · apple-icon · manifest)이 `<head>`를 만들고, 타일색·테마색은 `layout.tsx`에 있습니다. 조립본에는 넣지 않습니다 | 커밋 |
 
 ## 고치는 순서
 

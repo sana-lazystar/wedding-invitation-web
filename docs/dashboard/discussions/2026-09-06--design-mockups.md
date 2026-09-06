@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 18:25:07
-updated: 2026-09-07 01:36:11
+updated: 2026-09-07 01:41:00
 completed:
 participants: 이산하, Claude
 related: []
@@ -763,6 +763,16 @@ jira:
 - 간격(T67). 컷아웃이 안으로 들어오니 Scene4·5의 아래 여백 124px(`.story--stamp`)이 필요 없어 걷어내고 모든 이야기 구획을 위아래 20px로 통일했다. 장면 사이 실측(마지막 요소 아래 → 다음 첫 요소 위)은 30~38px이다(종이 기울기 몫만큼 다르다).
 - 아이콘(T69). `.note--who-right` · `.note--who-left` 변형을 만들어 Scene6 관찰 메모지(토끼 3)는 오른쪽 위, Scene7 독백 메모지(수달 2)는 왼쪽 위로 옮겼다.
 - 확인. localhost:3000 375×667 · 390×844 · 430×932. tsc · eslint 통과.
+
+### 2026-09-07 01:38:00 이후 · 이산하 (T70)
+
+- favicon을 설정하자. 생성기로 만든 묶음(`~/Downloads/535088a62da4d8245f73ad07ebdd0acf.ico/`, 애플 9종 · 안드로이드 6종 · favicon 3종 + ico · ms 타일 4종 · manifest · browserconfig)과 생성기가 준 `<link>` 목록을 줬다. 프로젝트에 설정해 보라.
+
+### 2026-09-07 01:41:00 · Claude (T70)
+
+- 이 Next.js는 `app/`의 파일 규약(`favicon.ico` · `icon*.png` · `apple-icon.png` · `manifest.ts`)이 `<head>`를 만들어 주므로 생성기의 `<link>` 목록을 손으로 옮기지 않았다(`node_modules/next/dist/docs/…/app-icons.md`). `favicon.ico`(생성기 것은 16×16 한 장) · `icon1~4.png`(16 · 32 · 96 · 192) · `apple-icon.png`(180. iOS는 이 한 장을 쓰므로 57~152는 넣지 않았다) · `manifest.ts`(이름 · 안드로이드 아이콘 6종 · 바탕색과 테마색 종이색 #F3ECDF)를 `src/app/`에, 안드로이드 · ms 타일 PNG와 `browserconfig.xml`(타일색 종이색)을 `public/`에 두었다. 규약이 없는 ms 타일 메타와 애플 홈 화면 이름은 `layout.tsx`의 `metadata.other` · `appleWebApp`, 테마색은 `viewport.themeColor`다. 생성기 기본값 흰색(#ffffff) 대신 종이색을 썼다. 원본 묶음 전체는 `docs/design/favicon/`(git 제외)에 복사했다.
+- 확인. localhost:3000 `<head>`에 icon 16 · 32 · 96 · 192, apple-touch-icon 180, manifest, theme-color, msapplication 둘, apple-mobile-web-app-title이 나오고 `/favicon.ico` · `/manifest.webmanifest` · `/android-icon-192x192.png` · `/ms-icon-144x144.png` · `/browserconfig.xml` 전부 200. tsc · eslint 통과.
+- `layout.tsx`의 제목·설명 변경(이산하)은 커밋에서 빼고 작업 트리로 되돌렸다.
 
 ## 결정
 
