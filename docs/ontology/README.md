@@ -9,10 +9,10 @@
 | --- | --- | --- |
 | 루트 원장 5종 | `requirements.md`(요구) · `decisions.md`(결정) · `open-questions.md`(미결) · `risks.md`(위험) · `glossary.md`(용어) | 활성 (2026-09-06 빈 골격. 요구 정의 논의에서 채웁니다) |
 | `tools/` | 서랍 횡단 기계 검증. `check-refs.mjs`(ID 참조 무결성) · `check-doc-style.mjs`(작업 문서 문체 게이트) · `board.mjs`(진행 보드) · `install-hook.sh`. 정본이 아니라 정본을 검사합니다 | 활성 (2026-09-06, medistream-chat-hub에서 계승) |
-| `references/` | 시점 고정 기록. 동결 스냅샷. **정본 아님** | 예정. 첫 동결본(시안·조사 결과)이 생길 때 |
+| `references/` | 시점 고정 기록. 동결 스냅샷. **정본 아님** | 활성 (2026-09-06 첫 동결본 `2026-09-06--free-tier-survey.md` 무료 티어 조사) |
 | `ia/` | 화면 구조. 섹션 순서·페이지 명세 | 예정. 첫 IA 산출물이 생길 때 |
 | `policy/` | 도메인 규칙. 공개 범위·방명록·참석 여부·개인정보 취급 등 | 예정. 첫 규칙이 확정되면 |
-| `topology/` | 물리 구성. 호스팅·도메인·빌드·배포 경로 | 예정. 호스팅이 정해지면 |
+| `topology/` | 물리 구성. 호스팅·도메인·빌드·배포 경로 | 활성 (2026-09-06 `system-context.md`. 상태 "결정됨 · 프로비저닝 전") |
 | `database/` | 저장소 설계 | 예정. 방명록·참석 여부처럼 서버 저장이 생기면 |
 | `api/` | API 계약 또는 외부 서비스 연동 계약 | 예정. 첫 계약이 생길 때 |
 
@@ -48,4 +48,9 @@
 
 | 지식 | SSOT |
 | --- | --- |
-| (아직 없음) | |
+| Next.js 설정(이미지 로더·출력 모드 등) | 레포 루트 `next.config.ts` |
+| 의존성·스크립트(lint·build·dev 명령) | 레포 루트 `package.json` |
+| TypeScript·경로 alias(`@/*`) | 레포 루트 `tsconfig.json` |
+| 린트 규칙 | 레포 루트 `eslint.config.mjs` |
+| 라우트 구조 | `src/app/` 디렉토리 |
+| Next.js 코드 작성 규칙(에이전트용) | 레포 루트 `AGENTS.md` |

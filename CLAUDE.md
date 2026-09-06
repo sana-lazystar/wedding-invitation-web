@@ -11,7 +11,7 @@
 - 진행 중 작업: `docs/dashboard/state.json`의 `activeWorks`. 세션을 시작하면 이 파일을 먼저 읽습니다. 터미널 보드 = `node docs/ontology/tools/board.mjs --watch`(읽기 전용)
 - 신규 문서 정본: `docs/dashboard/templates/`
 - 체계 설계·구조 결정 이력: `docs/dashboard/discussions/` 각 논의록의 결정 표
-- **지금 = 부트스트랩 완료 · 요구 정의 대기 (2026-09-06)**: 다음 논의는 "청첩장에 무엇이 들어가는가"입니다. 새 논의록을 열어 요구(REQ)·용어·미결(Q·U)을 원장에 적립하고, 목록이 확정되면 첫 story를 적재합니다. git 초기화, 훅 설치(`sh docs/ontology/tools/install-hook.sh`), 기술 스택 선정은 아직입니다
+- **지금 = 스택·인프라 논의 마무리 단계 (2026-09-06)**: 언어·프레임워크·호스팅은 `docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md` 결정 표에 있고, topology 서랍이 열렸습니다. 다음 논의는 "청첩장에 무엇이 들어가는가"입니다. 새 논의록을 열어 요구(REQ)·용어·미결(Q·U)을 원장에 적립하고, 목록이 확정되면 첫 story를 적재합니다. git과 훅은 설치돼 있습니다. 코드 착수와 Vercel 프로젝트 생성은 외부 반영 게이트 뒤입니다
 
 # 2. 규격 — 무엇이 현재 참인가 (`docs/ontology/`)
 
@@ -26,8 +26,10 @@
 | ID 참조 무결성 검사 (`node docs/ontology/tools/check-refs.mjs`) | `docs/ontology/README.md` §기계 검증 |
 | 작업 문서 문체 게이트 (`node docs/ontology/tools/check-doc-style.mjs`) | `docs/dashboard/README.md` §git 규약 |
 | 공개 문서 문체 기준 | `docs/WRITER.md` |
+| 물리 구성 (호스팅·도메인·빌드·배포 경로·한도·이전 경로) | `docs/ontology/topology/system-context.md` |
+| 시점 기록 동결본 (조사·시안 스냅샷, 정본 아님) | `docs/ontology/references/` |
 
-예정 서랍(`policy/` `database/` `topology/` `api/` `ia/` `references/`)은 디렉토리만 있고 비어 있습니다. 첫 콘텐츠가 생길 때 채우고 이 표에 행을 더합니다. 생성 조건은 `docs/ontology/README.md` §서랍 정의에 있습니다.
+예정 서랍(`policy/` `database/` `api/` `ia/`)은 디렉토리만 있고 비어 있습니다. 첫 콘텐츠가 생길 때 채우고 이 표에 행을 더합니다. 생성 조건은 `docs/ontology/README.md` §서랍 정의에 있습니다.
 
 # 규약
 
@@ -38,5 +40,9 @@
 - 착수 전 해당 WIW 문서의 design-refs와 ontology 해당 문서를 대조합니다
 - `docs/dashboard/discussions/` = AI 작업 논의. 외부 사람과의 협업 기록이 필요해지면 `docs/cooperation/`을 그때 만듭니다
 - ontology에는 살아있는 정본만 둡니다. 시점 기록은 `docs/ontology/references/`에 동결(무편집 + 상태 헤더)
-- 문체 = `docs/WRITER.md`. pre-commit 훅이 ID 참조 무결성과 작업 문서 문체 게이트를 겁니다. 클론·재설정 시 `sh docs/ontology/tools/install-hook.sh` 1회
+- **문체**: Claude가 작성·수정하는 모든 문서(md 파일 등)는 `docs/WRITER.md`를 토대로 씁니다. 논의록·원장·서랍 문서·동결본 헤더·이 파일도 예외가 아닙니다. pre-commit 훅이 ID 참조 무결성과 작업 문서 문체 게이트를 겁니다. 클론·재설정 시 `sh docs/ontology/tools/install-hook.sh` 1회
+- 재사용 스크립트(이미지 산출 등)는 `docs/scripts/`에 둡니다(스택 결정 10). 원본 사진은 `docs/gallery/`, 디자인 에셋은 `docs/design/`이고 둘은 git 제외 대상입니다(WIW-1). 사진 추가·순서 변경 절차는 `docs/scripts/README.md`
 - 시간 기입은 `date '+%Y-%m-%d %H:%M:%S'` 실측값
+- Next.js 코드 지침은 `AGENTS.md`입니다(create-next-app 생성, `next dev`가 규칙 블록을 다시 씁니다). 아래 임포트 줄로 자동 포함되며, 이 줄은 create-next-app이 만든 `CLAUDE.md`의 유일한 내용을 옮긴 것입니다(스택 결정 15)
+
+@AGENTS.md
