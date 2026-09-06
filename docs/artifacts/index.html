@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <title>이산하 · 송시야 청첩장</title>
+  <!-- 글꼴 후보. 시안 확인용으로 여럿을 싣습니다. 확정되면 쓰는 것만 남깁니다 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;600&family=Hahmlet:wght@400;600&family=Song+Myung&family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500&family=Nanum+Gothic:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500&family=Cormorant+Garamond:wght@500;600&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    :root {
+      --paper-bg: #F3ECDF;
+      --paper: #FBF7EF;
+      --ink: #2F2A25;
+      --ink-soft: #4A423B;
+      --muted: #7A6F63;
+      --oak: #B98E5E;
+      --rule: #DCD0BC;
+      --font-serif: 'Gowun Batang', 'Apple SD Gothic Neo', 'Noto Serif KR', serif;
+      --font-sans: 'Gowun Dodum', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      --font-latin: 'Cormorant Garamond', Georgia, serif;
+      --bar-h: 56px;
+    }
+    * { box-sizing: border-box; }
+    html { color-scheme: light only; }
+    body {
+      margin: 0;
+      background: #E9E1D2;
+      color: var(--ink);
+      font-family: var(--font-serif);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .page {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+      margin: 0 auto;
+      background: var(--paper-bg);
+      box-shadow: 0 0 40px -20px rgba(70, 48, 24, 0.5);
+    }
+    .block { position: relative; padding-bottom: var(--bar-h); }
+    .block--fixed { min-height: 100dvh; }
+
+    /* 1. 커버 */
+    #cover {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 52px 24px calc(var(--bar-h) + 20px);
+    }
+    .eyebrow {
+      font-family: var(--font-latin);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .tagline { margin-top: 12px; font-size: 15px; color: var(--ink-soft); }
+    .popup {
+      position: relative;
+      margin-top: 26px;
+      width: min(302px, 78vw);
+      aspect-ratio: 302 / 470;
+      max-height: calc(100dvh - 380px);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #E7DCC8;
+      box-shadow: 0 0 0 6px var(--paper), 0 26px 40px -24px rgba(70, 48, 24, 0.55);
+    }
+    .popup__hall { width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; display: block; }
+    .popup__shadow {
+      position: absolute; left: 50%; bottom: 12.5%;
+      width: 50%; height: 26px; transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(70, 48, 24, 0.32), rgba(70, 48, 24, 0) 70%);
+    }
+    .popup__couple {
+      position: absolute; left: 50%; bottom: 14%;
+      height: 42.5%; width: auto; transform: translateX(-50%);
+      filter: drop-shadow(0 8px 8px rgba(70, 48, 24, 0.3));
+    }
+    .names { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .names__name { font-size: 28px; font-weight: 700; letter-spacing: 0.08em; line-height: 1.4; }
+    .names__and { font-family: var(--font-sans); font-size: 13px; color: var(--muted); line-height: 1.4; }
+    .scroll-cue { position: absolute; left: 50%; bottom: calc(var(--bar-h) + 16px); transform: translateX(-50%); }
+
+    /* 하단 고정 바 */
+    .bar {
+      position: fixed; left: 50%; bottom: 0; transform: translateX(-50%);
+      width: 100%; max-width: 430px; height: var(--bar-h);
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      background: var(--paper); border-top: 1px solid var(--rule);
+      font-family: var(--font-sans); font-size: 15px;
+      padding-bottom: env(safe-area-inset-bottom);
+      z-index: 10;
+    }
+    .bar a { display: flex; align-items: center; justify-content: center; color: var(--ink); text-decoration: none; }
+    .bar a + a { border-left: 1px solid var(--rule); }
+    .bar a:focus-visible { outline: 2px solid var(--oak); outline-offset: -4px; }
+
+    /* 글꼴 확인 패널. 시안 확인용이며 확정 후 지웁니다 */
+    .fontbar {
+      position: fixed; top: 8px; right: 8px; z-index: 20;
+      display: flex; flex-direction: column; gap: 6px;
+      padding: 8px 10px; background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--rule); border-radius: 8px;
+      font: 12px/1.4 -apple-system, 'Apple SD Gothic Neo', sans-serif; color: var(--ink);
+    }
+    .fontbar label { display: flex; align-items: center; gap: 6px; }
+    .fontbar select { font-size: 12px; max-width: 170px; }
+    .fontbar button { font-size: 11px; align-self: flex-end; }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <section id="cover" class="block block--fixed">
+      <div class="eyebrow">Wedding Invitation</div>
+      <p class="tagline">우리의 삶을 함께 써 주신 당신께</p>
+      <div class="popup">
+        <img class="popup__hall" src="../design/canvas/hall.jpg" alt="더채플앳청담 커티지홀">
+        <div class="popup__shadow"></div>
+        <img class="popup__couple" src="../design/canvas/couple.png" alt="이산하와 송시야">
+      </div>
+      <div class="names">
+        <div class="names__name">이산하</div>
+        <div class="names__and">그리고</div>
+        <div class="names__name">송시야</div>
+      </div>
+      <svg class="scroll-cue" width="22" height="12" viewBox="0 0 22 12" fill="none" aria-hidden="true"><path d="M2 2 L11 10 L20 2" stroke="#B98E5E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </section>
+
+    <!-- 2쪽(핵심 정보)부터 여기 아래에 이어 붙입니다 -->
+
+  </div>
+
+  <nav class="bar" aria-label="바로 가기">
+    <a href="#directions">오시는 길</a>
+    <a href="#contact">연락처</a>
+  </nav>
+
+  <div class="fontbar" id="fontbar">
+    <label>본문 <select id="fontSerif">
+      <option value="'Gowun Batang', serif" selected>고운바탕 (Gowun Batang)</option>
+      <option value="'Nanum Myeongjo', serif">나눔명조 (Nanum Myeongjo)</option>
+      <option value="'Noto Serif KR', serif">노토 세리프 KR</option>
+      <option value="'Hahmlet', serif">함렛 (Hahmlet)</option>
+      <option value="'Song Myung', serif">송명 (Song Myung)</option>
+      <option value="'Pretendard', sans-serif">프리텐다드 (Pretendard)</option>
+      <option value="'Gowun Dodum', sans-serif">고운돋움 (Gowun Dodum)</option>
+    </select></label>
+    <label>안내 <select id="fontSans">
+      <option value="'Gowun Dodum', sans-serif" selected>고운돋움 (Gowun Dodum)</option>
+      <option value="'Pretendard', sans-serif">프리텐다드 (Pretendard)</option>
+      <option value="'Noto Sans KR', sans-serif">노토 산스 KR</option>
+      <option value="'Nanum Gothic', sans-serif">나눔고딕 (Nanum Gothic)</option>
+      <option value="'IBM Plex Sans KR', sans-serif">IBM Plex Sans KR</option>
+    </select></label>
+    <button type="button" id="fontbarHide">패널 닫기</button>
+  </div>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var serif = document.getElementById('fontSerif');
+      var sans = document.getElementById('fontSans');
+      serif.addEventListener('change', function () { root.style.setProperty('--font-serif', serif.value + ", 'Apple SD Gothic Neo'"); });
+      sans.addEventListener('change', function () { root.style.setProperty('--font-sans', sans.value + ", 'Apple SD Gothic Neo'"); });
+      document.getElementById('fontbarHide').addEventListener('click', function () { document.getElementById('fontbar').hidden = true; });
+    })();
+  </script>
+</body>
+</html>
