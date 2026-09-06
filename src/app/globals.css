@@ -99,6 +99,19 @@ body {
 .frame__big { font-size: 20px; font-weight: 700; line-height: 1.6; color: var(--ink); }
 .frame__small { font-size: 15px; line-height: 1.7; color: var(--ink-soft); }
 .frame__gap { height: 16px; }
+/* 달력(T57). 글 아래 흰 종이 카드(쪽지와 같은 종이 결)에 2026년 10월. 1일이 목요일이라 앞에 빈칸 넷, 31일까지 다섯 줄. 9일은 오크색 원 */
+.cal {
+  position: relative; margin-top: 22px; padding: 12px 12px 10px; border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
+}
+.cal__head {
+  position: relative; margin-bottom: 6px;
+  font-family: var(--font-latin); font-size: 12px; font-weight: 600; letter-spacing: 0.24em; text-indent: 0.24em; text-transform: uppercase; line-height: 1.4; color: var(--muted);
+}
+.cal__grid { position: relative; display: grid; grid-template-columns: repeat(7, 26px); gap: 2px; justify-content: center; }
+.cal__dow { font-family: var(--font-ui); font-size: 10px; line-height: 16px; color: var(--muted); }
+.cal__day { display: flex; align-items: center; justify-content: center; height: 24px; font-size: 12px; line-height: 1; color: var(--ink-soft); }
+.cal__day--wedding { margin: 0 auto; width: 24px; border-radius: 50%; background: var(--oak); color: var(--paper); font-weight: 700; }
 
 /* 3. 인사(와이어프레임 4쪽, 0.3화면). 쪽지 두 장에 한 줄씩. 화자 캐릭터(수달 = 신랑, 토끼 = 신부. 이산하가 준 스티커 그림, T52)가 쪽지 위 모서리에 걸칩니다. 신랑 쪽지는 오른쪽 정렬에 오른쪽 위, 신부 쪽지는 왼쪽 정렬에 왼쪽 위. 종이 결은 그림(`public/paper/note.png`), 그늘·기울기는 CSS */
 .greeting { display: flex; flex-direction: column; gap: 22px; padding: 40px 24px 14px; }

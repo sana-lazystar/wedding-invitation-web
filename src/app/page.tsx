@@ -191,6 +191,26 @@ export default function Home() {
               <div className="frame__gap" />
               <div className="frame__small">더채플앳청담 3층 커티지홀</div>
               <div className="frame__small">강남구 선릉로 757</div>
+              <div className="cal" aria-label="2026년 10월 달력, 9일 금요일">
+                <img className="note__paper" src="/paper/note.png" alt="" />
+                <div className="cal__head">October 2026</div>
+                <div className="cal__grid">
+                  {["일", "월", "화", "수", "목", "금", "토"].map((d) => (
+                    <span key={d} className="cal__dow">
+                      {d}
+                    </span>
+                  ))}
+                  {/* 2026년 10월 1일은 목요일이라 빈칸 넷, 31일까지 */}
+                  {Array.from({ length: 4 }, (_, i) => (
+                    <span key={`e${i}`} className="cal__day cal__day--empty" />
+                  ))}
+                  {Array.from({ length: 31 }, (_, i) => (
+                    <span key={i + 1} className={i + 1 === 9 ? "cal__day cal__day--wedding" : "cal__day"}>
+                      {i + 1}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
