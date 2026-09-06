@@ -210,7 +210,7 @@ export default function Home() {
             </p>
           </div>
         </section>
-        <section id="part1-groom" className="block story story--stamp">
+        <section id="part1-groom" className="block story">
           <div className="photo-paper">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="photo-paper__photo" src="/scene4/groom-child.jpg" alt="신랑 어릴 적 사진" />
@@ -226,7 +226,7 @@ export default function Home() {
             </p>
           </div>
         </section>
-        <section id="part1-bride" className="block story story--stamp">
+        <section id="part1-bride" className="block story">
           <div className="photo-paper photo-paper--left">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="photo-paper__photo" src="/scene5/bride-child.jpg" alt="신부 어릴 적 사진" />
@@ -255,7 +255,7 @@ export default function Home() {
               <span>신랑 웨딩 사진</span>
             </div>
           </div>
-          <div className="note note--left note--memo note--tuck">
+          <div className="note note--left note--memo note--tuck note--who-right">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/rabbit-3.png" alt="" />
             <p className="note__text">신랑은 새벽에 퇴근하더라도 다음 날 꼭 정장에 머리까지 하고 나왔어요. 처음엔 차가워 보이는 데다 저와 너무 다른 사람 같아서 거리를 뒀는데, 알면 알수록 보석 같은 사람이더라고요!</p>
@@ -278,7 +278,7 @@ export default function Home() {
             <img className="note__who" src="/character/otter-1.png" alt="" />
             <p className="note__text">사실 저는 그때 연애 생각이 없었어요. 당분간 일에만 집중하자는 마음이었죠. 그런데 이 사람이 자꾸 제 주변을 맴돌더라고요.</p>
           </div>
-          <div className="note note--right note--memo note--indent">
+          <div className="note note--right note--memo note--indent note--who-left">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/otter-2.png" alt="" />
             <p className="note__text">그러다 문득, 쉬는 날에도 시야를 떠올리는 저를 발견했어요. 아, 내가 설레고 있구나.</p>
