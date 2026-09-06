@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보(레이스 타원 카드, 디자인 논의 T50) · Scene3 인사(쪽지 + 수달·토끼 캐릭터, T51~T52) · 4쪽 자리표시 · 떠 있는 메뉴를 옮긴 것입니다.
+// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보(레이스 타원 카드, 디자인 논의 T50) · Scene3 인사(쪽지 + 수달·토끼 캐릭터, T51~T52) · Scene4 Part 1 신랑(사진 종이 + 토끼 메모지, T53) · 떠 있는 메뉴를 옮긴 것입니다.
 // 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
 // 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T49). 편지지는 커버 자체이고, 봉투 안에서 봉투 폭의 92%로 있다가 봉투가 내려가는 것과 동시에 올라오고, 이어서 화면 전체로 커집니다. 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -211,11 +211,24 @@ export default function Home() {
             </p>
           </div>
         </section>
-        {/* 4쪽(Part 1 신랑) 자리표시. 걸쳐 보이는 것만 확인합니다 */}
         <section id="part1-groom" className="block story">
           <div className="photo-paper">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <span className="photo-paper__label">신랑 어릴 적 사진 · 4쪽 자리</span>
+            <img className="photo-paper__photo" src="/scene4/groom-child.jpg" alt="신랑 어릴 적 사진" />
+          </div>
+          <div className="note note--left note--memo">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="note__who" src="/character/rabbit-1.png" alt="" />
+            <p className="note__text">
+              제 신랑은 어릴 때 시를 써서 상도 받던
+              <br />
+              문학소년이었대요. 무협지를 좋아해서
+              <br />
+              작가를 꿈꾸기도 했고요. 그랬던 아이는
+              <br />
+              커서 냉철하고 이성적인 개발자가 됐어요!
+            </p>
+            <img className="note__stamp" src="/scene4/groom-child-ride.png" alt="" />
           </div>
         </section>
         {/* 5쪽(Part 1 신부)부터 여기 아래에 이어 붙입니다 */}
