@@ -32,7 +32,7 @@
 ## 고치는 순서
 
 1. `index.html`을 고칩니다(CSS와 마크업의 정본).
-2. `node docs/scripts/sync-globals.mjs`로 `src/app/globals.css`를 다시 만듭니다. 마크업이 바뀌었으면 `src/app/page.tsx`도 같은 구조로 고칩니다. `npx tsc --noEmit -p tsconfig.json`과 `npx eslint src/app`을 돌립니다.
+2. `node docs/scripts/sync-globals.mjs`로 `src/app/globals.css`를 다시 만듭니다. 조립본 CSS에는 `-webkit-backdrop-filter` 같은 접두사 중복을 두지 않습니다(스크립트가 걷어내고 Tailwind 처리기가 붙입니다). 마크업이 바뀌었으면 `src/app/page.tsx`도 같은 구조로 고칩니다. `npx tsc --noEmit -p tsconfig.json`과 `npx eslint src/app`을 돌립니다.
 3. `canvas/Main.dc.html`을 같은 모양으로 고칩니다(정적, 진입 장면 없음).
 4. 미리보기와 캔버스를 다시 올립니다(아래).
 5. 논의록에 T-로그를 적고 커밋합니다. `git add`는 경로를 명시합니다.
@@ -55,7 +55,9 @@ Claude 세션에서 `/design`을 불러 `canvas/Main.dc.html`·`canvas/FloatingM
 
 ```sh
 sips -s format png -Z 900 원본.PNG --out docs/design/canvas/hall.png
-sips -s format png -Z 400 원본.PNG --out docs/design/canvas/couple.png
+python3 docs/scripts/unmatte.py docs/design/scene1/scene1--married-couple.PNG docs/design/scene1/scene1--married-couple--clean.png
+sips -s format png -Z 400 docs/design/scene1/scene1--married-couple--clean.png --out docs/design/canvas/couple.png
+sips -s format png -Z 700 docs/design/scene1/scene1--married-couple--clean.png --out public/scene1/couple.png
 sips -s format png -Z 720 원본.PNG --out docs/design/canvas/opened-paper.png
 ```
 

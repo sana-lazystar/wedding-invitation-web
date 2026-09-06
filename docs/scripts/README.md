@@ -41,3 +41,11 @@ node docs/scripts/inline-artifact.mjs docs/artifacts/index.html /tmp/preview.htm
 ```sh
 node docs/scripts/sync-globals.mjs
 ```
+
+## unmatte.py — 컷아웃 가장자리 색 번짐 제거
+
+투명 배경 PNG의 반투명 가장자리 픽셀 색을 가장 가까운 불투명 픽셀 색으로 바꿉니다. 두 사람 컷아웃의 자홍색 테두리 잔상을 지울 때 썼습니다(디자인 논의 T30). 원본은 건드리지 않고 새 파일로 씁니다. macOS 시스템 python3의 Pillow·numpy를 씁니다.
+
+```sh
+python3 docs/scripts/unmatte.py docs/design/scene1/scene1--married-couple.PNG docs/design/scene1/scene1--married-couple--clean.png
+```

@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 18:25:07
-updated: 2026-09-06 20:12:56
+updated: 2026-09-06 20:17:23
 completed:
 participants: 이산하, Claude
 related: []
@@ -311,6 +311,17 @@ jira:
 
 - 상단 흐림. 배경 흐림(backdrop-filter) 오버레이 두 겹을 겹쳤다. 위 26%는 5px 흐림, 위 16%는 9px 흐림이고 각각 마스크로 아래쪽이 투명해져서, 위로 갈수록 더 흐리고 중앙 쪽은 선명하다. 사진 파일은 그대로다.
 - 이어가기 준비. ① 조립본 CSS를 Next.js로 옮기는 절차를 `docs/scripts/sync-globals.mjs`로 만들었다(조립본이 정본, globals.css는 파생물). ② `docs/artifacts/README.md`를 지금 상태·링크 두 개·파일 자리·고치는 순서·다시 올리는 법으로 다시 썼다. ③ `CLAUDE.md` 라우터 상태 줄을 "Scene1·2 완료, 다음 Scene3"로 바꾸고 README를 가리키게 했다. ④ 코드(흐림 반영분)까지 develop에 커밋해 작업 트리를 비웠다. 새 세션은 CLAUDE.md → artifacts README → 이 논의록 마지막 T-로그 순으로 읽으면 된다.
+
+### 2026-09-06 20:17:23 이전 · 이산하 (T30)
+
+- (스크린샷) 배경 이미지 상단 흐림 효과가 적용되지 않았다.
+
+### 2026-09-06 20:17:23 · Claude (T30)
+
+- 원인. 조립본 CSS에 표준 `backdrop-filter`와 `-webkit-backdrop-filter`를 나란히 썼는데, Tailwind v4의 CSS 처리기(Lightning CSS)가 둘을 합치면서 표준 선언을 떨어뜨렸다. Next.js가 내려 준 CSS에는 접두사 선언만 남았고 Chrome은 그 접두사를 모르므로 흐림이 사라졌다. 조립본 파일을 직접 열면 정상이었다.
+- 조치. `docs/scripts/sync-globals.mjs`가 `-webkit-backdrop-filter`·`-webkit-mask-image` 중복을 걷어내고 표준만 넘기게 했다. 처리기가 접두사를 알아서 붙인다. Playwright로 Next.js 화면을 열어 계산된 스타일이 `blur(9px)`이고 상단 4분의 1이 흐려진 것을 스크린샷으로 확인했다.
+- 덤. 그 스크린샷에서 두 사람 컷아웃 가장자리에 자홍색 테두리 잔상이 보였다. 원본 PNG의 반투명 픽셀에 자홍색이 남아 있던 것이다. `docs/scripts/unmatte.py`(반투명 픽셀 색을 이웃 불투명 픽셀 색으로 교체)를 만들어 정리본 `docs/design/scene1/scene1--married-couple--clean.png`을 만들고, 캔버스(400px)와 Next.js(700px) 축소본을 거기서 다시 만들었다. 원본은 그대로다.
+- 조립본·Next.js·캔버스·미리보기 반영. 코드(`globals.css`·`public/scene1/couple.png`)도 develop에 커밋한다.
 
 ## 결정
 
