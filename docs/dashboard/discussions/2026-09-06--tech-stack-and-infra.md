@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 16:53:09
-updated: 2026-09-06 18:03:20
+updated: 2026-09-06 18:05:43
 completed:
 participants: 이산하, Claude
 related: []
@@ -169,6 +169,15 @@ jira:
 
 - WIW-2 실행 완료. `feature/WIW-2-nextjs-scaffold`에 스캐폴드를 커밋(8a48f39)하고 푸시했습니다. lint·build 통과, 라우트는 `/`와 `/_not-found` 둘 다 정적입니다. task는 PR 초안까지 적고 archive로 옮겼습니다. ontology README의 코드 SSOT 표를 채웠습니다.
 - 다음은 이산하 몫입니다. WIW-2 PR을 develop에 머지하고, develop→main PR을 올린 뒤, topology §11 절차로 Vercel 프로젝트를 만듭니다(WIW-3). 프로젝트 이름·URL·리전을 알려주면 topology §2를 채웁니다.
+
+### 2026-09-06 18:05:43 이전 · 이산하 (T9)
+
+- VS Code 소스 컨트롤에 `.next/` 아래 파일 156개가 미추적으로 뜬다. `.gitignore`를 어떻게 설정했길래 이런가.
+
+### 2026-09-06 18:05:43 · Claude (T9)
+
+- `.gitignore` 설정 문제가 아니라 브랜치 차이입니다. 스캐폴드의 `.gitignore`(`/.next/`·`next-env.d.ts` 제외)는 feature 브랜치에만 있고 develop에는 아직 없습니다. feature 브랜치에서 돌린 `npm run build`의 산출물이 작업 트리에 남은 채 develop으로 돌아와 미추적으로 보인 것입니다. 빌드 산출물 `.next/`와 `next-env.d.ts`를 지웠고 작업 트리는 깨끗합니다. WIW-2가 develop에 머지되면 다시 생겨도 무시됩니다.
+- 교훈. 브랜치를 옮기기 전에 빌드 산출물을 지우거나, 산출물이 있는 브랜치에서 작업을 마칩니다.
 
 ## 결정
 
