@@ -66,3 +66,5 @@ related: []
 2026-09-06 23:13:34 · develop · 8492a14 · 진입 장면 3.9초, 카드 폭 92%, 봉투 아래로 빠져나감, 끝날 때 깜빡임 제거(디자인 논의 T41). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-06 23:19:31 · develop · 933743a · 봉투 뒷판·앞판 층, 카드가 앞판 뒤에 끼워져 입구로 보임(디자인 논의 T42). `src/app/page.tsx` `src/app/globals.css` `public/intro/envelope-back.png` `public/intro/envelope-front.png`.
+
+2026-09-06 23:36:16 · develop · 1f24fae · 편지지 1:1, 봉투 폭 108%, 시작 높이 2/3, 확대 없이 봉투가 내려가며 끝, 4.3초(디자인 논의 T43). `src/app/page.tsx` `src/app/globals.css`.
