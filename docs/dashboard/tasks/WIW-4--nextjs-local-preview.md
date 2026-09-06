@@ -78,3 +78,5 @@ related: []
 2026-09-06 23:56:52 · develop · b267628 · 봉투 흐려짐 0.3초, 확대 2.7초부터, 편지지 92%로 복귀, 3.8초(디자인 논의 T47). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-07 00:00:26 · develop · a445667 · 봉투 하강 뒤 확대와 함께 0.3초 흐려짐, 4.0초(디자인 논의 T48). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 00:02:33 · develop · a730c51 · 봉투 하강을 편지지 올라옴과 동시에, 3.7초(디자인 논의 T49). `src/app/page.tsx` `src/app/globals.css`.
