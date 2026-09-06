@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 // WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보 · 떠 있는 메뉴를 옮긴 것입니다.
 // 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
-// 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T46). 편지지는 커버 자체이고, 봉투 안에서 봉투 폭의 55%로 있다가 조금 올라온 뒤 화면 전체로 커집니다. 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
+// 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T47). 편지지는 커버 자체이고, 봉투 안에서 봉투 폭의 92%로 있다가 조금 올라온 뒤 화면 전체로 커집니다. 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export default function Home() {
@@ -46,8 +46,8 @@ export default function Home() {
     const z0 = (vh * 2) / 3 / 400; // 시작 배율. 봉투 높이 = 화면 높이의 2/3
     const envTop = vh / 2 - 200 * z1; // 물러난 뒤 봉투 윗변의 화면 y
     const ty0 = envTop + 14 * z1; // 편지지가 봉투 안에 든 자리(윗변 바로 아래). 올라오면 0(최종 자리)
-    const s0 = (envW * 0.55) / cover.clientWidth; // 봉투 안에서의 배율. 편지지 폭 = 봉투 폭의 55%. 커지면 1
-    const ty1 = ty0 - cover.clientHeight * s0 * 0.4; // 조금 올라온 자리(제 높이의 40%)
+    const s0 = (envW * 0.92) / cover.clientWidth; // 봉투 안에서의 배율. 편지지 폭 = 봉투 폭의 92%. 커지면 1
+    const ty1 = ty0 - cover.clientHeight * s0 * 0.35; // 조금 올라온 자리(제 높이의 35%). 이만큼 올라와야 봉투가 사라질 때 아랫변이 화면 안에 있습니다
     root.style.setProperty("--z0", String(z0));
     root.style.setProperty("--z1", String(z1));
     cover.style.setProperty("--card-ty0", `${ty0}px`);
