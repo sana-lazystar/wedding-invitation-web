@@ -108,3 +108,5 @@ related: []
 2026-09-07 01:18:00 · develop · 99cdfd0 · 캐릭터 아이콘 43px, 4px 아래로(디자인 논의 T63). `src/app/globals.css`.
 
 2026-09-07 01:22:49 · develop · 75f718a · 메모지 글꼴 개구(next/font Gaegu · `--font-memo`), 쪽지 폭 글만큼(디자인 논의 T64). `src/app/layout.tsx` `src/app/globals.css`. 이 커밋부터 develop. T50~T63 커밋은 main에 직접 쌓였다가 a9b1fbe로 develop에 병합됨.
+
+2026-09-07 01:27:52 · develop · 1ba6be3 · Scene6~8 Part 2·3(메모지 + 사진 자리표시), 캐릭터 여덟 장 추가(디자인 논의 T65). `src/app/page.tsx` `src/app/globals.css` `public/character/`.
