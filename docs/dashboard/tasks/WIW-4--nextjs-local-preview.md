@@ -92,3 +92,5 @@ related: []
 2026-09-07 00:50:45 · develop · e3c7f96 · Scene4 사진 종이 절반·가운데, 컷아웃 스티커 144px(디자인 논의 T54). `src/app/globals.css`.
 
 2026-09-07 00:54:36 · develop · edd4fd7 · Scene2 액자 선화(`public/scene2/frame.png`), `public/lace/` 삭제, Scene4 사진 3/4 오른쪽·메모지 겹침(디자인 논의 T55·T56). `src/app/page.tsx` `src/app/globals.css` `public/scene2/` `public/lace/`.
+
+2026-09-07 00:57:06 · develop · 4a75ca4 · Scene2 액자 안 달력 카드(디자인 논의 T57). `src/app/page.tsx` `src/app/globals.css`.
