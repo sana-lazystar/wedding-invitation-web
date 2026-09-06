@@ -2,12 +2,78 @@
 
 /* eslint-disable @next/next/no-img-element */
 // WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보 · 떠 있는 메뉴를 옮긴 것입니다.
-// 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/…, 여기 /…). 진입 장면(로딩)은 T34에서 걷어냈고 처음부터 다시 만듭니다.
+// 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
+// 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36). 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 탭하면 건너뜁니다.
 import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const fabRef = useRef<HTMLElement>(null);
+  const introRef = useRef<HTMLDivElement>(null);
+  const coverRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const intro = introRef.current;
+    const cover = coverRef.current;
+    if (!intro || !cover) return;
+    let finished = false;
+    const finishIntro = () => {
+      if (finished) return;
+      finished = true;
+      root.classList.remove("is-intro", "is-intro-shown");
+      setIntroDone(true);
+    };
+    // 움직임 줄이기 설정이거나 앵커(#…)로 들어오면 바로 커버입니다. 매번 재생합니다
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || location.hash) {
+      finishIntro();
+      return;
+    }
+    root.classList.add("is-intro");
+    const vw = root.clientWidth;
+    const vh = window.innerHeight;
+    const coverW = cover.clientWidth;
+    const coverH = cover.clientHeight;
+    const envW = Math.min(vw * 0.88, 380);
+    const z1 = envW / 600;
+    const z0 = vh / 400;
+    const envTop = vh / 2 - 200 * z1; // 전체가 보일 때 봉투 윗변의 화면 y
+    const s0 = (envW * 0.6) / coverW; // 카드 폭 = 봉투 폭의 60%
+    const ty0 = envTop + 14 * z1; // 카드가 봉투 안에 든 자리(윗변 바로 아래)
+    const ty1 = Math.max(48, vh * 0.06); // 빠져나온 카드의 윗변
+    const b1 = Math.min(coverH, Math.max(0, coverH - (envTop - ty1) / s0)); // 그때 봉투 안에 남은 부분(커버 좌표)
+    intro.style.setProperty("--z0", String(z0));
+    intro.style.setProperty("--z1", String(z1));
+    cover.style.setProperty("--card-s0", String(s0));
+    cover.style.setProperty("--card-ty0", `${ty0}px`);
+    cover.style.setProperty("--card-ty1", `${ty1}px`);
+    cover.style.setProperty("--card-b0", `${coverH}px`);
+    cover.style.setProperty("--card-b1", `${b1}px`);
+    let started = false;
+    let safety: number | undefined;
+    const startIntro = () => {
+      if (started || finished) return;
+      started = true;
+      root.classList.add("is-intro-shown");
+      safety = window.setTimeout(finishIntro, 6500);
+    };
+    const imgs = Array.from(intro.querySelectorAll("img"));
+    Promise.all(imgs.map((im) => (im.decode ? im.decode().catch(() => undefined) : Promise.resolve()))).then(startIntro);
+    const fallback = window.setTimeout(startIntro, 2500);
+    const onAnimationEnd = (e: AnimationEvent) => {
+      if (e.animationName === "intro-card") finishIntro();
+    };
+    cover.addEventListener("animationend", onAnimationEnd);
+    intro.addEventListener("click", finishIntro);
+    return () => {
+      window.clearTimeout(fallback);
+      window.clearTimeout(safety);
+      cover.removeEventListener("animationend", onAnimationEnd);
+      intro.removeEventListener("click", finishIntro);
+      root.classList.remove("is-intro", "is-intro-shown");
+    };
+  }, []);
 
   useEffect(() => {
     const onDocumentClick = (e: MouseEvent) => {
@@ -26,8 +92,25 @@ export default function Home() {
 
   return (
     <>
+      {!introDone && (
+        <div className="intro" ref={introRef} aria-hidden="true">
+          <div className="intro__zoom">
+            <div className="intro__env">
+              <img className="intro__back" src="/intro/envelope-back.png" alt="" />
+              <div className="intro__flap">
+                <div className="intro__flap-out">
+                  <img src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__seal" src="/intro/wax-seal.png" alt="" />
+                </div>
+                <img className="intro__flap-in" src="/intro/envelope-flap-inside.png" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="page">
-        <section id="cover" className="block block--fixed">
+        <section id="cover" className="block block--fixed" ref={coverRef}>
           <div className="cover-bg">
             <img className="cover-bg__hall" src="/scene1/hall.png" alt="더채플앳청담 커티지홀" />
             <div className="cover-bg__blur cover-bg__blur--soft" />
