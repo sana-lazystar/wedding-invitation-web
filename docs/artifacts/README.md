@@ -128,7 +128,9 @@ node docs/scripts/render-asset.mjs docs/artifacts/assets/note-paper.svg public/p
 
 ```sh
 sips -s format png -Z 900 원본.PNG --out docs/design/canvas/hall.png
-python3 docs/scripts/unmatte.py docs/design/scene1/scene1--married-couple.PNG docs/design/scene1/scene1--married-couple--clean.png
+python3 docs/scripts/unmatte.py docs/design/scene1/scene1--married-couple.png docs/design/scene1/scene1--married-couple--clean.png
+# 원본에 투명 여백이 있으면 알파 경계 상자로 잘라 꽉 찬 컷아웃으로 만듭니다(T74. CSS가 그림 상자 높이를 27%로 잡으므로 여백이 있으면 사람이 작아집니다)
+python3 -c "from PIL import Image; import numpy as np; p='docs/design/scene1/scene1--married-couple--clean.png'; im=Image.open(p).convert('RGBA'); a=np.array(im)[:,:,3]; ys,xs=np.where(a>=8); im.crop((xs.min(),ys.min(),xs.max()+1,ys.max()+1)).save(p)"
 sips -s format png -Z 400 docs/design/scene1/scene1--married-couple--clean.png --out docs/design/canvas/couple.png
 sips -s format png -Z 700 docs/design/scene1/scene1--married-couple--clean.png --out public/scene1/couple.png
 python3 docs/scripts/unmatte.py "docs/design/character/0_수달_기본.png" docs/design/character/otter-basic--clean.png
