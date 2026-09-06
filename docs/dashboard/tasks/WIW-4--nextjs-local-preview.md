@@ -3,7 +3,7 @@ id: WIW-4
 type: task
 status: in-progress
 created: 2026-09-06 19:14:53
-updated: 2026-09-06 21:03:10
+updated: 2026-09-06 21:28:32
 completed:
 epic:
 jira:
@@ -46,3 +46,5 @@ related: []
 2026-09-06 20:10:21 · develop · d8b24d7 · 배포 확인용 임시 적용 코드 커밋(이산하 지시 T28)
 
 2026-09-06 21:03:10 · develop · 64eba75 · 팝업북 진입 장면(디자인 논의 T31) 반영. `src/app/page.tsx` 진입 장면 마크업·타이머, `src/app/globals.css`(sync-globals), `public/intro/book-cover.png` `public/intro/page.png`(빈티지 질감 에셋), `package.json`에 `playwright-core` devDependency. localhost:3000에서 Playwright 프레임으로 조립본과 같은 동작 확인, tsc · eslint 통과.
+
+2026-09-06 21:28:32 · develop · 진입 장면 손질(디자인 논의 T32): 붉은 가죽 표지, 두께 있는 두 뭉치, 뒤집힌 종이 뒷면, 표제·이름·통로 사본으로 끊김 없는 이어짐. `src/app/page.tsx` `src/app/globals.css` `public/intro/{book-cover,page-edges,couple-back}.png`. 커밋 해시는 커밋 뒤 기입

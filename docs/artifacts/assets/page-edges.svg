@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="56" viewBox="0 0 512 56">
+  <!-- 책배(종이 뭉치의 옆면) 결. 가로줄 여러 장이 겹친 모양. 조립본이 두께 높이에 맞춰 늘려 씁니다.
+       렌더: node docs/scripts/render-asset.mjs docs/artifacts/assets/page-edges.svg public/intro/page-edges.png 2 && python3 docs/scripts/quantize-png.py public/intro/page-edges.png -->
+  <defs>
+    <filter id="grain" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9 0.3" numOctaves="2" seed="4" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.35  0 0 0 0 0.26  0 0 0 0 0.12  0 0 0 0.16 0" result="g"/>
+      <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="g"/></feMerge>
+    </filter>
+    <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F7EEDB"/>
+      <stop offset="0.5" stop-color="#E9DCC0"/>
+      <stop offset="1" stop-color="#CDBB98"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="56" fill="url(#shade)" filter="url(#grain)"/>
+  <g stroke-width="0.9">
+    <line x1="0" y1="2.5" x2="512" y2="2.5" stroke="#B9A47E" stroke-opacity="0.55"/>
+    <line x1="0" y1="4.5" x2="512" y2="4.5" stroke="#FFF8E6" stroke-opacity="0.5"/>
+    <line x1="0" y1="7.5" x2="512" y2="7.5" stroke="#B9A47E" stroke-opacity="0.45"/>
+    <line x1="0" y1="9.5" x2="512" y2="9.5" stroke="#FFF8E6" stroke-opacity="0.45"/>
+    <line x1="0" y1="12.5" x2="512" y2="12.5" stroke="#B9A47E" stroke-opacity="0.6"/>
+    <line x1="0" y1="14.5" x2="512" y2="14.5" stroke="#FFF8E6" stroke-opacity="0.4"/>
+    <line x1="0" y1="17.5" x2="512" y2="17.5" stroke="#B9A47E" stroke-opacity="0.5"/>
+    <line x1="0" y1="20.5" x2="512" y2="20.5" stroke="#FFF8E6" stroke-opacity="0.5"/>
+    <line x1="0" y1="22.5" x2="512" y2="22.5" stroke="#B9A47E" stroke-opacity="0.55"/>
+    <line x1="0" y1="25.5" x2="512" y2="25.5" stroke="#B9A47E" stroke-opacity="0.4"/>
+    <line x1="0" y1="27.5" x2="512" y2="27.5" stroke="#FFF8E6" stroke-opacity="0.45"/>
+    <line x1="0" y1="30.5" x2="512" y2="30.5" stroke="#B9A47E" stroke-opacity="0.6"/>
+    <line x1="0" y1="33.5" x2="512" y2="33.5" stroke="#FFF8E6" stroke-opacity="0.4"/>
+    <line x1="0" y1="35.5" x2="512" y2="35.5" stroke="#B9A47E" stroke-opacity="0.5"/>
+    <line x1="0" y1="38.5" x2="512" y2="38.5" stroke="#B9A47E" stroke-opacity="0.45"/>
+    <line x1="0" y1="40.5" x2="512" y2="40.5" stroke="#FFF8E6" stroke-opacity="0.5"/>
+    <line x1="0" y1="43.5" x2="512" y2="43.5" stroke="#B9A47E" stroke-opacity="0.6"/>
+    <line x1="0" y1="46.5" x2="512" y2="46.5" stroke="#FFF8E6" stroke-opacity="0.35"/>
+    <line x1="0" y1="48.5" x2="512" y2="48.5" stroke="#B9A47E" stroke-opacity="0.5"/>
+    <line x1="0" y1="51.5" x2="512" y2="51.5" stroke="#B9A47E" stroke-opacity="0.55"/>
+    <line x1="0" y1="53.5" x2="512" y2="53.5" stroke="#FFF8E6" stroke-opacity="0.4"/>
+  </g>
+</svg>

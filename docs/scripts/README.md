@@ -7,6 +7,7 @@
 | 이미지 산출 (예정) | `docs/gallery/`의 원본을 폭 3~4단계 WebP로 줄여 `public/gallery/`와 매니페스트를 만듭니다 | Next.js 스캐폴드 뒤 task에서 작성 |
 | `render-asset.mjs` | SVG(또는 HTML)를 Chrome으로 그려 투명 PNG로 뽑습니다. 질감 에셋용 | 있음 (디자인 논의 T31) |
 | `quantize-png.py` | PNG를 256색 팔레트로 줄입니다 | 있음 (디자인 논의 T31) |
+| `paper-back.py` | 컷아웃의 뒷면(종이 결을 윤곽으로 오려 뒤집은 것)을 만듭니다 | 있음 (디자인 논의 T32) |
 | `sync-globals.mjs` | 조립본 CSS를 Next.js `globals.css`로 옮깁니다 | 있음 |
 | `inline-artifact.mjs` | 조립본을 Artifact 발행용으로 인라인합니다 | 있음. 디자인 결정 11로 쓰지 않음 |
 | `unmatte.py` | 컷아웃 가장자리 색 번짐을 지웁니다 | 있음 |
@@ -53,6 +54,14 @@ node docs/scripts/render-asset.mjs docs/artifacts/assets/book-cover.svg public/i
 
 ```sh
 python3 docs/scripts/quantize-png.py public/intro/book-cover.png
+```
+
+## paper-back.py — 컷아웃의 종이 뒷면
+
+투명 배경 컷아웃의 윤곽으로 종이 결 이미지를 오리고 위아래를 뒤집어, 접혀 있는 팝업 조각의 뒷면으로 씁니다(디자인 논의 T32). 브라우저 마스크는 3D 변환 안에서 그려지지 않거나 file://에서 막혀 그림 파일로 둡니다. 투명도를 유지한 256색 PNG로 저장합니다. `--no-flip`이면 뒤집지 않습니다.
+
+```sh
+python3 docs/scripts/paper-back.py docs/design/canvas/couple.png public/intro/page.png public/intro/couple-back.png
 ```
 
 ## sync-globals.mjs — 조립본 CSS를 Next.js로
