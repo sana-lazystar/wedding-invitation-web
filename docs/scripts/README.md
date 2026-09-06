@@ -33,3 +33,11 @@
 ```sh
 node docs/scripts/inline-artifact.mjs docs/artifacts/index.html /tmp/preview.html --title "이산하 · 송시야 청첩장 미리보기"
 ```
+
+## sync-globals.mjs — 조립본 CSS를 Next.js로
+
+조립본 `docs/artifacts/index.html`의 스타일 구간을 `src/app/globals.css`로 옮깁니다(WIW-4). 조립본이 정본이고 globals.css는 파생물입니다. 글꼴 토큰만 next/font 변수로 바꿉니다.
+
+```sh
+node docs/scripts/sync-globals.mjs
+```

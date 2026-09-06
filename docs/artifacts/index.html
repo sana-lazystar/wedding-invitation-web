@@ -65,6 +65,10 @@
       filter: saturate(0.7);
       animation: cover-zoom 16s cubic-bezier(0.22, 0.61, 0.36, 1) both;
     }
+    /* 상단 1/4 흐림. 두 겹의 배경 흐림을 마스크로 겹쳐 위로 갈수록 더 흐려집니다 */
+    .cover-bg__blur { position: absolute; left: 0; right: 0; top: 0; pointer-events: none; }
+    .cover-bg__blur--soft { height: 26%; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%); }
+    .cover-bg__blur--strong { height: 16%; backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); mask-image: linear-gradient(to bottom, #000 0%, #000 30%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 30%, transparent 100%); }
     .cover-bg__shadow {
       position: absolute; left: calc(50% + 10px); bottom: 21.4%;
       width: 40%; height: 18px; transform: translateX(-50%);
@@ -274,6 +278,8 @@
     <section id="cover" class="block block--fixed">
       <div class="cover-bg">
         <img class="cover-bg__hall" src="../design/scene1/scene1--wedding-hall.PNG" alt="더채플앳청담 커티지홀">
+        <div class="cover-bg__blur cover-bg__blur--soft"></div>
+        <div class="cover-bg__blur cover-bg__blur--strong"></div>
         <div class="cover-bg__shadow"></div>
         <img class="cover-bg__couple" src="../design/canvas/couple.png" alt="이산하와 송시야">
       </div>

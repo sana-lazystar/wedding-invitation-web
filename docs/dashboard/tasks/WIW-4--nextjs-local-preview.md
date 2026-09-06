@@ -3,7 +3,7 @@ id: WIW-4
 type: task
 status: in-progress
 created: 2026-09-06 19:14:53
-updated: 2026-09-06 20:10:21
+updated: 2026-09-06 20:12:56
 completed:
 epic:
 jira:
@@ -23,7 +23,7 @@ related: []
 
 - `src/app/layout.tsx`에 글꼴(Noto Sans KR · 고운바탕 · Cormorant Garamond)을 `next/font/google`로 싣고 `lang="ko"`, 제목, noindex를 둡니다.
 - `src/app/page.tsx`를 클라이언트 컴포넌트로 바꿔 커버 마크업, 진입 장면, 떠 있는 메뉴를 React로 옮깁니다. 글꼴 확인 패널은 옮기지 않습니다(조립본 전용).
-- `src/app/globals.css`에 조립본의 CSS를 옮깁니다.
+- `src/app/globals.css`는 조립본에서 `node docs/scripts/sync-globals.mjs`로 만듭니다(조립본이 정본).
 - 이미지는 `docs/design/canvas/`의 축소본을 `public/scene1/`로 복사해 씁니다.
 - 로컬 `next dev`로 띄워 이산하가 확인합니다.
 

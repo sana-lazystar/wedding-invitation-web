@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 18:25:07
-updated: 2026-09-06 20:10:21
+updated: 2026-09-06 20:12:56
 completed:
 participants: 이산하, Claude
 related: []
@@ -301,6 +301,16 @@ jira:
 
 - 커밋 안 된 것은 WIW-4의 Next.js 임시 적용 코드(`src/app/layout.tsx` `page.tsx` `globals.css`)와 이미지 3장(`public/scene1/hall.png` `couple.png` `public/scene2/opened-paper.png`)뿐이다. `next build`가 통과했다(정적 페이지 2개). WIW-4는 원래 "커밋하지 않음"이었으므로 이 지시를 근거로 범위를 넓혀 문서에 적은 뒤 코드를 커밋한다. develop → main PR과 배포는 이산하 몫이다.
 - 주의. 이미지는 원본 그대로라 커버 PNG가 1.9MB다. 배포 확인용으로는 되지만 발송본은 이미지 파이프라인(webp 변형)을 거쳐야 한다.
+
+### 2026-09-06 20:12:56 이전 · 이산하 (T29)
+
+- 배경 이미지 상단을 좀 흐릿하게. 4분의 1 정도만, 오버레이로 중앙에서 멀어질수록 흐릿하게.
+- compact나 세션을 다시 열어도 작업을 이어갈 수 있는 상태로 만들어 달라.
+
+### 2026-09-06 20:12:56 · Claude (T29)
+
+- 상단 흐림. 배경 흐림(backdrop-filter) 오버레이 두 겹을 겹쳤다. 위 26%는 5px 흐림, 위 16%는 9px 흐림이고 각각 마스크로 아래쪽이 투명해져서, 위로 갈수록 더 흐리고 중앙 쪽은 선명하다. 사진 파일은 그대로다.
+- 이어가기 준비. ① 조립본 CSS를 Next.js로 옮기는 절차를 `docs/scripts/sync-globals.mjs`로 만들었다(조립본이 정본, globals.css는 파생물). ② `docs/artifacts/README.md`를 지금 상태·링크 두 개·파일 자리·고치는 순서·다시 올리는 법으로 다시 썼다. ③ `CLAUDE.md` 라우터 상태 줄을 "Scene1·2 완료, 다음 Scene3"로 바꾸고 README를 가리키게 했다. ④ 코드(흐림 반영분)까지 develop에 커밋해 작업 트리를 비웠다. 새 세션은 CLAUDE.md → artifacts README → 이 논의록 마지막 T-로그 순으로 읽으면 된다.
 
 ## 결정
 
