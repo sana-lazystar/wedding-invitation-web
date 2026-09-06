@@ -11,7 +11,7 @@
 - 진행 중 작업: `docs/dashboard/state.json`의 `activeWorks`. 세션을 시작하면 이 파일을 먼저 읽습니다. 터미널 보드 = `node docs/ontology/tools/board.mjs --watch`(읽기 전용)
 - 신규 문서 정본: `docs/dashboard/templates/`
 - 체계 설계·구조 결정 이력: `docs/dashboard/discussions/` 각 논의록의 결정 표
-- **지금 = 디자인 시안 논의 진행 중 (2026-09-06)**: 스택·인프라는 `docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md` 결정 표(15건)로 완결됐습니다. Next.js 16 스캐폴드가 `main`에 있고 Vercel이 `main` → production으로 배포합니다. 지금은 `docs/dashboard/discussions/2026-09-06--design-mockups.md`에서 시안의 저장 구조와 생산 흐름을 정하는 중입니다(잠정 결정 6건, 이산하 확정 대기). 와이어프레임(`docs/design/`, git 제외)이 청첩장 내용을 정의하므로 요구 원장은 이 논의에서 채웁니다. 시안이 확정되면 첫 story를 적재합니다. 코드 착수는 외부 반영 게이트 뒤입니다
+- **지금 = 디자인 시안 진행 중 · Scene1 캔버스 발행 (2026-09-06)**: 스택·인프라는 `docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md` 결정 표(15건)로 완결됐습니다. Next.js 16 스캐폴드가 `main`에 있고 Vercel이 `main` → production으로 배포합니다. 시안은 Claude가 `/design` 캔버스로 만들고, 와이어프레임을 한 쪽씩 이산하와 논의해 아트보드 아래에 이어 붙입니다(디자인 결정 7). 캔버스 작업 파일은 `docs/artifacts/canvas/`, 축소 이미지는 `docs/design/canvas/`(git 제외), 캔버스 링크와 진행은 `docs/dashboard/discussions/2026-09-06--design-mockups.md`에 있습니다. 와이어프레임이 청첩장 내용을 정의하므로 요구 원장은 이 논의에서 채웁니다. 시안이 확정되면 첫 story를 적재합니다. 코드 착수는 외부 반영 게이트 뒤입니다
 
 # 2. 규격 — 무엇이 현재 참인가 (`docs/ontology/`)
 

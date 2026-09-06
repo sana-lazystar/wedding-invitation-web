@@ -1,0 +1,9 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "title": "청첩장 · Scene1 커버", "x": 0, "y": 0, "w": 390, "h": 844 }
+  ],
+  "annotations": [
+    { "id": "scene1-brief", "x": 470, "y": 0, "w": 340, "text": "Scene1 · 와이어프레임 2쪽 커버 · 1화면 고정\n\n위 WEDDING INVITATION, 가운데 팝업북 일러스트(커티지홀 사진 + 그 가운데 작은 두 사람), 아래 두 사람 이름, 맨 아래 스크롤 유도와 고정 바.\n\n가정: 바탕은 종이빛 아이보리, 선과 포인트는 홀의 오크색, 이름은 고운바탕. 키 컬러는 아직 미결(Q8)이라 이 쪽을 보며 정합니다.\n\n다음 쪽은 이 아트보드 아래에 이어 붙입니다." }
+  ],
+  "launch": { "view": "focused", "file": "Main.dc.html" }
+}
