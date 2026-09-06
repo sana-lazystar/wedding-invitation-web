@@ -1,0 +1,73 @@
+# 시스템 구성 (topology)
+
+결정 출처: `docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md` 결정 표 (접두 "스택 결정 N")
+
+청첩장이 무엇으로 이루어져 있고 어디에 떠 있는지의 현행 정본입니다. 상태는 **결정됨 · 프로비저닝 전**(2026-09-06)입니다. Vercel 프로젝트 생성과 첫 배포는 `docs/` 밖 변경이라 외부 반영 게이트(task 문서 + 승인)를 거친 뒤에 하고, 그때 "프로비저닝 후 확정" 칸을 채웁니다. 한도 수치의 근거는 동결본 `references/2026-09-06--free-tier-survey.md`(조회 2026-09-06)입니다. 값이 바뀌면 동결본을 새로 만들고 이 문서를 고칩니다.
+
+## 1. 한 줄 정의
+
+TypeScript·Next.js·React로 만든 정적 모바일 청첩장을 GitHub 레포에서 Vercel Hobby로 빌드·배포하고, `*.vercel.app` 주소를 카카오톡 등으로 하객에게 보냅니다(스택 결정 1·3·7). 서버 저장·DB·로그인·방명록은 없습니다(스택 결정 6). 브라우저 밖에서 도는 이 프로젝트의 코드는 없습니다.
+
+## 2. 배포 단위
+
+| 표면 | 실물 | 역할 |
+| --- | --- | --- |
+| 청첩장 페이지 | Vercel Hobby 프로젝트의 production 배포. CDN이 정적 파일을 서빙 | 전부 정적 생성(SSG). 함수·ISR·미들웨어 없음 |
+| 프리뷰 | 같은 프로젝트의 preview 배포 | develop·story·feature 브랜치 확인용 |
+| 소스 | GitHub `sana-lazystar/wedding-invitation-web` | 코드 · 사진 변형 · 문서(`docs/`) |
+
+프로비저닝 후 확정: Vercel 계정 · 프로젝트 이름 · production URL · 리전. 계정 전제는 U-3입니다.
+
+## 3. 요청 경로
+
+1. 하객이 카카오톡 링크(OG 미리보기)로 `https://{project}.vercel.app/`을 엽니다.
+2. Vercel CDN이 정적 HTML·JS·CSS·이미지를 줍니다. 서버 함수는 호출되지 않습니다.
+3. 페이지가 외부 스크립트(§6)를 부를 수 있습니다. 그 밖의 네트워크 요청은 없습니다.
+
+## 4. 빌드·배포 경로
+
+- 트리거는 GitHub push입니다. Vercel Git 연동이 `main` → production, 그 밖의 브랜치 → preview로 배포합니다(스택 결정 9, 잠정). 부트스트랩 결정 7(main 배포 기준 · develop 통합)과 짝입니다.
+- 빌드는 Hobby Basic 머신(2 vCPU · 8GB), 동시 빌드 1, 배포 100회/일입니다. `next build` 결과는 전부 정적입니다. `output: 'export'`는 쓰지 않습니다(Vercel에서 이점이 없고 되돌릴 일을 만들지 않습니다).
+- 프리뷰 URL의 공개 범위는 policy 서랍이 생길 때 정합니다. 청첩장은 개인정보를 담습니다.
+
+## 5. 이미지 파이프라인 (스택 결정 4 · 5)
+
+- 리사이즈 서버·람다·Vercel 런타임 이미지 최적화를 쓰지 않습니다.
+- 원본은 git 밖에 둡니다(보관처는 U-2). 스크립트가 폭 3~4단계 webp + 블러 placeholder + 매니페스트를 만들고, 산출물만 `public/`에 커밋합니다. next/image는 custom loader로 그 파일을 가리킵니다. 스택 결정 5는 잠정입니다.
+- 예상 크기는 60장 × 4폭 × 약 150KB ≈ 36MB입니다.
+
+## 6. 외부 의존
+
+요구 정의 논의에서 확정합니다. 후보와 조건은 다음과 같고, 유료 항목은 없습니다.
+
+| 용도 | 후보 | 비용 · 조건 |
+| --- | --- | --- |
+| 지도 | Kakao Map JS SDK | 무료. 앱 키 + 도메인 등록 |
+| 공유 | Kakao JS SDK | 무료. 앱 키 |
+| 폰트 | next/font 자체 호스팅 | 무료 |
+| 분석 | Vercel Web Analytics | Hobby 5만 이벤트/월. 초과 시 수집만 중단 |
+
+## 7. 무료 한도 대 예상 사용
+
+전제는 U-1(열람 1천~5천 회, 사진 30~60장)입니다.
+
+| 항목 | 예상 | Hobby 한도 | 초과 시 |
+| --- | --- | --- | --- |
+| Fast Data Transfer | 5천 회 × 약 3MB ≈ 15GB/월 | 100GB/월 | 공식 문서 미명시(동결본 §1 #12) |
+| Function Invocations | 0 | 1M/월 | 해당 없음 |
+| Image Transformations · Cache Reads | 0 (런타임 최적화 안 씀) | 5K · 300K/월 | 해당 없음 |
+| 배포 | 하루 수 회 | 100회/일 | 큐잉 |
+
+## 8. 도메인 (스택 결정 7)
+
+- 기본은 `*.vercel.app`입니다.
+- 커스텀 도메인은 Hobby에서도 붙일 수 있습니다(프로젝트당 50개, Vercel 쪽 비용 0). 이산하가 외부 등록기관에서 사서 그 DNS를 Vercel이 안내하는 레코드로 향하게 합니다. 레코드값은 Vercel 대시보드 안내가 SSOT라 여기 적지 않습니다.
+
+## 9. 감수한 위험과 이전 경로
+
+- R1(Fair Use 기부 조항)은 감수합니다(스택 결정 8).
+- 이전 경로는 Cloudflare Workers(OpenNext 어댑터)입니다. Vercel이 배포를 정지하거나 한도를 넘으면 옮깁니다. 정적 사이트라 옮길 것은 빌드 설정과 도메인뿐입니다. 근거는 동결본 §2입니다.
+
+## 10. 코드가 SSOT인 것
+
+코드가 생기면 `docs/ontology/README.md` §코드가 SSOT인 것들 표에 `next.config.*` · `vercel.json`(있으면) · 이미지 생성 스크립트를 등록합니다. 이 문서는 그것들을 복제하지 않고 가리킵니다.
