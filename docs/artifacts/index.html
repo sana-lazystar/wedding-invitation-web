@@ -147,19 +147,21 @@
 
 
     /* 0. 진입 장면(로딩). 편지봉투가 화면 높이만큼 확대돼 있다가(좌우가 잘림) 물러나는 것과 동시에 뚜껑이 열리고, 뚜껑이 반쯤 열렸을 때 커버(Scene1)가 카드로 올라오며 봉투는 조금 내려가고, 봉투가 화면 아래로 쭉 빠져나가면 카드가 화면 가운데를 기준으로 커져 화면을 채웁니다(디자인 논의 T36~T41). 3.9초.
-       층 구조가 핵심입니다. 바탕(.intro, z 25) < 카드 = 커버 자체(z 30) < 봉투 몸(.intro-layer--env, z 35) < 뚜껑(.intro-layer--flap, z 36 → 옆면을 지나는 0.92초에 28로 내려가 카드 뒤). 봉투 안에 든 카드 부분은 봉투가 자연히 가리므로 클립이 필요 없고, 봉투가 아래로 빠져나가면 그 뒤의 카드가 그대로 드러납니다.
+       층 구조가 핵심입니다. 바탕(.intro, z 25) < 뒷판(.intro-layer--back, z 26. 그냥 네모) < 카드 = 커버 자체(z 30) < 앞판(.intro-layer--front, z 35. 옆 날개 둘 + 아래 날개, 입구는 투명) < 뚜껑(.intro-layer--flap, z 36 → 옆면을 지나는 1.2초에 28로 내려가 카드 뒤). 봉투는 뒷판 · 앞판 · 뚜껑 세 장이고, 카드는 앞판 뒤, 뒷판 앞에 끼워져 입구(옆 날개 사이 삼각형)로 보입니다(T42). 앞판이 카드를 자연히 가리므로 클립이 필요 없고, 봉투가 아래로 빠져나가면 그 뒤의 카드가 그대로 드러납니다.
        카드가 봉투 밑변 아래로 삐져나오는 부분만 clip-path로 가립니다. 그 선은 봉투 밑변을 따라갑니다. 카드가 올라오고 봉투가 내려가는 구간, 봉투가 화면 밖으로 빠져나가는 구간 각각에서 봉투 이동과 같은 시간표·곡선을 쓰므로 둘 다 선형으로 일치합니다.
-       치수는 봉투 좌표(600×400)입니다. 배율 --z0(높이 = 화면) · --z1(전체가 보임, 폭 80%), 봉투 하강 --drop1(조금) · --drop2(화면 밖), 카드 값 --card-*(폭은 봉투의 92%)는 스크립트가 화면 크기에서 계산해 넣습니다. 봉투 몸과 뚜껑 층은 같은 확대·하강·흐려짐 애니메이션을 씁니다.
+       치수는 봉투 좌표(600×400)입니다. 배율 --z0(높이 = 화면) · --z1(전체가 보임, 폭 80%), 봉투 하강 --drop1(조금) · --drop2(화면 밖), 카드 값 --card-*(폭은 봉투의 92%)는 스크립트가 화면 크기에서 계산해 넣습니다. 뒷판·앞판·뚜껑 층은 같은 확대·하강 애니메이션을 씁니다.
        마지막 프레임은 커버 정지 화면과 같습니다(변환 · 클립 · 필터 없음). 봉투 상자는 화면보다 넓을 수 있어 absolute + 음수 margin으로 가운데를 맞춥니다 */
     .is-intro { overflow: hidden; }
     .intro { position: fixed; inset: 0; z-index: 25; overflow: hidden; background: #E9E1D2; touch-action: none; }
     .intro-layer { position: fixed; inset: 0; overflow: hidden; pointer-events: none; visibility: hidden; }
     .is-intro-shown .intro-layer { visibility: visible; }
-    .intro-layer--env { z-index: 35; }
+    .intro-layer--back { z-index: 26; }
+    .intro-layer--front { z-index: 35; }
     .intro-layer--flap { z-index: 36; }
     .intro__zoom { position: absolute; left: 50%; top: 50%; width: 600px; height: 400px; margin: -200px 0 0 -300px; transform: scale(var(--z0, 2.1)); }
     .intro__env { position: relative; width: 600px; height: 400px; perspective: 1400px; }
-    .intro__back { position: absolute; left: 0; top: 0; width: 600px; height: 400px; filter: drop-shadow(0 18px 24px rgba(70, 48, 24, 0.28)) drop-shadow(0 2px 3px rgba(70, 48, 24, 0.25)); }
+    .intro__back, .intro__front { position: absolute; left: 0; top: 0; width: 600px; height: 400px; }
+    .intro__front { filter: drop-shadow(0 18px 24px rgba(70, 48, 24, 0.28)) drop-shadow(0 2px 3px rgba(70, 48, 24, 0.25)); }
     .intro__flap { position: absolute; left: 0; top: 0; width: 600px; height: 236px; transform-origin: 50% 0; filter: drop-shadow(1.2px 2.6px 1.3px rgba(74, 54, 32, 0.34)) drop-shadow(0 0 3.2px rgba(74, 54, 32, 0.3)); }
     .intro__flap-out, .intro__flap-in { position: absolute; left: 0; top: 0; width: 600px; height: 236px; }
     .intro__flap-in { opacity: 0; }
@@ -218,14 +220,21 @@
   </style>
 </head>
 <body>
-  <!-- 진입 장면(로딩). 세 층입니다. 바탕(.intro) < 커버(카드) < 봉투 몸 < 뚜껑. 이미지는 public/intro/에 있습니다(원본 assets/*.svg). 스크립트가 배율을 넣고 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다 -->
+  <!-- 진입 장면(로딩). 층: 바탕(.intro) < 뒷판 < 커버(카드) < 앞판 < 뚜껑. 이미지는 public/intro/에 있습니다(원본 assets/*.svg). 스크립트가 배율을 넣고 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다 -->
   <div class="intro" id="intro" aria-hidden="true">
     <button type="button" class="intro__skip">넘어가기</button>
   </div>
-  <div class="intro-layer intro-layer--env" id="introEnv" aria-hidden="true">
+  <div class="intro-layer intro-layer--back" id="introBack" aria-hidden="true">
     <div class="intro__zoom">
       <div class="intro__env">
         <img class="intro__back" src="../../public/intro/envelope-back.png" alt="">
+      </div>
+    </div>
+  </div>
+  <div class="intro-layer intro-layer--front" id="introFront" aria-hidden="true">
+    <div class="intro__zoom">
+      <div class="intro__env">
+        <img class="intro__front" src="../../public/intro/envelope-front.png" alt="">
       </div>
     </div>
   </div>

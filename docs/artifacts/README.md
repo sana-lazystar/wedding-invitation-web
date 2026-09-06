@@ -28,7 +28,7 @@ Artifact 발행은 2026-09-06 T31에 중단했습니다(디자인 결정 11). �
 | `canvas/Main.dc.html` | Claude Design 캔버스의 아트보드(동결. 결정 11 뒤로 고치지 않습니다) | 커밋 |
 | `canvas/FloatingMenu.dc.html` | 떠 있는 바로 가기 버튼의 열린 상태 | 커밋 |
 | `canvas/canvas.json` | 아트보드 배치와 메모 | 커밋 |
-| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 지금은 편지봉투 다섯(`envelope-back` · `envelope-flap` · `envelope-flap-inside` · `wax-seal` · `wax-seal-back`, T35~T39)입니다 | 커밋 |
+| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 지금은 편지봉투 여섯(`envelope-back` · `envelope-front` · `envelope-flap` · `envelope-flap-inside` · `wax-seal` · `wax-seal-back`, T35~T42)입니다 | 커밋 |
 | `../design/scene1/`, `../design/scene2/` | 이산하가 준 원본 이미지 | 제외 (`docs/design/`) |
 | `../design/canvas/*.png` | 캔버스용 축소본(PNG 무손실). 아트보드가 파일명으로 참조합니다 | 제외 |
 | `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/scene2/` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
@@ -54,19 +54,20 @@ SVG 루트에 `width` · `height`(px)가 있어야 합니다. 배율 1.5에 256�
 
 ## 진입 장면 (로딩)
 
-편지봉투입니다(디자인 논의 T35~T41). 봉투가 화면 높이만큼 확대돼 있다가(좌우가 잘림) 물러나 전체가 보이는(폭 80%, 가운데) 것과 동시에 뚜껑이 봉인을 단 채 위로 180° 젖혀지고(옆면을 지나면 봉인 뒷면이 뚜껑 끝 둘레로 보입니다), 뚜껑이 반쯤 열렸을 때 커버(Scene1)가 카드(폭은 봉투의 92%)로 올라오며 봉투는 조금 내려가고, 봉투가 화면 아래로 쭉 빠져나가면 카드가 화면 가운데를 기준으로 커져 화면을 채웁니다. 3.9초이고 오른쪽 아래 "넘어가기"나 화면 어디를 탭해도 건너뜁니다. 시작할 때 맨 위로 스크롤합니다(새로고침해도). 움직임 줄이기 설정이거나 앵커로 들어오면 재생하지 않습니다. 매번 재생합니다.
+편지봉투입니다(디자인 논의 T35~T42). 봉투는 뒷판 · 앞판 · 뚜껑 세 장이고 카드는 앞판 뒤에 끼워져 입구로 보입니다. 봉투가 화면 높이만큼 확대돼 있다가(좌우가 잘림) 물러나 전체가 보이는(폭 80%, 가운데) 것과 동시에 뚜껑이 봉인을 단 채 위로 180° 젖혀지고(옆면을 지나면 봉인 뒷면이 뚜껑 끝 둘레로 보입니다), 뚜껑이 반쯤 열렸을 때 커버(Scene1)가 카드(폭은 봉투의 92%)로 올라오며 봉투는 조금 내려가고, 봉투가 화면 아래로 쭉 빠져나가면 카드가 화면 가운데를 기준으로 커져 화면을 채웁니다. 3.9초이고 오른쪽 아래 "넘어가기"나 화면 어디를 탭해도 건너뜁니다. 시작할 때 맨 위로 스크롤합니다(새로고침해도). 움직임 줄이기 설정이거나 앵커로 들어오면 재생하지 않습니다. 매번 재생합니다.
 
 | 것 | 자리 |
 | --- | --- |
 | 시간표 · CSS · 스크립트 | `index.html`의 "0. 진입 장면" 구간(`.intro*`, `@keyframes intro-*`)과 스크립트 앞부분. 배율 `--z0`(높이 = 화면) · `--z1`(전체가 보임)과 봉투 하강 `--drop1` · `--drop2` · 카드 값 `--card-*`는 스크립트가 화면 크기에서 계산해 넣습니다 |
-| 에셋 원본 | `assets/envelope-back.svg`(옆 날개 + 아래 날개) · `envelope-flap.svg`(위 날개, 봉인은 따로) · `envelope-flap-inside.svg`(위 날개 안쪽) · `wax-seal.svg`(봉인 앞면) · `wax-seal-back.svg`(봉인 뒷면, 어두운 밀랍) |
-| 산출 PNG | `public/intro/`. 뒷면·날개는 3배, 봉인은 6배로 뽑습니다(확대 시작 장면 때문). 아래 명령 |
+| 에셋 원본 | 봉투는 세 장입니다. `assets/envelope-back.svg`(뒷판, 그냥 네모) · `envelope-front.svg`(앞판. 옆 날개 둘 + 아래 날개, 입구는 투명) · `envelope-flap.svg`(뚜껑, 봉인은 따로) · `envelope-flap-inside.svg`(뚜껑 안쪽) · `wax-seal.svg`(봉인 앞면) · `wax-seal-back.svg`(봉인 뒷면, 어두운 밀랍) |
+| 산출 PNG | `public/intro/`. 앞판·뚜껑은 3배(확대 시작 장면에 보임), 뒷판은 1.5배(입구로만 보임), 봉인은 6배로 뽑습니다. 아래 명령 |
 | Next.js | `src/app/page.tsx`의 `intro*` 마크업과 첫 `useEffect`. 조립본 스크립트와 같은 계산입니다 |
 
-카드는 커버 자체입니다(사본이 아닙니다). 층이 핵심입니다. 바탕(`.intro`, z 25) < 카드(z 30) < 봉투 몸(`.intro-layer--env`, z 35) < 뚜껑(`.intro-layer--flap`, z 36). 봉투 안에 든 카드 부분은 봉투가 자연히 가리므로 클립이 필요 없고, 봉투가 아래로 빠져나가면 그 뒤의 카드가 그대로 드러납니다. 뚜껑은 옆면(90°)을 지나는 순간 z 28로 내려가 카드 뒤로 갑니다. 카드가 봉투 밑변 아래로 삐져나오는 부분만 clip-path로 가리는데, 그 선은 봉투 이동(조금 내려감 · 화면 밖으로 빠져나감)과 구간마다 같은 시간표·곡선이라 봉투 밑변을 정확히 따라갑니다. 봉투 몸 층과 뚜껑 층은 같은 확대·하강 애니메이션을 씁니다. Next.js에서 장면이 끝날 때 커버의 층 지정 해제는 봉투 층이 빠지는 렌더와 같은 프레임(useLayoutEffect)에 합니다. 먼저 지우면 바탕이 커버를 덮는 한 프레임이 생겨 깜빡입니다(T41). 확대는 카드가 화면 세로 가운데에 선 상태에서 시작하므로 위 가운데 기준 변환이 곧 가운데 확대입니다. 마지막 키프레임은 변환·클립·필터가 없어 커버 정지 화면과 같습니다(프레임 픽셀 비교로 확인). 봉투 상자(600px)는 화면보다 넓을 수 있어 grid 정렬 대신 absolute + 음수 margin으로 가운데를 맞춥니다. 뚜껑은 원근이 있는 봉투 안에서 윗변을 축으로 돌고, 바깥면과 안쪽면 그림을 같은 자리에 겹쳐 90°에서 바꿉니다(3D 두 면을 쓰지 않습니다). 봉인은 뚜껑의 자식이라 함께 젖혀집니다. 앞면은 바깥면 위, 뒷면은 안쪽면 아래에 같은 자리로 두고 90°에서 바꾸므로, 젖혀진 뒤에는 뚜껑 끝보다 큰 봉인의 뒷면이 끝 둘레로 보입니다. 아래 날개와 봉인의 그늘은 PNG에 굽고, 위 날개와 봉투와 카드의 그늘은 CSS drop-shadow입니다.
+카드는 커버 자체입니다(사본이 아닙니다). 층이 핵심입니다. 바탕(`.intro`, z 25) < 뒷판(`.intro-layer--back`, z 26) < 카드(z 30) < 앞판(`.intro-layer--front`, z 35) < 뚜껑(`.intro-layer--flap`, z 36). 카드는 앞판 뒤, 뒷판 앞에 끼워져 입구(옆 날개 사이 삼각형)로 보이고(T42), 앞판이 카드를 자연히 가리므로 클립이 필요 없으며, 봉투가 아래로 빠져나가면 그 뒤의 카드가 그대로 드러납니다. 뚜껑은 옆면(90°)을 지나는 순간 z 28로 내려가 카드 뒤로 갑니다. 카드가 봉투 밑변 아래로 삐져나오는 부분만 clip-path로 가리는데, 그 선은 봉투 이동(조금 내려감 · 화면 밖으로 빠져나감)과 구간마다 같은 시간표·곡선이라 봉투 밑변을 정확히 따라갑니다. 뒷판·앞판·뚜껑 층은 같은 확대·하강 애니메이션을 씁니다. Next.js에서 장면이 끝날 때 커버의 층 지정 해제는 봉투 층이 빠지는 렌더와 같은 프레임(useLayoutEffect)에 합니다. 먼저 지우면 바탕이 커버를 덮는 한 프레임이 생겨 깜빡입니다(T41). 확대는 카드가 화면 세로 가운데에 선 상태에서 시작하므로 위 가운데 기준 변환이 곧 가운데 확대입니다. 마지막 키프레임은 변환·클립·필터가 없어 커버 정지 화면과 같습니다(프레임 픽셀 비교로 확인). 봉투 상자(600px)는 화면보다 넓을 수 있어 grid 정렬 대신 absolute + 음수 margin으로 가운데를 맞춥니다. 뚜껑은 원근이 있는 봉투 안에서 윗변을 축으로 돌고, 바깥면과 안쪽면 그림을 같은 자리에 겹쳐 90°에서 바꿉니다(3D 두 면을 쓰지 않습니다). 봉인은 뚜껑의 자식이라 함께 젖혀집니다. 앞면은 바깥면 위, 뒷면은 안쪽면 아래에 같은 자리로 두고 90°에서 바꾸므로, 젖혀진 뒤에는 뚜껑 끝보다 큰 봉인의 뒷면이 끝 둘레로 보입니다. 아래 날개와 봉인의 그늘은 PNG에 굽고, 위 날개와 봉투와 카드의 그늘은 CSS drop-shadow입니다.
 
 ```sh
-node docs/scripts/render-asset.mjs docs/artifacts/assets/envelope-back.svg public/intro/envelope-back.png 3 && python3 docs/scripts/quantize-png.py public/intro/envelope-back.png
+node docs/scripts/render-asset.mjs docs/artifacts/assets/envelope-back.svg public/intro/envelope-back.png 1.5 && python3 docs/scripts/quantize-png.py public/intro/envelope-back.png
+node docs/scripts/render-asset.mjs docs/artifacts/assets/envelope-front.svg public/intro/envelope-front.png 3 && python3 docs/scripts/quantize-png.py public/intro/envelope-front.png
 node docs/scripts/render-asset.mjs docs/artifacts/assets/envelope-flap.svg public/intro/envelope-flap.png 3 && python3 docs/scripts/quantize-png.py public/intro/envelope-flap.png
 node docs/scripts/render-asset.mjs docs/artifacts/assets/envelope-flap-inside.svg public/intro/envelope-flap-inside.png 3 && python3 docs/scripts/quantize-png.py public/intro/envelope-flap-inside.png
 node docs/scripts/render-asset.mjs docs/artifacts/assets/wax-seal.svg public/intro/wax-seal.png 6 && python3 docs/scripts/quantize-png.py public/intro/wax-seal.png
