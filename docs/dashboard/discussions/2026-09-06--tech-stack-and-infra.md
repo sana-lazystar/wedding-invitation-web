@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 16:53:09
-updated: 2026-09-06 17:56:12
+updated: 2026-09-06 18:01:10
 completed:
 participants: 이산하, Claude
 related: []
@@ -153,6 +153,18 @@ jira:
 - 스캐폴드 명령은 공식 CLI `npx create-next-app@latest`(Next.js 16.3.4 문서 기준, 2026-08-25)입니다. `--yes`는 이 Mac에 저장된 이전 선택을 재사용할 수 있어 재현이 안 되므로, 기본값과 같은 내용을 플래그로 명시합니다(TypeScript · App Router · Tailwind · ESLint · Turbopack · `@/*`). 더한 것은 `--src-dir`(코드를 `src/`에)와 `--empty`(홍보 페이지 대신 빈 페이지, production 자리표시자용)입니다. 기본값 `--agents-md`가 `AGENTS.md`와 `CLAUDE.md`를 함께 만드는데, 생성된 `CLAUDE.md`는 라우터와 충돌하므로 버리고 `AGENTS.md`만 남깁니다. 결정 15(잠정)입니다.
 - 레포 루트에 `CLAUDE.md`·`docs/`가 있어 CLI가 비어 있지 않은 디렉토리를 거부할 수 있으므로 임시 디렉토리에 만들어 옮기고 `.gitignore`·`README.md`를 병합합니다. WIW-2 실행은 WIW-1 머지 뒤, 이산하의 명시 승인이 있을 때 합니다.
 
+### 2026-09-06 18:01:10 이전 · 이산하 (T8)
+
+- WIW-1 PR을 만들어 머지했다.
+- 결정 15의 마지막 문장("생성된 CLAUDE.md는 버리고 라우터 CLAUDE.md에 AGENTS.md 포인터를 둔다")은 왜 그렇게 정하는가. Next.js가 그 방식을 쓰라고 하는가.
+- 위 질문에 답이 되면 나머지는 동의한다.
+
+### 2026-09-06 18:01:10 · Claude (T8)
+
+- 답. Next.js의 방식이 바로 그것입니다. create-next-app 소스 `helpers/generate-agent-files.ts`(canary, 2026-09-06 조회)를 보면 `AGENTS.md`에 규칙 본문("This is NOT the Next.js you know", `node_modules/next/dist/docs/`를 먼저 읽으라는 지시)을 쓰고, `CLAUDE.md`에는 `@AGENTS.md` 한 줄만 씁니다. 주석도 "AGENTS.md contains the instructions, CLAUDE.md references it using @ syntax"입니다. 우리 레포에는 이미 라우터 `CLAUDE.md`가 있어 두 파일이 공존할 수 없으니, Next.js가 만든 `CLAUDE.md`의 유일한 내용인 `@AGENTS.md` 줄을 라우터에 옮겨 적는 것입니다. 결정 15의 "포인터"는 이 `@AGENTS.md` 임포트 줄을 뜻합니다. Next.js가 만든 것을 버리는 것이 아니라 같은 줄을 우리 파일에 합치는 것입니다.
+- 덧붙여 `AGENTS.md`의 규칙 블록은 `next dev`가 다시 써 넣으므로 커밋해 두어야 트리가 깨끗합니다. 그리고 `helpers/is-folder-empty.ts`의 허용 목록에 `docs`·`.gitignore`·`.git`·`.claude`는 있지만 `CLAUDE.md`는 없어서 레포 루트에서 직접 실행하면 거부됩니다. 임시 디렉토리 생성 후 이동이 필요한 이유입니다.
+- 결정 15를 확정으로 바꿨습니다. WIW-1이 머지돼(daa9e63) develop의 `.gitignore`에 두 폴더가 들어 있고, "위에거 답변 되면 나머지 동의"를 WIW-2 실행 승인으로 삼습니다. WIW-2를 in-progress로 올리고 게이트를 표시한 뒤 실행합니다.
+
 ## 결정
 
 행의 내용은 불변입니다. 상태 칸만 갱신할 수 있습니다.
@@ -174,7 +186,7 @@ jira:
 | 12 | 사진 원본 파일명은 촬영 시각 순 두 자리 번호(`01.jpg`~)입니다. 새 사진은 다음 번호를 받습니다. 표시 순서는 매니페스트가 정하고 파일명은 ID일 뿐입니다 | Claude 제안 | 확정 (이산하, 2026-09-06. 조건: 순서 변경 절차를 docs에 둠, `docs/scripts/README.md`) |
 | 13 | git 제외는 원본·에셋 폴더 두 개(`docs/gallery/`, `docs/design/`)만 합니다. `docs/` 나머지는 추적을 유지합니다. 반영은 WIW-1. 결정 11의 폴더명만 정정했습니다 | Claude 제안 | 확정 (이산하, 2026-09-06) |
 | 14 | GitHub 레포는 public을 유지합니다. R2는 감수하고, 문서와 코드에는 사이트에 실을 정보만 적습니다. 하객 명단·상세 주소·사이트에 싣지 않는 연락처는 적지 않습니다 | 이산하 (유지), Claude (감수 조건) | 확정 |
-| 15 | Next.js 스캐폴드는 공식 CLI `npx create-next-app@latest`(npm)로 만듭니다. 구성은 TypeScript · App Router · `src/` · Tailwind CSS · ESLint · Turbopack · alias `@/*` · `--empty` · `AGENTS.md` 포함이고, 생성된 `CLAUDE.md`는 버리고 라우터 `CLAUDE.md`에 `AGENTS.md` 포인터를 둡니다. 임시 디렉토리에 만들어 레포 루트로 옮기며 `.gitignore`·`README.md`는 병합합니다 | 이산하 (공식 CLI·npm), Claude (옵션) | 잠정 (이산하 확인 대기) |
+| 15 | Next.js 스캐폴드는 공식 CLI `npx create-next-app@latest`(npm)로 만듭니다. 구성은 TypeScript · App Router · `src/` · Tailwind CSS · ESLint · Turbopack · alias `@/*` · `--empty` · `AGENTS.md` 포함이고, 생성된 `CLAUDE.md`는 버리고 라우터 `CLAUDE.md`에 `AGENTS.md` 포인터를 둡니다. 임시 디렉토리에 만들어 레포 루트로 옮기며 `.gitignore`·`README.md`는 병합합니다 | 이산하 (공식 CLI·npm), Claude (옵션) | 확정 (이산하, 2026-09-06 "나머지 동의") |
 
 ## 정본 반영 점검 (완결 전)
 
@@ -185,5 +197,5 @@ jira:
 이 논의에서 생성된 epic·task·bugfix ID를 분해 승인 후 적습니다.
 
 - WIW-1 원본·에셋 폴더 git 제외 (단독 task, 2026-09-06 적재 · 같은 날 completed, 528c02d, archive/tasks)
-- WIW-2 Next.js 기본 스캐폴드 (단독 task, todo, 2026-09-06)
+- WIW-2 Next.js 기본 스캐폴드 (단독 task, 2026-09-06 적재 · in-progress)
 - WIW-3 Vercel 프로젝트 연동 (단독 task, todo, 2026-09-06. 대기: WIW-2의 main 반영)

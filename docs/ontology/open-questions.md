@@ -26,6 +26,5 @@
 
 ## 열린 액션
 
-- WIW-1 PR 생성과 develop 머지. 이산하. 브랜치 `feature/WIW-1-gitignore-asset-folders`는 origin에 있습니다
-- WIW-2(Next.js 스캐폴드) 실행 승인과 스택 결정 15(옵션) 확인. 이산하. WIW-1 머지 뒤 실행
+- WIW-2(Next.js 스캐폴드) 실행 중. 승인 2026-09-06. 완료 시 닫습니다
 - WIW-3(Vercel 연동)은 이산하가 대시보드에서 수행. 대기: WIW-2의 main 반영

@@ -1,9 +1,9 @@
 ---
 id: WIW-2
 type: task
-status: todo
+status: in-progress
 created: 2026-09-06 17:56:12
-updated: 2026-09-06 17:56:12
+updated: 2026-09-06 18:01:10
 completed:
 epic:
 jira:
@@ -33,7 +33,7 @@ npx create-next-app@latest <임시 디렉토리> --ts --app --src-dir --tailwind
 
 ## 주의할 점
 
-대기: WIW-1의 develop 머지. 그 뒤 develop에서 `feature/WIW-2-nextjs-scaffold`를 냅니다. `git add`는 경로를 명시합니다. Node 22.22가 설치돼 있습니다. 실행 직전 `[게이트] WIW-2`를 표시합니다.
+WIW-1은 2026-09-06 머지됐습니다(daa9e63). 승인: 이산하 2026-09-06 "위에거 답변 되면 나머지 동의"(스택 논의록 T8). develop에서 `feature/WIW-2-nextjs-scaffold`를 냅니다. `git add`는 경로를 명시합니다. Node 22.22가 설치돼 있습니다. 실행 직전 `[게이트] WIW-2`를 표시합니다.
 
 ## 완료 기준
 
