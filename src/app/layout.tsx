@@ -36,8 +36,8 @@ const gaegu = Gaegu({
 });
 
 export const metadata: Metadata = {
-  title: "이산하 · 송시야 청첩장",
-  description: "2026년 10월 9일 금요일 오후 6시 30분, 더채플앳청담 3층 커티지홀",
+  title: "이산하 ♥ 송시야 결혼합니다.",
+  description: "2026년 10월 9일 금요일 오후 6시 30분",
   robots: { index: false, follow: false },
   // 아이콘(디자인 논의 T70). favicon.ico · icon1~4.png · apple-icon.png은 app/ 파일 규약으로 자동 연결되고, 매니페스트는 manifest.ts입니다. 아래는 규약이 없는 것만
   appleWebApp: { title: "이산하 · 송시야 청첩장" },
