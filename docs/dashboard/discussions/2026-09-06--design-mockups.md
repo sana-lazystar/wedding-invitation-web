@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 18:25:07
-updated: 2026-09-06 20:08:44
+updated: 2026-09-06 20:10:21
 completed:
 participants: 이산하, Claude
 related: []
@@ -292,6 +292,15 @@ jira:
 ### 2026-09-06 20:08:44 · Claude (T27)
 
 - 둘 다 지웠다. 표제 아래 26px 오크 선과 "그리고" 양옆 18px 선. 조립본·Next.js·캔버스·미리보기 반영, 로컬 200.
+
+### 2026-09-06 20:10:21 이전 · 이산하 (T28)
+
+- 커밋 안 된 것이 있는가. 한번 배포하려고 한다. 배포는 이산하가 하니 커밋 안 된 것만 넣어 달라.
+
+### 2026-09-06 20:10:21 · Claude (T28)
+
+- 커밋 안 된 것은 WIW-4의 Next.js 임시 적용 코드(`src/app/layout.tsx` `page.tsx` `globals.css`)와 이미지 3장(`public/scene1/hall.png` `couple.png` `public/scene2/opened-paper.png`)뿐이다. `next build`가 통과했다(정적 페이지 2개). WIW-4는 원래 "커밋하지 않음"이었으므로 이 지시를 근거로 범위를 넓혀 문서에 적은 뒤 코드를 커밋한다. develop → main PR과 배포는 이산하 몫이다.
+- 주의. 이미지는 원본 그대로라 커버 PNG가 1.9MB다. 배포 확인용으로는 되지만 발송본은 이미지 파이프라인(webp 변형)을 거쳐야 한다.
 
 ## 결정
 
