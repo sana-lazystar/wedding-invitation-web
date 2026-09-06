@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 18:25:07
-updated: 2026-09-07 01:18:00
+updated: 2026-09-07 01:22:49
 completed:
 participants: 이산하, Claude
 related: []
@@ -709,6 +709,17 @@ jira:
 
 - 화자 아이콘(`.note__who`, 쪽지 셋 · 메모지 둘 공통) 높이 36 → 43px, 위 기준 -27 → -23px. 아래가 쪽지 안 20px까지 오는데 첫 줄 글자는 위 여백 20px에 반행간 5px을 더한 자리에서 시작하므로 겹치지 않는다. 좌우 밖 8~9px은 그대로다. 크기 규칙(README · CLAUDE.md)도 43px로 고쳤다.
 - 확인. localhost:3000 390×844에서 아이콘 상자 높이 43, 쪽지 첫 줄 글자 위와 아이콘 아래 사이 겹침 없음. tsc · eslint 통과.
+
+### 2026-09-07 01:19:38 이후 · 이산하 (T64)
+
+- 메모지 안 글을 개구(Gaegu)로 바꿔 달라. 앞으로도 메모지 화면은 이 글꼴을 쓴다.
+
+### 2026-09-07 01:22:49 · Claude (T64)
+
+- 글꼴 토큰 `--font-memo`(개구)를 만들어 쪽지·메모지(`.note`)에 걸었다. 조립본은 이미 개구를 불러오고 있고, Next.js는 `layout.tsx`에 next/font `Gaegu`(400 · 700, 변수 `--font-gaegu`)를 더하고 `sync-globals.mjs` 글꼴 대응표에 다섯째 줄을 넣었다. 개구는 고운바탕보다 작게 보여 15 → 18px, 줄 간격 1.7 → 1.6이고, 컷아웃 앞의 빈 float 높이도 두 줄(58px)로 맞췄다. 쪽지 폭은 80% → 글만큼(`fit-content`, 최대 100%)이라 Scene3 둘째 쪽지가 두 줄 그대로다(390px에서 폭 279px).
+- 브랜치 사고. 00:03에 이산하가 release 2026.09.07.a를 끝내고 main을 체크아웃한 채였고, 그 뒤 T50~T63의 커밋 38개가 main에 직접 쌓였다(브랜치 워크플로 위반. 세션 시작 상태만 믿고 브랜치를 다시 확인하지 않은 Claude 잘못). origin/main은 태그 자리(a32141f) 그대로라 푸시된 것은 없었다. 처치. develop에 main을 병합해(a9b1fbe, 이력 재작성 없음) 커밋을 전부 develop으로 옮기고, 로컬 main을 origin/main과 같은 a32141f로 되돌렸다(reflog로 복구 가능). 이 T64부터 develop에서 커밋한다. 재발 방지로 코드 커밋 직전에 `git branch --show-current`를 게이트 표시와 함께 확인한다.
+- `src/app/layout.tsx`의 제목·설명 변경(이산하, 01:15)은 커밋하지 않고 stash에 두었다가 이 커밋 뒤 작업 트리로 되돌려 둔다.
+- 확인. localhost:3000 390×844에서 `.note__text` 글꼴이 Gaegu로 잡히고, Scene4 메모지 7줄 · Scene5 10줄, 컷아웃 비킴은 셋째 줄부터 그대로다. tsc · eslint 통과.
 
 ## 결정
 

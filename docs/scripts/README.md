@@ -68,7 +68,7 @@ python3 docs/scripts/paper-back.py docs/design/canvas/couple.png {종이결.png}
 
 ## sync-globals.mjs — 조립본 CSS를 Next.js로
 
-조립본 `docs/artifacts/index.html`의 스타일 구간을 `src/app/globals.css`로 옮깁니다(WIW-4). 조립본이 정본이고 globals.css는 파생물입니다. 글꼴 토큰 4개(이름·본문·안내·라틴)만 next/font 변수로 바꿉니다. `-webkit-` 접두사 중복(backdrop-filter · mask-image · backface-visibility)은 걷어내고, 개별 변환 속성(`translate` · `rotate` · `scale`)이 있으면 실패합니다(Tailwind v4의 처리기가 떨어뜨리므로 transform 함수로 씁니다).
+조립본 `docs/artifacts/index.html`의 스타일 구간을 `src/app/globals.css`로 옮깁니다(WIW-4). 조립본이 정본이고 globals.css는 파생물입니다. 글꼴 토큰 5개(이름·본문·안내·라틴·메모지)만 next/font 변수로 바꿉니다. `-webkit-` 접두사 중복(backdrop-filter · mask-image · backface-visibility)은 걷어내고, 개별 변환 속성(`translate` · `rotate` · `scale`)이 있으면 실패합니다(Tailwind v4의 처리기가 떨어뜨리므로 transform 함수로 씁니다).
 
 ```sh
 node docs/scripts/sync-globals.mjs
