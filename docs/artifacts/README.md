@@ -4,8 +4,8 @@
 
 ## 지금 상태 (2026-09-06)
 
-- 완료: Scene1 커버(와이어프레임 2쪽) · Scene2 핵심 정보(3쪽) · 떠 있는 바로 가기 메뉴
-- 진입 장면(로딩)은 T34에서 전부 걷어냈고 처음부터 다시 만듭니다. T35부터 편지봉투 에셋(아마 결 종이 · 접힌 날개 · 밀랍 봉인)을 만드는 중이고, 이산하가 마음에 들면 로딩 화면에 씁니다. 걷어낸 판(팝업북 · 붉은 가죽 고서)은 커밋 1f1a819의 조립본과 6d7dc2e의 에셋에 있습니다
+- 완료: 진입 장면(편지봉투) · Scene1 커버(와이어프레임 2쪽) · Scene2 핵심 정보(3쪽) · 떠 있는 바로 가기 메뉴
+- 진입 장면(로딩)은 편지봉투입니다(T35 에셋 · T36 장면). 봉투가 확대돼 있다가 물러나고, 뚜껑이 봉인을 단 채 젖혀지고, 커버가 카드로 빠져나오며 화면을 채웁니다. 아래 "진입 장면 (로딩)"
 - 다음: Scene3 인사(4쪽). 이 쪽부터 토끼(신부)·수달(신랑) 캐릭터 그림이 필요합니다. 이산하가 재료를 줍니다(Q11)
 - 콘셉트: 팝업북. 책은 서양 고서(앤티크)이고 붉은 가죽에 금박입니다. 질감 에셋은 CSS로 흉내 내지 않고 SVG → PNG로 만듭니다(디자인 결정 11, 아래 "질감 에셋 만들기")
 - Next.js 임시 적용(WIW-4)은 develop에 커밋돼 있습니다. develop → main PR과 배포는 이산하가 합니다
@@ -28,10 +28,10 @@ Artifact 발행은 2026-09-06 T31에 중단했습니다(디자인 결정 11). �
 | `canvas/Main.dc.html` | Claude Design 캔버스의 아트보드(동결. 결정 11 뒤로 고치지 않습니다) | 커밋 |
 | `canvas/FloatingMenu.dc.html` | 떠 있는 바로 가기 버튼의 열린 상태 | 커밋 |
 | `canvas/canvas.json` | 아트보드 배치와 메모 | 커밋 |
-| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 지금은 편지봉투 셋(`envelope-back` · `envelope-flap` · `wax-seal`, T35)입니다 | 커밋 |
+| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 지금은 편지봉투 넷(`envelope-back` · `envelope-flap` · `envelope-flap-inside` · `wax-seal`, T35 · T36)입니다 | 커밋 |
 | `../design/scene1/`, `../design/scene2/` | 이산하가 준 원본 이미지 | 제외 (`docs/design/`) |
 | `../design/canvas/*.png` | 캔버스용 축소본(PNG 무손실). 아트보드가 파일명으로 참조합니다 | 제외 |
-| `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/scene1/`, `public/scene2/` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
+| `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/scene2/` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
 | 조립된 발행 파일 | Claude 세션 스크래치패드 | 커밋하지 않음 |
 
 ## 고치는 순서
@@ -54,15 +54,25 @@ SVG 루트에 `width` · `height`(px)가 있어야 합니다. 배율 1.5에 256�
 
 ## 진입 장면 (로딩)
 
-T34에서 전부 걷어냈습니다. 처음부터 다시 만듭니다. 걷어낸 판을 다시 볼 때는 커밋 1f1a819의 `docs/artifacts/index.html`(팝업북 · 붉은 가죽 고서 · 두께 있는 두 뭉치 · 뒤집힌 종이 뒷면 · 커버와 끊김 없는 이어짐)과 논의록 T31~T33을 봅니다. 그때 배운 것은 남깁니다. 3D 컨테이너(`transform-style: preserve-3d`)에는 clip-path · overflow · opacity를 걸지 않습니다(평면화됩니다). 3D 변환 안에서는 CSS mask · SVG mask를 쓰지 않고 그림 파일로 둡니다. 클래스 이름은 페이지 구획(`.block`)과 겹치지 않게 짓습니다. 장면의 마지막 프레임은 커버와 픽셀 단위로 겹치게 하고, 걷힐 때 아무것도 움직이지 않게 합니다.
+편지봉투입니다(디자인 논의 T35 · T36). 봉투가 화면 높이만큼 확대돼 있다가(좌우가 잘림) 물러나 전체가 보이고, 뚜껑이 봉인을 단 채 위로 180° 젖혀지고, 커버(Scene1)가 카드로 빠져나오며 커져 화면을 채웁니다. 5초 남짓이고 탭하면 건너뜁니다. 움직임 줄이기 설정이거나 앵커로 들어오면 재생하지 않습니다. 매번 재생합니다.
 
-편지봉투 에셋(T35). 600×400 비율의 보통 봉투를 세 장으로 나눠 그립니다. 뒷면 `envelope-back.svg`(옆 날개 두 장과 접혀 올라온 아래 날개), 위 날개 `envelope-flap.svg`(600×236, 뒷면의 (0,0)에 얹습니다), 밀랍 봉인 `wax-seal.svg`(140×140, 봉투의 (300,205)에 가운데를 맞춥니다). 따로 뽑는 이유는 날개만 들어 올리거나 봉인만 떼는 움직임을 만들기 위해서입니다. 아래 날개와 봉인의 그늘은 PNG에 굽고, 위 날개의 그늘은 CSS drop-shadow로 얹습니다(들릴 때 따라 움직이도록). 봉인의 글자는 도장 자국이라 PNG에 굽습니다. 산출물은 `public/intro/`에 두고, 확인은 `public/intro/preview.html`(임시, 커밋하지 않음)을 http://localhost:3000/intro/preview.html 로 엽니다.
+| 것 | 자리 |
+| --- | --- |
+| 시간표 · CSS · 스크립트 | `index.html`의 "0. 진입 장면" 구간(`.intro*`, `@keyframes intro-*`)과 스크립트 앞부분. 배율 `--z0`(높이 = 화면) · `--z1`(전체가 보임)과 카드 값 `--card-*`는 스크립트가 화면 크기에서 계산해 넣습니다 |
+| 에셋 원본 | `assets/envelope-back.svg`(옆 날개 + 아래 날개) · `envelope-flap.svg`(위 날개, 봉인은 따로) · `envelope-flap-inside.svg`(위 날개 안쪽) · `wax-seal.svg`(봉인) |
+| 산출 PNG | `public/intro/`. 뒷면·날개는 3배, 봉인은 6배로 뽑습니다(확대 시작 장면 때문). 아래 명령 |
+| Next.js | `src/app/page.tsx`의 `intro*` 마크업과 첫 `useEffect`. 조립본 스크립트와 같은 계산입니다 |
+
+카드는 커버 자체입니다(사본이 아닙니다). 봉투 안에 든 부분은 clip-path로 가리고, 커지기 시작할 때 클립을 풀어 봉투 앞으로 나옵니다. 마지막 키프레임은 변환·클립·필터가 없어 커버 정지 화면과 같습니다(프레임 픽셀 비교로 확인). 뚜껑은 원근이 있는 봉투 안에서 윗변을 축으로 돌고, 바깥면(봉인 포함)과 안쪽면 그림을 같은 자리에 겹쳐 90°에서 바꿉니다(3D 두 면을 쓰지 않습니다). 아래 날개와 봉인의 그늘은 PNG에 굽고, 위 날개와 봉투의 그늘은 CSS drop-shadow입니다.
 
 ```sh
-node docs/scripts/render-asset.mjs docs/artifacts/assets/envelope-back.svg public/intro/envelope-back.png 1.5 && python3 docs/scripts/quantize-png.py public/intro/envelope-back.png
-node docs/scripts/render-asset.mjs docs/artifacts/assets/envelope-flap.svg public/intro/envelope-flap.png 1.5 && python3 docs/scripts/quantize-png.py public/intro/envelope-flap.png
-node docs/scripts/render-asset.mjs docs/artifacts/assets/wax-seal.svg public/intro/wax-seal.png 3 && python3 docs/scripts/quantize-png.py public/intro/wax-seal.png
+node docs/scripts/render-asset.mjs docs/artifacts/assets/envelope-back.svg public/intro/envelope-back.png 3 && python3 docs/scripts/quantize-png.py public/intro/envelope-back.png
+node docs/scripts/render-asset.mjs docs/artifacts/assets/envelope-flap.svg public/intro/envelope-flap.png 3 && python3 docs/scripts/quantize-png.py public/intro/envelope-flap.png
+node docs/scripts/render-asset.mjs docs/artifacts/assets/envelope-flap-inside.svg public/intro/envelope-flap-inside.png 3 && python3 docs/scripts/quantize-png.py public/intro/envelope-flap-inside.png
+node docs/scripts/render-asset.mjs docs/artifacts/assets/wax-seal.svg public/intro/wax-seal.png 6 && python3 docs/scripts/quantize-png.py public/intro/wax-seal.png
 ```
+
+걷어낸 첫 판(팝업북 · 붉은 가죽 고서)을 다시 볼 때는 커밋 1f1a819의 `docs/artifacts/index.html`과 논의록 T31~T33을 봅니다. 그때 배운 것은 지금 판에도 적용합니다. 3D 컨테이너(`transform-style: preserve-3d`)에는 clip-path · overflow · opacity를 걸지 않습니다(평면화됩니다). 3D 변환 안에서는 CSS mask · SVG mask를 쓰지 않고 그림 파일로 둡니다. 클래스 이름은 페이지 구획(`.block`)과 겹치지 않게 짓습니다. 장면의 마지막 프레임은 커버와 픽셀 단위로 겹치게 하고, 걷힐 때 아무것도 움직이지 않게 합니다.
 
 ## Artifact 발행 (중단)
 
