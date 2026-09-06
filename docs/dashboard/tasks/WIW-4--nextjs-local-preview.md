@@ -3,7 +3,7 @@ id: WIW-4
 type: task
 status: in-progress
 created: 2026-09-06 19:14:53
-updated: 2026-09-06 19:14:53
+updated: 2026-09-06 19:22:14
 completed:
 epic:
 jira:
@@ -35,8 +35,10 @@ related: []
 
 ## 완료 기준
 
-- [ ] `next dev`로 띄운 `http://localhost:3000`에서 커버·진입 장면·떠 있는 메뉴가 조립본과 같이 동작함
+- [x] `next dev`로 띄운 `http://localhost:3000`에서 커버·진입 장면·떠 있는 메뉴가 조립본과 같이 동작함 (HTTP 200, 이미지 200, tsc·eslint 통과)
 - [ ] 이산하가 로컬에서 확인함
 - [ ] 구현 기록 기입 (커밋 없음, 작업 트리 상태만)
 
 ## 구현 기록
+
+2026-09-06 19:22:14 · 브랜치 develop 작업 트리(커밋 없음) · 변경 파일 `src/app/layout.tsx` `src/app/page.tsx` `src/app/globals.css` `public/scene1/hall.jpg` `public/scene1/couple.png` · 이산하의 `next dev`(포트 3000)에 반영 확인
