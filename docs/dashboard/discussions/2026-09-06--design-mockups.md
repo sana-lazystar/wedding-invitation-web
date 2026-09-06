@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 18:25:07
-updated: 2026-09-06 20:05:26
+updated: 2026-09-06 20:06:14
 completed:
 participants: 이산하, Claude
 related: []
@@ -276,6 +276,14 @@ jira:
 ### 2026-09-06 20:05:26 · Claude (T25)
 
 - 홀 사진에 CSS 필터 `saturate(0.7)`를 걸었다. 원본 파일은 그대로이고 화면에서만 채도가 70%다. 수치는 바꾸기 쉽다. 조립본·Next.js·캔버스·미리보기 반영, 로컬 200.
+
+### 2026-09-06 20:06:14 이전 · 이산하 (T26)
+
+- WEDDING INVITATION 글자 크기는 지금의 2/3으로, "우리의 삶을 함께 써 주신 당신께"는 좀 더 크게. 아래 이산하 · 그리고 · 송시야 사이 여백을 약간 더.
+
+### 2026-09-06 20:06:14 · Claude (T26)
+
+- WEDDING INVITATION 14px → 10px(자간 0.36em 유지), 문장 20px → 24px(줄 간격 1.5), 이름 사이 간격 2px → 10px. 조립본·Next.js·캔버스·미리보기 반영, 로컬 200.
 
 ## 결정
 
