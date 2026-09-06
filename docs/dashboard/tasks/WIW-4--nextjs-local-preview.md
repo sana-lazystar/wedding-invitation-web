@@ -104,3 +104,5 @@ related: []
 2026-09-07 01:12:01 · develop · fb7b621 · 메모지 글 크기만큼, 컷아웃 float + shape-outside(디자인 논의 T61). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-07 01:14:30 · develop · 1d7f8c0 · 컷아웃 네모 영역으로 글 비킴(빈 float + clear), 신랑 컷아웃 오른쪽 아래·신부 컷아웃 왼쪽 10px(디자인 논의 T62). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 01:18:00 · develop · 99cdfd0 · 캐릭터 아이콘 43px, 4px 아래로(디자인 논의 T63). `src/app/globals.css`.
