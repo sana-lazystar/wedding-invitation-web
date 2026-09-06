@@ -97,7 +97,7 @@
     .names__name { font-family: var(--font-name); font-size: 24px; font-weight: 700; letter-spacing: 0.1em; line-height: 1.4; }
     .names__and { font-family: var(--font-ui); font-size: 13px; color: var(--muted); line-height: 1.4; }
 
-    /* 진입 장면. 봉투가 열리고 표제가 적힌 편지지가 나온 뒤, 편지지가 화면을 채우며 커버로 이어집니다 */
+    /* 진입 장면. 기울어진 봉투가 열리고 표제가 적힌 편지지가 나오며 수평으로 펴진 뒤, 화면을 채우며 커버로 이어집니다 */
     html.is-intro { overflow: hidden; }
     html.is-intro .cover-head { visibility: hidden; }
     #intro {
@@ -112,10 +112,10 @@
       width: 300px; height: 200px;
       perspective: 1200px;
       opacity: 0;
-      transform: translateY(90px) scale(0.96);
+      transform: translate(24px, 90px) rotate(-15deg) scale(0.96);
       transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
     }
-    #intro.is-shown .stage { opacity: 1; transform: translateY(90px) scale(1); }
+    #intro.is-shown .stage { opacity: 1; transform: translate(24px, 90px) rotate(-15deg) scale(1); }
     .env__back, .env__front, .env__flap, .env__letter { position: absolute; }
     .env__back {
       inset: 0; z-index: 1;
@@ -128,13 +128,15 @@
       background: var(--paper);
       border-radius: 8px;
       box-shadow: inset 0 0 0 1px rgba(185, 142, 94, 0.35), 0 10px 24px -14px rgba(70, 48, 24, 0.4);
-      transition: transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+      translate: 0 0;
+      rotate: 0deg;
+      transition: translate 0.85s cubic-bezier(0.22, 0.61, 0.36, 1), rotate 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s;
     }
-    #intro.is-rising .env__letter { transform: translateY(-210px); }
+    #intro.is-rising .env__letter { translate: 0 -210px; rotate: 15deg; }
     #intro.is-expanding .env__letter {
       z-index: 5;
       transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1), background-color 0.85s ease, box-shadow 0.4s ease, border-radius 0.85s ease;
-      transform: translateY(-210px) scale(var(--letter-scale, 6));
+      transform: scale(var(--letter-scale, 6));
       background: var(--paper-bg);
       box-shadow: none;
       border-radius: 0;
@@ -164,18 +166,21 @@
     #intro.is-expanding .env__back, #intro.is-expanding .env__front, #intro.is-expanding .env__flap, #intro.is-expanding .env__note { opacity: 0; transition: opacity 0.4s ease; }
     .intro-text {
       position: absolute; left: 50%; top: 50%; z-index: 6;
-      transform: translate(-50%, -50%) scale(0.72);
+      translate: -50% -50%;
+      rotate: 0deg;
+      transform: scale(0.72);
       display: flex; flex-direction: column; align-items: center;
-      transition: transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+      transition: translate 0.85s cubic-bezier(0.22, 0.61, 0.36, 1), rotate 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s;
       will-change: transform;
     }
-    #intro.is-rising .intro-text { transform: translate(-50%, calc(-50% - 210px)) scale(0.72); }
+    #intro.is-rising .intro-text { translate: -50% calc(-50% - 210px); rotate: 15deg; }
     .intro-text > * { opacity: 0; transform: translateY(12px); transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1); }
     .intro-text > .tagline { transition-delay: 0.12s; }
     #intro.is-text .intro-text > * { opacity: 1; transform: translateY(0); }
     #intro.is-expanding .intro-text {
-      transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
-      transform: translate(calc(-50% + var(--text-dx, 0px)), calc(-50% - 210px + var(--text-dy, 0px))) scale(1);
+      transition: translate 0.85s cubic-bezier(0.65, 0, 0.35, 1), transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
+      translate: calc(-50% + var(--text-dx, 0px)) calc(-50% - 210px + var(--text-dy, 0px));
+      transform: scale(1);
     }
     .intro-skip {
       position: absolute; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom));
@@ -392,8 +397,12 @@
           letter.style.setProperty('--letter-scale', scale.toFixed(3));
           var from = introText.getBoundingClientRect();
           var to = coverHead.getBoundingClientRect();
-          introText.style.setProperty('--text-dx', (to.left + to.width / 2 - (from.left + from.width / 2)).toFixed(1) + 'px');
-          introText.style.setProperty('--text-dy', (to.top + to.height / 2 - (from.top + from.height / 2)).toFixed(1) + 'px');
+          var dx = to.left + to.width / 2 - (from.left + from.width / 2);
+          var dy = to.top + to.height / 2 - (from.top + from.height / 2);
+          /* 무대가 -15도 기울어 있으므로 화면 이동량을 무대 좌표계로 돌린다 */
+          var rad = 15 * Math.PI / 180, cs = Math.cos(rad), sn = Math.sin(rad);
+          introText.style.setProperty('--text-dx', (dx * cs - dy * sn).toFixed(1) + 'px');
+          introText.style.setProperty('--text-dy', (dx * sn + dy * cs).toFixed(1) + 'px');
           intro.classList.add('is-expanding');
         }, 2800));
         timers.push(setTimeout(finish, 3700));

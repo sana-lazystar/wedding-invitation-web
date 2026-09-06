@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 18:25:07
-updated: 2026-09-06 19:28:10
+updated: 2026-09-06 19:30:40
 completed:
 participants: 이산하, Claude
 related: []
@@ -155,6 +155,16 @@ jira:
 - 입체감(덮개 앞뒷면·명암·안쪽 그늘·편지지 기울기·원근 변경)을 전부 걷어내고 진입 장면 3(커밋 41c16e4의 조립본)으로 되돌렸다. Next.js 코드도 같은 상태로 맞췄다.
 - 봉투 앞면 오른쪽 아래에 필기체 "Thanks to everyone."을 넣었다. 글꼴은 Google Fonts의 Dancing Script(500), 17px, 오크 잉크색 `#7E5A33`, 4도 기울임. 편지지가 확대될 때 봉투와 함께 사라진다. Next.js에는 `next/font/google`의 Dancing_Script로 실었다. 다른 필기체 후보는 Caveat(펜 글씨), Sacramento(가는 흘림), Parisienne·Great Vibes(격식 흘림), La Belle Aurore·Homemade Apple(진짜 손글씨 느낌)이다.
 - 조립본·Next.js·미리보기 Artifact 셋 다 반영. tsc·eslint 통과, 로컬 200.
+
+### 2026-09-06 19:30:40 이전 · 이산하 (T14)
+
+- 봉투가 왼쪽 아래로 15도쯤 기울어 있고, 편지지는 꺼내면서 15도 기울어 있다가 수평이 되도록 할 수 있는가.
+
+### 2026-09-06 19:30:40 · Claude (T14)
+
+- 무대(봉투·편지지·표제를 담은 상자)를 통째로 -15도 돌려 봉투가 왼쪽 아래로 기울었다. 편지지는 봉투 축을 따라(기울어진 방향으로) 빠져나오다가, 0.35초 뒤부터 0.6초에 걸쳐 +15도 되돌아 수평으로 펴진다. 표제도 같은 경로를 따른다. 편지지가 왼쪽 위로 빠져나오므로 무대를 오른쪽으로 24px 옮겨 균형을 맞췄다.
+- 구현은 CSS의 개별 변형 속성(`translate`·`rotate`)으로 이동과 회전을 따로 전환한다. 확대 단계에서 표제가 커버 자리로 가는 이동량은 화면 좌표로 재서 무대 좌표계(-15도)로 돌려 넣는다.
+- 조립본·Next.js·미리보기 Artifact 셋 다 반영. tsc·eslint 통과, 로컬 200과 CSS 반영 확인.
 
 ## 결정
 
