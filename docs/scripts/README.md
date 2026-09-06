@@ -5,6 +5,11 @@
 | 스크립트 | 역할 | 상태 |
 | --- | --- | --- |
 | 이미지 산출 (예정) | `docs/gallery/`의 원본을 폭 3~4단계 WebP로 줄여 `public/gallery/`와 매니페스트를 만듭니다 | Next.js 스캐폴드 뒤 task에서 작성 |
+| `render-asset.mjs` | SVG(또는 HTML)를 Chrome으로 그려 투명 PNG로 뽑습니다. 질감 에셋용 | 있음 (디자인 논의 T31) |
+| `quantize-png.py` | PNG를 256색 팔레트로 줄입니다 | 있음 (디자인 논의 T31) |
+| `sync-globals.mjs` | 조립본 CSS를 Next.js `globals.css`로 옮깁니다 | 있음 |
+| `inline-artifact.mjs` | 조립본을 Artifact 발행용으로 인라인합니다 | 있음. 디자인 결정 11로 쓰지 않음 |
+| `unmatte.py` | 컷아웃 가장자리 색 번짐을 지웁니다 | 있음 |
 
 ## 사진 추가·순서 변경 절차
 
@@ -34,9 +39,25 @@
 node docs/scripts/inline-artifact.mjs docs/artifacts/index.html /tmp/preview.html --title "이산하 · 송시야 청첩장 미리보기"
 ```
 
+## render-asset.mjs — SVG를 PNG로
+
+SVG(또는 `id="a"` 요소가 있는 HTML)를 설치된 Google Chrome으로 그려 투명 배경 PNG로 뽑습니다. 빈티지 표지·속지 같은 질감 에셋을 CSS로 흉내 내지 않고 그림 파일로 만들기 위한 것입니다(디자인 결정 11). SVG 필터(feTurbulence 종이 결, feDisplacementMap 찢은 가장자리, 잉크 번짐)를 그대로 씁니다. `playwright-core`(devDependency)를 쓰고 브라우저를 내려받지 않습니다. SVG 루트에 `width` · `height`(px 숫자)가 있어야 합니다.
+
+```sh
+node docs/scripts/render-asset.mjs docs/artifacts/assets/book-cover.svg public/intro/book-cover.png 1.5
+```
+
+## quantize-png.py — PNG를 256색으로
+
+질감 PNG는 무손실이면 수백 KB라서 256색 팔레트로 줄입니다. 제자리에서 덮어쓰고, 투명도가 있으면 유지합니다. macOS 시스템 python3의 Pillow를 씁니다.
+
+```sh
+python3 docs/scripts/quantize-png.py public/intro/book-cover.png
+```
+
 ## sync-globals.mjs — 조립본 CSS를 Next.js로
 
-조립본 `docs/artifacts/index.html`의 스타일 구간을 `src/app/globals.css`로 옮깁니다(WIW-4). 조립본이 정본이고 globals.css는 파생물입니다. 글꼴 토큰만 next/font 변수로 바꿉니다.
+조립본 `docs/artifacts/index.html`의 스타일 구간을 `src/app/globals.css`로 옮깁니다(WIW-4). 조립본이 정본이고 globals.css는 파생물입니다. 글꼴 토큰만 next/font 변수로 바꿉니다. `-webkit-` 접두사 중복(backdrop-filter · mask-image · backface-visibility)은 걷어내고, 개별 변환 속성(`translate` · `rotate` · `scale`)이 있으면 실패합니다(Tailwind v4의 처리기가 떨어뜨리므로 transform 함수로 씁니다).
 
 ```sh
 node docs/scripts/sync-globals.mjs
