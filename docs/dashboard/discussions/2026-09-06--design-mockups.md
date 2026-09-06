@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 18:25:07
-updated: 2026-09-06 20:03:40
+updated: 2026-09-06 20:05:26
 completed:
 participants: 이산하, Claude
 related: []
@@ -267,6 +267,15 @@ jira:
 - 의도한 색 보정은 T21의 채도·대비 필터와 종이색 워시였고 T23에서 이미 걷어냈다. 남아 있던 차이는 축소본이 JPEG(품질 72, 366px)였다는 점이다. 원본 PNG는 색 프로파일이 없고(브라우저는 sRGB로 취급) JPEG는 sRGB 태그가 붙었으니 색 공간 차이는 없지만, JPEG 압축과 낮은 해상도가 질감을 무디게 했을 수 있다.
 - 조치. 조립본은 원본 `docs/design/scene1/scene1--wedding-hall.PNG`(860×1829)를 그대로 참조한다. Next.js에는 원본을 `public/scene1/hall.png`로 복사했다(JPEG 삭제). 캔버스는 2MB 항목 제한 때문에 원본을 무손실로 900px로만 줄인 `docs/design/canvas/hall.png`(519KB)를 쓴다. 미리보기 Artifact는 스크립트가 원본을 1080px로 무손실 축소해 심는다(1.8MB).
 - 조립본·Next.js·캔버스·미리보기 반영. 로컬 200, 이미지 200.
+
+### 2026-09-06 20:05:26 이전 · 이산하 (T25)
+
+- Next.js 임시 작업분도 바꿨는가. (확인: 바꿨고 원본과 동일)
+- 배경 채도를 좀 뺄 수 있는가. 필터 같은 것으로.
+
+### 2026-09-06 20:05:26 · Claude (T25)
+
+- 홀 사진에 CSS 필터 `saturate(0.7)`를 걸었다. 원본 파일은 그대로이고 화면에서만 채도가 70%다. 수치는 바꾸기 쉽다. 조립본·Next.js·캔버스·미리보기 반영, 로컬 200.
 
 ## 결정
 
