@@ -82,24 +82,23 @@ body {
 .names__name { font-family: var(--font-name); font-size: 20px; font-weight: 700; letter-spacing: 0.14em; text-indent: 0.14em; line-height: 1.35; color: var(--ink); }
 .names__and { font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); line-height: 1.4; }
 
-/* 2. 핵심 정보. 레이스 프릴을 두른 타원 카드(이산하가 만든 에셋 `public/lace/`, T50) 위에 날짜·시간·장소. 그림 세 장은 같은 840×1110 화폭이라 같은 상자에 겹치면 맞습니다 */
+/* 2. 핵심 정보. 액자(장식 테두리 선화. 이산하가 준 그림 `public/scene2/frame.png`, T55) 안에 날짜·시간·장소. 그림 안쪽은 투명이라 바탕 종이색이 그대로 보입니다 */
 #info { display: flex; align-items: center; justify-content: center; padding: 40px 12px; }
-.lace {
+.frame {
   position: relative;
-  width: min(100%, calc((100dvh - 80px) * 840 / 1110));
-  aspect-ratio: 840 / 1110;
-  container-type: inline-size;   /* 글자 크기를 판 폭(cqw)으로 잡습니다. 타원 안쪽 폭이 판 폭에 비례하므로 화면이 달라도 같은 여유가 남습니다(T51) */
+  width: min(100%, calc((100dvh - 80px) * 940 / 1672));
+  aspect-ratio: 940 / 1672;
 }
-.lace__frill, .lace__card { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
-/* 글은 안쪽 인쇄 테두리(타원 가로 28~72%, 세로 22.6~77.4%) 안에 세로 가운데로 쌓습니다. 크기는 두 가지(T51). 가장 긴 줄 "더채플앳청담 3층 커티지홀"(12em)이 가장 넓은 곳(판 폭의 44%)에 들어가야 하므로 작은 글자는 3.5cqw입니다 */
-.lace__text {
-  position: absolute; left: 28%; right: 28%; top: 22.6%; height: 54.8%;
+.frame__art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+/* 글은 테두리 안쪽(가로 12~88%, 세로 13~85%. 위아래 가운데 장식과 옆 가운데 장식을 피한 값)에 세로 가운데로 쌓습니다. 크기는 두 가지(T51) */
+.frame__text {
+  position: absolute; left: 12%; right: 12%; top: 13%; height: 72%;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   font-family: var(--font-name); text-align: center; white-space: nowrap;
 }
-.lace__big { font-size: 4.6cqw; font-weight: 700; line-height: 1.6; color: var(--ink); }
-.lace__small { font-size: 3.5cqw; line-height: 1.7; color: var(--ink-soft); }
-.lace__gap { height: 3.5cqw; }
+.frame__big { font-size: 20px; font-weight: 700; line-height: 1.6; color: var(--ink); }
+.frame__small { font-size: 15px; line-height: 1.7; color: var(--ink-soft); }
+.frame__gap { height: 16px; }
 
 /* 3. 인사(와이어프레임 4쪽, 0.3화면). 쪽지 두 장에 한 줄씩. 화자 캐릭터(수달 = 신랑, 토끼 = 신부. 이산하가 준 스티커 그림, T52)가 쪽지 위 모서리에 걸칩니다. 신랑 쪽지는 오른쪽 정렬에 오른쪽 위, 신부 쪽지는 왼쪽 정렬에 왼쪽 위. 종이 결은 그림(`public/paper/note.png`), 그늘·기울기는 CSS */
 .greeting { display: flex; flex-direction: column; gap: 22px; padding: 40px 24px 14px; }
@@ -126,14 +125,14 @@ body {
 .note--right .note__who { right: -8px; transform: rotate(6deg); }
 .note--left .note__who { left: -9px; transform: rotate(-5deg); }
 /* 4. Part 1 신랑(와이어프레임 5쪽, 약 1.2화면). 어릴 적 사진을 붙인 종이가 위, 토끼(신부)가 소개하는 메모지가 아래입니다(T53). 인사 블록이 0.3화면이라 사진 종이가 인사와 같은 화면에 걸쳐 보입니다. 메모지는 쪽지와 같은 부품(`.note`)이고 폭만 전체입니다. 오른쪽 아래에는 어릴 적 사진 컷아웃(헬리콥터)이 스티커처럼 걸칩니다 */
-.story { display: flex; flex-direction: column; gap: 30px; padding: 20px 24px 124px; }   /* 아래 여백은 메모지 밖으로 84px 나가는 스티커 몫 */
+.story { display: flex; flex-direction: column; padding: 20px 24px 124px; }   /* 아래 여백은 메모지 밖으로 84px 나가는 스티커 몫 */
 .photo-paper {
-  position: relative; width: 50%; align-self: center; padding: 12px; border-radius: 3px;   /* 사진 종이는 폭의 절반, 가운데(T54) */
+  position: relative; z-index: 1; width: 75%; align-self: flex-end; padding: 4px; border-radius: 3px;   /* 사진 종이는 폭의 3/4, 오른쪽, 흰 테두리 4px(T56). 메모지 위에 겹치므로 앞 층 */
   box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
   transform: rotate(-0.7deg);
 }
 .photo-paper__photo { position: relative; display: block; width: 100%; height: auto; }
-.note--memo { width: 100%; padding-bottom: 70px; }   /* 아래 여백은 오른쪽 아래 스티커(메모지 안 60px까지 옴)를 피해 마지막 줄이 10px 위에 끝나게 */
+.note--memo { width: 100%; margin-top: -26px; padding-top: 44px; padding-bottom: 70px; }   /* 사진 종이 뒤로 26px 들어가 겹칩니다(T56). 위 여백은 첫 줄이 사진 아래 18px에서 시작하게. 아래 여백은 오른쪽 아래 스티커(메모지 안 60px까지 옴)를 피해 마지막 줄이 10px 위에 끝나게 */
 .note__stamp {
   position: absolute; right: -12px; bottom: -84px; height: 144px; width: auto;   /* 컷아웃 스티커는 캐릭터 아이콘의 4배(T54에서 3배로 키움). 절반은 메모지 안, 절반은 밖 */
   transform: rotate(5deg);
