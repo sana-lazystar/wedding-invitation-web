@@ -80,3 +80,5 @@ related: []
 2026-09-07 00:00:26 · develop · a445667 · 봉투 하강 뒤 확대와 함께 0.3초 흐려짐, 4.0초(디자인 논의 T48). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-07 00:02:33 · develop · a730c51 · 봉투 하강을 편지지 올라옴과 동시에, 3.7초(디자인 논의 T49). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 00:15:21 · develop · ce00bc8 · Scene1 글자 크기·굵기·아래 여백 48px, Scene2 레이스 타원 카드로 교체(열린 봉투 그림 삭제, `public/lace/` 추가)(디자인 논의 T50). `src/app/page.tsx` `src/app/globals.css` `public/lace/` `public/scene2/`.
