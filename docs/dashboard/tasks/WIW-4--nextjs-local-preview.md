@@ -64,3 +64,5 @@ related: []
 2026-09-06 23:08:04 · develop · a49d92c · 진입 장면 세 층 구조, 줌아웃과 뚜껑 동시, 봉투 흐려짐, 2.6초(디자인 논의 T40). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-06 23:13:34 · develop · 8492a14 · 진입 장면 3.9초, 카드 폭 92%, 봉투 아래로 빠져나감, 끝날 때 깜빡임 제거(디자인 논의 T41). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-06 23:19:31 · develop · 933743a · 봉투 뒷판·앞판 층, 카드가 앞판 뒤에 끼워져 입구로 보임(디자인 논의 T42). `src/app/page.tsx` `src/app/globals.css` `public/intro/envelope-back.png` `public/intro/envelope-front.png`.
