@@ -46,28 +46,29 @@ body {
   overflow: hidden;
   isolation: isolate;   /* 커버 안의 층 순서를 커버 안에서 닫습니다(T66) */
 }
-.cover-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+/* 무대(T75). 홀 사진·두 사람·그늘은 폭 기준 고정 크기 상자(폭 106%, 홀 사진 비율)에 있고 커버 아랫변에 붙습니다. 인앱 브라우저(카카오톡)는 주소창이 사라질 때 창 높이 자체가 바뀌어 svh까지 변하므로 높이 기준이면 그림이 늘었다 줄었다 합니다. 폭 기준이면 크기는 그대로이고 위쪽 커튼이 더 잘리거나 덜 잘릴 뿐입니다. 폭 106%(좌우 3%씩 잘림)는 세로 비율 0.444까지 폰 화면을 채웁니다. 두 사람 값은 390×844에서 전(높이 기준 27% · 22%)과 같은 크기·자리가 되도록 환산했습니다 */
+.cover-bg { position: absolute; left: 50%; bottom: 0; width: 106%; aspect-ratio: 860 / 1829; transform: translateX(-50%); z-index: 0; overflow: hidden; }
 .cover-bg__hall {
   width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; display: block;
   filter: saturate(0.7);
 }
-/* 상단 1/4 흐림. 두 겹의 배경 흐림을 마스크로 겹쳐 위로 갈수록 더 흐려집니다 */
-.cover-bg__blur { position: absolute; left: 0; right: 0; top: 0; pointer-events: none; }
+/* 상단 1/4 흐림. 무대가 아니라 커버(글 자리) 기준이라 무대 밖 형제입니다(T75). 두 겹의 배경 흐림을 마스크로 겹쳐 위로 갈수록 더 흐려집니다 */
+.cover-bg__blur { position: absolute; left: 0; right: 0; top: 0; z-index: 1; pointer-events: none; }
 .cover-bg__blur--soft { height: 26%; backdrop-filter: blur(5px); mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%); }
 .cover-bg__blur--strong { height: 16%; backdrop-filter: blur(9px); mask-image: linear-gradient(to bottom, #000 0%, #000 30%, transparent 100%); }
 .cover-bg__shadow {
-  position: absolute; left: calc(50% + 8px); bottom: 21.4%;
-  width: 40%; height: 18px; transform: translateX(-50%);
+  position: absolute; left: calc(50% + 8px); bottom: 20.5%;
+  width: 37.7%; height: 18px; transform: translateX(-50%);
   border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(70, 48, 24, 0.38), rgba(70, 48, 24, 0) 68%);
 }
 .cover-bg__couple {
-  position: absolute; left: calc(50% + 8px); bottom: 22%;
-  height: 27%; width: auto; transform: translateX(-50%);
+  position: absolute; left: calc(50% + 8px); bottom: 21.1%;
+  height: 25.9%; width: auto; transform: translateX(-50%);
   filter: drop-shadow(0 2px 2px rgba(70, 48, 24, 0.28)) drop-shadow(0 18px 18px rgba(70, 48, 24, 0.18));
 }
 /* 글 상자 둘은 제 합성 층에 둡니다(T66). iOS Safari는 커버가 진입 장면에서 변환 애니메이션 중일 때 흐림 층(backdrop-filter)을 앞으로 올려, 같은 층에 그려지던 위쪽 글(WEDDING INVITATION · 표제)을 덮어 사라지게 했습니다. 글 상자가 제 층이면 z-index 1이 합성에서도 지켜집니다. 데스크톱 WebKit·Chrome에서는 재현되지 않아 폰에서 확인합니다 */
-.cover-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; transform: translateZ(0); will-change: transform; }
+.cover-head { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; transform: translateZ(0); will-change: transform; }
 .eyebrow {
   font-family: var(--font-latin);
   font-size: 10px;
@@ -80,7 +81,7 @@ body {
   white-space: nowrap;
 }
 .tagline { margin: 10px 0 0; font-family: var(--font-name); font-size: 18px; font-weight: 700; line-height: 1.5; color: var(--ink-soft); white-space: nowrap; }
-.names { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 7px; transform: translateZ(0); will-change: transform; }
+.names { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 7px; transform: translateZ(0); will-change: transform; }
 .names__name { font-family: var(--font-name); font-size: 20px; font-weight: 700; letter-spacing: 0.14em; text-indent: 0.14em; line-height: 1.35; color: var(--ink); }
 .names__and { font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); line-height: 1.4; }
 
