@@ -263,12 +263,12 @@ export default function Home() {
               <span>신랑 웨딩 사진</span>
             </div>
           </div>
-          <div className="note note--left note--memo note--tuck note--who-right">
+          <div className="note note--left note--memo note--tuck">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/rabbit-3.png" width={240} height={151} alt="" />
             <p className="note__text">신랑은 새벽에 퇴근하더라도 다음 날 꼭 정장에 머리까지 하고 나왔어요. 처음엔 차가워 보이는 데다 저와 너무 다른 사람 같아서 거리를 뒀는데, 알면 알수록 보석 같은 사람이더라고요!</p>
           </div>
-          <div className="note note--left note--memo note--indent">
+          <div className="note note--left note--memo note--indent note--who-right">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/rabbit-4.png" width={240} height={159} alt="" />
             <p className="note__text">&apos;이 사람 놓치면 안 되겠다, 남 주기 너무 아깝다! 아니, 싫다!&apos; 싶어서 콱 잡았죠.</p>
