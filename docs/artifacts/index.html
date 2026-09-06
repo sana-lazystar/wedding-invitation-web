@@ -8,7 +8,7 @@
   <!-- 글꼴 후보. 시안 확인용으로 여럿을 싣습니다. 확정되면 쓰는 것만 남깁니다 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;600&family=Hahmlet:wght@400;600&family=Song+Myung&family=Diphylleia&family=Grandiflora+One&family=Nanum+Pen+Script&family=Nanum+Brush+Script&family=Gaegu:wght@400;700&family=Hi+Melody&family=Gamja+Flower&family=Gowun+Dodum&family=Nanum+Gothic:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500&family=Cormorant+Garamond:wght@500;600&family=Dancing+Script:wght@500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;600&family=Hahmlet:wght@400;600&family=Song+Myung&family=Diphylleia&family=Grandiflora+One&family=Nanum+Pen+Script&family=Nanum+Brush+Script&family=Gaegu:wght@400;700&family=Hi+Melody&family=Gamja+Flower&family=Gowun+Dodum&family=Nanum+Gothic:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500&family=Cormorant+Garamond:wght@500;600&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <style>
     * { box-sizing: border-box; }
@@ -20,14 +20,10 @@
       --muted: #7A6F63;
       --oak: #B98E5E;
       --rule: #EDE4D3;
-      --envelope: #E4D6BE;
-      --envelope-front: #EEE2CC;
-      --envelope-flap: #DFCFB4;
       --font-name: 'Gowun Batang', 'Apple SD Gothic Neo', serif;
       --font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
       --font-ui: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
       --font-latin: 'Cormorant Garamond', Georgia, serif;
-      --font-script: 'Dancing Script', 'Snell Roundhand', cursive;
     }
     html { color-scheme: light only; scroll-behavior: smooth; }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -79,7 +75,7 @@
       height: 27%; width: auto; transform: translateX(-50%);
       filter: drop-shadow(0 2px 2px rgba(70, 48, 24, 0.28)) drop-shadow(0 18px 18px rgba(70, 48, 24, 0.18));
     }
-    /* 커버 자체는 움직이지 않습니다. 등장 연출은 진입 장면 안에서 끝납니다(디자인 논의 T33) */
+    /* 커버 자체는 움직이지 않습니다(디자인 논의 T33). 진입 장면(로딩)은 T34에서 걷어냈고 처음부터 다시 만듭니다 */
     .cover-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
     .eyebrow {
       font-family: var(--font-latin);
@@ -112,151 +108,6 @@
     }
     .letter-card__venue { font-size: 17px; font-weight: 500; color: var(--ink); }
     .letter-card__rule { width: 28px; height: 1px; background: var(--oak); margin: 12px 0; }
-
-    /* 진입 장면. 붉은 가죽 고서가 위에서 내려다보는 시점으로 떠오르고, 앞쪽 반이 젖혀지면 접혀 있던 홀 배경과 두 사람이 종이처럼 일어서며, 시점이 내려와 그 장면이 그대로 커버가 됩니다.
-       무대는 커버와 같은 크기(--W × --H)이고 바닥선은 커버에서 두 사람의 발 위치(아래 22%)입니다. 책의 종이 면이 바닥선에 놓이고 종이 뭉치는 그 아래로 내려갑니다. 장면 끝에서 홀 조각·두 사람·표제·이름이 커버의 같은 자리에 겹칩니다 */
-    html.is-intro { overflow: hidden; }
-    /* 커버의 표제·이름은 장면 동안 숨깁니다. 표제는 홀 조각에 찍혀 있고 이름은 사본이 같은 자리에서 떠오르므로, 걷힐 때 원본과 겹쳐 바뀌어 아무것도 튀지 않습니다. 메뉴 버튼은 걷힘과 같은 0.35초에 함께 나타납니다 */
-    #cover .cover-head, #cover .names { transition: opacity 0.35s ease; }
-    html.is-intro #cover .cover-head, html.is-intro #cover .names { opacity: 0; }
-    .fab { transition: opacity 0.35s ease; }
-    html.is-intro .fab { opacity: 0; pointer-events: none; }
-    #intro {
-      position: fixed; inset: 0; z-index: 30;
-      --W: min(430px, 100vw); --H: 100dvh;
-      --leaf-w: calc(var(--W) * 0.65); --leaf-h: calc(var(--W) * 0.94);
-      --Tp: 14px; --Tc: 4px; --Tb: calc(var(--Tp) + var(--Tc));
-      --hall-h: calc(var(--H) * 0.78);
-      --couple-h: calc(var(--H) * 0.27); --couple-w: calc(var(--H) * 0.27 * 0.6025);
-      --couple-z: calc(var(--leaf-h) * 0.35);
-      background: #E9E1D2;
-      transition: opacity 0.35s ease, background-color 0.4s ease;
-    }
-    /* 바탕은 끝까지 불투명합니다. 커버가 비치면 움직이는 두 사람 뒤로 커버의 두 사람이 겹쳐 보이기 때문입니다. 대신 통로(홀 사진 아래 22%)와 발밑 그림자 사본이 장면 안에서 같은 자리에 떠오릅니다 */
-    #intro.is-done { opacity: 0; pointer-events: none; }
-    #intro.is-reset, #intro.is-reset * { transition: none !important; }
-    .stage {
-      position: absolute; left: 50%; top: 0; width: var(--W); height: var(--H);
-      opacity: 0;
-      transform: translate(-50%, -42%) scale(0.78);
-      transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
-    }
-    #intro.is-shown .stage { opacity: 1; transform: translate(-50%, -42%) scale(0.8); }
-    #intro.is-open .stage { transform: translate(-50%, -20%) scale(0.75); transition: opacity 0.5s ease, transform 1.6s cubic-bezier(0.65, 0, 0.35, 1); }
-    #intro.is-diving .stage { transform: translate(-50%, 0) scale(1); transition: opacity 0.5s ease, transform 1.2s cubic-bezier(0.65, 0, 0.35, 1); }
-    .stage__aisle { position: absolute; inset: 0; overflow: hidden; clip-path: inset(78% 0 0 0); opacity: 0; }
-    .stage__aisle img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; display: block; filter: saturate(0.7); }
-    #intro.is-diving .stage__aisle { opacity: 1; transition: opacity 0.5s ease 0.55s; }
-    .book { position: absolute; inset: 0; perspective: 1600px; perspective-origin: 50% 50%; transition: perspective-origin 1.2s cubic-bezier(0.65, 0, 0.35, 1); }
-    #intro.is-diving .book { perspective-origin: 50% 78%; }
-    /* 세계. 바닥선을 축으로 기울여 위에서 내려다보고, 살짝 돌려 책의 옆면(책배)이 보이게 합니다. 마지막에 둘 다 0도가 되어 정면이 됩니다 */
-    .world { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: 50% 78%; transform: rotateX(-55deg) rotateY(-16deg); transition: transform 1.6s cubic-bezier(0.65, 0, 0.35, 1); }
-    #intro.is-open .world { transform: rotateX(-34deg) rotateY(-10deg); }
-    #intro.is-diving .world { transform: rotateX(0deg) rotateY(0deg); transition-duration: 1.2s; }
-    /* 바닥. 펼친 종이 면이 놓이는 평면. 원점은 바닥선 가운데, 안쪽 y는 보는 쪽, z는 위입니다. 닫혀 있을 때는 책이 가운데 오도록 반 쪽 옮깁니다 */
-    .floor { position: absolute; left: 50%; top: 78%; width: 0; height: 0; transform-style: preserve-3d; transform: translateX(calc(var(--leaf-w) / -2)) rotateX(90deg); transition: transform 1.3s cubic-bezier(0.65, 0, 0.35, 1); }
-    #intro.is-open .floor { transform: translateX(0) rotateX(90deg); }
-    /* 책은 가운데서 펼친 두 뭉치입니다. 오른쪽 뭉치는 고정이고, 앞쪽 반(표지 판 + 종이)은 책등을 축으로 왼쪽으로 젖혀집니다. 두께 = 종이 --Tp + 표지 판 --Tc */
-    .stack { position: absolute; top: 0; width: var(--leaf-w); height: var(--leaf-h); transform-style: preserve-3d; }
-    .stack--right { left: 0; }
-    .stack--cover { left: calc(-1 * var(--leaf-w)); transform-origin: 100% 50%; transform: rotateY(180deg); transition: transform 1.3s cubic-bezier(0.65, 0, 0.35, 1); }
-    #intro.is-open .stack--cover { transform: rotateY(0deg); }
-    .leaf { position: absolute; inset: 0; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-    .leaf__art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-    .leaf__shade { position: absolute; inset: 0; pointer-events: none; }
-    .leaf--right .leaf__shade { background: linear-gradient(to right, rgba(70, 48, 24, 0.16), transparent 12%); }
-    .leaf__inner .leaf__shade { background: linear-gradient(to left, rgba(70, 48, 24, 0.16), transparent 12%); }
-    /* 표지 바깥면. 앞쪽 반의 바닥에 아래를 보고 붙어 있다가 닫히면 위로 옵니다. 가죽·금박 괘선은 public/intro/book-cover.png(원본 docs/artifacts/assets/book-cover.svg)이고 제목만 HTML로 금색으로 얹습니다. 괘선 가운데(가로 53.6%)에 글자를 맞춥니다 */
-    .leaf__outer {
-      position: absolute; inset: 0; overflow: hidden;
-      backface-visibility: hidden; -webkit-backface-visibility: hidden;
-      transform: translateZ(calc(-1 * var(--Tb))) rotateY(180deg);
-      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-      padding: 16px 12px 16px calc(12px + var(--leaf-w) * 0.0714);
-    }
-    .leaf__outer > .eyebrow, .leaf__outer > .leaf__rule, .leaf__outer > .leaf__tagline { position: relative; }
-    .leaf__outer .eyebrow { color: #DCC07A; text-shadow: 0 0.6px 0 rgba(26, 4, 6, 0.6); }
-    .leaf__rule { width: 24px; height: 1px; background: #C9A551; margin: 10px auto; box-shadow: 0 0.6px 0 rgba(26, 4, 6, 0.6); }
-    .leaf__tagline { margin: 0; font-family: var(--font-name); font-size: 15px; line-height: 1.6; color: #EAD79C; text-shadow: 0 0.6px 0 rgba(26, 4, 6, 0.6); }
-    .leaf__note { position: absolute; right: 22px; bottom: 36px; font-family: var(--font-script); font-size: 14px; font-weight: 500; line-height: 1.2; color: #D9BC6B; text-shadow: 0 0.6px 0 rgba(26, 4, 6, 0.6); transform: rotate(-4deg); white-space: nowrap; }
-    /* 옆면. 앞면(보는 쪽)과 책배(바깥쪽). 종이 결 이미지 위에 표지 판(가죽색 띠). 뒷면은 보이지 않아 두지 않습니다 */
-    .edge { position: absolute; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; background: #EDE2CA; }
-    .edge--near { left: 0; top: var(--leaf-h); width: var(--leaf-w); height: var(--Tb); transform-origin: 50% 0; transform: rotateX(-90deg); }
-    .edge__pages { display: block; width: 100%; height: var(--Tp); }
-    .edge__board { width: 100%; height: var(--Tc); background: linear-gradient(to bottom, #75232F, #4A111A); }
-    .edge--fore { top: 0; width: var(--Tb); height: var(--leaf-h); }
-    .stack--right .edge--fore { left: var(--leaf-w); transform-origin: 0 50%; transform: rotateY(90deg); }
-    .stack--cover .edge--fore { left: calc(-1 * var(--Tb)); transform-origin: 100% 50%; transform: rotateY(-90deg); }
-    .edge__pages-v { position: absolute; top: 0; width: var(--Tp); height: 100%; overflow: hidden; }
-    .edge__pages-v img { position: absolute; left: 50%; top: 50%; width: var(--leaf-h); height: var(--Tp); transform: translate(-50%, -50%) rotate(90deg); }
-    .edge__board-v { position: absolute; top: 0; width: var(--Tc); height: 100%; background: linear-gradient(to right, #75232F, #4A111A); }
-    .stack--right .edge__pages-v { left: 0; }
-    .stack--right .edge__board-v { left: var(--Tp); }
-    .stack--cover .edge__pages-v { left: var(--Tc); }
-    .stack--cover .edge__board-v { left: 0; }
-    /* 책 아래 그림자. 왼쪽 것은 앞쪽 반이 젖혀지면 나타납니다 */
-    .shade { position: absolute; top: 6px; height: calc(var(--leaf-h) + 4px); border-radius: 10px; background: rgba(40, 24, 10, 0.42); filter: blur(9px); transform: translateZ(calc(-1 * var(--Tb) - 1px)); }
-    .shade--right { left: -2px; width: calc(var(--leaf-w) + 6px); }
-    .shade--left { left: calc(-1 * var(--leaf-w) - 4px); width: calc(var(--leaf-w) + 6px); opacity: 0; transition: opacity 1s ease 0.5s; }
-    #intro.is-open .shade--left { opacity: 1; }
-    /* 종이 위 그림자. 홀 조각이 드리우는 띠와 두 사람 발밑 타원. 일어설 때 나타나고 시점이 내려오면 사라집니다 */
-    .floor__wall { position: absolute; left: calc(var(--W) / -2); top: 0; width: var(--W); height: 44px; transform: translateZ(1px); background: linear-gradient(to bottom, rgba(70, 48, 24, 0.30), rgba(70, 48, 24, 0)); opacity: 0; transition: opacity 0.7s ease; }
-    .floor__feet { position: absolute; left: calc(10px - var(--W) * 0.2); top: calc(var(--couple-z) - 9px); width: calc(var(--W) * 0.4); height: 18px; transform: translateZ(1px); border-radius: 50%; background: radial-gradient(ellipse at center, rgba(70, 48, 24, 0.38), rgba(70, 48, 24, 0) 68%); opacity: 0; transition: opacity 0.7s ease 0.3s; }
-    #intro.is-rising .floor__wall, #intro.is-rising .floor__feet { opacity: 1; }
-    #intro.is-diving .floor__wall, #intro.is-diving .floor__feet, #intro.is-diving .stack, #intro.is-diving .shade { opacity: 0; transition: opacity 0.5s ease 0.5s; }
-    /* 일어서는 조각. 경첩은 위쪽 변(바닥선 쪽)이고 종이 면에 앞면을 대고 접혀 있습니다. 접혀 있을 때는 뒷면(종이 결)이 위를 보고 머리가 보는 쪽에 있어 뒤집혀 보이며, 90도로 서면 앞면(그림)이 보는 쪽을 향합니다 */
-    .pop { position: absolute; left: 0; top: 0; transform-origin: 50% 0; transform-style: preserve-3d; visibility: hidden; transition: transform 1s cubic-bezier(0.34, 1.25, 0.64, 1), visibility 0s 0.62s; }
-    #intro.is-open .pop { visibility: visible; }
-    .pop__face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-    .pop__front { transform: rotateX(180deg); overflow: hidden; }
-    /* 접힌 조각의 뒷면은 종이 면보다 반 톤 어둡고 가장자리에 얇은 그늘을 두어 종이 위에 놓인 다른 종이로 읽힙니다 */
-    .pop__back { overflow: hidden; box-shadow: 0 0 0 0.5px rgba(70, 48, 24, 0.14); }
-    .pop--hall .pop__back img { filter: brightness(0.965); }
-    .pop--couple .pop__back { overflow: visible; }
-    .pop--couple .pop__back img { filter: brightness(0.965) drop-shadow(0 0.5px 0.8px rgba(70, 48, 24, 0.35)); }
-    /* 조각은 접혀 있을 때 종이와 겹치지 않도록 제 면에서 살짝 뜹니다(회전 뒤의 translateZ라 서면 보는 쪽으로 향합니다). 시점이 내려올 때 0으로 되돌려 커버와 정확히 겹칩니다 */
-    .pop--hall {
-      width: var(--W); height: var(--hall-h);
-      transform: translateX(-50%) rotateX(0deg) translateZ(1.5px);
-      transition: transform 1s cubic-bezier(0.34, 1.25, 0.64, 1), visibility 0s 0.62s;
-    }
-    #intro.is-rising .pop--hall { transform: translateX(-50%) rotateX(90deg) translateZ(1.5px); }
-    #intro.is-diving .pop--hall { transform: translateX(-50%) rotateX(90deg) translateZ(0); transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1), visibility 0s 0.62s; }
-    /* 장면 동안은 홀 조각의 위쪽 46%(선 채로 봤을 때 윗부분)를 잘라 책 깊이에 맞추고, 시점이 내려올 때 끝까지 폅니다. 자르기는 면에 겁니다(3D 컨테이너에 걸면 평면화됩니다) */
-    .pop--hall .pop__front { clip-path: inset(46% 0 0 0); transition: clip-path 1.2s cubic-bezier(0.65, 0, 0.35, 1); }
-    .pop--hall .pop__back { clip-path: inset(0 0 46% 0); transition: clip-path 1.2s cubic-bezier(0.65, 0, 0.35, 1); }
-    #intro.is-diving .pop--hall .pop__face { clip-path: inset(0 0 0 0); }
-    .pop--hall .pop__front img { position: absolute; left: 0; top: 0; width: var(--W); height: var(--H); object-fit: cover; object-position: 50% 50%; display: block; filter: saturate(0.7); }
-    .pop--hall .cover-bg__blur--soft { height: calc(var(--H) * 0.26); }
-    .pop--hall .cover-bg__blur--strong { height: calc(var(--H) * 0.16); }
-    .pop--couple {
-      left: 10px; top: var(--couple-z); width: var(--couple-w); height: var(--couple-h);
-      transform: translate(-50%, 0) rotateX(0deg) translateZ(2px);
-      transition: transform 0.85s cubic-bezier(0.34, 1.3, 0.64, 1) 0.2s, visibility 0s 0.62s;
-    }
-    #intro.is-rising .pop--couple { transform: translate(-50%, 0) rotateX(90deg) translateZ(2px); }
-    /* 시점이 내려올 때 두 사람이 홀 조각 평면으로 물러나 커버의 자리와 정확히 겹칩니다 */
-    #intro.is-diving .pop--couple { transform: translate(-50%, calc(-1 * var(--couple-z))) rotateX(90deg) translateZ(0); transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1), visibility 0s 0.62s; }
-    .pop--couple .pop__face { box-shadow: none; }
-    .pop--couple img { display: block; width: 100%; height: 100%; }
-    .pop--couple .pop__front img { filter: drop-shadow(0 2px 2px rgba(70, 48, 24, 0.28)) drop-shadow(0 18px 18px rgba(70, 48, 24, 0.18)); }
-    /* 두 사람 뒷면은 public/intro/couple-back.png(docs/scripts/paper-back.py가 종이 결을 두 사람 윤곽으로 오리고 위아래를 뒤집은 것)입니다. 접힌 종이의 뒷면이라 머리가 보는 쪽에 옵니다. 브라우저 마스크는 3D 변환 안에서 그려지지 않아 그림 파일로 둡니다 */
-    /* 표제는 홀 조각 윗부분에 찍혀 있어 조각이 위로 펴질 때 드러납니다. 커버의 표제와 같은 자리(위 56px + 안전 영역) */
-    .pop__title { position: absolute; left: 24px; right: 24px; top: calc(56px + env(safe-area-inset-top)); }
-    /* 이름 사본. 커버(#cover)와 같은 배치이고 통로와 같은 박자로 떠오릅니다 */
-    .stage__text {
-      position: absolute; inset: 0; z-index: 2;
-      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-      padding: calc(56px + env(safe-area-inset-top)) 24px calc(56px + env(safe-area-inset-bottom));
-      pointer-events: none; opacity: 0;
-    }
-    #intro.is-diving .stage__text { opacity: 1; transition: opacity 0.5s ease 0.55s; }
-    .intro-skip {
-      position: absolute; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom));
-      border: 0; background: transparent; padding: 8px 10px;
-      font-family: var(--font-ui); font-size: 12px; color: var(--muted); cursor: pointer;
-    }
-    @media (prefers-reduced-motion: reduce) { #intro { display: none; } }
 
     /* 떠 있는 바로 가기 버튼 */
     .fab {
@@ -347,63 +198,6 @@
 
   </div>
 
-  <div id="intro" aria-hidden="true">
-    <div class="stage">
-      <div class="stage__aisle"><img src="../design/scene1/scene1--wedding-hall.PNG" alt=""><div class="cover-bg__shadow"></div></div>
-      <div class="book">
-        <div class="world">
-          <div class="floor">
-            <div class="shade shade--right"></div>
-            <div class="shade shade--left"></div>
-            <div class="stack stack--right">
-              <div class="leaf leaf--right"><img class="leaf__art" src="../../public/intro/page.png" alt=""><div class="leaf__shade"></div></div>
-              <div class="edge edge--near"><img class="edge__pages" src="../../public/intro/page-edges.png" alt=""><div class="edge__board"></div></div>
-              <div class="edge edge--fore"><div class="edge__pages-v"><img src="../../public/intro/page-edges.png" alt=""></div><div class="edge__board-v"></div></div>
-            </div>
-            <div class="stack stack--cover">
-              <div class="leaf leaf__inner"><img class="leaf__art" src="../../public/intro/page.png" alt=""><div class="leaf__shade"></div></div>
-              <div class="leaf__outer">
-                <img class="leaf__art" src="../../public/intro/book-cover.png" alt="">
-                <div class="eyebrow">Wedding Invitation</div>
-                <div class="leaf__rule"></div>
-                <p class="leaf__tagline">우리의 삶을 함께<br>써 주신 당신께</p>
-                <div class="leaf__note">Thanks to everyone.</div>
-              </div>
-              <div class="edge edge--near"><img class="edge__pages" src="../../public/intro/page-edges.png" alt=""><div class="edge__board"></div></div>
-              <div class="edge edge--fore"><div class="edge__pages-v"><img src="../../public/intro/page-edges.png" alt=""></div><div class="edge__board-v"></div></div>
-            </div>
-            <div class="floor__wall"></div>
-            <div class="floor__feet"></div>
-            <div class="pop pop--hall">
-              <div class="pop__face pop__back"><img class="leaf__art" src="../../public/intro/page.png" alt=""></div>
-              <div class="pop__face pop__front">
-                <img src="../design/scene1/scene1--wedding-hall.PNG" alt="">
-                <div class="cover-bg__blur cover-bg__blur--soft"></div>
-                <div class="cover-bg__blur cover-bg__blur--strong"></div>
-                <div class="cover-head pop__title">
-                  <div class="eyebrow">Wedding Invitation</div>
-                  <p class="tagline">우리의 삶을 함께 써 주신 당신께</p>
-                </div>
-              </div>
-            </div>
-            <div class="pop pop--couple">
-              <div class="pop__face pop__back"><img src="../../public/intro/couple-back.png" alt=""></div>
-              <div class="pop__face pop__front"><img src="../design/canvas/couple.png" alt=""></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="stage__text">
-        <div class="names">
-          <div class="names__name">이산하</div>
-          <div class="names__and">그리고</div>
-          <div class="names__name">송시야</div>
-        </div>
-      </div>
-    </div>
-    <button type="button" class="intro-skip" id="introSkip">건너뛰기</button>
-  </div>
-
   <nav class="fab" id="fab" data-open="false" aria-label="바로 가기">
     <div class="fab__menu" id="fabMenu" hidden>
       <a href="#directions">오시는 길</a>
@@ -450,7 +244,6 @@
       <option value="'IBM Plex Sans KR', sans-serif">IBM Plex Sans KR</option>
     </select></label>
     <div class="fontbar__row">
-      <button type="button" id="introReplay">진입 장면 다시</button>
       <button type="button" id="fontbarHide">패널 닫기</button>
     </div>
   </div>
@@ -483,38 +276,6 @@
       menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
       document.addEventListener('click', function (e) { if (!fab.contains(e.target)) setOpen(false); });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
-
-      /* 진입 장면. 순서: 닫힌 책 등장 → 앞쪽 반 젖힘(책이 가운데로) → 홀 조각·두 사람이 일어섬 → 시점이 내려오며 무대가 화면을 채우고 표제·이름이 떠오름(모두 커버 자리에 겹침) → 걷힘 */
-      var intro = document.getElementById('intro');
-      var timers = [];
-      var finished = false;
-      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var finish = function () {
-        if (finished) return;
-        finished = true;
-        timers.forEach(clearTimeout);
-        root.classList.remove('is-intro');
-        intro.classList.add('is-done');
-        timers.push(setTimeout(function () { intro.hidden = true; }, 400));
-      };
-      var play = function () {
-        finished = false;
-        timers.forEach(clearTimeout); timers = [];
-        window.scrollTo(0, 0);
-        intro.hidden = false;
-        intro.className = 'is-reset';
-        root.classList.add('is-intro');
-        void intro.offsetWidth;
-        intro.className = '';
-        timers.push(setTimeout(function () { intro.classList.add('is-shown'); }, 60));
-        timers.push(setTimeout(function () { intro.classList.add('is-open'); }, 600));
-        timers.push(setTimeout(function () { intro.classList.add('is-rising'); }, 1450));
-        timers.push(setTimeout(function () { intro.classList.add('is-diving'); }, 2750));
-        timers.push(setTimeout(finish, 3950));
-      };
-      intro.addEventListener('click', function (e) { if (e.target.closest('.intro-skip')) finish(); });
-      document.getElementById('introReplay').addEventListener('click', function () { setOpen(false); play(); });
-      if (reduced) { intro.hidden = true; } else { play(); }
     })();
   </script>
 </body>

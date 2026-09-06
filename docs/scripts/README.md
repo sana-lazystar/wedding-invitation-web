@@ -45,7 +45,7 @@ node docs/scripts/inline-artifact.mjs docs/artifacts/index.html /tmp/preview.htm
 SVG(또는 `id="a"` 요소가 있는 HTML)를 설치된 Google Chrome으로 그려 투명 배경 PNG로 뽑습니다. 빈티지 표지·속지 같은 질감 에셋을 CSS로 흉내 내지 않고 그림 파일로 만들기 위한 것입니다(디자인 결정 11). SVG 필터(feTurbulence 종이 결, feDisplacementMap 찢은 가장자리, 잉크 번짐)를 그대로 씁니다. `playwright-core`(devDependency)를 쓰고 브라우저를 내려받지 않습니다. SVG 루트에 `width` · `height`(px 숫자)가 있어야 합니다.
 
 ```sh
-node docs/scripts/render-asset.mjs docs/artifacts/assets/book-cover.svg public/intro/book-cover.png 1.5
+node docs/scripts/render-asset.mjs docs/artifacts/assets/{이름}.svg public/{자리}/{이름}.png 1.5
 ```
 
 ## quantize-png.py — PNG를 256색으로
@@ -53,7 +53,7 @@ node docs/scripts/render-asset.mjs docs/artifacts/assets/book-cover.svg public/i
 질감 PNG는 무손실이면 수백 KB라서 256색 팔레트로 줄입니다. 제자리에서 덮어쓰고, 투명도가 있으면 유지합니다. macOS 시스템 python3의 Pillow를 씁니다.
 
 ```sh
-python3 docs/scripts/quantize-png.py public/intro/book-cover.png
+python3 docs/scripts/quantize-png.py public/{자리}/{이름}.png
 ```
 
 ## paper-back.py — 컷아웃의 종이 뒷면
@@ -61,12 +61,12 @@ python3 docs/scripts/quantize-png.py public/intro/book-cover.png
 투명 배경 컷아웃의 윤곽으로 종이 결 이미지를 오리고 위아래를 뒤집어, 접혀 있는 팝업 조각의 뒷면으로 씁니다(디자인 논의 T32). 브라우저 마스크는 3D 변환 안에서 그려지지 않거나 file://에서 막혀 그림 파일로 둡니다. 투명도를 유지한 256색 PNG로 저장합니다. `--no-flip`이면 뒤집지 않습니다.
 
 ```sh
-python3 docs/scripts/paper-back.py docs/design/canvas/couple.png public/intro/page.png public/intro/couple-back.png
+python3 docs/scripts/paper-back.py docs/design/canvas/couple.png {종이결.png} public/{자리}/couple-back.png
 ```
 
 ## sync-globals.mjs — 조립본 CSS를 Next.js로
 
-조립본 `docs/artifacts/index.html`의 스타일 구간을 `src/app/globals.css`로 옮깁니다(WIW-4). 조립본이 정본이고 globals.css는 파생물입니다. 글꼴 토큰만 next/font 변수로 바꿉니다. `-webkit-` 접두사 중복(backdrop-filter · mask-image · backface-visibility)은 걷어내고, 개별 변환 속성(`translate` · `rotate` · `scale`)이 있으면 실패합니다(Tailwind v4의 처리기가 떨어뜨리므로 transform 함수로 씁니다).
+조립본 `docs/artifacts/index.html`의 스타일 구간을 `src/app/globals.css`로 옮깁니다(WIW-4). 조립본이 정본이고 globals.css는 파생물입니다. 글꼴 토큰 4개(이름·본문·안내·라틴)만 next/font 변수로 바꿉니다. `-webkit-` 접두사 중복(backdrop-filter · mask-image · backface-visibility)은 걷어내고, 개별 변환 속성(`translate` · `rotate` · `scale`)이 있으면 실패합니다(Tailwind v4의 처리기가 떨어뜨리므로 transform 함수로 씁니다).
 
 ```sh
 node docs/scripts/sync-globals.mjs

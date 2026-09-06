@@ -3,7 +3,7 @@ id: WIW-4
 type: task
 status: in-progress
 created: 2026-09-06 19:14:53
-updated: 2026-09-06 21:46:15
+updated: 2026-09-06 21:53:16
 completed:
 epic:
 jira:
@@ -50,3 +50,5 @@ related: []
 2026-09-06 21:28:32 · develop · 92801be · 진입 장면 손질(디자인 논의 T32): 붉은 가죽 표지, 두께 있는 두 뭉치, 뒤집힌 종이 뒷면, 표제·이름·통로 사본으로 끊김 없는 이어짐. `src/app/page.tsx` `src/app/globals.css` `public/intro/{book-cover,page-edges,couple-back}.png`.
 
 2026-09-06 21:46:15 · develop · 1f1a819 · Scene1 정지(디자인 논의 T33): 홀 물러남 삭제, 표제를 홀 조각에 찍음, 메뉴 버튼은 걷힘과 함께, 조각 들뜸 0으로. `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-06 21:53:16 · develop · d37fddc · 진입 장면 전부 삭제(디자인 논의 T34). `src/app/page.tsx` `src/app/layout.tsx` `src/app/globals.css`, `public/intro/` 삭제.

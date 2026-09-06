@@ -17,7 +17,6 @@ const FONT_MAP = [
   ["--font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;", "--font-body: var(--font-noto-sans-kr), 'Apple SD Gothic Neo', sans-serif;"],
   ["--font-ui: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;", "--font-ui: var(--font-noto-sans-kr), 'Apple SD Gothic Neo', sans-serif;"],
   ["--font-latin: 'Cormorant Garamond', Georgia, serif;", "--font-latin: var(--font-cormorant), Georgia, serif;"],
-  ["--font-script: 'Dancing Script', 'Snell Roundhand', cursive;", "--font-script: var(--font-dancing-script), 'Snell Roundhand', cursive;"],
 ];
 
 const html = readFileSync(SRC, 'utf8');
