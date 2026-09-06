@@ -23,8 +23,8 @@ Claude 세션에서 `/design`을 불러 이 디렉토리의 아트보드와 `doc
 원본은 `docs/design/scene1/` 같은 원본 폴더에 있습니다. 축소는 macOS `sips`로 합니다.
 
 ```sh
-sips -s format jpeg -s formatOptions 72 -Z 780 원본.PNG --out docs/design/canvas/hall.jpg
+sips -s format png -Z 900 원본.PNG --out docs/design/canvas/hall.png
 sips -s format png -Z 400 원본.PNG --out docs/design/canvas/couple.png
 ```
 
-투명 배경이 필요한 컷아웃은 PNG, 그 밖은 JPEG로 둡니다. 파일당 70KB 안팎이 권장이고, 2MB를 넘는 파일은 캔버스가 받지 않습니다.
+색을 바꾸지 않도록 PNG 무손실 축소만 합니다. JPEG로 바꾸지 않습니다(디자인 논의 T24). 파일당 70KB 안팎이 권장이고, 2MB를 넘는 파일은 캔버스가 받지 않습니다.
