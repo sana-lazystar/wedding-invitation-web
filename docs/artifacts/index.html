@@ -127,7 +127,7 @@
     .note--right { --tilt: 0.6deg; align-self: flex-end; }
     .note--left { --tilt: -0.8deg; align-self: flex-start; }
     .note__paper { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 3px; }
-    .note__text { position: relative; margin: 0; }
+    .note__text { position: relative; margin: 0; display: flow-root; word-break: keep-all; }   /* flow-root: 안의 float(컷아웃)를 높이에 넣습니다. keep-all: 한글 낱말 안에서 줄을 바꾸지 않습니다 */
     /* 화자 아이콘. 흰 테두리(다이컷)는 그림에 이미 있어 그늘만 CSS로 붙입니다. 높이 36px(T53에서 절반으로. 앞으로의 캐릭터 아이콘도 이 크기), 아래가 쪽지 안 +9px까지 옵니다. 살짝 기울여 붙인 스티커처럼 */
     .note__who {
       position: absolute; top: -27px; height: 36px; width: auto;
@@ -143,18 +143,21 @@
       transform: rotate(-0.7deg);
     }
     .photo-paper__photo { position: relative; display: block; width: 100%; height: auto; }
-    .note--memo { width: 100%; margin-top: -26px; padding-top: 44px; padding-bottom: 70px; }   /* 사진 종이 뒤로 26px 들어가 겹칩니다(T56). 위 여백은 첫 줄이 사진 아래 18px에서 시작하게. 아래 여백은 오른쪽 아래 스티커(메모지 안 60px까지 옴)를 피해 마지막 줄이 10px 위에 끝나게 */
+    .note--memo { width: fit-content; max-width: 100%; margin-top: -26px; padding-top: 44px; }   /* 메모지는 글 크기만큼(T61). 사진 종이 뒤로 26px 들어가 겹치고(T56) 위 여백은 첫 줄이 사진 아래 18px에서 시작하게 */
+    /* 컷아웃 스티커(T61 · T62). 본문 안의 float라 글이 그 네모 영역(여백 포함)을 피해 흐릅니다(실루엣 아님, T62). 앞의 빈 float(`.note__push`, 폭 0 · 두 줄 높이)를 clear로 넘어 셋째 줄부터 비킵니다. 음수 아래·바깥 여백만큼 메모지 밖으로 나갑니다 */
+    .note__push { float: right; width: 0; height: 51px; }
+    .note__push--left { float: left; }
     .note__stamp {
-      position: absolute; right: -12px; bottom: -84px; height: 144px; width: auto;   /* 컷아웃 스티커는 캐릭터 아이콘의 4배(T54에서 3배로 키움). 절반은 메모지 안, 절반은 밖 */
+      float: right; clear: right; position: relative; z-index: 1; height: 144px; width: auto;
+      margin: 10px -22px -94px 16px;   /* 안쪽 여백 16px은 회전(5°)으로 상자 밖에 그려지는 부분 몫. 오른쪽·아래로 10px 더(T62) */
       transform: rotate(5deg);
       filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.22)) drop-shadow(0 6px 10px rgba(70, 48, 24, 0.28));
     }
     /* 5. Part 1 신부(와이어프레임 6쪽). Scene4와 좌우 대칭입니다(T58). 사진 종이는 왼쪽, 메모지는 수달(신랑)이 오른쪽 위에, 신부 컷아웃이 왼쪽 아래에 */
     .photo-paper--left { align-self: flex-start; transform: rotate(0.7deg); }
-    /* 신부 메모지(T60). 본문은 24px 오른쪽으로. 신부 컷아웃은 1.5배(216px)라 본문 줄과 가로로 겹칠 수 없어 본문 아래 띠(152px 안 + 64px 밖)에 왼쪽 아래로 세웁니다. 아래 여백은 마지막 줄이 컷아웃 위 10px에서 끝나게 */
-    .note--bride { padding-bottom: 162px; }
+    /* 신부 메모지(T60 · T61). 본문은 24px 오른쪽으로. 신부 컷아웃은 1.5배(216px)로 왼쪽에 서고 셋째 줄부터 글이 오른쪽으로 비켜 흐릅니다 */
     .note--bride .note__text { padding-left: 24px; }
-    .note__stamp--left { right: auto; left: -2px; bottom: -64px; height: 216px; transform: rotate(-4deg); }
+    .note__stamp--left { float: left; clear: left; height: 216px; margin: 0 16px -64px -12px; transform: rotate(-4deg); }   /* 왼쪽으로 10px 더(T62) */
 
     /* 떠 있는 바로 가기 버튼 */
     .fab {
@@ -348,8 +351,7 @@
       <div class="note note--left note--memo">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
         <img class="note__who" src="../../public/character/rabbit-1.png" alt="">
-        <p class="note__text">제 신랑은 어릴 때 시를 써서 상도 받던<br>문학소년이었대요. 무협지를 좋아해서<br>작가를 꿈꾸기도 했고요. 그랬던 아이는<br>커서 냉철하고 이성적인 개발자가 됐어요!</p>
-        <img class="note__stamp" src="../../public/scene4/groom-child-ride.png" alt="">
+        <p class="note__text"><span class="note__push"></span><img class="note__stamp" src="../../public/scene4/groom-child-ride.png" alt="">제 신랑은 어릴 때 시를 써서 상도 받던 문학소년이었대요. 무협지를 좋아해서 작가를 꿈꾸기도 했고요. 그랬던 아이는 커서 냉철하고 이성적인 개발자가 됐어요!</p>
       </div>
     </section>
 
@@ -361,8 +363,7 @@
       <div class="note note--right note--memo note--bride">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
         <img class="note__who" src="../../public/character/otter-basic.png" alt="">
-        <p class="note__text">제 신부는 다섯 살 때 빗소리가 좋다며<br>혼자 우산 쓰고 동네를 걷던 아이였대요.<br>글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고<br>다녔고요. 그랬던 아이는 커서 상황을<br>분석하고 길을 찾는 사업전략가가 됐어요.<br>그래도 여전히 꿈을 꾸는 사람이고요.</p>
-        <img class="note__stamp note__stamp--left" src="../../public/scene5/bride-child-cutout.png" alt="">
+        <p class="note__text"><span class="note__push note__push--left"></span><img class="note__stamp note__stamp--left" src="../../public/scene5/bride-child-cutout.png" alt="">제 신부는 다섯 살 때 빗소리가 좋다며 혼자 우산 쓰고 동네를 걷던 아이였대요. 글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고 다녔고요. 그랬던 아이는 커서 상황을 분석하고 길을 찾는 사업전략가가 됐어요. 그래도 여전히 꿈을 꾸는 사람이고요.</p>
       </div>
     </section>
 
