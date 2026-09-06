@@ -26,5 +26,4 @@
 
 ## 열린 액션
 
-- WIW-2 PR 생성·develop 머지·develop→main PR. 이산하. 브랜치 `feature/WIW-2-nextjs-scaffold`는 origin에 있습니다
-- WIW-3(Vercel 연동)은 이산하가 대시보드에서 수행. 대기: WIW-2의 main 반영
+- WIW-3(Vercel 연동)은 이산하가 대시보드에서 수행합니다. 대기 조건(WIW-2의 main 반영)은 2026-09-06 풀렸습니다. 절차는 `topology/system-context.md` §11

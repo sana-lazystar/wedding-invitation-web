@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 16:53:09
-updated: 2026-09-06 18:05:43
+updated: 2026-09-06 18:06:57
 completed:
 participants: 이산하, Claude
 related: []
@@ -178,6 +178,11 @@ jira:
 
 - `.gitignore` 설정 문제가 아니라 브랜치 차이입니다. 스캐폴드의 `.gitignore`(`/.next/`·`next-env.d.ts` 제외)는 feature 브랜치에만 있고 develop에는 아직 없습니다. feature 브랜치에서 돌린 `npm run build`의 산출물이 작업 트리에 남은 채 develop으로 돌아와 미추적으로 보인 것입니다. 빌드 산출물 `.next/`와 `next-env.d.ts`를 지웠고 작업 트리는 깨끗합니다. WIW-2가 develop에 머지되면 다시 생겨도 무시됩니다.
 - 교훈. 브랜치를 옮기기 전에 빌드 산출물을 지우거나, 산출물이 있는 브랜치에서 작업을 마칩니다.
+
+### 2026-09-06 18:06:57 · Claude (T9 추기)
+
+- 이산하가 PR #2(WIW-2 → develop, cfbb1ba)와 PR #3(develop → main, 8397e14)을 머지했습니다. main에 빌드되는 Next.js 앱이 있으므로 WIW-3(Vercel 연동)을 시작할 수 있습니다. 두 archive 문서의 구현 기록에 추기했습니다.
+- 로컬에서는 이산하가 develop을 pull하며 머지 커밋(05730d4)이 생겼고 main으로 옮겨 가 있었습니다. develop을 그대로 푸시하고 브랜치는 main으로 되돌려 두었습니다.
 
 ## 결정
 
