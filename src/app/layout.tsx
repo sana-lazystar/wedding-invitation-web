@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Dancing_Script, Gowun_Batang, Nanum_Pen_Script, Noto_Sans_KR } from "next/font/google";
+import { Cormorant_Garamond, Gowun_Batang, Nanum_Pen_Script, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 
 // WIW-4 임시 적용. 정식 이식은 시안 확정 뒤 story 아래 task에서 다시 합니다.
@@ -27,12 +27,6 @@ const nanumPen = Nanum_Pen_Script({
   variable: "--font-nanum-pen",
   display: "swap",
 });
-const dancingScript = Dancing_Script({
-  subsets: ["latin"],
-  weight: ["500"],
-  variable: "--font-dancing-script",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "이산하 · 송시야 청첩장",
@@ -49,7 +43,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ko" className={`${notoSansKr.variable} ${gowunBatang.variable} ${nanumPen.variable} ${cormorant.variable} ${dancingScript.variable}`}>
+    <html lang="ko" className={`${notoSansKr.variable} ${gowunBatang.variable} ${nanumPen.variable} ${cormorant.variable}`}>
       <body>{children}</body>
     </html>
   );

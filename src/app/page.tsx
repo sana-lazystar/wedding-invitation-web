@@ -1,83 +1,92 @@
 "use client";
 
-// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보 · 진입 장면 · 떠 있는 메뉴를 옮긴 것입니다.
-import { useEffect, useRef, useState } from "react";
-
-const INTRO_STEPS = { shown: 60, open: 500, rising: 1300, settling: 1950, text: 2050, expanding: 2950, done: 3850 };
+/* eslint-disable @next/next/no-img-element */
+// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보 · 떠 있는 메뉴를 옮긴 것입니다.
+// 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
+// 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T49). 편지지는 커버 자체이고, 봉투 안에서 봉투 폭의 92%로 있다가 봉투가 내려가는 것과 동시에 올라오고, 이어서 화면 전체로 커집니다. 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export default function Home() {
-  const introRef = useRef<HTMLDivElement>(null);
-  const letterRef = useRef<HTMLDivElement>(null);
-  const introTextRef = useRef<HTMLDivElement>(null);
-  const coverHeadRef = useRef<HTMLDivElement>(null);
   const fabRef = useRef<HTMLElement>(null);
-  const finishRef = useRef<() => void>(() => {});
+  const introRef = useRef<HTMLDivElement>(null);
+  const introBackRef = useRef<HTMLDivElement>(null);
+  const introFrontRef = useRef<HTMLDivElement>(null);
+  const introFlapRef = useRef<HTMLDivElement>(null);
+  const coverRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
-    const intro = introRef.current;
-    const letter = letterRef.current;
-    const text = introTextRef.current;
-    const head = coverHeadRef.current;
-    if (!intro || !letter || !text || !head) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      intro.hidden = true;
-      return;
-    }
-    const timers: number[] = [];
+    const cover = coverRef.current;
+    const layers = [introRef.current, introBackRef.current, introFrontRef.current, introFlapRef.current];
+    if (!cover || layers.some((el) => !el)) return;
     let finished = false;
-    const finish = () => {
+    const onIntroTouchMove = (e: TouchEvent) => e.preventDefault();
+    // 층 지정(is-intro)은 여기서 지우지 않습니다. 봉투 층이 사라지는 렌더와 같은 프레임에 지워야 바탕이 커버를 덮는 한 프레임(깜빡임)이 없습니다. 아래 useLayoutEffect
+    const finishIntro = () => {
       if (finished) return;
       finished = true;
-      timers.forEach(clearTimeout);
-      root.classList.remove("is-intro");
-      intro.classList.add("is-done");
-      timers.push(window.setTimeout(() => { intro.hidden = true; }, 400));
+      document.removeEventListener("click", finishIntro);
+      document.removeEventListener("touchmove", onIntroTouchMove);
+      setIntroDone(true);
     };
-    finishRef.current = finish;
-
-    window.scrollTo(0, 0);
-    intro.hidden = false;
-    intro.className = "";
-    letter.style.removeProperty("--letter-scale");
-    text.style.removeProperty("--text-dx");
-    text.style.removeProperty("--text-dy");
+    // 새로고침해도 맨 위에서 시작합니다(스크롤 복원 끔). 움직임 줄이기 설정이거나 앵커(#…)로 들어오면 바로 커버입니다. 매번 재생합니다
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || location.hash) {
+      finishIntro();
+      return;
+    }
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     root.classList.add("is-intro");
-    void intro.offsetWidth;
-    timers.push(window.setTimeout(() => intro.classList.add("is-shown"), INTRO_STEPS.shown));
-    timers.push(window.setTimeout(() => intro.classList.add("is-open"), INTRO_STEPS.open));
-    timers.push(window.setTimeout(() => intro.classList.add("is-rising"), INTRO_STEPS.rising));
-    timers.push(window.setTimeout(() => intro.classList.add("is-settling"), INTRO_STEPS.settling));
-    timers.push(window.setTimeout(() => intro.classList.add("is-text"), INTRO_STEPS.text));
-    timers.push(
-      window.setTimeout(() => {
-        const r = letter.getBoundingClientRect();
-        const cx = r.left + r.width / 2;
-        const cy = r.top + r.height / 2;
-        const scale =
-          Math.max((2 * Math.max(cx, window.innerWidth - cx)) / r.width, (2 * Math.max(cy, window.innerHeight - cy)) / r.height) * 1.06;
-        letter.style.setProperty("--letter-scale", scale.toFixed(3));
-        const from = text.getBoundingClientRect();
-        const to = head.getBoundingClientRect();
-        const dx = to.left + to.width / 2 - (from.left + from.width / 2);
-        const dy = to.top + to.height / 2 - (from.top + from.height / 2);
-        // 무대가 -15도 기울어 있으므로 화면 이동량을 무대 좌표계로 돌린다
-        const rad = (15 * Math.PI) / 180;
-        const cs = Math.cos(rad);
-        const sn = Math.sin(rad);
-        text.style.setProperty("--text-dx", `${(dx * cs - dy * sn).toFixed(1)}px`);
-        text.style.setProperty("--text-dy", `${(dx * sn + dy * cs).toFixed(1)}px`);
-        intro.classList.add("is-expanding");
-      }, INTRO_STEPS.expanding),
-    );
-    timers.push(window.setTimeout(finish, INTRO_STEPS.done));
-
+    const vw = root.clientWidth;
+    const vh = window.innerHeight;
+    const envW = Math.min(vw, 430) * 0.92; // 봉투 폭 = 화면 폭(페이지 폭 430까지)의 92%
+    const z1 = envW / 600;
+    const z0 = (vh * 2) / 3 / 400; // 시작 배율. 봉투 높이 = 화면 높이의 2/3
+    const envTop = vh / 2 - 200 * z1; // 물러난 뒤 봉투 윗변의 화면 y
+    const ty0 = envTop + 14 * z1; // 편지지가 봉투 안에 든 자리(윗변 바로 아래). 올라오면 0(최종 자리)
+    const s0 = (envW * 0.92) / cover.clientWidth; // 봉투 안에서의 배율. 편지지 폭 = 봉투 폭의 92%. 커지면 1
+    const ty1 = ty0 - cover.clientHeight * s0 * 0.35; // 조금 올라온 자리(제 높이의 35%). 이만큼 올라와야 봉투가 사라질 때 아랫변이 화면 안에 있습니다
+    const drop1 = Math.max(0, ty1 + cover.clientHeight * s0 - 70 - envTop); // 봉투가 내려가는 거리(화면 px). 윗변이 편지지 아랫변 70px 위까지 와서 편지지가 거의 다 보입니다
+    root.style.setProperty("--z0", String(z0));
+    root.style.setProperty("--z1", String(z1));
+    root.style.setProperty("--drop1", `${drop1 / z1}px`);
+    cover.style.setProperty("--card-ty0", `${ty0}px`);
+    cover.style.setProperty("--card-ty1", `${ty1}px`);
+    cover.style.setProperty("--card-s0", String(s0));
+    let started = false;
+    let safety: number | undefined;
+    const startIntro = () => {
+      if (started || finished) return;
+      started = true;
+      root.classList.add("is-intro-shown");
+      safety = window.setTimeout(finishIntro, 6500);
+    };
+    const imgs = layers.flatMap((el) => Array.from(el!.querySelectorAll("img")));
+    Promise.all(imgs.map((im) => (im.decode ? im.decode().catch(() => undefined) : Promise.resolve()))).then(startIntro);
+    const fallback = window.setTimeout(startIntro, 2500);
+    const onAnimationEnd = (e: AnimationEvent) => {
+      if (e.animationName === "intro-card-rise") finishIntro();
+    };
+    cover.addEventListener("animationend", onAnimationEnd);
+    document.addEventListener("click", finishIntro);
+    document.addEventListener("touchmove", onIntroTouchMove, { passive: false });
     return () => {
-      timers.forEach(clearTimeout);
-      root.classList.remove("is-intro");
+      window.clearTimeout(fallback);
+      window.clearTimeout(safety);
+      cover.removeEventListener("animationend", onAnimationEnd);
+      document.removeEventListener("click", finishIntro);
+      document.removeEventListener("touchmove", onIntroTouchMove);
+      root.classList.remove("is-intro", "is-intro-shown");
     };
   }, []);
+
+  // 진입 장면이 끝나면 봉투 층이 빠진 DOM이 그려지기 전에(같은 프레임) 커버의 층 지정을 지웁니다
+  useLayoutEffect(() => {
+    if (!introDone) return;
+    document.documentElement.classList.remove("is-intro", "is-intro-shown");
+  }, [introDone]);
 
   useEffect(() => {
     const onDocumentClick = (e: MouseEvent) => {
@@ -96,18 +105,52 @@ export default function Home() {
 
   return (
     <>
+      {!introDone && (
+        <>
+          <div className="intro" ref={introRef} aria-hidden="true" />
+          <button type="button" className="intro__skip">
+            넘어가기
+          </button>
+          <div className="intro-layer intro-layer--back" ref={introBackRef} aria-hidden="true">
+            <div className="intro__zoom">
+              <div className="intro__env">
+                <img className="intro__back" src="/intro/envelope-back.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div className="intro-layer intro-layer--front" ref={introFrontRef} aria-hidden="true">
+            <div className="intro__zoom">
+              <div className="intro__env">
+                <div className="intro__floor" />
+                <img className="intro__front" src="/intro/envelope-front.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div className="intro-layer intro-layer--flap" ref={introFlapRef} aria-hidden="true">
+            <div className="intro__zoom">
+              <div className="intro__env">
+                <div className="intro__flap">
+                  <img className="intro__seal-back" src="/intro/wax-seal-back.png" alt="" />
+                  <img className="intro__flap-in" src="/intro/envelope-flap-inside.png" alt="" />
+                  <img className="intro__flap-out" src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__seal" src="/intro/wax-seal.png" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
       <div className="page">
-        <section id="cover" className="block block--fixed">
+        <section id="cover" className="block block--fixed" ref={coverRef}>
           <div className="cover-bg">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="cover-bg__hall" src="/scene1/hall.png" alt="더채플앳청담 커티지홀" />
             <div className="cover-bg__blur cover-bg__blur--soft" />
             <div className="cover-bg__blur cover-bg__blur--strong" />
             <div className="cover-bg__shadow" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="cover-bg__couple" src="/scene1/couple.png" alt="이산하와 송시야" />
           </div>
-          <div className="cover-head" ref={coverHeadRef}>
+          <div className="cover-head">
             <div className="eyebrow">Wedding Invitation</div>
             <p className="tagline">우리의 삶을 함께 써 주신 당신께</p>
           </div>
@@ -119,7 +162,6 @@ export default function Home() {
         </section>
         <section id="info" className="block block--fixed">
           <div className="letter-card">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="letter-card__art" src="/scene2/opened-paper.png" alt="" />
             <div className="letter-card__text">
               <div>2026년 10월 9일 금요일</div>
@@ -131,23 +173,6 @@ export default function Home() {
           </div>
         </section>
         {/* 3쪽(인사)부터 여기 아래에 이어 붙입니다 */}
-      </div>
-
-      <div id="intro" ref={introRef} aria-hidden="true">
-        <div className="stage">
-          <div className="env__back" />
-          <div className="env__letter" ref={letterRef} />
-          <div className="env__front" />
-          <div className="env__note">Thanks to everyone.</div>
-          <div className="env__flap" />
-          <div className="intro-text" ref={introTextRef}>
-            <div className="eyebrow">Wedding Invitation</div>
-            <p className="tagline">우리의 삶을 함께 써 주신 당신께</p>
-          </div>
-        </div>
-        <button type="button" className="intro-skip" onClick={() => finishRef.current()}>
-          건너뛰기
-        </button>
       </div>
 
       <nav className="fab" ref={fabRef} data-open={menuOpen ? "true" : "false"} aria-label="바로 가기">

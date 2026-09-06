@@ -3,7 +3,8 @@
  * 조립본 docs/artifacts/index.html의 <style> 구간을 Next.js의 src/app/globals.css로 옮깁니다(WIW-4).
  * 조립본이 정본이고 globals.css는 파생물입니다. 조립본 CSS를 고친 뒤 이 스크립트를 돌립니다.
  * 글꼴 토큰만 바꿉니다. 조립본은 Google Fonts 이름, Next.js는 next/font가 만든 CSS 변수(src/app/layout.tsx).
- * 글꼴 확인 패널(.fontbar) CSS는 옮기지 않고, -webkit-backdrop-filter · -webkit-mask-image 중복 선언은 걷어냅니다(처리기가 접두사를 붙입니다). 의존성 0.
+ * 조립본 CSS에는 개별 변환 속성(translate · rotate · scale)을 쓰지 않습니다. Tailwind v4의 처리기(Lightning CSS)가 떨어뜨려 Next.js에서 사라집니다. transform 함수로 씁니다.
+ * 글꼴 확인 패널(.fontbar) CSS는 옮기지 않고, -webkit-backdrop-filter · -webkit-mask-image · -webkit-backface-visibility 중복 선언은 걷어냅니다(처리기가 접두사를 붙입니다). 의존성 0.
  *
  * 사용: node docs/scripts/sync-globals.mjs
  */
@@ -16,7 +17,6 @@ const FONT_MAP = [
   ["--font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;", "--font-body: var(--font-noto-sans-kr), 'Apple SD Gothic Neo', sans-serif;"],
   ["--font-ui: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;", "--font-ui: var(--font-noto-sans-kr), 'Apple SD Gothic Neo', sans-serif;"],
   ["--font-latin: 'Cormorant Garamond', Georgia, serif;", "--font-latin: var(--font-cormorant), Georgia, serif;"],
-  ["--font-script: 'Dancing Script', 'Snell Roundhand', cursive;", "--font-script: var(--font-dancing-script), 'Snell Roundhand', cursive;"],
 ];
 
 const html = readFileSync(SRC, 'utf8');
@@ -31,7 +31,8 @@ for (const [from, to] of FONT_MAP) {
   css = css.replace(from, to);
 }
 // 접두사 중복 제거. Tailwind의 CSS 처리기(Lightning CSS)가 -webkit- 중복을 만나면 표준 선언을 떨어뜨리므로 표준만 남기고 접두사는 처리기에 맡깁니다
-css = css.replace(/\s*-webkit-backdrop-filter:[^;]*;/g, '').replace(/\s*-webkit-mask-image:[^;]*;/g, '');
+css = css.replace(/\s*-webkit-backdrop-filter:[^;]*;/g, '').replace(/\s*-webkit-mask-image:[^;]*;/g, '').replace(/\s*-webkit-backface-visibility:[^;]*;/g, '');
+if (/^\s*(translate|rotate|scale):/m.test(css)) { console.error('✗ 조립본 CSS에 개별 변환 속성(translate·rotate·scale)이 있습니다. 처리기가 떨어뜨리므로 transform 함수로 바꿉니다'); process.exit(1); }
 const header = '@import "tailwindcss";\n\n/* WIW-4 임시 적용. docs/artifacts/index.html의 CSS를 옮긴 것입니다(docs/scripts/sync-globals.mjs). 글꼴 확인 패널은 옮기지 않았습니다. */\n';
 writeFileSync(OUT, header + css.trimEnd() + '\n');
 console.log(`✓ ${OUT} ← ${SRC} (${(css.length / 1024).toFixed(0)}KB)`);

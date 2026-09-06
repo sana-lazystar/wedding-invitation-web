@@ -3,7 +3,7 @@ id: WIW-4
 type: task
 status: in-progress
 created: 2026-09-06 19:14:53
-updated: 2026-09-06 20:12:56
+updated: 2026-09-06 21:53:16
 completed:
 epic:
 jira:
@@ -44,3 +44,39 @@ related: []
 2026-09-06 19:22:14 · 브랜치 develop 작업 트리(커밋 없음) · 변경 파일 `src/app/layout.tsx` `src/app/page.tsx` `src/app/globals.css` `public/scene1/hall.jpg` `public/scene1/couple.png` · 이산하의 `next dev`(포트 3000)에 반영 확인
 
 2026-09-06 20:10:21 · develop · d8b24d7 · 배포 확인용 임시 적용 코드 커밋(이산하 지시 T28)
+
+2026-09-06 21:03:10 · develop · 64eba75 · 팝업북 진입 장면(디자인 논의 T31) 반영. `src/app/page.tsx` 진입 장면 마크업·타이머, `src/app/globals.css`(sync-globals), `public/intro/book-cover.png` `public/intro/page.png`(빈티지 질감 에셋), `package.json`에 `playwright-core` devDependency. localhost:3000에서 Playwright 프레임으로 조립본과 같은 동작 확인, tsc · eslint 통과.
+
+2026-09-06 21:28:32 · develop · 92801be · 진입 장면 손질(디자인 논의 T32): 붉은 가죽 표지, 두께 있는 두 뭉치, 뒤집힌 종이 뒷면, 표제·이름·통로 사본으로 끊김 없는 이어짐. `src/app/page.tsx` `src/app/globals.css` `public/intro/{book-cover,page-edges,couple-back}.png`.
+
+2026-09-06 21:46:15 · develop · 1f1a819 · Scene1 정지(디자인 논의 T33): 홀 물러남 삭제, 표제를 홀 조각에 찍음, 메뉴 버튼은 걷힘과 함께, 조각 들뜸 0으로. `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-06 21:53:16 · develop · c708b98 · 진입 장면 전부 삭제(디자인 논의 T34). `src/app/page.tsx` `src/app/layout.tsx` `src/app/globals.css`, `public/intro/` 삭제.
+
+2026-09-06 22:32:11 · develop · c761db5 · 진입 장면 편지봉투(디자인 논의 T36): 확대 → 물러남 → 뚜껑 젖힘 → 커버가 카드로 빠져나옴. `src/app/page.tsx` `src/app/globals.css` `public/intro/{envelope-back,envelope-flap,envelope-flap-inside,wax-seal}.png`. localhost:3000 프레임으로 조립본과 같은 동작 확인, 마지막 프레임 = 커버 정지 화면, tsc · eslint 통과.
+
+2026-09-06 22:48:58 · develop · 635c02d · 진입 장면 손질(디자인 논의 T37): 가운데 맞춤, 봉인은 뚜껑에 붙은 채, 카드 올라오며 봉투 내려감, 넘어가기, 새로고침 시 맨 위. `src/app/page.tsx` `src/app/globals.css`. 여러 화면 폭에서 가운데 확인, 마지막 프레임 = 커버 정지 화면.
+
+2026-09-06 22:52:04 · develop · b1b9138 · 봉인은 뚜껑이 옆면을 지날 때 뚜껑 뒤로 숨음, 면 교체 2.42초(디자인 논의 T38). `src/app/globals.css`.
+
+2026-09-06 22:56:03 · develop · 50afd26 · 봉인 뒷면이 젖혀진 뚜껑 끝 둘레로 보임, 카드는 2.9초부터(디자인 논의 T39). `src/app/page.tsx` `src/app/globals.css` `public/intro/wax-seal-back.png`.
+
+2026-09-06 23:08:04 · develop · a49d92c · 진입 장면 세 층 구조, 줌아웃과 뚜껑 동시, 봉투 흐려짐, 2.6초(디자인 논의 T40). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-06 23:13:34 · develop · 8492a14 · 진입 장면 3.9초, 카드 폭 92%, 봉투 아래로 빠져나감, 끝날 때 깜빡임 제거(디자인 논의 T41). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-06 23:19:31 · develop · 933743a · 봉투 뒷판·앞판 층, 카드가 앞판 뒤에 끼워져 입구로 보임(디자인 논의 T42). `src/app/page.tsx` `src/app/globals.css` `public/intro/envelope-back.png` `public/intro/envelope-front.png`.
+
+2026-09-06 23:36:16 · develop · 1f24fae · 편지지 1:1, 봉투 폭 108%, 시작 높이 2/3, 확대 없이 봉투가 내려가며 끝, 4.3초(디자인 논의 T43). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-06 23:45:32 · develop · 6c00072 · 편지지 연속 상승과 봉투 하강·흐려짐 동시, 봉투 폭 92%, 바닥으로 가림, 넘어가기 맨 위 층, 3.6초(디자인 논의 T44). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-06 23:47:37 · develop · 5a0839e · 봉투 열린 뒤 바로 흐려짐, 편지지 올라오며 확대, 3.9초(디자인 논의 T45). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-06 23:53:46 · develop · ad321d7 · 편지지 봉투 폭의 55%, 뚜껑 80%부터 조금 올라오고 봉투가 사라진 뒤 화면 전체로 커짐, 4.0초(디자인 논의 T46). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-06 23:56:52 · develop · b267628 · 봉투 흐려짐 0.3초, 확대 2.7초부터, 편지지 92%로 복귀, 3.8초(디자인 논의 T47). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 00:00:26 · develop · a445667 · 봉투 하강 뒤 확대와 함께 0.3초 흐려짐, 4.0초(디자인 논의 T48). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 00:02:33 · develop · a730c51 · 봉투 하강을 편지지 올라옴과 동시에, 3.7초(디자인 논의 T49). `src/app/page.tsx` `src/app/globals.css`.
