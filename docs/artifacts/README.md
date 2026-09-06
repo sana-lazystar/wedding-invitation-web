@@ -12,6 +12,7 @@
 | `../design/canvas/*.png`, `*.jpg` | 캔버스용 축소 이미지. 아트보드가 파일명으로 참조합니다 | 제외 (`docs/design/`) |
 | `index.html` | 조립본. URL `/` 미러(디자인 결정 3). Scene1부터 캔버스와 나란히 유지하고, 브라우저에서 파일로 열어 글꼴·스크롤을 확인합니다(디자인 결정 10). 오른쪽 위 글꼴 확인 패널은 확정 후 지웁니다 | 커밋 |
 | 조립된 발행 파일 | Claude 세션 스크래치패드 | 커밋하지 않음 |
+| 조립본 미리보기 Artifact | `node docs/scripts/inline-artifact.mjs docs/artifacts/index.html <출력> --title "이산하 · 송시야 청첩장 미리보기"`로 만든 사본을 발행합니다(디자인 결정 4). 링크는 논의록 T10 | 커밋하지 않음 |
 
 ## 캔버스를 다시 여는 법
 

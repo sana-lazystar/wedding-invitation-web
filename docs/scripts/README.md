@@ -25,3 +25,11 @@
 4. 사진 교체. 같은 번호로 원본을 덮어쓰고 스크립트를 돌립니다. 스크립트는 원본이 바뀐 사진만 다시 만듭니다(잠정).
 
 상태: 스크립트 미작성(2026-09-06). 구현 task가 끝나면 이 줄을 갱신합니다.
+
+## inline-artifact.mjs — 조립본을 Artifact 발행용으로
+
+조립본 `docs/artifacts/index.html`이 상대 경로로 참조하는 이미지를 data URI로 심고 문서 껍데기를 벗깁니다(디자인 결정 4). Artifact 샌드박스가 외부 이미지를 막기 때문입니다. 이미지는 최대 1080px로 줄이고 작은 것은 키우지 않습니다. macOS `sips`만 쓰고 의존성이 없습니다.
+
+```sh
+node docs/scripts/inline-artifact.mjs docs/artifacts/index.html /tmp/preview.html --title "이산하 · 송시야 청첩장 미리보기"
+```
