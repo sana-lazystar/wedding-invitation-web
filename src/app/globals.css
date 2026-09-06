@@ -133,11 +133,12 @@ body {
 }
 .photo-paper__photo { position: relative; display: block; width: 100%; height: auto; }
 .note--memo { width: fit-content; max-width: 100%; margin-top: -26px; padding-top: 44px; }   /* 메모지는 글 크기만큼(T61). 사진 종이 뒤로 26px 들어가 겹치고(T56) 위 여백은 첫 줄이 사진 아래 18px에서 시작하게 */
-/* 컷아웃 스티커(T61). 본문 안의 float라 글이 실루엣(shape-outside, 그림 경로는 마크업 인라인)을 따라 비켜 흐릅니다. 위 여백 = 두 줄(첫 두 줄은 전체 폭), 음수 아래·바깥 여백만큼 메모지 밖으로 나갑니다 */
+/* 컷아웃 스티커(T61 · T62). 본문 안의 float라 글이 그 네모 영역(여백 포함)을 피해 흐릅니다(실루엣 아님, T62). 앞의 빈 float(`.note__push`, 폭 0 · 두 줄 높이)를 clear로 넘어 셋째 줄부터 비킵니다. 음수 아래·바깥 여백만큼 메모지 밖으로 나갑니다 */
+.note__push { float: right; width: 0; height: 51px; }
+.note__push--left { float: left; }
 .note__stamp {
-  float: right; position: relative; z-index: 1; height: 144px; width: auto;
-  margin: 46px -12px -84px 10px;
-  shape-margin: 8px; shape-image-threshold: 0.3;
+  float: right; clear: right; position: relative; z-index: 1; height: 144px; width: auto;
+  margin: 10px -22px -94px 16px;   /* 안쪽 여백 16px은 회전(5°)으로 상자 밖에 그려지는 부분 몫. 오른쪽·아래로 10px 더(T62) */
   transform: rotate(5deg);
   filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.22)) drop-shadow(0 6px 10px rgba(70, 48, 24, 0.28));
 }
@@ -145,7 +146,7 @@ body {
 .photo-paper--left { align-self: flex-start; transform: rotate(0.7deg); }
 /* 신부 메모지(T60 · T61). 본문은 24px 오른쪽으로. 신부 컷아웃은 1.5배(216px)로 왼쪽에 서고 셋째 줄부터 글이 오른쪽으로 비켜 흐릅니다 */
 .note--bride .note__text { padding-left: 24px; }
-.note__stamp--left { float: left; height: 216px; margin: 52px 10px -64px -2px; transform: rotate(-4deg); }
+.note__stamp--left { float: left; clear: left; height: 216px; margin: 0 16px -64px -12px; transform: rotate(-4deg); }   /* 왼쪽으로 10px 더(T62) */
 
 /* 떠 있는 바로 가기 버튼 */
 .fab {
