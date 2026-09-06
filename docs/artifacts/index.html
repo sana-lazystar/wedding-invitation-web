@@ -20,9 +20,6 @@
       --muted: #7A6F63;
       --oak: #B98E5E;
       --rule: #EDE4D3;
-      --envelope: #E4D6BE;
-      --envelope-front: #EEE2CC;
-      --envelope-flap: #DFCFB4;
       --font-name: 'Nanum Pen Script', 'Apple SD Gothic Neo', cursive;
       --font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
       --font-ui: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
@@ -113,105 +110,73 @@
     .letter-card__venue { font-size: 17px; font-weight: 500; color: var(--ink); }
     .letter-card__rule { width: 28px; height: 1px; background: var(--oak); margin: 12px 0; }
 
-    /* 진입 장면. 기울어진 봉투가 열리고 표제가 적힌 편지지가 나오며 수평으로 펴진 뒤, 화면을 채우며 커버로 이어집니다 */
+    /* 진입 장면. 리본으로 묶인 두 쪽 표지가 풀리고 좌우로 열리면, 안쪽에 표제가 떠오른 뒤 커버 자리로 옮겨 갑니다 */
     html.is-intro { overflow: hidden; }
     html.is-intro .cover-head { visibility: hidden; }
     #intro {
       position: fixed; inset: 0; z-index: 30;
-      display: flex; align-items: center; justify-content: center;
-      background: #E9E1D2;
+      background: var(--paper-bg);
       transition: opacity 0.35s ease;
     }
     #intro.is-done { opacity: 0; pointer-events: none; }
-    .stage {
-      position: relative;
-      width: 300px; height: 200px;
-      perspective: 1200px;
-      opacity: 0;
-      transform: rotate(-15deg) scale(0.96);
-      transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    .inside { position: absolute; inset: 0; background: var(--paper-bg); }
+    .gate { position: absolute; inset: 0; perspective: 1400px; }
+    .gate__panel {
+      position: absolute; top: 0; bottom: 0; width: 50%;
+      background-color: #F7F2E8;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.36 0 0 0 0 0.27 0 0 0 0 0.14 0 0 0 0.12 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      backface-visibility: hidden;
+      transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
     }
-    #intro.is-shown .stage { opacity: 1; transform: rotate(-15deg) scale(1); }
-    .env__back, .env__front, .env__flap, .env__letter { position: absolute; }
-    .env__back {
-      inset: 0; z-index: 1;
-      background: var(--envelope);
-      border-radius: 8px;
-      box-shadow: 0 26px 44px -24px rgba(70, 48, 24, 0.55);
+    .gate__left { left: 0; transform-origin: 0 50%; box-shadow: inset -14px 0 26px -22px rgba(70, 48, 24, 0.35); border-right: 1px solid rgba(255, 255, 255, 0.7); }
+    .gate__right { right: 0; transform-origin: 100% 50%; box-shadow: inset 14px 0 26px -22px rgba(70, 48, 24, 0.35); border-left: 1px solid rgba(70, 48, 24, 0.12); }
+    #intro.is-opening .gate__left { transform: rotateY(-105deg); }
+    #intro.is-opening .gate__right { transform: rotateY(105deg); }
+    .gate__band {
+      position: absolute; left: 0; right: 0; top: calc(52% - 18px); height: 36px;
+      background: linear-gradient(180deg, #FDFAF4 0%, #F3ECDD 45%, #E6DCC8 100%);
+      box-shadow: 0 6px 12px -6px rgba(70, 48, 24, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transition: transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
     }
-    .env__letter {
-      left: 20px; top: 10px; width: 260px; height: 180px; z-index: 2;
-      background: var(--paper);
-      border-radius: 8px;
-      box-shadow: inset 0 0 0 1px rgba(185, 142, 94, 0.35), 0 10px 24px -14px rgba(70, 48, 24, 0.4);
-      translate: 0 0;
-      rotate: 0deg;
-      transition: translate 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+    #intro.is-untie .gate__left .gate__band { transform: translateX(-8px); }
+    #intro.is-untie .gate__right .gate__band { transform: translateX(8px); }
+    .bow {
+      position: absolute; left: 50%; top: 52%; z-index: 3;
+      width: 250px; height: 172px;
+      transform: translate(-50%, -32%);
+      filter: drop-shadow(0 10px 10px rgba(70, 48, 24, 0.28));
+      pointer-events: none;
     }
-    #intro.is-rising .env__letter { translate: 0 -210px; }
-    #intro.is-settling .env__letter {
-      z-index: 5;
-      translate: 0 0;
-      rotate: 15deg;
-      transition: translate 0.65s cubic-bezier(0.65, 0, 0.35, 1), rotate 0.65s cubic-bezier(0.65, 0, 0.35, 1);
-      box-shadow: inset 0 0 0 1px rgba(185, 142, 94, 0.35), 0 22px 40px -18px rgba(70, 48, 24, 0.5);
-    }
-    #intro.is-expanding .env__letter {
-      z-index: 5;
-      transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1), background-color 0.85s ease, box-shadow 0.4s ease, border-radius 0.85s ease;
-      transform: scale(var(--letter-scale, 6));
-      background: var(--paper-bg);
-      box-shadow: none;
-      border-radius: 0;
-    }
-    .env__front {
-      inset: 0; z-index: 3;
-      background: var(--envelope-front);
-      border-radius: 8px;
-      clip-path: polygon(0 0, 50% 56%, 100% 0, 100% 100%, 0 100%);
-    }
-    .env__flap {
-      left: 0; top: 0; width: 300px; height: 112px; z-index: 4;
-      background: var(--envelope-flap);
-      border-radius: 8px 8px 0 0;
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
-      transform-origin: 50% 0;
-      transform: rotateX(0deg);
-      transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
-    }
-    #intro.is-open .env__flap { transform: rotateX(180deg); }
-    #intro.is-rising .env__flap { z-index: 1; }
-    .env__note {
-      position: absolute; right: 18px; bottom: 12px; z-index: 3;
-      font-family: var(--font-script); font-size: 17px; font-weight: 500; line-height: 1.2;
+    .bow * { transform-box: fill-box; transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.7s ease 0.2s; }
+    .bow__loop--l { transform-origin: 100% 50%; }
+    .bow__loop--r { transform-origin: 0% 50%; }
+    .bow__tail--l, .bow__tail--r { transform-origin: 50% 0%; }
+    .bow__knot { transform-origin: 50% 50%; transition-delay: 0.35s, 0.45s; }
+    #intro.is-untie .bow__loop--l { transform: scale(0.06, 0.45); opacity: 0; }
+    #intro.is-untie .bow__loop--r { transform: scale(0.06, 0.45); opacity: 0; }
+    #intro.is-untie .bow__tail--l { transform: rotate(-22deg) translate(-36px, 26px); opacity: 0; }
+    #intro.is-untie .bow__tail--r { transform: rotate(22deg) translate(36px, 26px); opacity: 0; }
+    #intro.is-untie .bow__knot { transform: scale(0.5); opacity: 0; }
+    .gate__note {
+      position: absolute; right: 22px; bottom: calc(24px + env(safe-area-inset-bottom));
+      font-family: var(--font-script); font-size: 18px; font-weight: 500; line-height: 1.2;
       color: #7E5A33; transform: rotate(-4deg); white-space: nowrap;
     }
-    #intro.is-expanding .env__back, #intro.is-expanding .env__front, #intro.is-expanding .env__flap, #intro.is-expanding .env__note { opacity: 0; transition: opacity 0.4s ease; }
     .intro-text {
-      position: absolute; left: 50%; top: 50%; z-index: 6;
+      position: absolute; left: 50%; top: 50%;
       translate: -50% -50%;
-      rotate: 0deg;
-      transform: scale(0.72);
       display: flex; flex-direction: column; align-items: center;
-      transition: translate 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
-      will-change: transform;
+      will-change: translate;
     }
-    #intro.is-rising .intro-text { translate: -50% calc(-50% - 210px); }
-    #intro.is-settling .intro-text {
-      translate: -50% -50%;
-      rotate: 15deg;
-      transition: translate 0.65s cubic-bezier(0.65, 0, 0.35, 1), rotate 0.65s cubic-bezier(0.65, 0, 0.35, 1);
-    }
-    .intro-text > * { opacity: 0; transform: translateY(12px); transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1); }
-    .intro-text > .tagline { transition-delay: 0.12s; }
+    .intro-text > * { opacity: 0; transform: translateY(12px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1); }
+    .intro-text > .tagline { transition-delay: 0.14s; }
     #intro.is-text .intro-text > * { opacity: 1; transform: translateY(0); }
-    #intro.is-expanding .intro-text {
-      transition: translate 0.85s cubic-bezier(0.65, 0, 0.35, 1), transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
+    #intro.is-moving .intro-text {
+      transition: translate 0.85s cubic-bezier(0.65, 0, 0.35, 1);
       translate: calc(-50% + var(--text-dx, 0px)) calc(-50% + var(--text-dy, 0px));
-      transform: scale(1);
     }
     .intro-skip {
-      position: absolute; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom));
+      position: absolute; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 4;
       border: 0; background: transparent; padding: 8px 10px;
       font-family: var(--font-ui); font-size: 12px; color: var(--muted); cursor: pointer;
     }
@@ -306,16 +271,36 @@
   </div>
 
   <div id="intro" aria-hidden="true">
-    <div class="stage">
-      <div class="env__back"></div>
-      <div class="env__letter"></div>
-      <div class="env__front"></div>
-      <div class="env__note">Thanks to everyone.</div>
-      <div class="env__flap"></div>
+    <div class="inside">
       <div class="intro-text" id="introText">
         <div class="eyebrow">Wedding Invitation</div>
         <p class="tagline">우리의 삶을 함께 써 주신 당신께</p>
       </div>
+    </div>
+    <div class="gate">
+      <div class="gate__panel gate__left"><div class="gate__band"></div></div>
+      <div class="gate__panel gate__right"><div class="gate__band"></div><div class="gate__note">Thanks to everyone.</div></div>
+      <svg class="bow" viewBox="0 0 320 220" aria-hidden="true">
+        <defs>
+          <linearGradient id="satin" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#FDFAF4"></stop>
+            <stop offset="0.45" stop-color="#EFE7D7"></stop>
+            <stop offset="0.7" stop-color="#F9F4EA"></stop>
+            <stop offset="1" stop-color="#E4DAC6"></stop>
+          </linearGradient>
+          <linearGradient id="satin-dark" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#E9E0CE"></stop>
+            <stop offset="1" stop-color="#D4C8B0"></stop>
+          </linearGradient>
+        </defs>
+        <path class="bow__tail--l" d="M152 84 C 132 118, 100 158, 74 198 L 108 206 L 100 190 C 120 158, 142 128, 160 96 Z" fill="url(#satin)" stroke="#D9CEB8" stroke-width="0.8"></path>
+        <path class="bow__tail--r" d="M168 84 C 188 118, 220 158, 246 198 L 212 206 L 220 190 C 200 158, 178 128, 160 96 Z" fill="url(#satin)" stroke="#D9CEB8" stroke-width="0.8"></path>
+        <path class="bow__loop--l" d="M160 70 C 128 22, 42 22, 44 70 C 46 114, 126 104, 160 70 Z" fill="url(#satin)" stroke="#D9CEB8" stroke-width="0.8"></path>
+        <path class="bow__loop--l" d="M158 70 C 132 40, 70 40, 72 70 C 74 98, 132 92, 158 70 Z" fill="url(#satin-dark)" opacity="0.55"></path>
+        <path class="bow__loop--r" d="M160 70 C 192 22, 278 22, 276 70 C 274 114, 194 104, 160 70 Z" fill="url(#satin)" stroke="#D9CEB8" stroke-width="0.8"></path>
+        <path class="bow__loop--r" d="M162 70 C 188 40, 250 40, 248 70 C 246 98, 188 92, 162 70 Z" fill="url(#satin-dark)" opacity="0.55"></path>
+        <rect class="bow__knot" x="146" y="56" width="28" height="28" rx="9" fill="url(#satin)" stroke="#D9CEB8" stroke-width="0.8"></rect>
+      </svg>
     </div>
     <button type="button" class="intro-skip" id="introSkip">건너뛰기</button>
   </div>
@@ -400,9 +385,8 @@
       document.addEventListener('click', function (e) { if (!fab.contains(e.target)) setOpen(false); });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
 
-      /* 진입 장면. 순서: 봉투 등장 → 덮개 열림 → 편지지가 올라옴 → 표제 떠오름 → 편지지가 화면을 채우며 표제가 커버 자리로 → 걷힘 */
+      /* 진입 장면. 순서: 리본 풀림 → 표지 좌우 열림 → 표제 떠오름 → 표제가 커버 자리로 → 걷힘 */
       var intro = document.getElementById('intro');
-      var letter = intro.querySelector('.env__letter');
       var introText = document.getElementById('introText');
       var coverHead = document.getElementById('coverHead');
       var timers = [];
@@ -422,32 +406,21 @@
         window.scrollTo(0, 0);
         intro.hidden = false;
         intro.className = '';
-        letter.style.removeProperty('--letter-scale');
         introText.style.removeProperty('--text-dx');
         introText.style.removeProperty('--text-dy');
         root.classList.add('is-intro');
         void intro.offsetWidth;
-        timers.push(setTimeout(function () { intro.classList.add('is-shown'); }, 60));
-        timers.push(setTimeout(function () { intro.classList.add('is-open'); }, 500));
-        timers.push(setTimeout(function () { intro.classList.add('is-rising'); }, 1300));
-        timers.push(setTimeout(function () { intro.classList.add('is-settling'); }, 1950));
-        timers.push(setTimeout(function () { intro.classList.add('is-text'); }, 2050));
+        timers.push(setTimeout(function () { intro.classList.add('is-untie'); }, 700));
+        timers.push(setTimeout(function () { intro.classList.add('is-opening'); }, 1800));
+        timers.push(setTimeout(function () { intro.classList.add('is-text'); }, 2500));
         timers.push(setTimeout(function () {
-          var r = letter.getBoundingClientRect();
-          var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-          var scale = Math.max(2 * Math.max(cx, window.innerWidth - cx) / r.width, 2 * Math.max(cy, window.innerHeight - cy) / r.height) * 1.06;
-          letter.style.setProperty('--letter-scale', scale.toFixed(3));
           var from = introText.getBoundingClientRect();
           var to = coverHead.getBoundingClientRect();
-          var dx = to.left + to.width / 2 - (from.left + from.width / 2);
-          var dy = to.top + to.height / 2 - (from.top + from.height / 2);
-          /* 무대가 -15도 기울어 있으므로 화면 이동량을 무대 좌표계로 돌린다 */
-          var rad = 15 * Math.PI / 180, cs = Math.cos(rad), sn = Math.sin(rad);
-          introText.style.setProperty('--text-dx', (dx * cs - dy * sn).toFixed(1) + 'px');
-          introText.style.setProperty('--text-dy', (dx * sn + dy * cs).toFixed(1) + 'px');
-          intro.classList.add('is-expanding');
-        }, 2950));
-        timers.push(setTimeout(finish, 3850));
+          introText.style.setProperty('--text-dx', (to.left + to.width / 2 - (from.left + from.width / 2)).toFixed(1) + 'px');
+          introText.style.setProperty('--text-dy', (to.top + to.height / 2 - (from.top + from.height / 2)).toFixed(1) + 'px');
+          intro.classList.add('is-moving');
+        }, 3600));
+        timers.push(setTimeout(finish, 4500));
       };
       intro.addEventListener('click', function (e) { if (e.target.closest('.intro-skip')) finish(); });
       document.getElementById('introReplay').addEventListener('click', function () { setOpen(false); play(); });
