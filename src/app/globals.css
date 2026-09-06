@@ -88,21 +88,53 @@ body {
   position: relative;
   width: min(100%, calc((100dvh - 80px) * 840 / 1110));
   aspect-ratio: 840 / 1110;
+  container-type: inline-size;   /* 글자 크기를 판 폭(cqw)으로 잡습니다. 타원 안쪽 폭이 판 폭에 비례하므로 화면이 달라도 같은 여유가 남습니다(T51) */
 }
 .lace__frill, .lace__card { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
-/* 글자는 안쪽 인쇄 테두리(타원 가로 28~72%, 세로 22.6~77.4%) 안에 세로 가운데로 쌓습니다. 타원이라 위아래로 갈수록 좁아지므로 끝에 놓이는 장식은 작게 둡니다 */
+/* 글은 안쪽 인쇄 테두리(타원 가로 28~72%, 세로 22.6~77.4%) 안에 세로 가운데로 쌓습니다. 크기는 두 가지(T51). 가장 긴 줄 "더채플앳청담 3층 커티지홀"(12em)이 가장 넓은 곳(판 폭의 44%)에 들어가야 하므로 작은 글자는 3.5cqw입니다 */
 .lace__text {
   position: absolute; left: 28%; right: 28%; top: 22.6%; height: 54.8%;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  font-family: var(--font-name); text-align: center; white-space: nowrap; color: var(--ink-soft);
+  font-family: var(--font-name); text-align: center; white-space: nowrap;
 }
-.lace__fleuron { width: 62%; height: auto; opacity: 0.9; }
-.lace__year { margin-top: 10px; font-size: 13px; letter-spacing: 0.12em; text-indent: 0.12em; line-height: 1.4; color: var(--muted); }
-.lace__date { margin-top: 2px; font-size: 20px; font-weight: 700; line-height: 1.4; color: var(--ink); }
-.lace__time { margin-top: 2px; font-size: 15px; line-height: 1.6; }
-.lace__rule { width: 28px; height: 1px; background: var(--oak); margin: 12px 0 10px; }
-.lace__venue { font-size: 18px; font-weight: 700; line-height: 1.4; color: var(--ink); }
-.lace__hall { margin-top: 2px; margin-bottom: 10px; font-size: 14px; line-height: 1.6; }
+.lace__big { font-size: 4.6cqw; font-weight: 700; line-height: 1.6; color: var(--ink); }
+.lace__small { font-size: 3.5cqw; line-height: 1.7; color: var(--ink-soft); }
+.lace__gap { height: 3.5cqw; }
+
+/* 3. 인사(와이어프레임 4쪽, 0.3화면). 쪽지 두 장에 한 줄씩. 화자 캐릭터는 쪽지 위 모서리에 다이컷 조각(종이 테두리 + 그늘)으로 걸칩니다. 지금은 회색 원 자리표시입니다(T51). 신랑 쪽지는 오른쪽 정렬에 오른쪽 위, 신부 쪽지는 왼쪽 정렬에 왼쪽 위. 종이 결은 그림(`public/paper/note.png`), 그늘·기울기는 CSS */
+.greeting { display: flex; flex-direction: column; gap: 22px; padding: 40px 24px 14px; }
+.note {
+  position: relative; width: 80%;
+  padding: 22px 16px 20px;   /* 와이어프레임 메모지 안쪽 여백 좌우 16 · 위아래 20. 위는 화자 원(아래가 +20px까지 옴)을 피해 2px 더 */
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
+  font-family: var(--font-name); font-size: 15px; line-height: 1.7; color: var(--ink);
+  opacity: 0; transform: translateY(8px) rotate(var(--tilt));
+  transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+}
+.note.is-in { opacity: 1; transform: translateY(0) rotate(var(--tilt)); }
+@media (prefers-reduced-motion: reduce) { .note { opacity: 1; transform: rotate(var(--tilt)); transition: none; } }
+.note--right { --tilt: 0.6deg; align-self: flex-end; }
+.note--left { --tilt: -0.8deg; align-self: flex-start; }
+.note__paper { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 3px; }
+.note__text { position: relative; margin: 0; }
+/* 화자 자리표시. 회색 원에 종이 테두리(다이컷)와 그늘. 캐릭터 그림이 오면 이 자리에 상반신 컷아웃이 들어갑니다 */
+.note__who {
+  position: absolute; top: -34px; width: 54px; height: 54px; border-radius: 50%;
+  background: #CBC2B3;
+  box-shadow: 0 0 0 4px #FFFDF8, 0 1px 2px rgba(70, 48, 24, 0.22), 0 8px 14px -6px rgba(70, 48, 24, 0.45);
+}
+.note--right .note__who { right: -12px; }
+.note--left .note__who { left: -12px; }
+/* 4쪽(Part 1 신랑) 자리표시. 인사 블록이 0.3화면이라 다음 블록의 사진 종이가 같은 화면에 걸쳐 보이는 것을 확인하기 위한 것입니다. 4쪽을 만들 때 걷어냅니다 */
+.story { padding: 20px 24px 48px; }
+.photo-paper {
+  position: relative; aspect-ratio: 4 / 3; border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.06em; color: var(--muted);
+}
+.photo-paper__label { position: relative; padding: 6px 10px; border: 1px dashed var(--rule); }
 
 /* 떠 있는 바로 가기 버튼 */
 .fab {

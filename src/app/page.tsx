@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보(레이스 타원 카드, 디자인 논의 T50) · 떠 있는 메뉴를 옮긴 것입니다.
+// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보(레이스 타원 카드, 디자인 논의 T50) · Scene3 인사 예시(쪽지 + 회색 원 자리표시, T51) · 4쪽 자리표시 · 떠 있는 메뉴를 옮긴 것입니다.
 // 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
 // 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T49). 편지지는 커버 자체이고, 봉투 안에서 봉투 폭의 92%로 있다가 봉투가 내려가는 것과 동시에 올라오고, 이어서 화면 전체로 커집니다. 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -88,6 +88,28 @@ export default function Home() {
     document.documentElement.classList.remove("is-intro", "is-intro-shown");
   }, [introDone]);
 
+  // 쪽지는 화면에 들어올 때 한 번 내려앉으며 나타납니다(디자인 논의 T51). 움직임 줄이기면 CSS가 바로 보이게 합니다
+  useEffect(() => {
+    const notes = Array.from(document.querySelectorAll<HTMLElement>(".note"));
+    if (!("IntersectionObserver" in window)) {
+      notes.forEach((el) => el.classList.add("is-in"));
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-in");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 },
+    );
+    notes.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     const onDocumentClick = (e: MouseEvent) => {
       if (fabRef.current && !fabRef.current.contains(e.target as Node)) setMenuOpen(false);
@@ -165,18 +187,38 @@ export default function Home() {
             <img className="lace__frill" src="/lace/frill.png" alt="" />
             <img className="lace__card" src="/lace/card.png" alt="" />
             <div className="lace__text">
-              <img className="lace__fleuron" src="/lace/fleuron.png" alt="" />
-              <div className="lace__year">2026년</div>
-              <div className="lace__date">10월 9일 금요일</div>
-              <div className="lace__time">오후 6시 30분</div>
-              <div className="lace__rule" />
-              <div className="lace__venue">더채플앳청담</div>
-              <div className="lace__hall">3층 커티지홀</div>
-              <img className="lace__fleuron" src="/lace/fleuron.png" alt="" />
+              <div className="lace__big">2026년 10월 9일</div>
+              <div className="lace__big">금요일 오후 6시 30분</div>
+              <div className="lace__gap" />
+              <div className="lace__small">더채플앳청담 3층 커티지홀</div>
+              <div className="lace__small">강남구 선릉로 757</div>
             </div>
           </div>
         </section>
-        {/* 3쪽(인사)부터 여기 아래에 이어 붙입니다 */}
+        <section id="greeting" className="block greeting">
+          <div className="note note--right">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <div className="note__who" aria-hidden="true" />
+            <p className="note__text">안녕하세요. 10월의 신랑, 이산하</p>
+          </div>
+          <div className="note note--left">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <div className="note__who" aria-hidden="true" />
+            <p className="note__text">
+              신부 송시야입니다!
+              <br />
+              잠깐 저희에 대해 얘기해 드릴게요!
+            </p>
+          </div>
+        </section>
+        {/* 4쪽(Part 1 신랑) 자리표시. 걸쳐 보이는 것만 확인합니다 */}
+        <section id="part1-groom" className="block story">
+          <div className="photo-paper">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <span className="photo-paper__label">신랑 어릴 적 사진 · 4쪽 자리</span>
+          </div>
+        </section>
+        {/* 5쪽(Part 1 신부)부터 여기 아래에 이어 붙입니다 */}
       </div>
 
       <nav className="fab" ref={fabRef} data-open={menuOpen ? "true" : "false"} aria-label="바로 가기">
