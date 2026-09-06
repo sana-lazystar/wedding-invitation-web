@@ -77,6 +77,7 @@ function decisionRows(file) {
 /** 접두 어휘 → 논의록 파일. 색인(decisions.md)이 정본이나, 파일이 실재하는지도 본다. 새 논의록마다 한 줄 추가 */
 const NS = {
   '부트스트랩': 'docs/dashboard/discussions/2026-09-06--workspace-bootstrap.md',
+  '스택': 'docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md',
 };
 const decisionCache = new Map();
 function decisionsOf(relPath) {
