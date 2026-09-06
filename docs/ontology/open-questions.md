@@ -26,4 +26,4 @@
 
 ## 열린 액션
 
-- WIW-3 preview 배포 확인(이 커밋의 develop push). Claude
+없음. (2026-09-06 스택 논의 완결 시점. WIW-1~3 모두 종결)

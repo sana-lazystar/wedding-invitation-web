@@ -11,7 +11,7 @@
 - 진행 중 작업: `docs/dashboard/state.json`의 `activeWorks`. 세션을 시작하면 이 파일을 먼저 읽습니다. 터미널 보드 = `node docs/ontology/tools/board.mjs --watch`(읽기 전용)
 - 신규 문서 정본: `docs/dashboard/templates/`
 - 체계 설계·구조 결정 이력: `docs/dashboard/discussions/` 각 논의록의 결정 표
-- **지금 = 스택·인프라 논의 마무리 단계 (2026-09-06)**: 언어·프레임워크·호스팅은 `docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md` 결정 표에 있고, topology 서랍이 열렸습니다. 다음 논의는 "청첩장에 무엇이 들어가는가"입니다. 새 논의록을 열어 요구(REQ)·용어·미결(Q·U)을 원장에 적립하고, 목록이 확정되면 첫 story를 적재합니다. git과 훅은 설치돼 있습니다. 코드 착수와 Vercel 프로젝트 생성은 외부 반영 게이트 뒤입니다
+- **지금 = 스택·인프라 논의 완결 · 요구 정의 대기 (2026-09-06)**: 언어·프레임워크·호스팅은 `docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md` 결정 표(15건)에 있습니다. Next.js 16 스캐폴드가 `main`에 있고 Vercel이 `main` → production, 그 밖의 브랜치 → preview로 배포합니다(정본 `docs/ontology/topology/system-context.md`). 다음 논의는 "청첩장에 무엇이 들어가는가"입니다. 새 논의록을 열어 요구(REQ)·용어·미결(Q·U)을 원장에 적립하고, 목록이 확정되면 첫 story를 적재합니다. 코드 착수는 외부 반영 게이트 뒤입니다
 
 # 2. 규격 — 무엇이 현재 참인가 (`docs/ontology/`)
 

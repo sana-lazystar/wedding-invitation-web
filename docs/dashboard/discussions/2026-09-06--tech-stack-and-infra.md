@@ -1,9 +1,9 @@
 ---
 type: discussion
-status: in-progress
+status: completed
 created: 2026-09-06 16:53:09
-updated: 2026-09-06 18:12:55
-completed:
+updated: 2026-09-06 18:14:54
+completed: 2026-09-06 18:14:54
 participants: 이산하, Claude
 related: []
 jira:
@@ -194,6 +194,11 @@ jira:
 - 리전은 신경 쓸 필요가 없습니다. Vercel의 리전 설정은 서버 함수가 도는 위치인데 이 사이트는 함수가 없고, 정적 파일은 전 세계 엣지 CDN에서 나갑니다. 함수가 생기면 그때 Project Settings → Functions에서 icn1(서울)로 바꾸면 됩니다.
 - WIW-3을 in-progress로 올리고 topology §2·§3·§11과 README §브랜치 워크플로 배포 매핑·§git 규약 호스팅을 채웠습니다. 남은 완료 기준은 "브랜치 push가 preview 배포를 만듦"인데, 연동 뒤 push가 아직 없어 GitHub Deployments에 preview가 없습니다. 이 커밋을 develop에 푸시해 확인합니다.
 
+### 2026-09-06 18:14:54 · Claude (T10 추기, 완결)
+
+- develop push(b16e300)가 preview 배포를 만들었습니다(https://wedding-invitation-lhx16a3n2-default-sana.vercel.app). WIW-3의 완료 기준이 모두 충족돼 completed로 archive에 옮겼습니다. WIW-1~3이 전부 종결됐고 state.json은 비어 있습니다.
+- 열린 쟁점 Q1~Q7과 미확인 U-1~U-4가 모두 닫혔고 잠정 결정이 없으므로 이 논의를 완결합니다. 정본 반영 점검은 아래 절에 적었습니다.
+
 ## 결정
 
 행의 내용은 불변입니다. 상태 칸만 갱신할 수 있습니다.
@@ -221,10 +226,24 @@ jira:
 
 점검 대상 목록의 정본 = `docs/dashboard/README.md` §논의 "완결 전 정본 반영 점검 대상" (정책·DB·API·IA + open-questions 열린 액션·requirements·risks·glossary·artifacts). 같은 커밋에서 대조합니다. 다른 논의록의 결정을 뒤집었으면 그 표의 상태 칸에 "폐기 — {이 파일}:결정 N으로 대체"를 적습니다.
 
+점검 결과(2026-09-06 18:14:54):
+
+| 대상 | 결과 |
+| --- | --- |
+| 정책·DB·API·IA 서랍 | 없음. 서버 저장이 없어 DB·API 서랍은 생기지 않습니다(결정 6). R2 감수 조건(사이트에 실을 정보만 문서·코드에 적는다)은 policy 서랍이 생길 때 넘겨받도록 `risks.md`에 적었습니다 |
+| topology 서랍 | `system-context.md` 현행화. 프로비저닝 완료, production·preview URL, 배포 매핑, 이미지 파이프라인, 한도 표, 이전 경로, 프로비저닝 절차 |
+| `open-questions.md` 열린 액션 | 없음. Q1~Q7 닫힘, U-1~U-4 닫힘 |
+| `requirements.md` 남은 결정 칸 | 원장이 비어 있습니다. 요구 정의 논의가 결정 6(방명록·참석 여부·업로드 없음)과 결정 12(사진 파일명)를 인용합니다 |
+| `risks.md` 대응 칸 | R1·R2 감수 확정, 조건 기입 |
+| `glossary.md` | production 배포 · preview 배포 · 원본(사진) · 산출물(이미지) · 매니페스트(갤러리) 5건 추가 |
+| `artifacts/` | 없음 |
+| 다른 논의록 결정 뒤집음 | 없음. 부트스트랩 결정 7(브랜치 역할)은 결정 9가 그대로 따릅니다 |
+| 라우터 `CLAUDE.md` | 상태 줄을 "스택·인프라 논의 완결 · 요구 정의 대기"로 갱신, 2절 표에 topology·references 행, 규약에 문체·스크립트·AGENTS.md 줄 |
+
 ## 적재
 
 이 논의에서 생성된 epic·task·bugfix ID를 분해 승인 후 적습니다.
 
 - WIW-1 원본·에셋 폴더 git 제외 (단독 task, 2026-09-06 적재 · 같은 날 completed, 528c02d, archive/tasks)
 - WIW-2 Next.js 기본 스캐폴드 (단독 task, 2026-09-06 적재 · 같은 날 completed, 8a48f39, archive/tasks)
-- WIW-3 Vercel 프로젝트 연동 (단독 task, todo, 2026-09-06. 대기: WIW-2의 main 반영)
+- WIW-3 Vercel 프로젝트 연동 (단독 task, 2026-09-06 적재 · 같은 날 completed, 이산하 수행, archive/tasks)

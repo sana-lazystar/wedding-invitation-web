@@ -1,10 +1,10 @@
 ---
 id: WIW-3
 type: task
-status: in-progress
+status: completed
 created: 2026-09-06 17:56:12
-updated: 2026-09-06 18:12:55
-completed:
+updated: 2026-09-06 18:14:54
+completed: 2026-09-06 18:14:54
 epic:
 jira:
 repos: [wedding-invitation-web]
@@ -32,12 +32,13 @@ WIW-2는 2026-09-06 main에 반영됐습니다(PR #3, 8397e14). 호스팅 자원
 ## 완료 기준
 
 - [x] production URL에서 스캐폴드 페이지가 열림
-- [ ] develop 또는 feature 브랜치 push가 preview 배포를 만듦
+- [x] develop 또는 feature 브랜치 push가 preview 배포를 만듦
 - [x] topology §2 프로비저닝 후 확정 칸과 README §브랜치 워크플로 배포 매핑 기입
-- [ ] 구현 기록 기입
+- [x] 구현 기록 기입
 
 ## 구현 기록
 
 - 2026-09-06 18:12:55 · 이산하가 Vercel 대시보드에서 연동·배포 완료. 프로젝트 `wedding-invitation-web`, production https://wedding-invitation-web-mu.vercel.app/ (main 8397e14). Claude 확인: HTTP 200, `x-vercel-id`가 icn1(서울 엣지), `x-vercel-cache` HIT. GitHub Deployments에 Production 1건(2026-09-06 18:09 KST) 기록
 - 함수 리전은 기본값이며 함수가 없어 무관합니다. 함수가 생기면 Project Settings → Functions에서 icn1(서울)로 바꿉니다
-- preview 배포 확인은 이 커밋의 develop push로 합니다
+- 2026-09-06 18:14:54 · develop push(b16e300)가 preview 배포를 만들었습니다. GitHub 커밋 상태 Vercel success, GitHub Deployments에 Preview 1건(2026-09-06 18:13 KST), preview URL https://wedding-invitation-lhx16a3n2-default-sana.vercel.app. Vercel 팀 슬러그는 `default-sana`입니다
+- 단독 task이고 코드 변경이 없어 PR은 없습니다. 이산하가 대시보드에서 수행한 호스팅 자원 생성이 곧 결과물입니다
