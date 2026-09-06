@@ -125,6 +125,7 @@ AI가 **`docs/` 밖**에 반영하는 모든 행위(코드·설정 커밋·푸�
 - `main` = 배포 기준, `develop` = 통합 브랜치입니다. 일상 커밋(문서 포함)은 develop 또는 그 하위 브랜치에 올리고, main 반영은 이산하의 develop→main PR로 합니다(부트스트랩 결정 7, 잠정). 부트스트랩 커밋은 main과 develop에 같이 올렸습니다(2026-09-06)
 - 커밋 계정은 `sana-lazystar`(`sana.lazystar@gmail.com`)입니다. 전역 git 계정이 다르므로 이 레포의 로컬 config로 고정했습니다(2026-09-06). 커밋 전에 `git config user.name`이 `sana-lazystar`인지 반드시 확인하고, 다르면 커밋하지 않고 이산하에게 알립니다
 - 문서 커밋 메시지: `docs: <요지>`. 작업 문서 커밋은 `docs: <요지> (WIW-N)`
+- `git add`는 경로를 명시합니다(예: `git add docs/dashboard docs/ontology`). `git add docs`·`git add -A`·`git add .`는 쓰지 않습니다. 2026-09-06에 `git add docs`로 원본 사진 170MB가 develop에 딸려 들어가 force-push로 되돌린 사고가 있었습니다(스택 논의록 T6 추기 2)
 - 코드 커밋 제목 `(WIW-N)` 병기, ADR 단위 커밋은 `(WIW-{N}--ADR-{M})`. 커밋·푸시는 위 외부 반영 게이트를 통과한 뒤에만
 - pre-commit 훅 = ID 참조 무결성(`check-refs.mjs`) + 작업 문서 문체 게이트(`check-doc-style.mjs`). 설치는 `sh docs/ontology/tools/install-hook.sh`
 - 검사 스크립트(후보): `WIW-0` 잔존 · status↔archive 위치 불일치 · 병렬 adr touches 겹침 · in-progress 집합↔`state.json` activeWorks 정합(보드가 경고) · frontmatter 중복 키(상태 전이 시 템플릿 빈 줄은 채우고 새 줄을 추가하지 않습니다)

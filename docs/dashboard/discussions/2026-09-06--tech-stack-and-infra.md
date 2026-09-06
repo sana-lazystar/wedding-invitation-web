@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 16:53:09
-updated: 2026-09-06 17:51:19
+updated: 2026-09-06 17:54:34
 completed:
 participants: 이산하, Claude
 related: []
@@ -134,6 +134,12 @@ jira:
 ### 2026-09-06 17:51:19 · Claude (T6 추기)
 
 - WIW-1 실행 완료. 게이트를 표시한 뒤 develop에서 `feature/WIW-1-gitignore-asset-folders`를 내고 `.gitignore`에 두 줄을 넣어 커밋했습니다(528c02d). `git check-ignore -v`로 두 폴더가 규칙에 걸리는 것을 확인했습니다. feature 브랜치와 develop을 origin에 푸시했습니다. 단독 task라 PR 초안까지 적고 archive로 옮겼습니다. PR 생성과 머지는 이산하 몫입니다.
+
+### 2026-09-06 17:54:34 · Claude (T6 추기 2, 사고 기록)
+
+- 사고. WIW-1 완주 기록을 develop에 커밋할 때 `git add docs`로 뭉뚱그려 추가했습니다. develop에는 아직 `.gitignore` 변경(feature 브랜치에만 있음)이 없어서 원본 사진 20장과 `docs/design/` 에셋 약 170MB가 커밋 bd3f8e1에 딸려 들어갔고, origin/develop까지 푸시됐습니다. 결정 5·13 위반입니다.
+- 복구. 같은 문서 변경만 다시 커밋해(c8a4f07) `--force-with-lease`로 origin/develop을 덮어썼습니다. `git ls-tree origin/develop`에 gallery·design 경로가 없는 것을 확인했습니다. bd3f8e1은 로컬 reflog와 GitHub의 미참조 객체로 남을 수 있습니다. 해시를 알아야 접근할 수 있고 GitHub가 주기적으로 정리하지만, 완전 삭제가 필요하면 GitHub Support에 요청해야 합니다.
+- 재발 방지. `docs/dashboard/README.md` §git 규약에 "add는 경로 명시, `git add docs`·`-A`·`.` 금지"를 넣었습니다. WIW-1이 develop에 머지되기 전까지는 두 폴더가 develop에서 무방비이므로 특히 지킵니다.
 
 ## 결정
 

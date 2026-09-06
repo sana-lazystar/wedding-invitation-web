@@ -3,7 +3,7 @@ id: WIW-1
 type: task
 status: completed
 created: 2026-09-06 17:43:58
-updated: 2026-09-06 17:51:19
+updated: 2026-09-06 17:54:34
 completed: 2026-09-06 17:51:19
 epic:
 jira:
@@ -46,6 +46,7 @@ docs/design/
 - 2026-09-06 17:51:19 · feature/WIW-1-gitignore-asset-folders · 528c02d · `.gitignore`에 `docs/gallery/`·`docs/design/` 추가. 검증: `git status --short`에 두 폴더 미표시, `git check-ignore -v`가 4·5행 규칙을 출력. 브랜치는 origin에 푸시했습니다
 - 게이트 표시: `[게이트] WIW-1 | 승인 근거: "제외 범위 - 두 폴더만", "WIW-1 실행 승인"`
 - PR 생성·develop 머지는 이산하 몫입니다. 알게 되면 여기에 추기합니다
+- 정정 추기 2026-09-06 17:54:34: 완주 기록 커밋 bd3f8e1에 `git add docs`로 원본 사진·디자인 에셋이 딸려 들어가 c8a4f07로 다시 커밋하고 origin/develop을 force-push로 덮어썼습니다. 상세는 스택 논의록 T6 추기 2
 
 ## PR 초안
 
