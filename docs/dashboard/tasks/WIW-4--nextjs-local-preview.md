@@ -94,3 +94,5 @@ related: []
 2026-09-07 00:54:36 · develop · edd4fd7 · Scene2 액자 선화(`public/scene2/frame.png`), `public/lace/` 삭제, Scene4 사진 3/4 오른쪽·메모지 겹침(디자인 논의 T55·T56). `src/app/page.tsx` `src/app/globals.css` `public/scene2/` `public/lace/`.
 
 2026-09-07 00:57:06 · develop · 4a75ca4 · Scene2 액자 안 달력 카드(디자인 논의 T57). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 01:01:41 · develop · c9ed65a · Scene5 Part 1 신부(Scene4 대칭), Scene2 달력 삭제, `public/scene5/` 추가(디자인 논의 T58). `src/app/page.tsx` `src/app/globals.css` `public/scene5/`.
