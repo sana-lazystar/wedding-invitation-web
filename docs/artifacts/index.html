@@ -52,7 +52,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: calc(56px + env(safe-area-inset-top)) 24px calc(56px + env(safe-area-inset-bottom));
+      padding: calc(56px + env(safe-area-inset-top)) 24px 48px;   /* 아래 여백은 배경(커버 상자 = 100dvh) 아랫변 기준 48px. 안전 영역을 더하지 않습니다(T50) */
       overflow: hidden;
     }
     .cover-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
@@ -80,7 +80,7 @@
     .eyebrow {
       font-family: var(--font-latin);
       font-size: 10px;
-      font-weight: 500;
+      font-weight: 600;
       letter-spacing: 0.36em;
       text-indent: 0.36em;
       text-transform: uppercase;
@@ -88,26 +88,32 @@
       line-height: 1.4;
       white-space: nowrap;
     }
-    .tagline { margin: 10px 0 0; font-family: var(--font-name); font-size: 24px; line-height: 1.5; color: var(--ink-soft); white-space: nowrap; }
-    .names { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-    .names__name { font-family: var(--font-name); font-size: 30px; font-weight: 700; letter-spacing: 0.14em; text-indent: 0.14em; line-height: 1.35; color: var(--ink); }
+    .tagline { margin: 10px 0 0; font-family: var(--font-name); font-size: 18px; font-weight: 700; line-height: 1.5; color: var(--ink-soft); white-space: nowrap; }
+    .names { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 7px; }
+    .names__name { font-family: var(--font-name); font-size: 20px; font-weight: 700; letter-spacing: 0.14em; text-indent: 0.14em; line-height: 1.35; color: var(--ink); }
     .names__and { font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); line-height: 1.4; }
 
-    /* 2. 핵심 정보. 열린 봉투 일러스트 위 편지지에 날짜·시간·장소 */
-    #info { display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
-    .letter-card {
+    /* 2. 핵심 정보. 레이스 프릴을 두른 타원 카드(이산하가 만든 에셋 `public/lace/`, T50) 위에 날짜·시간·장소. 그림 세 장은 같은 840×1110 화폭이라 같은 상자에 겹치면 맞습니다 */
+    #info { display: flex; align-items: center; justify-content: center; padding: 40px 12px; }
+    .lace {
       position: relative;
-      width: min(340px, 86vw, calc((100dvh - 80px) * 817 / 1438));
-      aspect-ratio: 817 / 1438;
+      width: min(100%, calc((100dvh - 80px) * 840 / 1110));
+      aspect-ratio: 840 / 1110;
     }
-    .letter-card__art { display: block; width: 100%; height: 100%; }
-    .letter-card__text {
-      position: absolute; left: 22%; right: 22%; top: 13%; height: 46%;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-      text-align: center; font-size: 16px; line-height: 1.7; color: var(--ink-soft);
+    .lace__frill, .lace__card { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+    /* 글자는 안쪽 인쇄 테두리(타원 가로 28~72%, 세로 22.6~77.4%) 안에 세로 가운데로 쌓습니다. 타원이라 위아래로 갈수록 좁아지므로 끝에 놓이는 장식은 작게 둡니다 */
+    .lace__text {
+      position: absolute; left: 28%; right: 28%; top: 22.6%; height: 54.8%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: var(--font-name); text-align: center; white-space: nowrap; color: var(--ink-soft);
     }
-    .letter-card__venue { font-size: 17px; font-weight: 500; color: var(--ink); }
-    .letter-card__rule { width: 28px; height: 1px; background: var(--oak); margin: 12px 0; }
+    .lace__fleuron { width: 62%; height: auto; opacity: 0.9; }
+    .lace__year { margin-top: 10px; font-size: 13px; letter-spacing: 0.12em; text-indent: 0.12em; line-height: 1.4; color: var(--muted); }
+    .lace__date { margin-top: 2px; font-size: 20px; font-weight: 700; line-height: 1.4; color: var(--ink); }
+    .lace__time { margin-top: 2px; font-size: 15px; line-height: 1.6; }
+    .lace__rule { width: 28px; height: 1px; background: var(--oak); margin: 12px 0 10px; }
+    .lace__venue { font-size: 18px; font-weight: 700; line-height: 1.4; color: var(--ink); }
+    .lace__hall { margin-top: 2px; margin-bottom: 10px; font-size: 14px; line-height: 1.6; }
 
     /* 떠 있는 바로 가기 버튼 */
     .fab {
@@ -268,14 +274,18 @@
     </section>
 
     <section id="info" class="block block--fixed">
-      <div class="letter-card">
-        <img class="letter-card__art" src="../design/canvas/opened-paper.png" alt="">
-        <div class="letter-card__text">
-          <div>2026년 10월 9일 금요일</div>
-          <div>오후 6시 30분</div>
-          <div class="letter-card__rule"></div>
-          <div class="letter-card__venue">더채플앳청담</div>
-          <div>3층 커티지홀</div>
+      <div class="lace">
+        <img class="lace__frill" src="../../public/lace/frill.png" alt="">
+        <img class="lace__card" src="../../public/lace/card.png" alt="">
+        <div class="lace__text">
+          <img class="lace__fleuron" src="../../public/lace/fleuron.png" alt="">
+          <div class="lace__year">2026년</div>
+          <div class="lace__date">10월 9일 금요일</div>
+          <div class="lace__time">오후 6시 30분</div>
+          <div class="lace__rule"></div>
+          <div class="lace__venue">더채플앳청담</div>
+          <div class="lace__hall">3층 커티지홀</div>
+          <img class="lace__fleuron" src="../../public/lace/fleuron.png" alt="">
         </div>
       </div>
     </section>

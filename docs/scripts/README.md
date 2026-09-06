@@ -11,6 +11,7 @@
 | `sync-globals.mjs` | 조립본 CSS를 Next.js `globals.css`로 옮깁니다 | 있음 |
 | `inline-artifact.mjs` | 조립본을 Artifact 발행용으로 인라인합니다 | 있음. 디자인 결정 11로 쓰지 않음 |
 | `unmatte.py` | 컷아웃 가장자리 색 번짐을 지웁니다 | 있음 |
+| `gen-lace-frill.py` | 레이스 프릴 SVG(`docs/artifacts/assets/lace-frill.svg`)를 만듭니다. 타원 둘레를 호 길이로 균등 분할해 주름잎을 놓습니다 | 있음 (이산하가 다른 세션에서 작성. 디자인 논의 T50) |
 
 ## 사진 추가·순서 변경 절차
 
