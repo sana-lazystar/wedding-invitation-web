@@ -43,3 +43,6 @@
 - **문체**: Claude가 작성·수정하는 모든 문서(md 파일 등)는 `docs/WRITER.md`를 토대로 씁니다. 논의록·원장·서랍 문서·동결본 헤더·이 파일도 예외가 아닙니다. pre-commit 훅이 ID 참조 무결성과 작업 문서 문체 게이트를 겁니다. 클론·재설정 시 `sh docs/ontology/tools/install-hook.sh` 1회
 - 재사용 스크립트(이미지 산출 등)는 `docs/scripts/`에 둡니다(스택 결정 10). 원본 사진은 `docs/gallery/`, 디자인 에셋은 `docs/design/`이고 둘은 git 제외 대상입니다(WIW-1). 사진 추가·순서 변경 절차는 `docs/scripts/README.md`
 - 시간 기입은 `date '+%Y-%m-%d %H:%M:%S'` 실측값
+- Next.js 코드 지침은 `AGENTS.md`입니다(create-next-app 생성, `next dev`가 규칙 블록을 다시 씁니다). 아래 임포트 줄로 자동 포함되며, 이 줄은 create-next-app이 만든 `CLAUDE.md`의 유일한 내용을 옮긴 것입니다(스택 결정 15)
+
+@AGENTS.md
