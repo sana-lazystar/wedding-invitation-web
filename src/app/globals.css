@@ -56,8 +56,8 @@ body {
 }
 /* 상단 1/4 흐림. 두 겹의 배경 흐림을 마스크로 겹쳐 위로 갈수록 더 흐려집니다 */
 .cover-bg__blur { position: absolute; left: 0; right: 0; top: 0; pointer-events: none; }
-.cover-bg__blur--soft { height: 26%; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%); }
-.cover-bg__blur--strong { height: 16%; backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); mask-image: linear-gradient(to bottom, #000 0%, #000 30%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 30%, transparent 100%); }
+.cover-bg__blur--soft { height: 26%; backdrop-filter: blur(5px); mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%); }
+.cover-bg__blur--strong { height: 16%; backdrop-filter: blur(9px); mask-image: linear-gradient(to bottom, #000 0%, #000 30%, transparent 100%); }
 .cover-bg__shadow {
   position: absolute; left: calc(50% + 10px); bottom: 21.4%;
   width: 40%; height: 18px; transform: translateX(-50%);
