@@ -120,3 +120,5 @@ related: []
 2026-09-07 01:43:00 · develop · 1f1df85 · 페이지 제목·설명 변경(이산하 편집, 디자인 논의 T71). `src/app/layout.tsx`.
 
 2026-09-07 01:57:46 · develop · b33459e · 100svh, 진입 장면 크기 변화 재계산, img 크기 속성(디자인 논의 T72). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 02:03:00 · develop · ce5c601 · Scene6 관찰 아이콘 왼쪽·독백 아이콘 오른쪽(사진 종이 가림)(디자인 논의 T73). `src/app/page.tsx` `src/app/globals.css`.
