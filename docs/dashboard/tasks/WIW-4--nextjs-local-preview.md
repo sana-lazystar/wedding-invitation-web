@@ -68,3 +68,5 @@ related: []
 2026-09-06 23:19:31 · develop · 933743a · 봉투 뒷판·앞판 층, 카드가 앞판 뒤에 끼워져 입구로 보임(디자인 논의 T42). `src/app/page.tsx` `src/app/globals.css` `public/intro/envelope-back.png` `public/intro/envelope-front.png`.
 
 2026-09-06 23:36:16 · develop · 1f24fae · 편지지 1:1, 봉투 폭 108%, 시작 높이 2/3, 확대 없이 봉투가 내려가며 끝, 4.3초(디자인 논의 T43). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-06 23:45:32 · develop · 6c00072 · 편지지 연속 상승과 봉투 하강·흐려짐 동시, 봉투 폭 92%, 바닥으로 가림, 넘어가기 맨 위 층, 3.6초(디자인 논의 T44). `src/app/page.tsx` `src/app/globals.css`.
