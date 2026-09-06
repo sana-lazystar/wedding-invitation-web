@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 16:26:49
-updated: 2026-09-06 16:40:10
+updated: 2026-09-06 16:40:38
 completed:
 participants: 이산하, Claude
 related: []
@@ -65,6 +65,7 @@ jira:
 - 조치: `git init -b main` → 레포 로컬 config에 `user.name=sana-lazystar`, `user.email=sana.lazystar@gmail.com` 고정 → 원격 `origin`을 별칭 URL `git@github.com-lazystar:sana-lazystar/wedding-invitation-web.git`로 등록 → `ssh -T git@github.com-lazystar`가 "Hi sana-lazystar!"로 응답하는 것 확인 → `git ls-remote`로 원격이 비어 있음 확인 → `sh docs/ontology/tools/install-hook.sh`로 훅 설치.
 - main에서 첫 커밋을 시도하자 사용자 훅 `~/.claude/hooks/jarfis-safety.sh`가 "Direct commit to main is blocked"로 차단했다(패치·커밋 모두 미실행). 우회하지 않고 `docs/bootstrap` 브랜치를 만들어 거기에 커밋하고 푸시한다. 원격이 비어 있어 이 브랜치가 GitHub 기본 브랜치가 되므로, main은 이산하가 GitHub에서 만들거나 PR로 반영한다.
 - README §git 규약에 원격·기본 브랜치·계정 확인 규칙·main 직접 커밋 금지를 추기했다. 첫 커밋의 해시는 다음 커밋에서 추기한다.
+- 첫 커밋 `4e01e22` (2026-09-06 16:40:38 추기, 파일 33개). `docs/bootstrap` 브랜치, 작성자 `sana-lazystar <sana.lazystar@gmail.com>`, pre-commit 훅이 게이트 2종을 실행해 통과했다.
 
 ## 결정
 
