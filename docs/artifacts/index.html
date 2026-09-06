@@ -137,14 +137,26 @@
     .note--right .note__who { right: -8px; transform: rotate(6deg); }
     .note--left .note__who { left: -9px; transform: rotate(-5deg); }
     /* 4. Part 1 신랑(와이어프레임 5쪽, 약 1.2화면). 어릴 적 사진을 붙인 종이가 위, 토끼(신부)가 소개하는 메모지가 아래입니다(T53). 인사 블록이 0.3화면이라 사진 종이가 인사와 같은 화면에 걸쳐 보입니다. 메모지는 쪽지와 같은 부품(`.note`)이고 폭만 전체입니다. 오른쪽 아래에는 어릴 적 사진 컷아웃(헬리콥터)이 스티커처럼 걸칩니다 */
-    .story { display: flex; flex-direction: column; padding: 20px 24px 124px; }   /* 아래 여백은 메모지 밖으로 84px 나가는 스티커 몫 */
+    .story { display: flex; flex-direction: column; gap: 22px; padding: 20px 24px 40px; }
+    .story--stamp { padding-bottom: 124px; }   /* 아래 여백은 메모지 밖으로 나가는 컷아웃 스티커 몫(Scene4·5) */
     .photo-paper {
       position: relative; z-index: 1; width: 75%; align-self: flex-end; padding: 4px; border-radius: 3px;   /* 사진 종이는 폭의 3/4, 오른쪽, 흰 테두리 4px(T56). 메모지 위에 겹치므로 앞 층 */
       box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
       transform: rotate(-0.7deg);
     }
     .photo-paper__photo { position: relative; display: block; width: 100%; height: auto; }
-    .note--memo { width: fit-content; max-width: 100%; margin-top: -26px; padding-top: 44px; }   /* 메모지는 글 크기만큼(T61). 사진 종이 뒤로 26px 들어가 겹치고(T56) 위 여백은 첫 줄이 사진 아래 18px에서 시작하게 */
+    .note--memo { width: fit-content; max-width: 100%; }   /* 메모지는 글 크기만큼(T61) */
+    .note--tuck { margin-top: -48px; padding-top: 44px; }   /* 사진 종이 바로 다음 메모지. 사진 뒤로 26px 들어가 겹치고(T56) 위 여백은 첫 줄이 사진 아래 18px에서 시작하게 */
+    .note--indent { margin-left: 20px; }   /* 와이어프레임의 들여 놓은 메모지(독백) */
+    /* 합창 메모지(T65). 화자 둘이 오른쪽 위에 나란히. 바깥쪽이 첫째, 안쪽(`--inner`)이 둘째 */
+    .note--right .note__who--inner { right: 46px; transform: rotate(-4deg); }
+    /* 사진 자리표시(T65). 웨딩 사진이 오기 전 같은 크기의 빈 종이. 세로 3:4로 잡아 둡니다 */
+    .photo-paper--center { align-self: center; transform: rotate(0.4deg); }
+    .photo-paper__blank {
+      position: relative; aspect-ratio: 3 / 4; display: flex; align-items: center; justify-content: center;
+      background: rgba(70, 48, 24, 0.05); font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.06em; color: var(--muted);
+    }
+    .photo-paper__blank span { padding: 6px 10px; border: 1px dashed rgba(70, 48, 24, 0.25); }
     /* 컷아웃 스티커(T61 · T62). 본문 안의 float라 글이 그 네모 영역(여백 포함)을 피해 흐릅니다(실루엣 아님, T62). 앞의 빈 float(`.note__push`, 폭 0 · 두 줄 높이)를 clear로 넘어 셋째 줄부터 비킵니다. 음수 아래·바깥 여백만큼 메모지 밖으로 나갑니다 */
     .note__push { float: right; width: 0; height: 58px; }   /* 두 줄(18px × 1.6) */
     .note__push--left { float: left; }
@@ -344,31 +356,93 @@
       </div>
     </section>
 
-    <section id="part1-groom" class="block story">
+    <section id="part1-groom" class="block story story--stamp">
       <div class="photo-paper">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
         <img class="photo-paper__photo" src="../../public/scene4/groom-child.jpg" alt="신랑 어릴 적 사진">
       </div>
-      <div class="note note--left note--memo">
+      <div class="note note--left note--memo note--tuck">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
         <img class="note__who" src="../../public/character/rabbit-1.png" alt="">
         <p class="note__text"><span class="note__push"></span><img class="note__stamp" src="../../public/scene4/groom-child-ride.png" alt="">제 신랑은 어릴 때 시를 써서 상도 받던 문학소년이었대요. 무협지를 좋아해서 작가를 꿈꾸기도 했고요. 그랬던 아이는 커서 냉철하고 이성적인 개발자가 됐어요!</p>
       </div>
     </section>
 
-    <section id="part1-bride" class="block story">
+    <section id="part1-bride" class="block story story--stamp">
       <div class="photo-paper photo-paper--left">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
         <img class="photo-paper__photo" src="../../public/scene5/bride-child.jpg" alt="신부 어릴 적 사진">
       </div>
-      <div class="note note--right note--memo note--bride">
+      <div class="note note--right note--memo note--tuck note--bride">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
         <img class="note__who" src="../../public/character/otter-basic.png" alt="">
         <p class="note__text"><span class="note__push note__push--left"></span><img class="note__stamp note__stamp--left" src="../../public/scene5/bride-child-cutout.png" alt="">제 신부는 다섯 살 때 빗소리가 좋다며 혼자 우산 쓰고 동네를 걷던 아이였대요. 글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고 다녔고요. 그랬던 아이는 커서 상황을 분석하고 길을 찾는 사업전략가가 됐어요. 그래도 여전히 꿈을 꾸는 사람이고요.</p>
       </div>
     </section>
 
-    <!-- 6쪽(Part 2 신랑)부터 여기 아래에 이어 붙입니다 -->
+    <section id="part2-groom" class="block story">
+      <div class="note note--right note--memo">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <img class="note__who" src="../../public/character/otter-basic.png" alt="">
+        <img class="note__who note__who--inner" src="../../public/character/rabbit-2.png" alt="">
+        <p class="note__text">저희는 같은 회사에서 만났어요!</p>
+      </div>
+      <div class="photo-paper photo-paper--right">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <div class="photo-paper__blank"><span>신랑 웨딩 사진</span></div>
+      </div>
+      <div class="note note--left note--memo note--tuck">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <img class="note__who" src="../../public/character/rabbit-3.png" alt="">
+        <p class="note__text">신랑은 새벽에 퇴근하더라도 다음 날 꼭 정장에 머리까지 하고 나왔어요. 처음엔 차가워 보이는 데다 저와 너무 다른 사람 같아서 거리를 뒀는데, 알면 알수록 보석 같은 사람이더라고요!</p>
+      </div>
+      <div class="note note--left note--memo note--indent">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <img class="note__who" src="../../public/character/rabbit-4.png" alt="">
+        <p class="note__text">'이 사람 놓치면 안 되겠다, 남 주기 너무 아깝다! 아니, 싫다!' 싶어서 콱 잡았죠.</p>
+      </div>
+    </section>
+
+    <section id="part2-bride" class="block story">
+      <div class="photo-paper photo-paper--left">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <div class="photo-paper__blank"><span>신부 웨딩 사진</span></div>
+      </div>
+      <div class="note note--right note--memo note--tuck">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <img class="note__who" src="../../public/character/otter-1.png" alt="">
+        <p class="note__text">사실 저는 그때 연애 생각이 없었어요. 당분간 일에만 집중하자는 마음이었죠. 그런데 이 사람이 자꾸 제 주변을 맴돌더라고요.</p>
+      </div>
+      <div class="note note--right note--memo note--indent">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <img class="note__who" src="../../public/character/otter-2.png" alt="">
+        <p class="note__text">그러다 문득, 쉬는 날에도 시야를 떠올리는 저를 발견했어요. 아, 내가 설레고 있구나.</p>
+      </div>
+    </section>
+
+    <section id="part3" class="block story">
+      <div class="photo-paper photo-paper--center">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <div class="photo-paper__blank"><span>함께 있는 컷</span></div>
+      </div>
+      <div class="note note--right note--memo note--tuck note--indent">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <img class="note__who" src="../../public/character/otter-3.png" alt="">
+        <p class="note__text">어른이 되고는 꿈을 꾸지 않던 제가, 이 사람을 만나 다시 꿈꾸게 됐어요. 사랑도 많아졌고요.</p>
+      </div>
+      <div class="note note--left note--memo">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <img class="note__who" src="../../public/character/rabbit-5.png" alt="">
+        <p class="note__text">마음이 여렸던 저는 이 사람 덕분에 많이 단단해졌어요! 누군가에게 기대는 법도 배웠고요!</p>
+      </div>
+      <div class="note note--right note--memo">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <img class="note__who" src="../../public/character/hug.png" alt="">
+        <p class="note__text">MBTI 궁합이 '파국'으로 나올 만큼 성향이 다르지만, 달랐기에 서로의 빈틈을 채우고, 장점은 더 빛낼 수 있었어요.</p>
+      </div>
+    </section>
+
+    <!-- 9쪽(초대)부터 여기 아래에 이어 붙입니다 -->
 
   </div>
 
