@@ -5,10 +5,10 @@
 ## 지금 상태 (2026-09-07)
 
 - 완료: 진입 장면(편지봉투) · Scene1 커버(와이어프레임 2쪽) · Scene2 핵심 정보(3쪽, 액자) · 떠 있는 바로 가기 메뉴
-- Scene3 인사(4쪽)는 쪽지 두 장에 수달(신랑) · 토끼(신부) 스티커 캐릭터가 걸칩니다(T51 예시 · T52 캐릭터). Scene4 Part 1 신랑(5쪽)은 어릴 적 사진 종이와 토끼 메모지입니다(T53). 종이는 흰색이고 캐릭터 아이콘은 36px입니다. 아래 "인사·이야기 (쪽지·메모지)"
+- Scene3 인사(4쪽)는 쪽지 두 장에 수달(신랑) · 토끼(신부) 스티커 캐릭터가 걸칩니다(T51 예시 · T52 캐릭터). Scene4 Part 1 신랑(5쪽)은 어릴 적 사진 종이와 토끼 메모지입니다(T53). Scene5 Part 1 신부(6쪽)는 그 좌우 대칭입니다(T58). 종이는 흰색이고 캐릭터 아이콘은 36px입니다. 아래 "인사·이야기 (쪽지·메모지)"
 - 진입 장면(로딩)은 편지봉투입니다(T35 에셋 · T36~T49 장면). 봉투가 확대돼 있다가 물러나고, 뚜껑이 봉인을 단 채 젖혀지고, 커버가 카드로 빠져나오며 화면을 채웁니다. 아래 "진입 장면 (로딩)"
-- 핵심 정보(Scene2)는 이산하가 준 장식 테두리 액자입니다(T55). 그림 한 장에 글과 달력(T57)은 HTML로 얹습니다. 아래 "핵심 정보 (액자)"
-- 다음: 이산하의 Scene3·4 판정, 그다음 Scene5 Part 1 신부(6쪽. 신부 어릴 적 사진 + 수달 메모지, 오른쪽 정렬). 캐릭터 원본은 `../design/character/`에 기본 표정 둘과 다른 포즈 아홉(수달 1~3, 토끼 1~5, 둘이 허그)이 있습니다(T52)
+- 핵심 정보(Scene2)는 이산하가 준 장식 테두리 액자입니다(T55). 그림 한 장에 글은 HTML로 얹습니다. 아래 "핵심 정보 (액자)"
+- 다음: 이산하의 Scene3~5 판정, 그다음 Scene6 Part 2 신랑(7쪽. 합창 메모지 한 줄 + 웨딩 사진 + 토끼 메모지 둘). 캐릭터 원본은 `../design/character/`에 기본 표정 둘과 다른 포즈 아홉(수달 1~3, 토끼 1~5, 둘이 허그)이 있습니다(T52)
 - 콘셉트: 팝업북. 책은 서양 고서(앤티크)이고 붉은 가죽에 금박입니다. 질감 에셋은 CSS로 흉내 내지 않고 SVG → PNG로 만듭니다(디자인 결정 11, 아래 "질감 에셋 만들기")
 - Next.js 임시 적용(WIW-4)은 develop에 커밋돼 있습니다. develop → main PR과 배포는 이산하가 합니다
 
@@ -31,9 +31,9 @@ Artifact 발행은 2026-09-06 T31에 중단했습니다(디자인 결정 11). �
 | `canvas/FloatingMenu.dc.html` | 떠 있는 바로 가기 버튼의 열린 상태 | 커밋 |
 | `canvas/canvas.json` | 아트보드 배치와 메모 | 커밋 |
 | `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 편지봉투 여섯(`envelope-back` · `envelope-front` · `envelope-flap` · `envelope-flap-inside` · `wax-seal` · `wax-seal-back`, T35~T42)과 쪽지 종이(`note-paper`, T51)입니다. 레이스 셋(`lace-frill` · `oval-card` · `fleuron`, 이산하가 다른 세션에서 만듦, T50)은 T55에서 액자로 바뀌어 쓰지 않습니다 | 커밋 |
-| `../design/scene1/`, `../design/scene2/`, `../design/scene4/`, `../design/character/` | 이산하가 준 원본 이미지. 캐릭터는 스티커(흰 테두리 포함) PNG이고 `*--clean.png`는 가장자리 색 번짐을 지운 것 | 제외 (`docs/design/`) |
+| `../design/scene1/`, `../design/scene2/`, `../design/scene4/`, `../design/scene5/`, `../design/character/` | 이산하가 준 원본 이미지. 캐릭터는 스티커(흰 테두리 포함) PNG이고 `*--clean.png`는 가장자리 색 번짐을 지운 것 | 제외 (`docs/design/`) |
 | `../design/canvas/*.png` | 캔버스용 축소본(PNG 무손실). 아트보드가 파일명으로 참조합니다 | 제외 |
-| `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/scene2/`, `public/paper/`, `public/character/`, `public/scene4/` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
+| `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/scene2/`, `public/paper/`, `public/character/`, `public/scene4/`, `public/scene5/` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
 | 조립된 발행 파일 | Claude 세션 스크래치패드 | 커밋하지 않음 |
 
 ## 고치는 순서
@@ -90,7 +90,7 @@ Scene2입니다(디자인 논의 T55). 이산하가 준 장식 테두리 선화(
 
 글은 네 줄, 크기는 둘입니다(T51). 큰 글자(20px, 700) "2026년 10월 9일" · "금요일 오후 6시 30분", 16px 띄고 작은 글자(15px) "더채플앳청담 3층 커티지홀" · "강남구 선릉로 757". 액자 안쪽이 넓어(390px 화면에서 278px) 타원 때문에 쓰던 판 폭 기준 크기(cqw)는 걷어내고 고정 px입니다.
 
-글 아래 22px에 달력(`.cal`, T57)이 있습니다. 쪽지와 같은 흰 종이 결(`public/paper/note.png`)을 깐 카드에 "October 2026"(라틴 글꼴, 자간) · 요일 줄(일~토, 안내 글꼴 10px) · 날짜 다섯 줄(고운바탕 12px, 칸 26×24px)입니다. 2026년 10월 1일이 목요일이라 앞에 빈칸 넷이고 31일까지입니다. 9일은 오크색 원에 흰 글자입니다. 글과 달력을 한 상자에서 세로 가운데로 맞추므로 달력이 들어오면서 글이 위로 올라갑니다. Next.js에서는 날짜 칸을 배열로 만듭니다(조립본은 풀어 적음). 달력은 글자 두 크기 규칙(T51) 밖입니다.
+달력 카드는 T57에 넣었다가 T58에서 걷어냈습니다(커밋 4a75ca4에 있습니다).
 
 ```sh
 cp "docs/design/scene2/2_핵심정보 에셋.png" public/scene2/frame.png && python3 docs/scripts/quantize-png.py public/scene2/frame.png
@@ -98,16 +98,16 @@ cp "docs/design/scene2/2_핵심정보 에셋.png" public/scene2/frame.png && pyt
 
 ## 인사·이야기 (쪽지·메모지)
 
-Scene3 인사(디자인 논의 T50 제안 · T51 예시 · T52 캐릭터)와 Scene4 Part 1 신랑(T53)입니다. 5~8쪽도 같은 부품으로 잇습니다. 말풍선 대신 쪽지입니다. 한 줄 인사를 종이 쪽지에 쓰고, 화자 캐릭터가 쪽지의 위 모서리 하나에 스티커(흰 테두리는 그림에 있고 그늘은 CSS)로 걸칩니다. 신랑(수달) 쪽지는 오른쪽 정렬에 오른쪽 위 모서리, 신부(토끼) 쪽지는 왼쪽 정렬에 왼쪽 위 모서리입니다. 캐릭터 아이콘(`.note__who`)은 높이 36px이고(T53에서 절반으로. 앞으로의 캐릭터 아이콘도 이 크기) 쪽지 위로 27px 올라가 아래가 쪽지 안 9px까지 옵니다. 첫 줄은 위 여백 20px 아래라 겹치지 않습니다. 붙인 스티커처럼 6° · -5° 기울입니다. 종이는 흰색입니다(T53. 크림색 바탕 위에서 도드라집니다).
+Scene3 인사(디자인 논의 T50 제안 · T51 예시 · T52 캐릭터), Scene4 Part 1 신랑(T53), Scene5 Part 1 신부(T58)입니다. 7~9쪽도 같은 부품으로 잇습니다. 말풍선 대신 쪽지입니다. 한 줄 인사를 종이 쪽지에 쓰고, 화자 캐릭터가 쪽지의 위 모서리 하나에 스티커(흰 테두리는 그림에 있고 그늘은 CSS)로 걸칩니다. 신랑(수달) 쪽지는 오른쪽 정렬에 오른쪽 위 모서리, 신부(토끼) 쪽지는 왼쪽 정렬에 왼쪽 위 모서리입니다. 캐릭터 아이콘(`.note__who`)은 높이 36px이고(T53에서 절반으로. 앞으로의 캐릭터 아이콘도 이 크기) 쪽지 위로 27px 올라가 아래가 쪽지 안 9px까지 옵니다. 첫 줄은 위 여백 20px 아래라 겹치지 않습니다. 붙인 스티커처럼 6° · -5° 기울입니다. 종이는 흰색입니다(T53. 크림색 바탕 위에서 도드라집니다).
 
-Scene4는 사진 종이(`.photo-paper`. 흰 테두리 4px에 사진을 붙인 것, 폭의 3/4에 오른쪽 정렬, -0.7° 기울임. T56)가 위, 토끼 메모지(`.note--memo`. 쪽지와 같은 부품이고 폭만 전체, 왼쪽 위에 토끼 1)가 아래입니다. 메모지는 사진 종이 뒤로 26px 들어가 겹치고(사진이 앞 층), 첫 줄은 사진 아래 18px에서 시작해 가려지지 않습니다. 메모지 오른쪽 아래에는 어릴 적 사진 컷아웃(헬리콥터)이 스티커(`.note__stamp`, 높이 144px. 캐릭터 아이콘의 4배. T54)로 걸칩니다. 절반(60px)은 메모지 안, 절반은 밖이라 메모지 아래 여백이 70px이고 블록 아래 여백이 124px입니다. 컷아웃에는 흰 테두리가 없어 `docs/scripts/sticker-border.py`로 구웠습니다. 본문 줄바꿈은 와이어프레임 그대로 `<br>`입니다(한 줄 약 22자). 인사 블록이 0.3화면이라 사진 종이가 인사와 같은 화면에 걸쳐 보입니다. 쪽지는 화면에 들어올 때 한 번 8px 내려앉으며 나타납니다(0.45초, IntersectionObserver). 움직임 줄이기면 바로 보입니다. 블록 높이는 약 0.3화면(390×844에서 233px)이라 다음 블록의 사진 종이가 같은 화면에 걸쳐 보입니다.
+Scene4는 사진 종이(`.photo-paper`. 흰 테두리 4px에 사진을 붙인 것, 폭의 3/4에 오른쪽 정렬, -0.7° 기울임. T56)가 위, 토끼 메모지(`.note--memo`. 쪽지와 같은 부품이고 폭만 전체, 왼쪽 위에 토끼 1)가 아래입니다. 메모지는 사진 종이 뒤로 26px 들어가 겹치고(사진이 앞 층), 첫 줄은 사진 아래 18px에서 시작해 가려지지 않습니다. Scene5(`#part1-bride`)는 좌우 대칭입니다. 사진 종이는 왼쪽(`.photo-paper--left`), 메모지는 `.note--right`라 수달(신랑, 기본 표정)이 오른쪽 위에, 신부 컷아웃(`.note__stamp--left`, 같은 144px)이 왼쪽 아래에 걸칩니다. 본문 여섯 줄도 와이어프레임 그대로입니다. 메모지 오른쪽 아래에는 어릴 적 사진 컷아웃(헬리콥터)이 스티커(`.note__stamp`, 높이 144px. 캐릭터 아이콘의 4배. T54)로 걸칩니다. 절반(60px)은 메모지 안, 절반은 밖이라 메모지 아래 여백이 70px이고 블록 아래 여백이 124px입니다. 컷아웃에는 흰 테두리가 없어 `docs/scripts/sticker-border.py`로 구웠습니다. 본문 줄바꿈은 와이어프레임 그대로 `<br>`입니다(한 줄 약 22자). 인사 블록이 0.3화면이라 사진 종이가 인사와 같은 화면에 걸쳐 보입니다. 쪽지는 화면에 들어올 때 한 번 8px 내려앉으며 나타납니다(0.45초, IntersectionObserver). 움직임 줄이기면 바로 보입니다. 블록 높이는 약 0.3화면(390×844에서 233px)이라 다음 블록의 사진 종이가 같은 화면에 걸쳐 보입니다.
 
 | 것 | 자리 |
 | --- | --- |
-| CSS · 마크업 | `index.html`의 "3. 인사"(`.greeting` · `.note*`) · "4. Part 1 신랑"(`.story` · `.photo-paper` · `.note--memo` · `.note__stamp`) 구간과 스크립트의 쪽지 등장 부분 |
-| 에셋 원본 | `assets/note-paper.svg`(흰 종이 + 결 + 옅은 얼룩. 720×480. 그늘·모서리는 CSS). 캐릭터는 `../design/character/0_수달_기본.png` · `0_토끼_기본.png` · `0_토끼 1.PNG`(이산하, T52~T53). Scene4 사진은 `../design/scene4/3_산하 1.jpg`(대표) · `3_산하 2.png`(컷아웃) |
-| 산출 PNG | `public/paper/note.png`(1배, 214KB). 쪽지마다 `object-fit: cover`로 깔리므로 크기가 달라도 결이 늘어나지 않습니다. 4~8쪽의 메모지도 같은 그림을 씁니다. 캐릭터는 `public/character/otter-basic.png` · `rabbit-basic.png` · `rabbit-1.png`(높이 240px, 58~69KB). Scene4는 `public/scene4/groom-child.jpg`(폭 900, 269KB) · `groom-child-ride.png`(높이 300 + 테두리, 25KB). 아래 "이미지 축소" |
-| Next.js | `src/app/page.tsx`의 `#greeting` · `#part1-groom` 마크업과 쪽지 등장 `useEffect`. 메모지도 `.note`라 같이 나타납니다 |
+| CSS · 마크업 | `index.html`의 "3. 인사"(`.greeting` · `.note*`) · "4. Part 1 신랑"(`.story` · `.photo-paper` · `.note--memo` · `.note__stamp`) · "5. Part 1 신부"(`--left` 변형 둘) 구간과 스크립트의 쪽지 등장 부분 |
+| 에셋 원본 | `assets/note-paper.svg`(흰 종이 + 결 + 옅은 얼룩. 720×480. 그늘·모서리는 CSS). 캐릭터는 `../design/character/0_수달_기본.png` · `0_토끼_기본.png` · `0_토끼 1.PNG`(이산하, T52~T53). Scene4 사진은 `../design/scene4/3_산하 1.jpg`(대표) · `3_산하 2.png`(컷아웃), Scene5는 `../design/scene5/3_시야 1.jpeg` · `3_시야 2.png`(파일명이 NFD라 셸에서 어긋나면 `bride-child.jpeg` · `bride-child-cutout.png` 사본을 씁니다) |
+| 산출 PNG | `public/paper/note.png`(1배, 214KB). 쪽지마다 `object-fit: cover`로 깔리므로 크기가 달라도 결이 늘어나지 않습니다. 4~8쪽의 메모지도 같은 그림을 씁니다. 캐릭터는 `public/character/otter-basic.png` · `rabbit-basic.png` · `rabbit-1.png`(높이 240px, 58~69KB). Scene4는 `public/scene4/groom-child.jpg`(폭 900, 269KB) · `groom-child-ride.png`(높이 300 + 테두리, 25KB), Scene5는 `public/scene5/bride-child.jpg`(144KB) · `bride-child-cutout.png`(10KB). 아래 "이미지 축소" |
+| Next.js | `src/app/page.tsx`의 `#greeting` · `#part1-groom` · `#part1-bride` 마크업과 쪽지 등장 `useEffect`. 메모지도 `.note`라 같이 나타납니다 |
 
 ```sh
 node docs/scripts/render-asset.mjs docs/artifacts/assets/note-paper.svg public/paper/note.png 1 && python3 docs/scripts/quantize-png.py public/paper/note.png
@@ -132,7 +132,7 @@ sips -s format png -Z 240 docs/design/character/otter-basic--clean.png --out pub
 
 캐릭터 스티커도 두 사람 컷아웃처럼 반투명 가장자리에 자홍색 번짐이 있어 `unmatte.py`를 먼저 거칩니다(T52). 화면에서 36px 높이로 쓰므로 240px이면 넉넉합니다. 토끼(`0_토끼_기본.png` → `rabbit-basic`, `0_토끼 1.PNG` → `rabbit-1`)도 같은 두 줄입니다. 파일 이름은 `{otter,rabbit}-{basic,1,2,…}`로 이산하의 번호를 따릅니다.
 
-사진(JPEG)은 JPEG 그대로 폭 900으로 줄이고, 사진 컷아웃은 번짐을 지운 뒤 흰 스티커 테두리를 굽습니다(T53).
+사진(JPEG)은 JPEG 그대로 폭 900으로 줄이고, 사진 컷아웃은 번짐을 지운 뒤 흰 스티커 테두리를 굽습니다(T53). Scene5(`bride-child*`)도 같은 세 줄입니다.
 
 ```sh
 sips -s format jpeg -s formatOptions 82 -Z 900 "docs/design/scene4/3_산하 1.jpg" --out public/scene4/groom-child.jpg
