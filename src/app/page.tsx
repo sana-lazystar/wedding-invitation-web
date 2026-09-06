@@ -3,13 +3,14 @@
 /* eslint-disable @next/next/no-img-element */
 // WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보 · 떠 있는 메뉴를 옮긴 것입니다.
 // 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
-// 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T41). 세 층(바탕 < 커버 < 봉투 몸 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
+// 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T41). 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export default function Home() {
   const fabRef = useRef<HTMLElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
-  const introEnvRef = useRef<HTMLDivElement>(null);
+  const introBackRef = useRef<HTMLDivElement>(null);
+  const introFrontRef = useRef<HTMLDivElement>(null);
   const introFlapRef = useRef<HTMLDivElement>(null);
   const coverRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -18,7 +19,7 @@ export default function Home() {
   useEffect(() => {
     const root = document.documentElement;
     const cover = coverRef.current;
-    const layers = [introRef.current, introEnvRef.current, introFlapRef.current];
+    const layers = [introRef.current, introBackRef.current, introFrontRef.current, introFlapRef.current];
     if (!cover || layers.some((el) => !el)) return;
     let finished = false;
     const onIntroTouchMove = (e: TouchEvent) => e.preventDefault();
@@ -122,10 +123,17 @@ export default function Home() {
               넘어가기
             </button>
           </div>
-          <div className="intro-layer intro-layer--env" ref={introEnvRef} aria-hidden="true">
+          <div className="intro-layer intro-layer--back" ref={introBackRef} aria-hidden="true">
             <div className="intro__zoom">
               <div className="intro__env">
                 <img className="intro__back" src="/intro/envelope-back.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div className="intro-layer intro-layer--front" ref={introFrontRef} aria-hidden="true">
+            <div className="intro__zoom">
+              <div className="intro__env">
+                <img className="intro__front" src="/intro/envelope-front.png" alt="" />
               </div>
             </div>
           </div>
