@@ -14,7 +14,7 @@ TypeScript·Next.js·React로 만든 정적 모바일 청첩장을 GitHub 레포
 | --- | --- | --- |
 | 청첩장 페이지 | Vercel Hobby 프로젝트의 production 배포. CDN이 정적 파일을 서빙 | 전부 정적 생성(SSG). 함수·ISR·미들웨어 없음 |
 | 프리뷰 | 같은 프로젝트의 preview 배포 | develop·story·feature 브랜치 확인용 |
-| 소스 | GitHub `sana-lazystar/wedding-invitation-web` (public, 2026-09-06 확인. 전환은 Q7) | 코드 · 사진 변형 · 문서(`docs/`) · 스크립트(`docs/scripts/`) |
+| 소스 | GitHub `sana-lazystar/wedding-invitation-web` (public 유지, 스택 결정 14) | 코드 · 사진 변형 · 문서(`docs/`) · 스크립트(`docs/scripts/`) |
 
 프로비저닝 후 확정: Vercel 계정 · 프로젝트 이름 · production URL · 리전. 계정 전제는 U-3입니다.
 

@@ -1,9 +1,9 @@
 ---
 id: WIW-1
 type: task
-status: todo
+status: in-progress
 created: 2026-09-06 17:43:58
-updated: 2026-09-06 17:44:52
+updated: 2026-09-06 17:50:28
 completed:
 epic:
 jira:
@@ -32,7 +32,7 @@ docs/design/
 
 ## 주의할 점
 
-대기: Q6(제외 범위) 답과 이산하의 착수 승인. 실행 직전 `[게이트] WIW-1`을 표시합니다. 브랜치는 `feature/WIW-1-gitignore-asset-folders`이고 develop에서 냅니다.
+승인: 이산하 2026-09-06 "제외 범위 두 폴더만", "WIW-1 실행 승인"(Q6 닫힘, 스택 결정 13). 실행 직전 `[게이트] WIW-1`을 표시합니다. 브랜치는 `feature/WIW-1-gitignore-asset-folders`이고 develop에서 냅니다.
 
 ## 완료 기준
 
