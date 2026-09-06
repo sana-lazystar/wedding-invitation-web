@@ -37,8 +37,10 @@ related: []
 
 - [x] `next dev`로 띄운 `http://localhost:3000`에서 커버·진입 장면·떠 있는 메뉴가 조립본과 같이 동작함 (HTTP 200, 이미지 200, tsc·eslint 통과)
 - [ ] 이산하가 로컬에서 확인함
-- [ ] 구현 기록 기입 (임시 적용 커밋 해시)
+- [x] 구현 기록 기입 (임시 적용 커밋 해시)
 
 ## 구현 기록
 
 2026-09-06 19:22:14 · 브랜치 develop 작업 트리(커밋 없음) · 변경 파일 `src/app/layout.tsx` `src/app/page.tsx` `src/app/globals.css` `public/scene1/hall.jpg` `public/scene1/couple.png` · 이산하의 `next dev`(포트 3000)에 반영 확인
+
+2026-09-06 20:10:21 · develop · d8b24d7 · 배포 확인용 임시 적용 코드 커밋(이산하 지시 T28)
