@@ -84,3 +84,5 @@ related: []
 2026-09-07 00:15:21 · develop · ce00bc8 · Scene1 글자 크기·굵기·아래 여백 48px, Scene2 레이스 타원 카드로 교체(열린 봉투 그림 삭제, `public/lace/` 추가)(디자인 논의 T50). `src/app/page.tsx` `src/app/globals.css` `public/lace/` `public/scene2/`.
 
 2026-09-07 00:33:39 · develop · eaecfce · Scene2 글 네 줄·크기 둘, Scene3 인사 예시(쪽지 + 회색 원)와 4쪽 자리표시, `public/paper/note.png` 추가(디자인 논의 T51). `src/app/page.tsx` `src/app/globals.css` `public/paper/`.
+
+2026-09-07 00:40:07 · develop · cb68363 · Scene3 화자 자리에 수달·토끼 캐릭터 그림, `public/character/` 추가(디자인 논의 T52). `src/app/page.tsx` `src/app/globals.css` `public/character/`.
