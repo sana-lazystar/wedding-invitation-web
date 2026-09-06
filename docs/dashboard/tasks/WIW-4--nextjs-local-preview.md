@@ -88,3 +88,5 @@ related: []
 2026-09-07 00:40:07 · develop · cb68363 · Scene3 화자 자리에 수달·토끼 캐릭터 그림, `public/character/` 추가(디자인 논의 T52). `src/app/page.tsx` `src/app/globals.css` `public/character/`.
 
 2026-09-07 00:46:03 · develop · 48c3f36 · Scene4 Part 1 신랑(사진 종이 + 토끼 메모지 + 컷아웃 스티커), 종이 흰색, 캐릭터 아이콘 36px, `public/scene4/` 추가(디자인 논의 T53). `src/app/page.tsx` `src/app/globals.css` `public/paper/` `public/character/` `public/scene4/`.
+
+2026-09-07 00:50:45 · develop · e3c7f96 · Scene4 사진 종이 절반·가운데, 컷아웃 스티커 144px(디자인 논의 T54). `src/app/globals.css`.
