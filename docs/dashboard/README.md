@@ -117,12 +117,12 @@ AI가 **`docs/` 밖**에 반영하는 모든 행위(코드·설정 커밋·푸�
 - 드리프트: 장기 브랜치는 주기적으로 상위에서 당겨옵니다. develop→story→epic 순, 충돌은 하위 브랜치에서 해소
 - 크로스레포 story·epic은 레포마다 브랜치 1개, 최종 머지 순서 = `deploy-order`. 단독 task는 develop 직분기
 - ADR은 별도 브랜치 없음. 브랜치 계층은 epic→task 2단까지. ADR = task 브랜치 위의 커밋 단위(작업→커밋 반복, 커밋 제목에 `(WIW-{N}--ADR-{M})` 병기가 ADR completed의 증거). 병렬 ADR(touches 불겹침)은 서브에이전트 위임하되 산출물은 메인 스레드가 검수 후 task 브랜치에 ADR 단위로 순차 커밋
-- 이 레포의 기본 브랜치·develop 유무·배포 매핑은 git 초기화와 호스팅 확정 시 이 절에 추기합니다
+- 이 레포의 브랜치는 `main`(배포 기준)과 `develop`(통합, 2026-09-06 생성)입니다. story는 develop에서 분기합니다. 배포 매핑은 호스팅 확정 시 이 절에 추기합니다
 
 ## git 규약
 
-- 원격 = `origin` → `git@github.com-lazystar:sana-lazystar/wedding-invitation-web.git`. GitHub 계정 `sana-lazystar` 전용 SSH 별칭(`~/.ssh/config`의 `github.com-lazystar`)을 씁니다. 기본 브랜치는 `main`. develop 유무와 호스팅은 미정
-- `main`에는 직접 커밋하지 않습니다. 사용자 훅(`~/.claude/hooks/jarfis-safety.sh`)이 막습니다. 문서 커밋도 브랜치(`docs/{slug}`)에서 하고, main 반영은 이산하의 PR로 합니다. 부트스트랩은 `docs/bootstrap` 브랜치입니다
+- 원격 = `origin` → `git@github.com-lazystar:sana-lazystar/wedding-invitation-web.git`. GitHub 계정 `sana-lazystar` 전용 SSH 별칭(`~/.ssh/config`의 `github.com-lazystar`)을 씁니다. 기본 브랜치는 `main`, 통합 브랜치는 `develop`. 호스팅은 미정
+- `main` = 배포 기준, `develop` = 통합 브랜치입니다. 일상 커밋(문서 포함)은 develop 또는 그 하위 브랜치에 올리고, main 반영은 이산하의 develop→main PR로 합니다(부트스트랩 결정 7, 잠정). 부트스트랩 커밋은 main과 develop에 같이 올렸습니다(2026-09-06)
 - 커밋 계정은 `sana-lazystar`(`sana.lazystar@gmail.com`)입니다. 전역 git 계정이 다르므로 이 레포의 로컬 config로 고정했습니다(2026-09-06). 커밋 전에 `git config user.name`이 `sana-lazystar`인지 반드시 확인하고, 다르면 커밋하지 않고 이산하에게 알립니다
 - 문서 커밋 메시지: `docs: <요지>`. 작업 문서 커밋은 `docs: <요지> (WIW-N)`
 - 코드 커밋 제목 `(WIW-N)` 병기, ADR 단위 커밋은 `(WIW-{N}--ADR-{M})`. 커밋·푸시는 위 외부 반영 게이트를 통과한 뒤에만

@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 16:26:49
-updated: 2026-09-06 16:40:38
+updated: 2026-09-06 16:43:43
 completed:
 participants: 이산하, Claude
 related: []
@@ -67,6 +67,16 @@ jira:
 - README §git 규약에 원격·기본 브랜치·계정 확인 규칙·main 직접 커밋 금지를 추기했다. 첫 커밋의 해시는 다음 커밋에서 추기한다.
 - 첫 커밋 `4e01e22` (2026-09-06 16:40:38 추기, 파일 33개). `docs/bootstrap` 브랜치, 작성자 `sana-lazystar <sana.lazystar@gmail.com>`, pre-commit 훅이 게이트 2종을 실행해 통과했다.
 
+### 2026-09-06 16:43:43 이전 · 이산하 (T8)
+
+- `~/.claude/hooks/jarfis-safety.sh`를 삭제하라. 그리고 main 브랜치에 다시 푸시하고, develop 브랜치도 만들어 푸시하라.
+
+### 2026-09-06 16:43:43 · Claude (T8)
+
+- 훅 스크립트를 스크래치패드에 백업한 뒤 삭제하고, `~/.claude/settings.json`의 PreToolUse 항목에서 그 훅 참조를 뺐다(스크립트만 지우면 Bash 호출마다 훅 오류가 난다). 다른 JARFIS 훅 3개(pre-compact·quality-gate·session-start)는 그대로다.
+- README §git 규약의 "main 직접 커밋 금지(훅)" 문구를 걷어내고 브랜치 역할(main 배포 기준 · develop 통합)을 적었다. §브랜치 워크플로 마지막 항목도 develop 생성 사실로 바꿨다. 결정 5는 부분 대체(결정 6), 브랜치 역할은 결정 7(잠정)로 올렸다.
+- 이 커밋을 `docs/bootstrap`에 올린 뒤 `main`을 같은 커밋으로 만들어 푸시하고, `develop`을 main에서 만들어 푸시한다. GitHub 기본 브랜치는 첫 푸시 때 `docs/bootstrap`으로 잡혔으므로 main으로 바꾸는 것은 이산하 몫이다(gh CLI 없음).
+
 ## 결정
 
 행의 내용은 불변입니다. 상태 칸만 갱신할 수 있습니다.
@@ -78,7 +88,9 @@ jira:
 | 2 | 이 레포는 코드와 작업 문서를 함께 둡니다. `docs/`가 참고 레포의 역할(작업 `dashboard` · 규격 `ontology` · 문체 `WRITER.md`)을 맡고, 코드는 레포 루트에 둡니다. 경로는 레포 루트 기준 `docs/…`로 씁니다 | 이산하 | 확정 |
 | 3 | `state.json`은 진행 중 파악 전용입니다. `activeWorks`에 `status: in-progress`인 story·epic·task·bugfix의 파일명(확장자 없이)만 담고, title·parent·path는 두지 않습니다. 갱신은 착수와 종결 두 시점입니다 | 이산하 (Claude 제안 정정) | 확정 |
 | 4 | 체계는 `~/medistream-chat-hub`의 dashboard 규칙·템플릿 6종·게이트 2종·터미널 보드·ontology 원장 5종을 계승합니다. 그 레포의 결정 번호는 옮기지 않습니다. cooperation 축, AWS 가드, 좌표 검사, 폰 보드는 계승하지 않습니다 | Claude 제안 | 잠정 (이산하 확인 대기) |
-| 5 | 원격은 GitHub `sana-lazystar/wedding-invitation-web`(SSH 별칭 `github.com-lazystar`)이고 커밋 계정은 `sana-lazystar`입니다. 전역 계정이 달라 레포 로컬 config로 고정합니다. 기본 브랜치는 `main`이고 직접 커밋하지 않습니다(사용자 훅). 문서 커밋도 브랜치에서 하고 main 반영은 이산하 PR입니다. develop 유무는 미정입니다 | 이산하 (원격·계정·훅), Claude (로컬 config·브랜치 규칙) | 확정 |
+| 5 | 원격은 GitHub `sana-lazystar/wedding-invitation-web`(SSH 별칭 `github.com-lazystar`)이고 커밋 계정은 `sana-lazystar`입니다. 전역 계정이 달라 레포 로컬 config로 고정합니다. 기본 브랜치는 `main`이고 직접 커밋하지 않습니다(사용자 훅). 문서 커밋도 브랜치에서 하고 main 반영은 이산하 PR입니다. develop 유무는 미정입니다 | 이산하 (원격·계정·훅), Claude (로컬 config·브랜치 규칙) | 부분 대체 — 결정 6으로 대체(훅·main 직접 커밋 금지·PR 경유). 존치: 원격 URL·SSH 별칭·계정 로컬 config·기본 브랜치 main |
+| 6 | main 직접 커밋을 막던 사용자 훅 `~/.claude/hooks/jarfis-safety.sh`를 삭제하고 settings.json 참조도 뺍니다. 부트스트랩 커밋은 `main`에 올리고, `develop`을 main에서 만들어 함께 푸시합니다 | 이산하 | 확정 |
+| 7 | 브랜치 역할: `main` = 배포 기준, `develop` = 통합(§브랜치 워크플로 4층의 시작점). 일상 커밋(문서 포함)은 develop 또는 그 하위 브랜치에 올리고, main 반영은 이산하가 develop→main PR로 합니다 | Claude 제안 | 잠정 (이산하 확인 대기) |
 
 ## 정본 반영 점검 (완결 전)
 
