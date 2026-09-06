@@ -1,56 +1,13 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보 · 팝업북 진입 장면 · 떠 있는 메뉴를 옮긴 것입니다.
-// 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
+// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보 · 떠 있는 메뉴를 옮긴 것입니다.
+// 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/…, 여기 /…). 진입 장면(로딩)은 T34에서 걷어냈고 처음부터 다시 만듭니다.
 import { useEffect, useRef, useState } from "react";
 
-const INTRO_STEPS = { shown: 60, open: 600, rising: 1450, diving: 2750, done: 3950 };
-
 export default function Home() {
-  const introRef = useRef<HTMLDivElement>(null);
   const fabRef = useRef<HTMLElement>(null);
-  const finishRef = useRef<() => void>(() => {});
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const intro = introRef.current;
-    if (!intro) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      intro.hidden = true;
-      return;
-    }
-    const timers: number[] = [];
-    let finished = false;
-    const finish = () => {
-      if (finished) return;
-      finished = true;
-      timers.forEach(clearTimeout);
-      root.classList.remove("is-intro");
-      intro.classList.add("is-done");
-      timers.push(window.setTimeout(() => { intro.hidden = true; }, 400));
-    };
-    finishRef.current = finish;
-
-    // 순서: 닫힌 책 등장 → 앞쪽 반 젖힘(책이 가운데로) → 홀 조각·두 사람이 일어섬 → 시점이 내려오며 무대가 화면을 채우고 표제·이름이 떠오름(모두 커버 자리에 겹침) → 걷힘
-    window.scrollTo(0, 0);
-    intro.hidden = false;
-    intro.className = "is-reset";
-    root.classList.add("is-intro");
-    void intro.offsetWidth;
-    intro.className = "";
-    timers.push(window.setTimeout(() => intro.classList.add("is-shown"), INTRO_STEPS.shown));
-    timers.push(window.setTimeout(() => intro.classList.add("is-open"), INTRO_STEPS.open));
-    timers.push(window.setTimeout(() => intro.classList.add("is-rising"), INTRO_STEPS.rising));
-    timers.push(window.setTimeout(() => intro.classList.add("is-diving"), INTRO_STEPS.diving));
-    timers.push(window.setTimeout(finish, INTRO_STEPS.done));
-
-    return () => {
-      timers.forEach(clearTimeout);
-      root.classList.remove("is-intro");
-    };
-  }, []);
 
   useEffect(() => {
     const onDocumentClick = (e: MouseEvent) => {
@@ -101,100 +58,6 @@ export default function Home() {
           </div>
         </section>
         {/* 3쪽(인사)부터 여기 아래에 이어 붙입니다 */}
-      </div>
-
-      <div id="intro" ref={introRef} aria-hidden="true">
-        <div className="stage">
-          <div className="stage__aisle">
-            <img src="/scene1/hall.png" alt="" />
-            <div className="cover-bg__shadow" />
-          </div>
-          <div className="book">
-            <div className="world">
-              <div className="floor">
-                <div className="shade shade--right" />
-                <div className="shade shade--left" />
-                <div className="stack stack--right">
-                  <div className="leaf leaf--right">
-                    <img className="leaf__art" src="/intro/page.png" alt="" />
-                    <div className="leaf__shade" />
-                  </div>
-                  <div className="edge edge--near">
-                    <img className="edge__pages" src="/intro/page-edges.png" alt="" />
-                    <div className="edge__board" />
-                  </div>
-                  <div className="edge edge--fore">
-                    <div className="edge__pages-v">
-                      <img src="/intro/page-edges.png" alt="" />
-                    </div>
-                    <div className="edge__board-v" />
-                  </div>
-                </div>
-                <div className="stack stack--cover">
-                  <div className="leaf leaf__inner">
-                    <img className="leaf__art" src="/intro/page.png" alt="" />
-                    <div className="leaf__shade" />
-                  </div>
-                  <div className="leaf__outer">
-                    <img className="leaf__art" src="/intro/book-cover.png" alt="" />
-                    <div className="eyebrow">Wedding Invitation</div>
-                    <div className="leaf__rule" />
-                    <p className="leaf__tagline">
-                      우리의 삶을 함께
-                      <br />
-                      써 주신 당신께
-                    </p>
-                    <div className="leaf__note">Thanks to everyone.</div>
-                  </div>
-                  <div className="edge edge--near">
-                    <img className="edge__pages" src="/intro/page-edges.png" alt="" />
-                    <div className="edge__board" />
-                  </div>
-                  <div className="edge edge--fore">
-                    <div className="edge__pages-v">
-                      <img src="/intro/page-edges.png" alt="" />
-                    </div>
-                    <div className="edge__board-v" />
-                  </div>
-                </div>
-                <div className="floor__wall" />
-                <div className="floor__feet" />
-                <div className="pop pop--hall">
-                  <div className="pop__face pop__back">
-                    <img className="leaf__art" src="/intro/page.png" alt="" />
-                  </div>
-                  <div className="pop__face pop__front">
-                    <img src="/scene1/hall.png" alt="" />
-                    <div className="cover-bg__blur cover-bg__blur--soft" />
-                    <div className="cover-bg__blur cover-bg__blur--strong" />
-                    <div className="cover-head pop__title">
-                      <div className="eyebrow">Wedding Invitation</div>
-                      <p className="tagline">우리의 삶을 함께 써 주신 당신께</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="pop pop--couple">
-                  <div className="pop__face pop__back">
-                    <img src="/intro/couple-back.png" alt="" />
-                  </div>
-                  <div className="pop__face pop__front">
-                    <img src="/scene1/couple.png" alt="" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="stage__text">
-            <div className="names">
-              <div className="names__name">이산하</div>
-              <div className="names__and">그리고</div>
-              <div className="names__name">송시야</div>
-            </div>
-          </div>
-        </div>
-        <button type="button" className="intro-skip" onClick={() => finishRef.current()}>
-          건너뛰기
-        </button>
       </div>
 
       <nav className="fab" ref={fabRef} data-open={menuOpen ? "true" : "false"} aria-label="바로 가기">
