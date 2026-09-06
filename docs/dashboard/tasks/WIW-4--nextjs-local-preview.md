@@ -124,3 +124,5 @@ related: []
 2026-09-07 02:03:00 · develop · ce5c601 · Scene6 관찰 아이콘 왼쪽·독백 아이콘 오른쪽(사진 종이 가림)(디자인 논의 T73). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-07 02:05:53 · develop · 87a1a52 · Scene1 두 사람 컷아웃 새 원본으로 교체(디자인 논의 T74). `public/scene1/couple.png`.
+
+2026-09-07 02:15:22 · develop · 369e2d1 · 커버 그림 폭 기준 고정 크기 무대, 흐림 띠 커버 기준(디자인 논의 T75). `src/app/page.tsx` `src/app/globals.css`.
