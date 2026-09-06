@@ -219,15 +219,10 @@ export default function Home() {
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/rabbit-1.png" alt="" />
             <p className="note__text">
-              제 신랑은 어릴 때 시를 써서 상도 받던
-              <br />
-              문학소년이었대요. 무협지를 좋아해서
-              <br />
-              작가를 꿈꾸기도 했고요. 그랬던 아이는
-              <br />
-              커서 냉철하고 이성적인 개발자가 됐어요!
+              <img className="note__stamp" src="/scene4/groom-child-ride.png" alt="" style={{ shapeOutside: "url(/scene4/groom-child-ride.png)" }} />
+              제 신랑은 어릴 때 시를 써서 상도 받던 문학소년이었대요. 무협지를 좋아해서 작가를 꿈꾸기도 했고요. 그랬던 아이는 커서 냉철하고 이성적인
+              개발자가 됐어요!
             </p>
-            <img className="note__stamp" src="/scene4/groom-child-ride.png" alt="" />
           </div>
         </section>
         <section id="part1-bride" className="block story">
@@ -239,19 +234,10 @@ export default function Home() {
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/otter-basic.png" alt="" />
             <p className="note__text">
-              제 신부는 다섯 살 때 빗소리가 좋다며
-              <br />
-              혼자 우산 쓰고 동네를 걷던 아이였대요.
-              <br />
-              글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고
-              <br />
-              다녔고요. 그랬던 아이는 커서 상황을
-              <br />
-              분석하고 길을 찾는 사업전략가가 됐어요.
-              <br />
-              그래도 여전히 꿈을 꾸는 사람이고요.
+              <img className="note__stamp note__stamp--left" src="/scene5/bride-child-cutout.png" alt="" style={{ shapeOutside: "url(/scene5/bride-child-cutout.png)" }} />
+              제 신부는 다섯 살 때 빗소리가 좋다며 혼자 우산 쓰고 동네를 걷던 아이였대요. 글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고 다녔고요. 그랬던 아이는
+              커서 상황을 분석하고 길을 찾는 사업전략가가 됐어요. 그래도 여전히 꿈을 꾸는 사람이고요.
             </p>
-            <img className="note__stamp note__stamp--left" src="/scene5/bride-child-cutout.png" alt="" />
           </div>
         </section>
         {/* 6쪽(Part 2 신랑)부터 여기 아래에 이어 붙입니다 */}
