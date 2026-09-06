@@ -5,9 +5,10 @@
 ## 지금 상태 (2026-09-07)
 
 - 완료: 진입 장면(편지봉투) · Scene1 커버(와이어프레임 2쪽) · Scene2 핵심 정보(3쪽, 레이스 타원 카드) · 떠 있는 바로 가기 메뉴
+- 예시: Scene3 인사(4쪽)를 쪽지 두 장 + 회색 원 자리표시로 붙였습니다(T51). 캐릭터 그림이 오면 원 자리에 넣습니다. 4쪽(Part 1 신랑)은 사진 종이 자리표시만 있습니다. 아래 "인사 (쪽지)"
 - 진입 장면(로딩)은 편지봉투입니다(T35 에셋 · T36~T49 장면). 봉투가 확대돼 있다가 물러나고, 뚜껑이 봉인을 단 채 젖혀지고, 커버가 카드로 빠져나오며 화면을 채웁니다. 아래 "진입 장면 (로딩)"
 - 핵심 정보(Scene2)는 레이스 프릴을 두른 타원 카드입니다(T50). 그림 세 장을 겹치고 글은 HTML로 얹습니다. 아래 "핵심 정보 (레이스 타원 카드)"
-- 다음: Scene3 인사(4쪽). 이 쪽부터 토끼(신부)·수달(신랑) 캐릭터 그림이 필요합니다. 이산하가 재료를 줍니다(Q11). 구성 제안과 재료 규격은 디자인 논의 T50에 있습니다
+- 다음: 이산하의 Scene3 예시 판정과 캐릭터 그림(토끼 = 신부 · 수달 = 신랑). 이산하가 재료를 줍니다(Q11). 구성 제안과 재료 규격은 디자인 논의 T50에 있습니다. 받으면 Scene3에 넣고 4쪽부터 이어 붙입니다
 - 콘셉트: 팝업북. 책은 서양 고서(앤티크)이고 붉은 가죽에 금박입니다. 질감 에셋은 CSS로 흉내 내지 않고 SVG → PNG로 만듭니다(디자인 결정 11, 아래 "질감 에셋 만들기")
 - Next.js 임시 적용(WIW-4)은 develop에 커밋돼 있습니다. develop → main PR과 배포는 이산하가 합니다
 
@@ -29,10 +30,10 @@ Artifact 발행은 2026-09-06 T31에 중단했습니다(디자인 결정 11). �
 | `canvas/Main.dc.html` | Claude Design 캔버스의 아트보드(동결. 결정 11 뒤로 고치지 않습니다) | 커밋 |
 | `canvas/FloatingMenu.dc.html` | 떠 있는 바로 가기 버튼의 열린 상태 | 커밋 |
 | `canvas/canvas.json` | 아트보드 배치와 메모 | 커밋 |
-| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 편지봉투 여섯(`envelope-back` · `envelope-front` · `envelope-flap` · `envelope-flap-inside` · `wax-seal` · `wax-seal-back`, T35~T42)과 레이스 셋(`lace-frill` · `oval-card` · `fleuron`, 이산하가 다른 세션에서 만듦, T50)입니다 | 커밋 |
+| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 편지봉투 여섯(`envelope-back` · `envelope-front` · `envelope-flap` · `envelope-flap-inside` · `wax-seal` · `wax-seal-back`, T35~T42)과 레이스 셋(`lace-frill` · `oval-card` · `fleuron`, 이산하가 다른 세션에서 만듦, T50), 쪽지 종이(`note-paper`, T51)입니다 | 커밋 |
 | `../design/scene1/`, `../design/scene2/` | 이산하가 준 원본 이미지 | 제외 (`docs/design/`) |
 | `../design/canvas/*.png` | 캔버스용 축소본(PNG 무손실). 아트보드가 파일명으로 참조합니다 | 제외 |
-| `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/lace/` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
+| `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/lace/`, `public/paper/` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
 | 조립된 발행 파일 | Claude 세션 스크래치패드 | 커밋하지 않음 |
 
 ## 고치는 순서
@@ -88,13 +89,28 @@ Scene2입니다(디자인 논의 T50). 이산하가 다른 세션에서 만든 �
 | 산출 PNG | `public/lace/frill.png`(1.6배) · `card.png`(2배) · `fleuron.png`(3배). 아래 명령. `public/lace/preview.html`은 이산하의 확인용 조합 예시이고 커밋하지 않습니다 |
 | Next.js | `src/app/page.tsx`의 `.lace` 마크업. 경로만 `/lace/…`입니다 |
 
-글 쌓기는 플러런 / 2026년 / 10월 9일 금요일 / 오후 6시 30분 / 오크색 짧은 선 / 더채플앳청담 / 3층 커티지홀 / 플러런입니다. 타원 안쪽은 가장 넓은 곳이 판 폭의 44%(390px 화면에서 161px)라 "2026년 10월 9일 금요일"(10.2em)을 한 줄로 두면 15px에도 꽉 찹니다. 그래서 연도를 작은 윗줄로 뺐습니다. 위아래로 갈수록 좁아지므로 끝에 놓이는 플러런은 글 상자 폭의 62%로 둡니다.
+글은 네 줄, 크기는 둘입니다(T51). 큰 글자(4.6cqw, 700) "2026년 10월 9일" · "금요일 오후 6시 30분", 한 줄 띄고 작은 글자(3.5cqw) "더채플앳청담 3층 커티지홀" · "강남구 선릉로 757". 장식(플러런·선)은 없습니다. 크기를 판 폭(cqw)으로 잡는 이유는 타원 안쪽 폭이 판 폭에 비례하기 때문입니다. 가장 넓은 곳이 판 폭의 44%(390px 화면에서 161px)이고 가장 긴 줄이 12em이라 작은 글자는 3.5cqw(390px에서 12.8px)까지입니다. 390px에서 큰 글자는 16.8px입니다.
 
 ```sh
 python3 docs/scripts/gen-lace-frill.py
 node docs/scripts/render-asset.mjs docs/artifacts/assets/lace-frill.svg public/lace/frill.png 1.6 && python3 docs/scripts/quantize-png.py public/lace/frill.png
 node docs/scripts/render-asset.mjs docs/artifacts/assets/oval-card.svg public/lace/card.png 2 && python3 docs/scripts/quantize-png.py public/lace/card.png
 node docs/scripts/render-asset.mjs docs/artifacts/assets/fleuron.svg public/lace/fleuron.png 3 && python3 docs/scripts/quantize-png.py public/lace/fleuron.png
+```
+
+## 인사 (쪽지)
+
+Scene3 예시입니다(디자인 논의 T50 제안 · T51 예시). 말풍선 대신 쪽지입니다. 한 줄 인사를 종이 쪽지에 쓰고, 화자 캐릭터가 쪽지의 위 모서리 하나에 다이컷 조각(종이 테두리 + 그늘)으로 걸칩니다. 신랑(수달) 쪽지는 오른쪽 정렬에 오른쪽 위 모서리, 신부(토끼) 쪽지는 왼쪽 정렬에 왼쪽 위 모서리입니다. 지금 화자는 회색 원 자리표시(`.note__who`)이고, 캐릭터 그림이 오면 그 자리에 상반신 컷아웃을 넣습니다. 쪽지는 화면에 들어올 때 한 번 8px 내려앉으며 나타납니다(0.45초, IntersectionObserver). 움직임 줄이기면 바로 보입니다. 블록 높이는 약 0.3화면(390×844에서 233px)이라 다음 블록의 사진 종이가 같은 화면에 걸쳐 보입니다. 그것을 확인하려고 4쪽 자리표시(`#part1-groom`, 사진 종이 한 장)를 두었고 4쪽을 만들 때 걷어냅니다.
+
+| 것 | 자리 |
+| --- | --- |
+| CSS · 마크업 | `index.html`의 "3. 인사" 구간(`.greeting` · `.note*` · `.story` · `.photo-paper`)과 스크립트의 쪽지 등장 부분 |
+| 에셋 원본 | `assets/note-paper.svg`(결 있는 종이 + 얼룩. 720×480. 그늘·모서리는 CSS) |
+| 산출 PNG | `public/paper/note.png`(1배, 214KB). 쪽지마다 `object-fit: cover`로 깔리므로 크기가 달라도 결이 늘어나지 않습니다. 4~8쪽의 메모지도 같은 그림을 씁니다 |
+| Next.js | `src/app/page.tsx`의 `#greeting` · `#part1-groom` 마크업과 쪽지 등장 `useEffect` |
+
+```sh
+node docs/scripts/render-asset.mjs docs/artifacts/assets/note-paper.svg public/paper/note.png 1 && python3 docs/scripts/quantize-png.py public/paper/note.png
 ```
 
 ## Artifact 발행 (중단)

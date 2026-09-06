@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+<!-- 쪽지·메모지 종이(디자인 논의 T51). 결 있는 무명 종이에 살짝 따뜻한 비네트. 그늘·모서리는 CSS가 맡고(크기가 제각각이라) 이 그림은 object-fit: cover로 깔립니다. 글자는 HTML로 얹습니다. -->
+<defs>
+  <filter id="tooth" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="5" result="n"/>
+    <feDiffuseLighting in="n" surfaceScale="0.5" diffuseConstant="1" lighting-color="#fff" result="l">
+      <feDistantLight azimuth="225" elevation="64"/>
+    </feDiffuseLighting>
+    <feComponentTransfer in="l" result="soft">
+      <feFuncR type="linear" slope="0.22" intercept="0.78"/>
+      <feFuncG type="linear" slope="0.22" intercept="0.78"/>
+      <feFuncB type="linear" slope="0.22" intercept="0.78"/>
+    </feComponentTransfer>
+    <feComposite in="soft" in2="SourceAlpha" operator="in" result="t"/>
+    <feBlend in="SourceGraphic" in2="t" mode="multiply"/>
+  </filter>
+  <filter id="mottle" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" seed="11"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.62  0 0 0 0 0.52  0 0 0 0 0.38  0 0 0 0.10 0"/>
+  </filter>
+  <linearGradient id="vig" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#FDF9F0"/><stop offset="1" stop-color="#F5EEDF"/>
+  </linearGradient>
+</defs>
+<rect width="720" height="480" fill="url(#vig)" filter="url(#tooth)"/>
+<rect width="720" height="480" filter="url(#mottle)"/>
+</svg>
