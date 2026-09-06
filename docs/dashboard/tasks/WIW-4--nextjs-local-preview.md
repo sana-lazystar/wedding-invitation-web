@@ -54,3 +54,5 @@ related: []
 2026-09-06 21:53:16 · develop · c708b98 · 진입 장면 전부 삭제(디자인 논의 T34). `src/app/page.tsx` `src/app/layout.tsx` `src/app/globals.css`, `public/intro/` 삭제.
 
 2026-09-06 22:32:11 · develop · c761db5 · 진입 장면 편지봉투(디자인 논의 T36): 확대 → 물러남 → 뚜껑 젖힘 → 커버가 카드로 빠져나옴. `src/app/page.tsx` `src/app/globals.css` `public/intro/{envelope-back,envelope-flap,envelope-flap-inside,wax-seal}.png`. localhost:3000 프레임으로 조립본과 같은 동작 확인, 마지막 프레임 = 커버 정지 화면, tsc · eslint 통과.
+
+2026-09-06 22:48:58 · develop · 635c02d · 진입 장면 손질(디자인 논의 T37): 가운데 맞춤, 봉인은 뚜껑에 붙은 채, 카드 올라오며 봉투 내려감, 넘어가기, 새로고침 시 맨 위. `src/app/page.tsx` `src/app/globals.css`. 여러 화면 폭에서 가운데 확인, 마지막 프레임 = 커버 정지 화면.
