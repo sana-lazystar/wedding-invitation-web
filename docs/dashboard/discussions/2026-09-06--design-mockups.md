@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 18:25:07
-updated: 2026-09-07 01:41:00
+updated: 2026-09-07 01:43:00
 completed:
 participants: 이산하, Claude
 related: []
@@ -773,6 +773,14 @@ jira:
 - 이 Next.js는 `app/`의 파일 규약(`favicon.ico` · `icon*.png` · `apple-icon.png` · `manifest.ts`)이 `<head>`를 만들어 주므로 생성기의 `<link>` 목록을 손으로 옮기지 않았다(`node_modules/next/dist/docs/…/app-icons.md`). `favicon.ico`(생성기 것은 16×16 한 장) · `icon1~4.png`(16 · 32 · 96 · 192) · `apple-icon.png`(180. iOS는 이 한 장을 쓰므로 57~152는 넣지 않았다) · `manifest.ts`(이름 · 안드로이드 아이콘 6종 · 바탕색과 테마색 종이색 #F3ECDF)를 `src/app/`에, 안드로이드 · ms 타일 PNG와 `browserconfig.xml`(타일색 종이색)을 `public/`에 두었다. 규약이 없는 ms 타일 메타와 애플 홈 화면 이름은 `layout.tsx`의 `metadata.other` · `appleWebApp`, 테마색은 `viewport.themeColor`다. 생성기 기본값 흰색(#ffffff) 대신 종이색을 썼다. 원본 묶음 전체는 `docs/design/favicon/`(git 제외)에 복사했다.
 - 확인. localhost:3000 `<head>`에 icon 16 · 32 · 96 · 192, apple-touch-icon 180, manifest, theme-color, msapplication 둘, apple-mobile-web-app-title이 나오고 `/favicon.ico` · `/manifest.webmanifest` · `/android-icon-192x192.png` · `/ms-icon-144x144.png` · `/browserconfig.xml` 전부 200. tsc · eslint 통과.
 - `layout.tsx`의 제목·설명 변경(이산하)은 커밋에서 빼고 작업 트리로 되돌렸다.
+
+### 2026-09-07 01:41:00 이후 · 이산하 (T71)
+
+- 커밋 안 된 것을 다 커밋해 달라.
+
+### 2026-09-07 01:43:00 · Claude (T71)
+
+- 남은 것은 이산하가 01:15에 고친 `src/app/layout.tsx`의 페이지 제목("이산하 · 송시야 청첩장" → "이산하 ♥ 송시야 결혼합니다.")과 설명("2026년 10월 9일 금요일 오후 6시 30분, 더채플앳청담 3층 커티지홀" → "2026년 10월 9일 금요일 오후 6시 30분")뿐이라 그대로 커밋했다. 작업 트리가 비었다.
 
 ## 결정
 
