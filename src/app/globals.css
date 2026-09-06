@@ -135,7 +135,7 @@ body {
 .fab__button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
 
-/* 0. 진입 장면(로딩). 편지봉투가 화면 높이만큼 확대돼 있다가(좌우가 잘림) 물러나 전체가 보이고, 뚜껑이 봉인을 단 채 위로 180° 젖혀지고(봉인은 옆면을 지나며 뚜껑 뒤로 숨음), 커버(Scene1)가 카드로 올라오며 봉투는 아래로 빠져나가고, 카드가 화면 가운데를 기준으로 커져 화면을 채웁니다(디자인 논의 T36 · T37).
+/* 0. 진입 장면(로딩). 편지봉투가 화면 높이만큼 확대돼 있다가(좌우가 잘림) 물러나 전체가 보이고, 뚜껑이 봉인을 단 채 위로 180° 젖혀지고(옆면을 지나면 봉인 뒷면이 뚜껑 끝 둘레로 보임), 커버(Scene1)가 카드로 올라오며 봉투는 아래로 빠져나가고, 카드가 화면 가운데를 기준으로 커져 화면을 채웁니다(디자인 논의 T36 · T37).
    치수는 봉투 좌표(600×400)입니다. 배율 --z0(높이 = 화면) · --z1(전체가 보임), 카드 값 --card-*, 봉투가 내려가는 거리 --drop-*는 스크립트가 화면 크기에서 계산해 넣습니다.
    카드는 커버 자체입니다(사본이 아님). 봉투 안에 든 부분은 clip-path로 가리는데, 카드가 올라오는 동안 봉투도 같은 박자로 내려가므로 클립 선이 늘 봉투 윗변과 일치합니다(둘 다 같은 매개변수에 선형). 봉투 윗변이 카드 아래를 지나면 클립은 저절로 풀립니다. 그다음 카드가 커지는 구간은 화면 가운데를 기준으로 한 확대라 다가오는 느낌입니다(카드 윗변 = 화면 높이 × (1 − 배율) / 2로 두면 위 가운데 기준 변환이 곧 가운데 확대가 됩니다). 마지막 프레임은 커버 정지 화면과 같습니다(변환 · 클립 · 필터 없음).
    봉투 상자(600px)는 화면보다 넓을 수 있어 grid 정렬로 가운데를 맞추지 않고 absolute + 음수 margin으로 맞춥니다(트랙이 왼쪽에서 시작해 오른쪽으로 치우쳤던 것). 뚜껑은 원근이 있는 봉투 안에서 윗변을 축으로 돌고, 바깥면과 안쪽면 그림을 같은 자리에 겹쳐 90°에서 바꿉니다 */
@@ -148,7 +148,9 @@ body {
 .intro__flap { position: absolute; left: 0; top: 0; width: 600px; height: 236px; z-index: 1; transform-origin: 50% 0; filter: drop-shadow(1.2px 2.6px 1.3px rgba(74, 54, 32, 0.34)) drop-shadow(0 0 3.2px rgba(74, 54, 32, 0.3)); }
 .intro__flap-out, .intro__flap-in { position: absolute; left: 0; top: 0; width: 600px; height: 236px; }
 .intro__flap-in { opacity: 0; }
-.intro__seal { position: absolute; left: 230px; top: 135px; width: 140px; height: 140px; }   /* 뚜껑의 자식. 뚜껑과 함께 젖혀지다 90°에서 바깥면과 함께 뚜껑 뒤로 숨습니다 */
+/* 봉인은 뚜껑의 자식이라 함께 젖혀집니다. 앞면은 바깥면 위에, 뒷면(어두운 밀랍)은 안쪽면 아래에 같은 자리로 두고 90°에서 바꿉니다. 봉인이 뚜껑 끝보다 커서 젖혀진 뒤에는 뚜껑 끝 둘레로 뒷면이 삐져나와 보입니다 */
+.intro__seal, .intro__seal-back { position: absolute; left: 230px; top: 135px; width: 140px; height: 140px; }
+.intro__seal-back { opacity: 0; }
 .intro__skip {
   position: absolute; right: max(24px, calc((100vw - 430px) / 2 + 24px), env(safe-area-inset-right)); bottom: calc(26px + env(safe-area-inset-bottom));
   padding: 8px 6px; border: 0; background: none; cursor: pointer; opacity: 0;
@@ -160,25 +162,26 @@ body {
 .is-intro-shown .intro__flap { animation: intro-flap 1.4s cubic-bezier(0.55, 0, 0.3, 1) 1.8s both; }
 /* 면 교체 시각 = 뚜껑이 90°를 지나는 순간. 곡선 cubic-bezier(0.55, 0, 0.3, 1)은 진행 50%가 시간 44.4%에 오므로 1.8 + 1.4 × 0.444 = 2.42초 */
 .is-intro-shown .intro__flap-out, .is-intro-shown .intro__seal { animation: intro-hide 1ms linear 2.42s both; }
-.is-intro-shown .intro__flap-in { animation: intro-show 1ms linear 2.42s both; }
-.is-intro-shown .intro__env { animation: intro-drop 2s linear 3.35s both; }
-.is-intro-shown #cover { animation: intro-card 2s linear 3.35s both; }
-.is-intro-shown .intro__skip { animation: intro-skip 4.7s linear 0s both; }
+.is-intro-shown .intro__flap-in, .is-intro-shown .intro__seal-back { animation: intro-show 1ms linear 2.42s both; }
+/* 카드는 뚜껑이 다 젖혀지기 전(2.9초, 약 173°)부터 올라옵니다. 젖혀진 뚜껑은 카드 뒤에 있습니다(B안, 디자인 논의 T39) */
+.is-intro-shown .intro__env { animation: intro-drop 1.5s linear 2.9s both; }
+.is-intro-shown #cover { animation: intro-card 1.5s linear 2.9s both; }
+.is-intro-shown .intro__skip { animation: intro-skip 3.9s linear 0s both; }
 @keyframes intro-zoom { from { transform: scale(var(--z0, 2.1)); } to { transform: scale(var(--z1, 0.57)); } }
 @keyframes intro-flap { from { transform: rotateX(0deg); } to { transform: rotateX(180deg); } }
 @keyframes intro-hide { from { opacity: 1; } to { opacity: 0; } }
 @keyframes intro-show { from { opacity: 0; } to { opacity: 1; } }
 @keyframes intro-skip { 0% { opacity: 0; } 13% { opacity: 0; } 22% { opacity: 1; } 92% { opacity: 1; } 100% { opacity: 0; } }
-/* 봉투와 카드는 한 시간표를 씁니다. 0~50% 카드가 올라오고 봉투가 내려감(같은 완화 곡선) · 50~55% 멈춤 · 55~100% 카드가 가운데 기준으로 커지고 봉투는 더 내려가며 사라짐 */
+/* 봉투와 카드는 한 시간표(1.5초)를 씁니다. 0~40%(0.6초) 카드가 올라오고 봉투가 내려감(같은 완화 곡선) · 40~45% 멈춤 · 45~100%(0.825초) 카드가 가운데 기준으로 커지고 봉투는 더 내려가며 사라짐 */
 @keyframes intro-drop {
   0% { transform: translateY(0); opacity: 1; animation-timing-function: cubic-bezier(0.45, 0.05, 0.25, 1); }
-  50% { transform: translateY(var(--drop1)); opacity: 0.85; }
-  55% { transform: translateY(var(--drop1)); opacity: 0.85; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); }
+  40% { transform: translateY(var(--drop1)); opacity: 0.85; }
+  45% { transform: translateY(var(--drop1)); opacity: 0.85; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); }
   100% { transform: translateY(var(--drop2)); opacity: 0; }
 }
 @keyframes intro-card {
   0% { transform: translateY(var(--card-ty0)) scale(var(--card-s0)); clip-path: inset(0 -40px var(--card-b0) -40px); border-radius: 14px; filter: drop-shadow(0 14px 18px rgba(70, 48, 24, 0.35)); animation-timing-function: cubic-bezier(0.45, 0.05, 0.25, 1); }
-  50% { transform: translateY(var(--card-ty1)) scale(var(--card-s0)); clip-path: inset(0 -40px var(--card-b1) -40px); border-radius: 14px; filter: drop-shadow(0 14px 18px rgba(70, 48, 24, 0.35)); }
-  55% { transform: translateY(var(--card-ty1)) scale(var(--card-s0)); clip-path: inset(0 -40px var(--card-b1) -40px); border-radius: 14px; filter: drop-shadow(0 14px 18px rgba(70, 48, 24, 0.35)); animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+  40% { transform: translateY(var(--card-ty1)) scale(var(--card-s0)); clip-path: inset(0 -40px var(--card-b1) -40px); border-radius: 14px; filter: drop-shadow(0 14px 18px rgba(70, 48, 24, 0.35)); }
+  45% { transform: translateY(var(--card-ty1)) scale(var(--card-s0)); clip-path: inset(0 -40px var(--card-b1) -40px); border-radius: 14px; filter: drop-shadow(0 14px 18px rgba(70, 48, 24, 0.35)); animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
   100% { transform: translateY(0) scale(1); clip-path: inset(0 -40px 0 -40px); border-radius: 0; filter: drop-shadow(0 0 0 rgba(70, 48, 24, 0)); }
 }

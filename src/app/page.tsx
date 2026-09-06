@@ -62,7 +62,7 @@ export default function Home() {
       if (started || finished) return;
       started = true;
       root.classList.add("is-intro-shown");
-      safety = window.setTimeout(finishIntro, 7500);
+      safety = window.setTimeout(finishIntro, 6500);
     };
     const imgs = Array.from(intro.querySelectorAll("img"));
     Promise.all(imgs.map((im) => (im.decode ? im.decode().catch(() => undefined) : Promise.resolve()))).then(startIntro);
@@ -107,8 +107,9 @@ export default function Home() {
             <div className="intro__env">
               <img className="intro__back" src="/intro/envelope-back.png" alt="" />
               <div className="intro__flap">
-                <img className="intro__flap-out" src="/intro/envelope-flap.png" alt="" />
+                <img className="intro__seal-back" src="/intro/wax-seal-back.png" alt="" />
                 <img className="intro__flap-in" src="/intro/envelope-flap-inside.png" alt="" />
+                <img className="intro__flap-out" src="/intro/envelope-flap.png" alt="" />
                 <img className="intro__seal" src="/intro/wax-seal.png" alt="" />
               </div>
             </div>
