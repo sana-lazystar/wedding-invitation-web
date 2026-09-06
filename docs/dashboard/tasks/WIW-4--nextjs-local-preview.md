@@ -112,3 +112,5 @@ related: []
 2026-09-07 01:27:52 · develop · 1ba6be3 · Scene6~8 Part 2·3(메모지 + 사진 자리표시), 캐릭터 여덟 장 추가(디자인 논의 T65). `src/app/page.tsx` `src/app/globals.css` `public/character/`.
 
 2026-09-07 01:31:46 · develop · 0f2487c · 커버 글 상자 합성 층 승격(iOS 진입 장면 중 글 사라짐)(디자인 논의 T66). `src/app/globals.css`.
+
+2026-09-07 01:36:11 · develop · 07eecea · 컷아웃 음수 여백 제거(마지막 줄 가림), 장면 간격 통일, Scene6·7 둘째 아이콘 반대쪽(디자인 논의 T67~T69). `src/app/page.tsx` `src/app/globals.css`.
