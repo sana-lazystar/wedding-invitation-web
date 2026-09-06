@@ -13,6 +13,7 @@
   --font-body: var(--font-noto-sans-kr), 'Apple SD Gothic Neo', sans-serif;
   --font-ui: var(--font-noto-sans-kr), 'Apple SD Gothic Neo', sans-serif;
   --font-latin: var(--font-cormorant), Georgia, serif;
+  --font-memo: var(--font-gaegu), 'Apple SD Gothic Neo', sans-serif;   /* 쪽지·메모지 글(T64). 앞으로의 메모지도 이 토큰 */
 }
 html { color-scheme: light only; scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -103,11 +104,11 @@ body {
 /* 3. 인사(와이어프레임 4쪽, 0.3화면). 쪽지 두 장에 한 줄씩. 화자 캐릭터(수달 = 신랑, 토끼 = 신부. 이산하가 준 스티커 그림, T52)가 쪽지 위 모서리에 걸칩니다. 신랑 쪽지는 오른쪽 정렬에 오른쪽 위, 신부 쪽지는 왼쪽 정렬에 왼쪽 위. 종이 결은 그림(`public/paper/note.png`), 그늘·기울기는 CSS */
 .greeting { display: flex; flex-direction: column; gap: 22px; padding: 40px 24px 14px; }
 .note {
-  position: relative; width: 80%;
+  position: relative; width: fit-content; max-width: 100%;   /* 쪽지 폭은 글만큼(T64. 전에는 80%) */
   padding: 20px 16px;   /* 와이어프레임 메모지 안쪽 여백 좌우 16 · 위아래 20. 화자 얼굴은 쪽지 안 20px까지 와서 첫 줄 글자(반행간 5px 아래에서 시작)와 겹치지 않습니다 */
   border-radius: 3px;
   box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
-  font-family: var(--font-name); font-size: 15px; line-height: 1.7; color: var(--ink);
+  font-family: var(--font-memo); font-size: 18px; line-height: 1.6; color: var(--ink);   /* 개구는 고운바탕보다 작게 보여 18px(T64) */
   opacity: 0; transform: translateY(8px) rotate(var(--tilt));
   transition: opacity 0.45s ease-out, transform 0.45s ease-out;
 }
@@ -134,7 +135,7 @@ body {
 .photo-paper__photo { position: relative; display: block; width: 100%; height: auto; }
 .note--memo { width: fit-content; max-width: 100%; margin-top: -26px; padding-top: 44px; }   /* 메모지는 글 크기만큼(T61). 사진 종이 뒤로 26px 들어가 겹치고(T56) 위 여백은 첫 줄이 사진 아래 18px에서 시작하게 */
 /* 컷아웃 스티커(T61 · T62). 본문 안의 float라 글이 그 네모 영역(여백 포함)을 피해 흐릅니다(실루엣 아님, T62). 앞의 빈 float(`.note__push`, 폭 0 · 두 줄 높이)를 clear로 넘어 셋째 줄부터 비킵니다. 음수 아래·바깥 여백만큼 메모지 밖으로 나갑니다 */
-.note__push { float: right; width: 0; height: 51px; }
+.note__push { float: right; width: 0; height: 58px; }   /* 두 줄(18px × 1.6) */
 .note__push--left { float: left; }
 .note__stamp {
   float: right; clear: right; position: relative; z-index: 1; height: 144px; width: auto;
