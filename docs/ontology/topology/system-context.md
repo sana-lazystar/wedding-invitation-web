@@ -2,7 +2,7 @@
 
 결정 출처: `docs/dashboard/discussions/2026-09-06--tech-stack-and-infra.md` 결정 표 (접두 "스택 결정 N")
 
-청첩장이 무엇으로 이루어져 있고 어디에 떠 있는지의 현행 정본입니다. 상태는 **결정됨 · 프로비저닝 전**(2026-09-06)입니다. Vercel 프로젝트 생성과 첫 배포는 `docs/` 밖 변경이라 외부 반영 게이트(task 문서 + 승인)를 거친 뒤에 하고, 그때 "프로비저닝 후 확정" 칸을 채웁니다. 한도 수치의 근거는 동결본 `references/2026-09-06--free-tier-survey.md`(조회 2026-09-06)입니다. 값이 바뀌면 동결본을 새로 만들고 이 문서를 고칩니다.
+청첩장이 무엇으로 이루어져 있고 어디에 떠 있는지의 현행 정본입니다. 상태는 **프로비저닝 완료**(2026-09-06, WIW-3)입니다. 첫 배포는 Next.js 스캐폴드(WIW-2)입니다. 한도 수치의 근거는 동결본 `references/2026-09-06--free-tier-survey.md`(조회 2026-09-06)입니다. 값이 바뀌면 동결본을 새로 만들고 이 문서를 고칩니다.
 
 ## 1. 한 줄 정의
 
@@ -16,11 +16,11 @@ TypeScript·Next.js·React로 만든 정적 모바일 청첩장을 GitHub 레포
 | 프리뷰 | 같은 프로젝트의 preview 배포 | develop·story·feature 브랜치 확인용 |
 | 소스 | GitHub `sana-lazystar/wedding-invitation-web` (public 유지, 스택 결정 14) | 코드 · 사진 변형 · 문서(`docs/`) · 스크립트(`docs/scripts/`) |
 
-프로비저닝 후 확정: Vercel 계정 · 프로젝트 이름 · production URL · 리전. 계정 전제는 U-3입니다.
+프로비저닝 결과(2026-09-06, WIW-3): Vercel 계정은 이산하 개인 Hobby, 프로젝트 이름 `wedding-invitation-web`, production URL https://wedding-invitation-web-mu.vercel.app/. 함수 리전은 기본값이고 함수가 없어 무관합니다. 정적 파일은 Vercel CDN이 서빙하며 서울에서 조회할 때 icn1 엣지가 응답했습니다(`x-vercel-id`, 2026-09-06 확인).
 
 ## 3. 요청 경로
 
-1. 하객이 카카오톡 링크(OG 미리보기)로 `https://{project}.vercel.app/`을 엽니다.
+1. 하객이 카카오톡 링크(OG 미리보기)로 https://wedding-invitation-web-mu.vercel.app/을 엽니다.
 2. Vercel CDN이 정적 HTML·JS·CSS·이미지를 줍니다. 서버 함수는 호출되지 않습니다.
 3. 페이지가 외부 스크립트(§6)를 부를 수 있습니다. 그 밖의 네트워크 요청은 없습니다.
 
@@ -76,7 +76,7 @@ TypeScript·Next.js·React로 만든 정적 모바일 청첩장을 GitHub 레포
 
 `docs/ontology/README.md` §코드가 SSOT인 것들 표에 `next.config.ts` · `package.json` · `tsconfig.json` · `eslint.config.mjs` · `src/app/` · `AGENTS.md`를 등록했습니다(WIW-2, 2026-09-06). 이미지 생성 스크립트는 만들 때 더합니다. 이 문서는 그것들을 복제하지 않고 가리킵니다.
 
-## 11. 프로비저닝 절차 (이산하가 Vercel 대시보드에서 합니다)
+## 11. 프로비저닝 절차 (이산하가 Vercel 대시보드에서 합니다. 2026-09-06 완료, WIW-3)
 
 선행 조건이 하나 있습니다. Next.js 스캐폴드가 `main`에 올라 있어야 합니다. 그 전에 import하면 Vercel이 레포 루트를 정적 사이트로 배포해 `docs/`가 그대로 노출됩니다. 스캐폴드는 별도 task로 만들고, 이 절차도 task 문서를 두고 결과를 §2에 적습니다.
 
@@ -85,6 +85,6 @@ TypeScript·Next.js·React로 만든 정적 모바일 청첩장을 GitHub 레포
 3. Import 화면에서 Framework Preset이 Next.js로 잡히는지 봅니다. Root Directory는 레포 루트, Build 설정은 기본값, 환경 변수는 없습니다. Project Name이 `{name}.vercel.app` 주소가 됩니다. Deploy를 누릅니다.
 4. Project Settings → Git에서 Production Branch가 `main`인지 확인합니다. 그 밖의 브랜치는 push마다 preview로 배포됩니다.
 5. Project Settings → Deployment Protection에서 preview 보호 옵션을 봅니다. 적용 여부는 policy 서랍이 정합니다.
-6. 프로젝트 이름·production URL·리전을 §2 "프로비저닝 후 확정"에 적습니다.
+6. 프로젝트 이름·production URL·리전을 §2에 적습니다. 재연동할 때 같은 절차를 씁니다.
 
 근거는 Vercel 문서 "Deploying GitHub Projects with Vercel"(2026-08-11)입니다. 대시보드 메뉴 이름은 바뀔 수 있어 재확인이 필요합니다.

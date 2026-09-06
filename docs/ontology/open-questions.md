@@ -26,4 +26,4 @@
 
 ## 열린 액션
 
-- WIW-3(Vercel 연동)은 이산하가 대시보드에서 수행합니다. 대기 조건(WIW-2의 main 반영)은 2026-09-06 풀렸습니다. 절차는 `topology/system-context.md` §11
+- WIW-3 preview 배포 확인(이 커밋의 develop push). Claude

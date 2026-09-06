@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 16:53:09
-updated: 2026-09-06 18:06:57
+updated: 2026-09-06 18:12:55
 completed:
 participants: 이산하, Claude
 related: []
@@ -183,6 +183,16 @@ jira:
 
 - 이산하가 PR #2(WIW-2 → develop, cfbb1ba)와 PR #3(develop → main, 8397e14)을 머지했습니다. main에 빌드되는 Next.js 앱이 있으므로 WIW-3(Vercel 연동)을 시작할 수 있습니다. 두 archive 문서의 구현 기록에 추기했습니다.
 - 로컬에서는 이산하가 develop을 pull하며 머지 커밋(05730d4)이 생겼고 main으로 옮겨 가 있었습니다. develop을 그대로 푸시하고 브랜치는 main으로 되돌려 두었습니다.
+
+### 2026-09-06 18:12:55 이전 · 이산하 (T10)
+
+- Vercel 연결과 배포를 완료했다. 프로젝트 이름은 `wedding-invitation-web`, URL은 https://wedding-invitation-web-mu.vercel.app/. 리전은 필요한가, 아마 기본값으로 설정됐을 것이다.
+
+### 2026-09-06 18:12:55 · Claude (T10)
+
+- 확인했습니다. production은 HTTP 200이고 `x-vercel-id`가 icn1이라 서울 엣지가 응답했습니다. GitHub Deployments에 Production(main 8397e14) 1건이 있습니다.
+- 리전은 신경 쓸 필요가 없습니다. Vercel의 리전 설정은 서버 함수가 도는 위치인데 이 사이트는 함수가 없고, 정적 파일은 전 세계 엣지 CDN에서 나갑니다. 함수가 생기면 그때 Project Settings → Functions에서 icn1(서울)로 바꾸면 됩니다.
+- WIW-3을 in-progress로 올리고 topology §2·§3·§11과 README §브랜치 워크플로 배포 매핑·§git 규약 호스팅을 채웠습니다. 남은 완료 기준은 "브랜치 push가 preview 배포를 만듦"인데, 연동 뒤 push가 아직 없어 GitHub Deployments에 preview가 없습니다. 이 커밋을 develop에 푸시해 확인합니다.
 
 ## 결정
 
