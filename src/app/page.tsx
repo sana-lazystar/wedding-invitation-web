@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보 · 떠 있는 메뉴를 옮긴 것입니다.
+// WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보(액자, 디자인 논의 T55·T58) · Scene3 인사(쪽지 + 수달·토끼 캐릭터, T51~T52) · Scene4 Part 1 신랑(사진 종이 + 토끼 메모지, T53) · Scene5 Part 1 신부(대칭, T58) · 떠 있는 메뉴를 옮긴 것입니다.
 // 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
 // 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T49). 편지지는 커버 자체이고, 봉투 안에서 봉투 폭의 92%로 있다가 봉투가 내려가는 것과 동시에 올라오고, 이어서 화면 전체로 커집니다. 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -88,6 +88,28 @@ export default function Home() {
     document.documentElement.classList.remove("is-intro", "is-intro-shown");
   }, [introDone]);
 
+  // 쪽지는 화면에 들어올 때 한 번 내려앉으며 나타납니다(디자인 논의 T51). 움직임 줄이기면 CSS가 바로 보이게 합니다
+  useEffect(() => {
+    const notes = Array.from(document.querySelectorAll<HTMLElement>(".note"));
+    if (!("IntersectionObserver" in window)) {
+      notes.forEach((el) => el.classList.add("is-in"));
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-in");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 },
+    );
+    notes.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     const onDocumentClick = (e: MouseEvent) => {
       if (fabRef.current && !fabRef.current.contains(e.target as Node)) setMenuOpen(false);
@@ -161,18 +183,66 @@ export default function Home() {
           </div>
         </section>
         <section id="info" className="block block--fixed">
-          <div className="letter-card">
-            <img className="letter-card__art" src="/scene2/opened-paper.png" alt="" />
-            <div className="letter-card__text">
-              <div>2026년 10월 9일 금요일</div>
-              <div>오후 6시 30분</div>
-              <div className="letter-card__rule" />
-              <div className="letter-card__venue">더채플앳청담</div>
-              <div>3층 커티지홀</div>
+          <div className="frame">
+            <img className="frame__art" src="/scene2/frame.png" alt="" />
+            <div className="frame__text">
+              <div className="frame__big">2026년 10월 9일</div>
+              <div className="frame__big">금요일 오후 6시 30분</div>
+              <div className="frame__gap" />
+              <div className="frame__small">더채플앳청담 3층 커티지홀</div>
+              <div className="frame__small">강남구 선릉로 757</div>
             </div>
           </div>
         </section>
-        {/* 3쪽(인사)부터 여기 아래에 이어 붙입니다 */}
+        <section id="greeting" className="block greeting">
+          <div className="note note--right">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="note__who" src="/character/otter-basic.png" alt="" />
+            <p className="note__text">안녕하세요. 10월의 신랑, 이산하</p>
+          </div>
+          <div className="note note--left">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="note__who" src="/character/rabbit-basic.png" alt="" />
+            <p className="note__text">
+              신부 송시야입니다!
+              <br />
+              잠깐 저희에 대해 얘기해 드릴게요!
+            </p>
+          </div>
+        </section>
+        <section id="part1-groom" className="block story">
+          <div className="photo-paper">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="photo-paper__photo" src="/scene4/groom-child.jpg" alt="신랑 어릴 적 사진" />
+          </div>
+          <div className="note note--left note--memo">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="note__who" src="/character/rabbit-1.png" alt="" />
+            <p className="note__text">
+              <span className="note__push" />
+              <img className="note__stamp" src="/scene4/groom-child-ride.png" alt="" />
+              제 신랑은 어릴 때 시를 써서 상도 받던 문학소년이었대요. 무협지를 좋아해서 작가를 꿈꾸기도 했고요. 그랬던 아이는 커서 냉철하고 이성적인
+              개발자가 됐어요!
+            </p>
+          </div>
+        </section>
+        <section id="part1-bride" className="block story">
+          <div className="photo-paper photo-paper--left">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="photo-paper__photo" src="/scene5/bride-child.jpg" alt="신부 어릴 적 사진" />
+          </div>
+          <div className="note note--right note--memo note--bride">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="note__who" src="/character/otter-basic.png" alt="" />
+            <p className="note__text">
+              <span className="note__push note__push--left" />
+              <img className="note__stamp note__stamp--left" src="/scene5/bride-child-cutout.png" alt="" />
+              제 신부는 다섯 살 때 빗소리가 좋다며 혼자 우산 쓰고 동네를 걷던 아이였대요. 글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고 다녔고요. 그랬던 아이는
+              커서 상황을 분석하고 길을 찾는 사업전략가가 됐어요. 그래도 여전히 꿈을 꾸는 사람이고요.
+            </p>
+          </div>
+        </section>
+        {/* 6쪽(Part 2 신랑)부터 여기 아래에 이어 붙입니다 */}
       </div>
 
       <nav className="fab" ref={fabRef} data-open={menuOpen ? "true" : "false"} aria-label="바로 가기">

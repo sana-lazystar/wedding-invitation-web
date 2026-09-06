@@ -41,7 +41,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: calc(56px + env(safe-area-inset-top)) 24px calc(56px + env(safe-area-inset-bottom));
+  padding: calc(56px + env(safe-area-inset-top)) 24px 48px;   /* 아래 여백은 배경(커버 상자 = 100dvh) 아랫변 기준 48px. 안전 영역을 더하지 않습니다(T50) */
   overflow: hidden;
 }
 .cover-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
@@ -54,13 +54,13 @@ body {
 .cover-bg__blur--soft { height: 26%; backdrop-filter: blur(5px); mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 100%); }
 .cover-bg__blur--strong { height: 16%; backdrop-filter: blur(9px); mask-image: linear-gradient(to bottom, #000 0%, #000 30%, transparent 100%); }
 .cover-bg__shadow {
-  position: absolute; left: calc(50% + 10px); bottom: 21.4%;
+  position: absolute; left: calc(50% + 8px); bottom: 21.4%;
   width: 40%; height: 18px; transform: translateX(-50%);
   border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(70, 48, 24, 0.38), rgba(70, 48, 24, 0) 68%);
 }
 .cover-bg__couple {
-  position: absolute; left: calc(50% + 10px); bottom: 22%;
+  position: absolute; left: calc(50% + 8px); bottom: 22%;
   height: 27%; width: auto; transform: translateX(-50%);
   filter: drop-shadow(0 2px 2px rgba(70, 48, 24, 0.28)) drop-shadow(0 18px 18px rgba(70, 48, 24, 0.18));
 }
@@ -69,7 +69,7 @@ body {
 .eyebrow {
   font-family: var(--font-latin);
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.36em;
   text-indent: 0.36em;
   text-transform: uppercase;
@@ -77,26 +77,76 @@ body {
   line-height: 1.4;
   white-space: nowrap;
 }
-.tagline { margin: 10px 0 0; font-family: var(--font-name); font-size: 24px; line-height: 1.5; color: var(--ink-soft); white-space: nowrap; }
-.names { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.names__name { font-family: var(--font-name); font-size: 30px; font-weight: 700; letter-spacing: 0.14em; text-indent: 0.14em; line-height: 1.35; color: var(--ink); }
+.tagline { margin: 10px 0 0; font-family: var(--font-name); font-size: 18px; font-weight: 700; line-height: 1.5; color: var(--ink-soft); white-space: nowrap; }
+.names { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.names__name { font-family: var(--font-name); font-size: 20px; font-weight: 700; letter-spacing: 0.14em; text-indent: 0.14em; line-height: 1.35; color: var(--ink); }
 .names__and { font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); line-height: 1.4; }
 
-/* 2. 핵심 정보. 열린 봉투 일러스트 위 편지지에 날짜·시간·장소 */
-#info { display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
-.letter-card {
+/* 2. 핵심 정보. 액자(장식 테두리 선화. 이산하가 준 그림 `public/scene2/frame.png`, T55) 안에 날짜·시간·장소. 그림 안쪽은 투명이라 바탕 종이색이 그대로 보입니다 */
+#info { display: flex; align-items: center; justify-content: center; padding: 40px 12px; }
+.frame {
   position: relative;
-  width: min(340px, 86vw, calc((100dvh - 80px) * 817 / 1438));
-  aspect-ratio: 817 / 1438;
+  width: min(100%, calc((100dvh - 80px) * 940 / 1672));
+  aspect-ratio: 940 / 1672;
 }
-.letter-card__art { display: block; width: 100%; height: 100%; }
-.letter-card__text {
-  position: absolute; left: 22%; right: 22%; top: 13%; height: 46%;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-  text-align: center; font-size: 16px; line-height: 1.7; color: var(--ink-soft);
+.frame__art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+/* 글은 테두리 안쪽(가로 12~88%, 세로 13~85%. 위아래 가운데 장식과 옆 가운데 장식을 피한 값)에 세로 가운데로 쌓습니다. 크기는 두 가지(T51) */
+.frame__text {
+  position: absolute; left: 12%; right: 12%; top: 13%; height: 72%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: var(--font-name); text-align: center; white-space: nowrap;
 }
-.letter-card__venue { font-size: 17px; font-weight: 500; color: var(--ink); }
-.letter-card__rule { width: 28px; height: 1px; background: var(--oak); margin: 12px 0; }
+.frame__big { font-size: 20px; font-weight: 700; line-height: 1.6; color: var(--ink); }
+.frame__small { font-size: 15px; line-height: 1.7; color: var(--ink-soft); }
+.frame__gap { height: 16px; }
+
+/* 3. 인사(와이어프레임 4쪽, 0.3화면). 쪽지 두 장에 한 줄씩. 화자 캐릭터(수달 = 신랑, 토끼 = 신부. 이산하가 준 스티커 그림, T52)가 쪽지 위 모서리에 걸칩니다. 신랑 쪽지는 오른쪽 정렬에 오른쪽 위, 신부 쪽지는 왼쪽 정렬에 왼쪽 위. 종이 결은 그림(`public/paper/note.png`), 그늘·기울기는 CSS */
+.greeting { display: flex; flex-direction: column; gap: 22px; padding: 40px 24px 14px; }
+.note {
+  position: relative; width: 80%;
+  padding: 20px 16px;   /* 와이어프레임 메모지 안쪽 여백 좌우 16 · 위아래 20. 화자 얼굴은 쪽지 안 20px까지 와서 첫 줄 글자(반행간 5px 아래에서 시작)와 겹치지 않습니다 */
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
+  font-family: var(--font-name); font-size: 15px; line-height: 1.7; color: var(--ink);
+  opacity: 0; transform: translateY(8px) rotate(var(--tilt));
+  transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+}
+.note.is-in { opacity: 1; transform: translateY(0) rotate(var(--tilt)); }
+@media (prefers-reduced-motion: reduce) { .note { opacity: 1; transform: rotate(var(--tilt)); transition: none; } }
+.note--right { --tilt: 0.6deg; align-self: flex-end; }
+.note--left { --tilt: -0.8deg; align-self: flex-start; }
+.note__paper { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 3px; }
+.note__text { position: relative; margin: 0; display: flow-root; word-break: keep-all; }   /* flow-root: 안의 float(컷아웃)를 높이에 넣습니다. keep-all: 한글 낱말 안에서 줄을 바꾸지 않습니다 */
+/* 화자 아이콘. 흰 테두리(다이컷)는 그림에 이미 있어 그늘만 CSS로 붙입니다. 높이 43px(T53 36px의 1.2배, T63. 앞으로의 캐릭터 아이콘도 이 크기), 위 기준을 4px 내려 아래가 쪽지 안 +20px(첫 줄 위 여백과 같음)까지 옵니다. 살짝 기울여 붙인 스티커처럼 */
+.note__who {
+  position: absolute; top: -23px; height: 43px; width: auto;
+  filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.22)) drop-shadow(0 4px 6px rgba(70, 48, 24, 0.24));
+}
+.note--right .note__who { right: -8px; transform: rotate(6deg); }
+.note--left .note__who { left: -9px; transform: rotate(-5deg); }
+/* 4. Part 1 신랑(와이어프레임 5쪽, 약 1.2화면). 어릴 적 사진을 붙인 종이가 위, 토끼(신부)가 소개하는 메모지가 아래입니다(T53). 인사 블록이 0.3화면이라 사진 종이가 인사와 같은 화면에 걸쳐 보입니다. 메모지는 쪽지와 같은 부품(`.note`)이고 폭만 전체입니다. 오른쪽 아래에는 어릴 적 사진 컷아웃(헬리콥터)이 스티커처럼 걸칩니다 */
+.story { display: flex; flex-direction: column; padding: 20px 24px 124px; }   /* 아래 여백은 메모지 밖으로 84px 나가는 스티커 몫 */
+.photo-paper {
+  position: relative; z-index: 1; width: 75%; align-self: flex-end; padding: 4px; border-radius: 3px;   /* 사진 종이는 폭의 3/4, 오른쪽, 흰 테두리 4px(T56). 메모지 위에 겹치므로 앞 층 */
+  box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
+  transform: rotate(-0.7deg);
+}
+.photo-paper__photo { position: relative; display: block; width: 100%; height: auto; }
+.note--memo { width: fit-content; max-width: 100%; margin-top: -26px; padding-top: 44px; }   /* 메모지는 글 크기만큼(T61). 사진 종이 뒤로 26px 들어가 겹치고(T56) 위 여백은 첫 줄이 사진 아래 18px에서 시작하게 */
+/* 컷아웃 스티커(T61 · T62). 본문 안의 float라 글이 그 네모 영역(여백 포함)을 피해 흐릅니다(실루엣 아님, T62). 앞의 빈 float(`.note__push`, 폭 0 · 두 줄 높이)를 clear로 넘어 셋째 줄부터 비킵니다. 음수 아래·바깥 여백만큼 메모지 밖으로 나갑니다 */
+.note__push { float: right; width: 0; height: 51px; }
+.note__push--left { float: left; }
+.note__stamp {
+  float: right; clear: right; position: relative; z-index: 1; height: 144px; width: auto;
+  margin: 10px -22px -94px 16px;   /* 안쪽 여백 16px은 회전(5°)으로 상자 밖에 그려지는 부분 몫. 오른쪽·아래로 10px 더(T62) */
+  transform: rotate(5deg);
+  filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.22)) drop-shadow(0 6px 10px rgba(70, 48, 24, 0.28));
+}
+/* 5. Part 1 신부(와이어프레임 6쪽). Scene4와 좌우 대칭입니다(T58). 사진 종이는 왼쪽, 메모지는 수달(신랑)이 오른쪽 위에, 신부 컷아웃이 왼쪽 아래에 */
+.photo-paper--left { align-self: flex-start; transform: rotate(0.7deg); }
+/* 신부 메모지(T60 · T61). 본문은 24px 오른쪽으로. 신부 컷아웃은 1.5배(216px)로 왼쪽에 서고 셋째 줄부터 글이 오른쪽으로 비켜 흐릅니다 */
+.note--bride .note__text { padding-left: 24px; }
+.note__stamp--left { float: left; clear: left; height: 216px; margin: 0 16px -64px -12px; transform: rotate(-4deg); }   /* 왼쪽으로 10px 더(T62) */
 
 /* 떠 있는 바로 가기 버튼 */
 .fab {

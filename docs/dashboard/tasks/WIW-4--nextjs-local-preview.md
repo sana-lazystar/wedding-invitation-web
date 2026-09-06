@@ -80,3 +80,29 @@ related: []
 2026-09-07 00:00:26 · develop · a445667 · 봉투 하강 뒤 확대와 함께 0.3초 흐려짐, 4.0초(디자인 논의 T48). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-07 00:02:33 · develop · a730c51 · 봉투 하강을 편지지 올라옴과 동시에, 3.7초(디자인 논의 T49). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 00:15:21 · develop · ce00bc8 · Scene1 글자 크기·굵기·아래 여백 48px, Scene2 레이스 타원 카드로 교체(열린 봉투 그림 삭제, `public/lace/` 추가)(디자인 논의 T50). `src/app/page.tsx` `src/app/globals.css` `public/lace/` `public/scene2/`.
+
+2026-09-07 00:33:39 · develop · eaecfce · Scene2 글 네 줄·크기 둘, Scene3 인사 예시(쪽지 + 회색 원)와 4쪽 자리표시, `public/paper/note.png` 추가(디자인 논의 T51). `src/app/page.tsx` `src/app/globals.css` `public/paper/`.
+
+2026-09-07 00:40:07 · develop · cb68363 · Scene3 화자 자리에 수달·토끼 캐릭터 그림, `public/character/` 추가(디자인 논의 T52). `src/app/page.tsx` `src/app/globals.css` `public/character/`.
+
+2026-09-07 00:46:03 · develop · 48c3f36 · Scene4 Part 1 신랑(사진 종이 + 토끼 메모지 + 컷아웃 스티커), 종이 흰색, 캐릭터 아이콘 36px, `public/scene4/` 추가(디자인 논의 T53). `src/app/page.tsx` `src/app/globals.css` `public/paper/` `public/character/` `public/scene4/`.
+
+2026-09-07 00:50:45 · develop · e3c7f96 · Scene4 사진 종이 절반·가운데, 컷아웃 스티커 144px(디자인 논의 T54). `src/app/globals.css`.
+
+2026-09-07 00:54:36 · develop · edd4fd7 · Scene2 액자 선화(`public/scene2/frame.png`), `public/lace/` 삭제, Scene4 사진 3/4 오른쪽·메모지 겹침(디자인 논의 T55·T56). `src/app/page.tsx` `src/app/globals.css` `public/scene2/` `public/lace/`.
+
+2026-09-07 00:57:06 · develop · 4a75ca4 · Scene2 액자 안 달력 카드(디자인 논의 T57). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 01:01:41 · develop · c9ed65a · Scene5 Part 1 신부(Scene4 대칭), Scene2 달력 삭제, `public/scene5/` 추가(디자인 논의 T58). `src/app/page.tsx` `src/app/globals.css` `public/scene5/`.
+
+2026-09-07 01:03:38 · develop · 2303c7b · Scene1 두 사람 컷아웃·그늘 2px 왼쪽으로(디자인 논의 T59). `src/app/globals.css`.
+
+2026-09-07 01:06:45 · develop · 2ce40c9 · Scene5 본문 24px 오른쪽, 신부 컷아웃 216px(디자인 논의 T60). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 01:12:01 · develop · fb7b621 · 메모지 글 크기만큼, 컷아웃 float + shape-outside(디자인 논의 T61). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 01:14:30 · develop · 1d7f8c0 · 컷아웃 네모 영역으로 글 비킴(빈 float + clear), 신랑 컷아웃 오른쪽 아래·신부 컷아웃 왼쪽 10px(디자인 논의 T62). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 01:18:00 · develop · 99cdfd0 · 캐릭터 아이콘 43px, 4px 아래로(디자인 논의 T63). `src/app/globals.css`.

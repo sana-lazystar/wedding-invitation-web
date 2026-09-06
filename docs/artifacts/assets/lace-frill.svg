@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="1110" viewBox="0 0 840 1110">
+<!-- 레이스 프릴(타원 카드를 두르는 주름 트리밍).
+     짜임(망사) = 실 격자를 난류로 흔든 마스크, 성기고 촘촘한 얼룩 = 낮은 주파수 난류.
+     주름 = 잎마다 좌우 명암 + 제 그늘. 배치는 호 길이 균등 분할이라 손으로 고치지 않는다(생성기: 디자인 논의 T37). -->
+<defs>
+  <pattern id="net" width="7.8" height="7.8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <path d="M0 3.9H7.8M3.9 0V7.8" stroke="#fff" stroke-width="1.15" fill="none"/>
+  </pattern>
+  <filter id="wob" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035 0.05" numOctaves="3" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+    <feGaussianBlur stdDeviation="0.3"/>
+  </filter>
+  <filter id="cloud" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="21"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  .5 0 0 0 -.2"/>
+  </filter>
+  <g id="netfield">
+    <g filter="url(#wob)">
+      <rect x="-120" y="-120" width="1080" height="1350" fill="#121212"/>
+      <rect x="-120" y="-120" width="1080" height="1350" fill="url(#net)"/>
+    </g>
+    <rect width="840" height="1110" filter="url(#cloud)"/>
+  </g>
+  <mask id="m1"><use href="#netfield"/></mask>
+  <mask id="m2"><g transform="rotate(37 420 555)"><use href="#netfield"/></g></mask>
+
+  <linearGradient id="pleat" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#DCD2C1"/><stop offset="0.2" stop-color="#F7F3EA"/>
+    <stop offset="0.5" stop-color="#FFFEFA"/><stop offset="0.8" stop-color="#F4EFE4"/>
+    <stop offset="1" stop-color="#E0D6C5"/>
+  </linearGradient>
+  <linearGradient id="fade" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+    <stop offset="0" stop-color="#fff"/><stop offset="0.5" stop-color="#fff" stop-opacity="0.94"/>
+    <stop offset="1" stop-color="#fff" stop-opacity="0.7"/>
+  </linearGradient>
+  <mask id="tip"><path d="M -21 12 C -25 -40 -27 -105 -24 -140 C -22 -161 -12 -171 0 -171 C 12 -171 22 -161 24 -140 C 27 -105 25 -40 21 12 Z" fill="url(#fade)"/></mask>
+  <filter id="pshadow" x="-60%" y="-25%" width="220%" height="150%">
+    <feDropShadow dx="-5" dy="2" stdDeviation="4" flood-color="#87795F" flood-opacity="0.4"/>
+  </filter>
+
+  <g id="pl" filter="url(#pshadow)"><g mask="url(#tip)">
+    <path d="M -21 12 C -25 -40 -27 -105 -24 -140 C -22 -161 -12 -171 0 -171 C 12 -171 22 -161 24 -140 C 27 -105 25 -40 21 12 Z" fill="url(#pleat)"/>
+    <path d="M -21 12 C -25 -40 -27 -105 -24 -140 C -22 -161 -12 -171 0 -171 C 12 -171 22 -161 24 -140 C 27 -105 25 -40 21 12 Z" fill="none" stroke="#FFFDF8" stroke-width="2.6" stroke-opacity="0.95"/>
+    <path d="M -21 12 C -25 -40 -27 -105 -24 -140 C -22 -161 -12 -171 0 -171 C 12 -171 22 -161 24 -140 C 27 -105 25 -40 21 12 Z" fill="none" stroke="#A89A85" stroke-width="0.6" stroke-opacity="0.45"/>
+  </g></g>
+
+  <filter id="cast" x="-10%" y="-8%" width="120%" height="116%">
+    <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#9E8F7A" flood-opacity="0.45"/>
+  </filter>
+</defs>
+
+<g filter="url(#cast)">
+<g mask="url(#m2)" opacity="0.8">
+<use href="#pl" transform="translate(650.7 571.5) rotate(104.2) scale(0.961 1.114)"/>
+<use href="#pl" transform="translate(648.7 604.5) rotate(95.9) scale(1.000 1.119)"/>
+<use href="#pl" transform="translate(644.5 637.5) rotate(99.2) scale(1.055 1.214)"/>
+<use href="#pl" transform="translate(638.3 669.7) rotate(105.6) scale(1.072 1.200)"/>
+<use href="#pl" transform="translate(629.8 701.9) rotate(111.1) scale(0.924 1.140)"/>
+<use href="#pl" transform="translate(619.2 732.7) rotate(111.9) scale(0.947 1.198)"/>
+<use href="#pl" transform="translate(606.0 763.1) rotate(118.2) scale(1.079 1.149)"/>
+<use href="#pl" transform="translate(590.4 792.0) rotate(122.2) scale(0.952 1.153)"/>
+<use href="#pl" transform="translate(571.9 819.4) rotate(127.8) scale(0.998 1.001)"/>
+<use href="#pl" transform="translate(550.4 844.7) rotate(137.3) scale(1.069 1.148)"/>
+<use href="#pl" transform="translate(526.2 866.7) rotate(155.2) scale(0.909 1.160)"/>
+<use href="#pl" transform="translate(498.6 885.1) rotate(163.6) scale(1.010 1.227)"/>
+<use href="#pl" transform="translate(468.6 898.1) rotate(173.5) scale(1.097 1.057)"/>
+<use href="#pl" transform="translate(436.3 905.1) rotate(180.9) scale(0.908 1.064)"/>
+<use href="#pl" transform="translate(403.3 905.1) rotate(190.6) scale(0.938 1.010)"/>
+<use href="#pl" transform="translate(371.0 898.0) rotate(208.0) scale(1.070 1.197)"/>
+<use href="#pl" transform="translate(341.1 884.9) rotate(217.8) scale(0.959 1.068)"/>
+<use href="#pl" transform="translate(313.5 866.5) rotate(226.4) scale(1.079 1.153)"/>
+<use href="#pl" transform="translate(289.3 844.4) rotate(235.8) scale(1.039 1.077)"/>
+<use href="#pl" transform="translate(267.8 819.0) rotate(241.8) scale(1.042 1.091)"/>
+<use href="#pl" transform="translate(249.4 791.6) rotate(240.6) scale(0.951 0.957)"/>
+<use href="#pl" transform="translate(233.8 762.6) rotate(245.4) scale(0.992 1.057)"/>
+<use href="#pl" transform="translate(220.6 732.2) rotate(260.3) scale(1.038 1.204)"/>
+<use href="#pl" transform="translate(210.1 701.4) rotate(255.9) scale(0.983 1.160)"/>
+<use href="#pl" transform="translate(201.6 669.2) rotate(268.1) scale(0.912 1.046)"/>
+<use href="#pl" transform="translate(195.4 636.9) rotate(261.3) scale(1.091 0.961)"/>
+<use href="#pl" transform="translate(191.3 603.9) rotate(271.4) scale(1.025 1.089)"/>
+<use href="#pl" transform="translate(189.2 571.0) rotate(270.4) scale(1.026 1.050)"/>
+<use href="#pl" transform="translate(189.3 538.5) rotate(-75.5) scale(0.914 1.123)"/>
+<use href="#pl" transform="translate(191.3 505.5) rotate(-83.1) scale(1.084 0.966)"/>
+<use href="#pl" transform="translate(195.5 472.5) rotate(-77.8) scale(1.026 1.217)"/>
+<use href="#pl" transform="translate(201.7 440.3) rotate(-64.4) scale(0.910 1.209)"/>
+<use href="#pl" transform="translate(210.2 408.1) rotate(-59.2) scale(0.912 1.108)"/>
+<use href="#pl" transform="translate(220.8 377.3) rotate(-61.9) scale(0.901 1.192)"/>
+<use href="#pl" transform="translate(234.0 346.9) rotate(-52.0) scale(0.980 1.022)"/>
+<use href="#pl" transform="translate(249.6 318.0) rotate(-51.4) scale(1.067 1.159)"/>
+<use href="#pl" transform="translate(268.1 290.6) rotate(-42.1) scale(0.910 1.009)"/>
+<use href="#pl" transform="translate(289.6 265.3) rotate(-43.5) scale(1.066 0.994)"/>
+<use href="#pl" transform="translate(313.8 243.3) rotate(-33.6) scale(1.000 1.030)"/>
+<use href="#pl" transform="translate(341.4 224.9) rotate(-23.1) scale(1.059 1.132)"/>
+<use href="#pl" transform="translate(371.4 211.9) rotate(-9.5) scale(0.991 0.959)"/>
+<use href="#pl" transform="translate(403.7 204.9) rotate(1.7) scale(1.053 1.036)"/>
+<use href="#pl" transform="translate(436.7 204.9) rotate(17.5) scale(1.003 1.185)"/>
+<use href="#pl" transform="translate(469.0 212.0) rotate(29.2) scale(1.085 1.056)"/>
+<use href="#pl" transform="translate(498.9 225.1) rotate(32.3) scale(1.071 1.095)"/>
+<use href="#pl" transform="translate(526.5 243.5) rotate(43.0) scale(1.015 1.074)"/>
+<use href="#pl" transform="translate(550.7 265.6) rotate(59.2) scale(0.998 0.988)"/>
+<use href="#pl" transform="translate(572.2 291.0) rotate(55.9) scale(0.991 1.118)"/>
+<use href="#pl" transform="translate(590.6 318.4) rotate(61.4) scale(1.100 1.169)"/>
+<use href="#pl" transform="translate(606.2 347.4) rotate(76.1) scale(1.057 1.179)"/>
+<use href="#pl" transform="translate(619.4 377.8) rotate(71.6) scale(0.910 1.084)"/>
+<use href="#pl" transform="translate(629.9 408.6) rotate(84.2) scale(1.075 1.112)"/>
+<use href="#pl" transform="translate(638.4 440.8) rotate(80.8) scale(1.088 0.971)"/>
+<use href="#pl" transform="translate(644.6 473.1) rotate(89.9) scale(0.952 1.120)"/>
+<use href="#pl" transform="translate(648.7 506.1) rotate(95.5) scale(1.098 0.987)"/>
+<use href="#pl" transform="translate(650.8 539.0) rotate(93.2) scale(0.905 1.199)"/>
+</g>
+<g mask="url(#m1)" opacity="0.9">
+<use href="#pl" transform="translate(651.0 555.0) rotate(97.8) scale(0.907 1.001)"/>
+<use href="#pl" transform="translate(650.0 588.0) rotate(102.0) scale(0.998 1.114)"/>
+<use href="#pl" transform="translate(646.8 621.3) rotate(96.4) scale(1.045 1.082)"/>
+<use href="#pl" transform="translate(641.7 653.5) rotate(108.9) scale(1.021 1.011)"/>
+<use href="#pl" transform="translate(634.4 685.7) rotate(102.0) scale(0.957 1.111)"/>
+<use href="#pl" transform="translate(624.8 717.3) rotate(109.4) scale(0.903 0.901)"/>
+<use href="#pl" transform="translate(612.9 748.2) rotate(115.1) scale(0.939 0.885)"/>
+<use href="#pl" transform="translate(598.5 777.9) rotate(120.9) scale(0.982 1.038)"/>
+<use href="#pl" transform="translate(581.5 805.9) rotate(127.6) scale(0.961 0.999)"/>
+<use href="#pl" transform="translate(561.6 832.3) rotate(134.1) scale(1.007 1.047)"/>
+<use href="#pl" transform="translate(538.8 856.0) rotate(145.0) scale(1.018 0.926)"/>
+<use href="#pl" transform="translate(512.7 876.5) rotate(156.6) scale(0.989 1.037)"/>
+<use href="#pl" transform="translate(483.7 892.4) rotate(165.3) scale(1.096 1.076)"/>
+<use href="#pl" transform="translate(452.5 902.5) rotate(178.4) scale(0.930 0.948)"/>
+<use href="#pl" transform="translate(420.0 906.0) rotate(189.0) scale(0.938 0.902)"/>
+<use href="#pl" transform="translate(387.1 902.4) rotate(193.2) scale(0.978 0.986)"/>
+<use href="#pl" transform="translate(355.9 892.2) rotate(203.6) scale(0.949 0.935)"/>
+<use href="#pl" transform="translate(326.9 876.2) rotate(213.5) scale(1.048 1.077)"/>
+<use href="#pl" transform="translate(300.9 855.7) rotate(227.8) scale(0.948 0.884)"/>
+<use href="#pl" transform="translate(278.1 832.0) rotate(234.7) scale(1.099 0.968)"/>
+<use href="#pl" transform="translate(258.2 805.5) rotate(241.2) scale(1.076 1.120)"/>
+<use href="#pl" transform="translate(241.3 777.5) rotate(238.9) scale(0.989 0.890)"/>
+<use href="#pl" transform="translate(226.9 747.7) rotate(257.3) scale(0.947 1.003)"/>
+<use href="#pl" transform="translate(215.0 716.8) rotate(255.7) scale(0.990 0.982)"/>
+<use href="#pl" transform="translate(205.5 685.2) rotate(264.7) scale(1.045 0.961)"/>
+<use href="#pl" transform="translate(198.2 652.9) rotate(256.8) scale(1.095 0.955)"/>
+<use href="#pl" transform="translate(193.1 620.8) rotate(263.3) scale(0.982 1.046)"/>
+<use href="#pl" transform="translate(190.0 587.5) rotate(271.0) scale(1.088 0.942)"/>
+<use href="#pl" transform="translate(189.0 555.0) rotate(279.6) scale(1.076 0.975)"/>
+<use href="#pl" transform="translate(190.0 522.0) rotate(-83.9) scale(0.964 0.992)"/>
+<use href="#pl" transform="translate(193.2 488.7) rotate(-82.1) scale(1.007 0.917)"/>
+<use href="#pl" transform="translate(198.3 456.5) rotate(-74.1) scale(0.901 1.003)"/>
+<use href="#pl" transform="translate(205.6 424.3) rotate(-67.7) scale(1.099 0.875)"/>
+<use href="#pl" transform="translate(215.2 392.7) rotate(-72.2) scale(0.917 1.046)"/>
+<use href="#pl" transform="translate(227.1 361.8) rotate(-62.2) scale(1.056 1.127)"/>
+<use href="#pl" transform="translate(241.5 332.1) rotate(-63.2) scale(0.959 1.079)"/>
+<use href="#pl" transform="translate(258.5 304.1) rotate(-45.6) scale(0.934 0.939)"/>
+<use href="#pl" transform="translate(278.4 277.7) rotate(-46.9) scale(0.904 0.884)"/>
+<use href="#pl" transform="translate(301.2 254.0) rotate(-37.6) scale(1.068 1.038)"/>
+<use href="#pl" transform="translate(327.3 233.5) rotate(-28.9) scale(0.971 0.966)"/>
+<use href="#pl" transform="translate(356.3 217.6) rotate(-18.6) scale(0.968 0.998)"/>
+<use href="#pl" transform="translate(387.5 207.5) rotate(-3.1) scale(0.983 1.053)"/>
+<use href="#pl" transform="translate(420.0 204.0) rotate(8.2) scale(0.981 0.943)"/>
+<use href="#pl" transform="translate(452.9 207.6) rotate(13.7) scale(0.901 1.128)"/>
+<use href="#pl" transform="translate(484.1 217.8) rotate(26.3) scale(1.024 0.930)"/>
+<use href="#pl" transform="translate(513.1 233.8) rotate(32.6) scale(1.014 1.065)"/>
+<use href="#pl" transform="translate(539.1 254.3) rotate(43.6) scale(1.083 1.062)"/>
+<use href="#pl" transform="translate(561.9 278.0) rotate(53.9) scale(1.034 0.990)"/>
+<use href="#pl" transform="translate(581.8 304.5) rotate(58.0) scale(1.073 1.064)"/>
+<use href="#pl" transform="translate(598.7 332.5) rotate(61.1) scale(0.929 0.958)"/>
+<use href="#pl" transform="translate(613.1 362.3) rotate(66.2) scale(0.915 0.875)"/>
+<use href="#pl" transform="translate(625.0 393.2) rotate(75.8) scale(1.036 1.035)"/>
+<use href="#pl" transform="translate(634.5 424.8) rotate(80.7) scale(0.925 0.977)"/>
+<use href="#pl" transform="translate(641.8 457.1) rotate(77.7) scale(0.972 1.118)"/>
+<use href="#pl" transform="translate(646.9 489.2) rotate(87.8) scale(1.004 1.121)"/>
+<use href="#pl" transform="translate(650.0 522.5) rotate(88.4) scale(1.016 0.906)"/>
+</g>
+  <g mask="url(#m1)">
+    <ellipse cx="420" cy="555" rx="242" ry="362" fill="none" stroke="#FAF6EE" stroke-width="26"/>
+  </g>
+  <ellipse cx="420" cy="555" rx="233" ry="353" fill="none" stroke="#B0A18C" stroke-width="8" stroke-opacity="0.3"/>
+</g>
+</svg>
