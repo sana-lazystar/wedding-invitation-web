@@ -43,7 +43,7 @@
 node docs/scripts/inline-artifact.mjs docs/artifacts/index.html <스크래치패드>/invitation-preview.html --title "이산하 · 송시야 청첩장 미리보기"
 ```
 
-그 파일을 Artifact 도구로 위 미리보기 링크(`url`)에 발행합니다. 즐겨찾기 아이콘은 📜입니다.
+그 파일을 Artifact 도구로 위 미리보기 링크(`url`)에 발행합니다. 즐겨찾기 아이콘은 📜입니다. 새 세션에서는 같은 링크를 먼저 `read`한 뒤 `url`을 지정해 발행해야 같은 링크가 유지됩니다(캔버스도 같습니다).
 
 ## 캔버스 다시 올리기
 
