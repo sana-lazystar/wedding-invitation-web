@@ -26,4 +26,4 @@
 
 ## 열린 액션
 
-- WIW-1(원본·에셋 폴더 git 제외) 실행 중. 승인 2026-09-06 "WIW-1 실행 승인". 완료 시 닫습니다
+- WIW-1 PR 생성과 develop 머지. 이산하. 브랜치 `feature/WIW-1-gitignore-asset-folders`는 origin에 있습니다

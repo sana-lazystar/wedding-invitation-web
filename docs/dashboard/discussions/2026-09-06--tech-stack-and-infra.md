@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 16:53:09
-updated: 2026-09-06 17:50:28
+updated: 2026-09-06 17:51:19
 completed:
 participants: 이산하, Claude
 related: []
@@ -131,6 +131,10 @@ jira:
 - 사진 추가·순서 변경 절차를 `docs/scripts/README.md`에 적었습니다. 스크립트가 아직 없어서 계약(원본 위치, 산출물, 매니페스트 규칙, 절차)을 먼저 적었고, 스크립트를 만드는 task가 이 계약을 그대로 구현합니다. CLAUDE.md 라우터에도 포인터를 두어 새 세션이 찾습니다.
 - WIW-1을 in-progress로 올리고 state.json에 넣었습니다. 이어서 게이트를 표시하고 실행합니다.
 
+### 2026-09-06 17:51:19 · Claude (T6 추기)
+
+- WIW-1 실행 완료. 게이트를 표시한 뒤 develop에서 `feature/WIW-1-gitignore-asset-folders`를 내고 `.gitignore`에 두 줄을 넣어 커밋했습니다(528c02d). `git check-ignore -v`로 두 폴더가 규칙에 걸리는 것을 확인했습니다. feature 브랜치와 develop을 origin에 푸시했습니다. 단독 task라 PR 초안까지 적고 archive로 옮겼습니다. PR 생성과 머지는 이산하 몫입니다.
+
 ## 결정
 
 행의 내용은 불변입니다. 상태 칸만 갱신할 수 있습니다.
@@ -161,4 +165,4 @@ jira:
 
 이 논의에서 생성된 epic·task·bugfix ID를 분해 승인 후 적습니다.
 
-- WIW-1 원본·에셋 폴더 git 제외 (단독 task, todo, 2026-09-06)
+- WIW-1 원본·에셋 폴더 git 제외 (단독 task, 2026-09-06 적재 · 같은 날 completed, 528c02d, archive/tasks)
