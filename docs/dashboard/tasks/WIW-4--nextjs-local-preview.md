@@ -1,0 +1,42 @@
+---
+id: WIW-4
+type: task
+status: in-progress
+created: 2026-09-06 19:14:53
+updated: 2026-09-06 19:14:53
+completed:
+epic:
+jira:
+repos: [wedding-invitation-web]
+design-refs: [docs/artifacts/index.html, docs/dashboard/discussions/2026-09-06--design-mockups.md]
+code-refs: []
+related: []
+---
+
+# WIW-4 — 조립본을 Next.js에 임시 적용해 로컬로 확인
+
+## 목적
+
+시안 조립본 `docs/artifacts/index.html`(Scene1 커버 · 편지지 진입 장면 · 떠 있는 메뉴)을 Next.js 앱에 임시로 옮겨 `next dev`로 띄웁니다. 이산하가 브라우저에서 실제 앱으로 동작을 확인하기 위한 것입니다.
+
+## 작업내용
+
+- `src/app/layout.tsx`에 글꼴(Noto Sans KR · 고운바탕 · Cormorant Garamond)을 `next/font/google`로 싣고 `lang="ko"`, 제목, noindex를 둡니다.
+- `src/app/page.tsx`를 클라이언트 컴포넌트로 바꿔 커버 마크업, 진입 장면, 떠 있는 메뉴를 React로 옮깁니다. 글꼴 확인 패널은 옮기지 않습니다(조립본 전용).
+- `src/app/globals.css`에 조립본의 CSS를 옮깁니다.
+- 이미지는 `docs/design/canvas/`의 축소본을 `public/scene1/`로 복사해 씁니다.
+- 로컬 `next dev`로 띄워 이산하가 확인합니다.
+
+하지 않는 것은 다음과 같습니다. 코드를 커밋하거나 푸시하지 않습니다. 이 task는 로컬 확인용이고, 정식 이식은 시안이 확정된 뒤 story 아래 task로 다시 합니다. Vercel 설정을 건드리지 않습니다. 이미지 파이프라인(`docs/scripts/images.mjs`)을 만들지 않습니다.
+
+## 주의할 점
+
+코드 변경은 작업 트리에만 두고 커밋하지 않습니다. `next dev`가 `AGENTS.md`의 규칙 블록을 다시 쓸 수 있습니다. 조립본이 바뀌면 같은 방식으로 다시 옮깁니다.
+
+## 완료 기준
+
+- [ ] `next dev`로 띄운 `http://localhost:3000`에서 커버·진입 장면·떠 있는 메뉴가 조립본과 같이 동작함
+- [ ] 이산하가 로컬에서 확인함
+- [ ] 구현 기록 기입 (커밋 없음, 작업 트리 상태만)
+
+## 구현 기록

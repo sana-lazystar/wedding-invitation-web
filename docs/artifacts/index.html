@@ -105,27 +105,41 @@
     #intro.is-done { opacity: 0; pointer-events: none; }
     .sheet {
       position: relative;
-      width: 260px; height: 360px;
+      width: 300px; height: 424px;
       perspective: 1100px;
       opacity: 0;
-      transform: translateY(-90px) scale(0.96);
+      transform: translateY(-106px) scale(0.96);
       transition: opacity 0.4s ease, transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
     }
-    #intro.is-shown .sheet { opacity: 1; transform: translateY(-90px) scale(1); }
+    #intro.is-shown .sheet { opacity: 1; transform: translateY(-106px) scale(1); }
     #intro.is-unfolding .sheet { transform: translateY(0) scale(1); }
     #intro.is-expanding .sheet { transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1); transform: translateY(0) scale(var(--sheet-scale, 4)); }
     .sheet__half {
-      position: absolute; left: 0; width: 260px; height: 180px;
-      background: var(--paper);
+      position: absolute; left: 0; width: 300px; height: 212px;
+      background: linear-gradient(180deg, #FCF8F1, #F9F3E8);
+      overflow: hidden;
+      transition: background-color 0.85s ease;
+    }
+    .sheet__lines {
+      position: absolute; left: 0; right: 0; bottom: 0; top: 0;
+      background-image: repeating-linear-gradient(to bottom, transparent 0 27px, rgba(185, 142, 94, 0.22) 27px 28px);
+      transition: opacity 0.5s ease;
+    }
+    .sheet__top .sheet__lines { top: 60px; }
+    .sheet__head {
+      position: absolute; left: 26px; right: 26px; top: 26px; height: 6px;
+      border-top: 1px solid rgba(185, 142, 94, 0.6);
+      border-bottom: 1px solid rgba(185, 142, 94, 0.6);
+      transition: opacity 0.5s ease;
     }
     .sheet__bottom {
       bottom: 0;
-      border-radius: 0 0 16px 16px;
+      border-radius: 0 0 14px 14px;
       box-shadow: 0 22px 40px -22px rgba(70, 48, 24, 0.5);
     }
     .sheet__top {
       top: 0;
-      border-radius: 16px 16px 0 0;
+      border-radius: 14px 14px 0 0;
       transform-origin: 50% 100%;
       transform: rotateX(180deg);
       transition: transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.7s ease;
@@ -136,11 +150,11 @@
       background: rgba(70, 48, 24, 0.08);
     }
     #intro.is-unfolding .sheet__top { transform: rotateX(0deg); box-shadow: 0 -12px 24px -20px rgba(70, 48, 24, 0.35); }
-    #intro.is-expanding .sheet__half { border-radius: 0; box-shadow: none; }
-    #intro.is-expanding .sheet__top::after { opacity: 0; }
+    #intro.is-expanding .sheet__half { border-radius: 0; box-shadow: none; background: var(--paper-bg); }
+    #intro.is-expanding .sheet__top::after, #intro.is-expanding .sheet__lines, #intro.is-expanding .sheet__head { opacity: 0; }
     .intro-text {
       position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(0.72);
       display: flex; flex-direction: column; align-items: center;
       will-change: transform;
     }
@@ -149,7 +163,7 @@
     #intro.is-text .intro-text > * { opacity: 1; transform: translateY(0); }
     #intro.is-expanding .intro-text {
       transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
-      transform: translate(calc(-50% + var(--text-dx, 0px)), calc(-50% + var(--text-dy, 0px)));
+      transform: translate(calc(-50% + var(--text-dx, 0px)), calc(-50% + var(--text-dy, 0px))) scale(1);
     }
     .intro-skip {
       position: absolute; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom));
@@ -237,8 +251,8 @@
 
   <div id="intro" aria-hidden="true">
     <div class="sheet">
-      <div class="sheet__half sheet__bottom"></div>
-      <div class="sheet__half sheet__top"></div>
+      <div class="sheet__half sheet__bottom"><div class="sheet__lines"></div></div>
+      <div class="sheet__half sheet__top"><div class="sheet__head"></div><div class="sheet__lines"></div></div>
     </div>
     <div class="intro-text" id="introText">
       <div class="eyebrow">Wedding Invitation</div>
@@ -353,7 +367,7 @@
         timers.push(setTimeout(function () { intro.classList.add('is-unfolding'); }, 500));
         timers.push(setTimeout(function () { intro.classList.add('is-text'); }, 1250));
         timers.push(setTimeout(function () {
-          var scale = Math.max(window.innerWidth / 260, window.innerHeight / 360) * 1.08;
+          var scale = Math.max(window.innerWidth / 300, window.innerHeight / 424) * 1.08;
           intro.style.setProperty('--sheet-scale', scale.toFixed(3));
           var from = introText.getBoundingClientRect();
           var to = coverHead.getBoundingClientRect();
