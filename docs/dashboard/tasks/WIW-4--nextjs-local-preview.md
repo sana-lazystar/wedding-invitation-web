@@ -114,3 +114,5 @@ related: []
 2026-09-07 01:31:46 · develop · 0f2487c · 커버 글 상자 합성 층 승격(iOS 진입 장면 중 글 사라짐)(디자인 논의 T66). `src/app/globals.css`.
 
 2026-09-07 01:36:11 · develop · 07eecea · 컷아웃 음수 여백 제거(마지막 줄 가림), 장면 간격 통일, Scene6·7 둘째 아이콘 반대쪽(디자인 논의 T67~T69). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-07 01:41:00 · develop · c903c85 · favicon · 앱 아이콘 · 매니페스트 · 테마색(디자인 논의 T70). `src/app/layout.tsx` `src/app/manifest.ts` `src/app/{favicon.ico,icon1~4.png,apple-icon.png}` `public/{android-icon,ms-icon}-*.png` `public/browserconfig.xml`.
