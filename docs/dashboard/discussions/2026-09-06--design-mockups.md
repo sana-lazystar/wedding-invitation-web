@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 18:25:07
-updated: 2026-09-07 01:27:52
+updated: 2026-09-07 01:31:46
 completed:
 participants: 이산하, Claude
 related: []
@@ -734,6 +734,16 @@ jira:
 - 부품 정리. `.story`에 항목 사이 22px을 두고, 사진 뒤 겹침은 `.note--tuck`, 들여 놓음은 `.note--indent`, 합창의 둘째 아이콘은 `.note__who--inner`(오른쪽 46px 안쪽)로 뺐다. 컷아웃 스티커가 있는 Scene4·5만 `.story--stamp`로 아래 여백 124px을 유지한다. 웨딩 사진 셋은 같은 크기(폭 3/4, 세로 3:4)의 빈 종이 `.photo-paper__blank`에 이름표("신랑 웨딩 사진" · "신부 웨딩 사진" · "함께 있는 컷")만 두었다.
 - 캐릭터 여덟 장(토끼 2~5, 수달 1~3, 둘이 허그)을 번짐 제거 → 240px로 `public/character/`에 두었다(52~83KB). 이름은 이산하의 번호를 따른다(`rabbit-2` … `otter-3` · `hug`).
 - 확인. localhost:3000 390×844에서 네 구획을 찍어 봤다. 합창 아이콘 둘이 겹치지 않고(토끼 267~322, 수달 319~377) 메모지 줄 수는 Scene6 1 · 5 · 2, Scene7 4 · 3, Scene8 3 · 3 · 3이다. tsc · eslint 통과.
+
+### 2026-09-07 01:27:52 이후 · 이산하 (T66)
+
+- 배포된 것을 폰으로 확인했을 때, 진입 장면에서 봉투가 열리고 편지지가 나올 때 편지지 안 문구(WEDDING INVITATION과 그 아래 문구)가 사라졌다가 편지지가 완전히 확장되면 다시 보인다. 항상 보이게 해 달라.
+
+### 2026-09-07 01:31:46 · Claude (T66)
+
+- 원인(추정). 사라지는 글 둘은 커버 위쪽 흐림 층(`.cover-bg__blur`, backdrop-filter) 아래 자리에 있고 아래 이름은 멀쩡하다. iOS Safari는 조상(커버)이 변환 애니메이션 중이면 backdrop-filter 층을 제 층으로 앞에 올리는데, 글 상자는 제 층이 없어 조상 층에 그려지므로 흐림 층에 덮인다. 애니메이션이 끝나 변환이 없어지면 순서가 돌아와 다시 보인다.
+- 처치. `.cover-head` · `.names`에 `transform: translateZ(0)` · `will-change: transform`으로 제 합성 층을 주고 `#cover`에 `isolation: isolate`를 걸었다. 제 층이면 z-index 1이 합성에서도 지켜진다. 진입 장면 동안만 거는 것이 아니라 항상 거는 이유는, 층 승격이 글자 안티에일리어싱을 바꿀 수 있어 장면 끝에서 글자가 튀지 않게 하기 위해서다.
+- 확인. Playwright WebKit(26.5)을 설치해 프레임을 찍었으나 고치기 전에도 글이 보여 데스크톱 WebKit에서는 재현되지 않았다(iOS 고유). 고친 뒤 Chrome에서 장면 마지막 프레임과 커버 정지 화면 픽셀 차 0, WebKit 프레임도 그대로다. tsc · eslint 통과. 폰에서 다시 확인해 달라. 그래도 사라지면 다음 수는 진입 장면 동안 흐림 층을 그림으로 굽는 것이다.
 
 ## 결정
 
