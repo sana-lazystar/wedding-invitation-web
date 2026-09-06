@@ -44,6 +44,7 @@ body {
   justify-content: space-between;
   padding: calc(56px + env(safe-area-inset-top)) 24px 48px;   /* 아래 여백은 배경(커버 상자 = 100dvh) 아랫변 기준 48px. 안전 영역을 더하지 않습니다(T50) */
   overflow: hidden;
+  isolation: isolate;   /* 커버 안의 층 순서를 커버 안에서 닫습니다(T66) */
 }
 .cover-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
 .cover-bg__hall {
@@ -65,8 +66,8 @@ body {
   height: 27%; width: auto; transform: translateX(-50%);
   filter: drop-shadow(0 2px 2px rgba(70, 48, 24, 0.28)) drop-shadow(0 18px 18px rgba(70, 48, 24, 0.18));
 }
-/* 커버 자체는 움직이지 않습니다(디자인 논의 T33). 진입 장면(로딩)은 T34에서 걷어냈고 처음부터 다시 만듭니다 */
-.cover-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+/* 글 상자 둘은 제 합성 층에 둡니다(T66). iOS Safari는 커버가 진입 장면에서 변환 애니메이션 중일 때 흐림 층(backdrop-filter)을 앞으로 올려, 같은 층에 그려지던 위쪽 글(WEDDING INVITATION · 표제)을 덮어 사라지게 했습니다. 글 상자가 제 층이면 z-index 1이 합성에서도 지켜집니다. 데스크톱 WebKit·Chrome에서는 재현되지 않아 폰에서 확인합니다 */
+.cover-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; transform: translateZ(0); will-change: transform; }
 .eyebrow {
   font-family: var(--font-latin);
   font-size: 10px;
@@ -79,7 +80,7 @@ body {
   white-space: nowrap;
 }
 .tagline { margin: 10px 0 0; font-family: var(--font-name); font-size: 18px; font-weight: 700; line-height: 1.5; color: var(--ink-soft); white-space: nowrap; }
-.names { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.names { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 7px; transform: translateZ(0); will-change: transform; }
 .names__name { font-family: var(--font-name); font-size: 20px; font-weight: 700; letter-spacing: 0.14em; text-indent: 0.14em; line-height: 1.35; color: var(--ink); }
 .names__and { font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); line-height: 1.4; }
 
