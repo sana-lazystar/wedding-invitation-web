@@ -74,7 +74,7 @@ TypeScript·Next.js·React로 만든 정적 모바일 청첩장을 GitHub 레포
 
 ## 10. 코드가 SSOT인 것
 
-코드가 생기면 `docs/ontology/README.md` §코드가 SSOT인 것들 표에 `next.config.*` · `vercel.json`(있으면) · 이미지 생성 스크립트를 등록합니다. 이 문서는 그것들을 복제하지 않고 가리킵니다.
+`docs/ontology/README.md` §코드가 SSOT인 것들 표에 `next.config.ts` · `package.json` · `tsconfig.json` · `eslint.config.mjs` · `src/app/` · `AGENTS.md`를 등록했습니다(WIW-2, 2026-09-06). 이미지 생성 스크립트는 만들 때 더합니다. 이 문서는 그것들을 복제하지 않고 가리킵니다.
 
 ## 11. 프로비저닝 절차 (이산하가 Vercel 대시보드에서 합니다)
 

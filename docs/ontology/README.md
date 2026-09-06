@@ -48,4 +48,9 @@
 
 | 지식 | SSOT |
 | --- | --- |
-| (아직 없음) | |
+| Next.js 설정(이미지 로더·출력 모드 등) | 레포 루트 `next.config.ts` |
+| 의존성·스크립트(lint·build·dev 명령) | 레포 루트 `package.json` |
+| TypeScript·경로 alias(`@/*`) | 레포 루트 `tsconfig.json` |
+| 린트 규칙 | 레포 루트 `eslint.config.mjs` |
+| 라우트 구조 | `src/app/` 디렉토리 |
+| Next.js 코드 작성 규칙(에이전트용) | 레포 루트 `AGENTS.md` |

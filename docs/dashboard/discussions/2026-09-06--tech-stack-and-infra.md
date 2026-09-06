@@ -2,7 +2,7 @@
 type: discussion
 status: in-progress
 created: 2026-09-06 16:53:09
-updated: 2026-09-06 18:01:10
+updated: 2026-09-06 18:03:20
 completed:
 participants: 이산하, Claude
 related: []
@@ -165,6 +165,11 @@ jira:
 - 덧붙여 `AGENTS.md`의 규칙 블록은 `next dev`가 다시 써 넣으므로 커밋해 두어야 트리가 깨끗합니다. 그리고 `helpers/is-folder-empty.ts`의 허용 목록에 `docs`·`.gitignore`·`.git`·`.claude`는 있지만 `CLAUDE.md`는 없어서 레포 루트에서 직접 실행하면 거부됩니다. 임시 디렉토리 생성 후 이동이 필요한 이유입니다.
 - 결정 15를 확정으로 바꿨습니다. WIW-1이 머지돼(daa9e63) develop의 `.gitignore`에 두 폴더가 들어 있고, "위에거 답변 되면 나머지 동의"를 WIW-2 실행 승인으로 삼습니다. WIW-2를 in-progress로 올리고 게이트를 표시한 뒤 실행합니다.
 
+### 2026-09-06 18:03:20 · Claude (T8 추기)
+
+- WIW-2 실행 완료. `feature/WIW-2-nextjs-scaffold`에 스캐폴드를 커밋(8a48f39)하고 푸시했습니다. lint·build 통과, 라우트는 `/`와 `/_not-found` 둘 다 정적입니다. task는 PR 초안까지 적고 archive로 옮겼습니다. ontology README의 코드 SSOT 표를 채웠습니다.
+- 다음은 이산하 몫입니다. WIW-2 PR을 develop에 머지하고, develop→main PR을 올린 뒤, topology §11 절차로 Vercel 프로젝트를 만듭니다(WIW-3). 프로젝트 이름·URL·리전을 알려주면 topology §2를 채웁니다.
+
 ## 결정
 
 행의 내용은 불변입니다. 상태 칸만 갱신할 수 있습니다.
@@ -197,5 +202,5 @@ jira:
 이 논의에서 생성된 epic·task·bugfix ID를 분해 승인 후 적습니다.
 
 - WIW-1 원본·에셋 폴더 git 제외 (단독 task, 2026-09-06 적재 · 같은 날 completed, 528c02d, archive/tasks)
-- WIW-2 Next.js 기본 스캐폴드 (단독 task, 2026-09-06 적재 · in-progress)
+- WIW-2 Next.js 기본 스캐폴드 (단독 task, 2026-09-06 적재 · 같은 날 completed, 8a48f39, archive/tasks)
 - WIW-3 Vercel 프로젝트 연동 (단독 task, todo, 2026-09-06. 대기: WIW-2의 main 반영)
