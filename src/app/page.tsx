@@ -3,26 +3,31 @@
 /* eslint-disable @next/next/no-img-element */
 // WIW-4 임시 적용. docs/artifacts/index.html의 Scene1 커버 · Scene2 핵심 정보 · 떠 있는 메뉴를 옮긴 것입니다.
 // 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
-// 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36 · T37). 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 탭하면 건너뜁니다.
+// 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T40). 세 층(바탕 < 커버 < 봉투 몸 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
 import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const fabRef = useRef<HTMLElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
+  const introEnvRef = useRef<HTMLDivElement>(null);
+  const introFlapRef = useRef<HTMLDivElement>(null);
   const coverRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [introDone, setIntroDone] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
-    const intro = introRef.current;
     const cover = coverRef.current;
-    if (!intro || !cover) return;
+    const layers = [introRef.current, introEnvRef.current, introFlapRef.current];
+    if (!cover || layers.some((el) => !el)) return;
     let finished = false;
+    const onIntroTouchMove = (e: TouchEvent) => e.preventDefault();
     const finishIntro = () => {
       if (finished) return;
       finished = true;
       root.classList.remove("is-intro", "is-intro-shown");
+      document.removeEventListener("click", finishIntro);
+      document.removeEventListener("touchmove", onIntroTouchMove);
       setIntroDone(true);
     };
     // 새로고침해도 맨 위에서 시작합니다(스크롤 복원 끔). 움직임 줄이기 설정이거나 앵커(#…)로 들어오면 바로 커버입니다. 매번 재생합니다
@@ -41,20 +46,20 @@ export default function Home() {
     const z1 = envW / 600;
     const z0 = vh / 400;
     const envTop = vh / 2 - 200 * z1; // 전체가 보일 때 봉투 윗변의 화면 y
+    const envBottom = envTop + 400 * z1; // 밑변
     const s0 = (envW * 0.6) / coverW; // 카드 폭 = 봉투 폭의 60%
     const ty0 = envTop + 14 * z1; // 카드가 봉투 안에 든 자리(윗변 바로 아래)
-    const ty1 = (vh - coverH * s0) / 2; // 올라온 카드의 윗변. 카드가 화면 세로 가운데에 오는 값이라 다음 확대가 가운데 기준이 됩니다
-    const drop1 = ty1 + coverH * s0 - envTop + 40; // 봉투가 내려가는 거리(화면 px). 윗변이 카드 아래 40px까지
-    const drop2 = vh - envTop + 24; // 그다음 화면 밖까지
-    const b1 = coverH - (envTop + drop1 - ty1) / s0; // 그때 클립 아래쪽(커버 좌표. 카드 아래로 40px 넘게 열림)
-    intro.style.setProperty("--z0", String(z0));
-    intro.style.setProperty("--z1", String(z1));
-    intro.style.setProperty("--drop1", `${drop1 / z1}px`);
-    intro.style.setProperty("--drop2", `${drop2 / z1}px`);
+    const ty1 = (vh - coverH * s0) / 2; // 올라온 카드의 윗변. 카드가 화면 세로 가운데에 와서 다음 확대가 가운데 기준이 됩니다
+    const drop1 = Math.max(0, ty1 + coverH * s0 * 0.6 - envTop); // 봉투가 내려가는 거리(화면 px). 카드가 60% 나오도록
+    const b0 = coverH - (envBottom - ty0) / s0; // 봉투 밑변 아래로 삐져나온 카드를 가리는 클립(커버 좌표)
+    const b1 = coverH - (envBottom + drop1 - ty1) / s0; // 올라오기 끝. 음수면 클립 없음
+    root.style.setProperty("--z0", String(z0));
+    root.style.setProperty("--z1", String(z1));
+    root.style.setProperty("--drop1", `${drop1 / z1}px`);
     cover.style.setProperty("--card-s0", String(s0));
     cover.style.setProperty("--card-ty0", `${ty0}px`);
     cover.style.setProperty("--card-ty1", `${ty1}px`);
-    cover.style.setProperty("--card-b0", `${coverH}px`);
+    cover.style.setProperty("--card-b0", `${b0}px`);
     cover.style.setProperty("--card-b1", `${b1}px`);
     let started = false;
     let safety: number | undefined;
@@ -62,24 +67,23 @@ export default function Home() {
       if (started || finished) return;
       started = true;
       root.classList.add("is-intro-shown");
-      safety = window.setTimeout(finishIntro, 6500);
+      safety = window.setTimeout(finishIntro, 5000);
     };
-    const imgs = Array.from(intro.querySelectorAll("img"));
+    const imgs = layers.flatMap((el) => Array.from(el!.querySelectorAll("img")));
     Promise.all(imgs.map((im) => (im.decode ? im.decode().catch(() => undefined) : Promise.resolve()))).then(startIntro);
     const fallback = window.setTimeout(startIntro, 2500);
     const onAnimationEnd = (e: AnimationEvent) => {
-      if (e.animationName === "intro-card") finishIntro();
+      if (e.animationName === "intro-card-grow") finishIntro();
     };
-    const onTouchMove = (e: TouchEvent) => e.preventDefault();
     cover.addEventListener("animationend", onAnimationEnd);
-    intro.addEventListener("click", finishIntro);
-    intro.addEventListener("touchmove", onTouchMove, { passive: false });
+    document.addEventListener("click", finishIntro);
+    document.addEventListener("touchmove", onIntroTouchMove, { passive: false });
     return () => {
       window.clearTimeout(fallback);
       window.clearTimeout(safety);
       cover.removeEventListener("animationend", onAnimationEnd);
-      intro.removeEventListener("click", finishIntro);
-      intro.removeEventListener("touchmove", onTouchMove);
+      document.removeEventListener("click", finishIntro);
+      document.removeEventListener("touchmove", onIntroTouchMove);
       root.classList.remove("is-intro", "is-intro-shown");
     };
   }, []);
@@ -102,22 +106,32 @@ export default function Home() {
   return (
     <>
       {!introDone && (
-        <div className="intro" ref={introRef} aria-hidden="true">
-          <div className="intro__zoom">
-            <div className="intro__env">
-              <img className="intro__back" src="/intro/envelope-back.png" alt="" />
-              <div className="intro__flap">
-                <img className="intro__seal-back" src="/intro/wax-seal-back.png" alt="" />
-                <img className="intro__flap-in" src="/intro/envelope-flap-inside.png" alt="" />
-                <img className="intro__flap-out" src="/intro/envelope-flap.png" alt="" />
-                <img className="intro__seal" src="/intro/wax-seal.png" alt="" />
+        <>
+          <div className="intro" ref={introRef} aria-hidden="true">
+            <button type="button" className="intro__skip">
+              넘어가기
+            </button>
+          </div>
+          <div className="intro-layer intro-layer--env" ref={introEnvRef} aria-hidden="true">
+            <div className="intro__zoom">
+              <div className="intro__env">
+                <img className="intro__back" src="/intro/envelope-back.png" alt="" />
               </div>
             </div>
           </div>
-          <button type="button" className="intro__skip">
-            넘어가기
-          </button>
-        </div>
+          <div className="intro-layer intro-layer--flap" ref={introFlapRef} aria-hidden="true">
+            <div className="intro__zoom">
+              <div className="intro__env">
+                <div className="intro__flap">
+                  <img className="intro__seal-back" src="/intro/wax-seal-back.png" alt="" />
+                  <img className="intro__flap-in" src="/intro/envelope-flap-inside.png" alt="" />
+                  <img className="intro__flap-out" src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__seal" src="/intro/wax-seal.png" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
       )}
 
       <div className="page">
