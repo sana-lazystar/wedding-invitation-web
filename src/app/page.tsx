@@ -104,6 +104,7 @@ export default function Home() {
   const [viewer, setViewer] = useState<Viewer | null>(null);
   const mapRef = useRef<HTMLDivElement>(null);
   const [mapReady, setMapReady] = useState(false);
+  const [mapFailed, setMapFailed] = useState(false);   // SDK를 못 실었거나(401 = 앱에 도메인 미등록 · 카카오맵 API 미활성) 10초 안에 안 그려짐
   const [toast, setToast] = useState("");
   const [toastShown, setToastShown] = useState(false);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -239,7 +240,7 @@ export default function Home() {
     document.documentElement.classList.remove("is-intro", "is-intro-shown");
   }, [introDone]);
 
-  // 카카오맵(디자인 논의 T112). 키가 있으면 SDK를 한 번 싣고, 대략 중심에 지도와 표식을 놓은 뒤 지오코더가 주소로 바로잡습니다. 지도 컨테이너는 React가 채우지 않는 빈 div라 SDK가 마음대로 그립니다
+  // 카카오맵(디자인 논의 T112 · T113). 키가 있으면 SDK를 한 번 싣고, 대략 중심에 지도와 표식을 놓은 뒤 지오코더가 주소로 바로잡습니다. 지도 컨테이너는 React가 채우지 않는 빈 div라 SDK가 마음대로 그립니다. SDK가 안 실리면(401. 앱의 Web 플랫폼에 도메인이 없거나 카카오맵 API가 꺼져 있음) 아래 지도 앱 링크로 안내합니다
   useEffect(() => {
     const el = mapRef.current;
     if (!KAKAO_MAP_KEY || !el) return;
@@ -272,8 +273,15 @@ export default function Home() {
       script.dataset.kakaoMap = "1";
       document.head.appendChild(script);
     }
+    const fail = () => setMapFailed(true);
+    const timer = setTimeout(fail, 10000);
     script.addEventListener("load", init);
-    return () => script.removeEventListener("load", init);
+    script.addEventListener("error", fail);
+    return () => {
+      clearTimeout(timer);
+      script.removeEventListener("load", init);
+      script.removeEventListener("error", fail);
+    };
   }, []);
 
   // 쪽지는 화면에 들어올 때 한 번 내려앉으며 나타납니다(디자인 논의 T51). 움직임 줄이기면 CSS가 바로 보이게 합니다
@@ -615,7 +623,11 @@ export default function Home() {
               <div className="map-paper">
                 <div className="map-paper__inner">
                   <div className="map-paper__map" ref={mapRef} role="img" aria-label="더채플앳청담 지도" aria-hidden={!mapReady} />
-                  {!mapReady && <span className="map-paper__note">{KAKAO_MAP_KEY ? "지도를 불러오는 중" : "지도 (카카오맵 키를 등록하면 표시)"}</span>}
+                  {!mapReady && (
+                    <span className="map-paper__note">
+                      {!KAKAO_MAP_KEY ? "지도 (카카오맵 키를 등록하면 표시)" : mapFailed ? "지도를 불러오지 못했습니다. 아래 지도 앱으로 열어 주세요" : "지도를 불러오는 중"}
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="chips">
