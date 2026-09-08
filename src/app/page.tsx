@@ -8,7 +8,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Keyboard, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import "swiper/css/navigation";
 import gallery from "@/content/gallery.json";
 
 // 사진첩(디자인 논의 T103 · T104). 매니페스트 순서가 표시 순서이고 앞 8장이 타일, 9번째 타일은 나머지 장수(+N개)입니다. 사진은 docs/scripts/gallery-jpeg.py의 잠정 산출이고 어느 8장을 보일지는 이산하가 나중에 고릅니다
@@ -31,7 +30,6 @@ export default function Home() {
   const galleryViewerRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);   // 덮개를 연 버튼. 닫으면 초점을 돌립니다
   const [viewer, setViewer] = useState<Viewer | null>(null);
-  const [galleryIndex, setGalleryIndex] = useState(0);
 
   // 화면 높이 고정 · 확대 막기(디자인 논의 T83). 카카오톡 인앱 브라우저는 스크롤로 주소창이 사라질 때 창 높이 자체가 바뀌어 svh까지 변하므로, 처음 잰 높이를 --vh-fixed(px)로 박습니다. 폭이 바뀌면(회전 · 창 크기 조절) 다시 재고 높이만 바뀌는 것(툴바)은 무시합니다. 인앱 브라우저는 열린 직후 툴바를 자리 잡으며 높이가 한 번 더 바뀌므로, 첫 터치 전(진입 장면 중)에는 높이 변화도 받습니다. iOS는 메타의 user-scalable=no를 무시하므로 손가락 두 개 움직임과 제스처 이벤트도 막습니다
   useEffect(() => {
@@ -445,13 +443,9 @@ export default function Home() {
             </span>
           </button>
         </section>
-        {/* 사진첩(와이어프레임 11쪽 아래 절반, 디자인 논의 T103 · T104). 추신과 같은 테이프 쪽지에 "사진첩", 나무 틀 안에 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 흐린 사진 위에 나머지 장수 */}
+        {/* 사진첩(와이어프레임 11쪽 아래 절반, 디자인 논의 T103~T105). 가운데 제목 "사진첩", 나무 틀 안에 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 흐린 사진 위에 나머지 장수 */}
         <section id="gallery" className="block story gallery">
-          <div className="note note--left note--memo note--ps">
-            <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__tape" src="/paper/tape.png" alt="" />
-            <p className="note__text">사진첩</p>
-          </div>
+          <h2 className="gallery__title">사진첩</h2>
           <div className="gallery__board">
             <img className="gallery__frame" src="/scene10/wood-frame.png" width={800} height={800} alt="" />
             <ul className="gallery__grid" id="galleryGrid">
@@ -466,7 +460,6 @@ export default function Home() {
                       aria-label={more ? `사진 ${i + 1}부터 크게 보기. ${galleryMore}장 더` : `사진 ${i + 1} 크게 보기`}
                       onClick={(e) => {
                         openerRef.current = e.currentTarget;
-                        setGalleryIndex(i);
                         setViewer({ kind: "gallery", index: i });
                       }}
                     >
@@ -505,32 +498,40 @@ export default function Home() {
         </button>
       </div>
 
-      {/* 사진 뷰어(디자인 논의 T103 · T104). 타일을 누르면 그 사진부터 Swiper로 봅니다. Swiper는 열려 있을 때만 그려 initialSlide가 먹게 합니다. 사진은 흰 테두리 인화지에 테이프, 단추는 종이, 장수는 손글씨 */}
+      {/* 사진 뷰어(디자인 논의 T103~T105). 타일을 누르면 그 사진부터 Swiper로 봅니다. Swiper는 열려 있을 때만 그려 initialSlide가 먹게 합니다. 사진은 흰 테두리 인화지에 위 가운데 테이프, 장수는 사진 아래 손글씨(슬라이드마다), 화살표는 우리 단추(×와 같은 크기, 반투명)를 Swiper에 넘깁니다 */}
       <div className="gallery-viewer" id="galleryViewer" ref={galleryViewerRef} role="dialog" aria-modal="true" aria-label="사진첩" hidden={viewer?.kind !== "gallery"}>
         {viewer?.kind === "gallery" && (
           <Swiper
             className="gallery-viewer__swiper"
             modules={[Navigation, Keyboard]}
-            navigation
+            navigation={{ prevEl: "#galleryPrev", nextEl: "#galleryNext" }}
             keyboard={{ enabled: true }}
             initialSlide={viewer.index}
             lazyPreloadPrevNext={2}
-            onSlideChange={(s) => setGalleryIndex(s.activeIndex)}
           >
             {gallery.map((item, i) => (
               <SwiperSlide key={item.id}>
                 <figure className="gallery-viewer__print" style={{ "--ar": `${item.width} / ${item.height}` } as React.CSSProperties}>
                   <img className="gallery-viewer__img" src={`/gallery/${item.id}.jpg`} width={item.width} height={item.height} alt={`사진 ${i + 1}`} loading="lazy" />
-                  <img className="gallery-viewer__tape gallery-viewer__tape--left" src="/paper/tape.png" alt="" />
-                  <img className="gallery-viewer__tape gallery-viewer__tape--right" src="/paper/tape.png" alt="" />
+                  <img className="gallery-viewer__tape" src="/paper/tape-short.png" alt="" />
                 </figure>
+                <p className="gallery-viewer__count">
+                  {i + 1} / {gallery.length}
+                </p>
               </SwiperSlide>
             ))}
           </Swiper>
         )}
-        <div className="gallery-viewer__count" aria-live="polite">
-          {galleryIndex + 1} / {gallery.length}
-        </div>
+        <button type="button" className="gallery-viewer__nav gallery-viewer__nav--prev" id="galleryPrev" aria-label="이전 사진">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M13.5 5.5L8 11l5.5 5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <button type="button" className="gallery-viewer__nav gallery-viewer__nav--next" id="galleryNext" aria-label="다음 사진">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M8.5 5.5L14 11l-5.5 5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
         <button type="button" className="gallery-viewer__close" aria-label="닫기" onClick={() => setViewer(null)}>
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
             <path d="M6 6l10 10M16 6L6 16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
