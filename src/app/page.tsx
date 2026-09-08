@@ -20,16 +20,16 @@ const ACCOUNTS: { side: string; rows: { role: string; name: string; bank: string
   {
     side: "신랑 측",
     rows: [
-      { role: "아버지", name: "이종노", bank: "하나", num: "468-910199-62707" },
-      { role: "어머니", name: "이은경", bank: "국민", num: "879602-01-133871" },
+      { role: "신랑 아버지", name: "이종노", bank: "하나", num: "468-910199-62707" },
+      { role: "신랑 어머니", name: "이은경", bank: "국민", num: "879602-01-133871" },
       { role: "신랑", name: "이산하", bank: "토스뱅크", num: "1001-6105-5173" },
     ],
   },
   {
     side: "신부 측",
     rows: [
-      { role: "아버지", name: "송영봉", bank: "삼성증권", num: "7084-1174-8301" },
-      { role: "어머니", name: "임인화", bank: "삼성증권", num: "7082-4708-9301" },
+      { role: "신부 아버지", name: "송영봉", bank: "삼성증권", num: "7084-1174-8301" },
+      { role: "신부 어머니", name: "임인화", bank: "삼성증권", num: "7082-4708-9301" },
       { role: "신부", name: "송시야", bank: "국민", num: "879201-00-010006" },
     ],
   },
@@ -813,14 +813,14 @@ export default function Home() {
                       type="button"
                       className="account"
                       key={row.name}
-                      aria-label={`${row.role} · ${row.name} ${row.bank} ${row.num} 복사`}
+                      aria-label={`${row.role} ${row.bank} ${row.name} ${row.num} 복사`}
                       onClick={() => copy(row.num.replace(/-/g, ""), "계좌번호를 복사했습니다")}
                     >
                       <span className="account__text">
                         <span className="account__role">{row.role}</span>
-                        <span className="account__name">{row.name}</span>
-                        <span className="account__num">
-                          {row.bank} {row.num}
+                        <span className="account__num">{row.num}</span>
+                        <span className="account__holder">
+                          {row.bank} {row.name}
                         </span>
                       </span>
                       <span className="account__copy" aria-hidden="true">
