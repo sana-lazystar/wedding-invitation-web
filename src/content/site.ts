@@ -7,8 +7,10 @@ export const SITE_NAME = "이산하 · 송시야 청첩장";
 export const SITE_DESCRIPTION = "26년 10월 9일 금요일 오후 6시 30분\n더채플앳청담";
 export const THEME_COLOR = "#F3ECDF";
 
-// 공유 미리보기 그림(T132). 1600×800(2:1)이고 카카오톡이 800×400으로 자릅니다. 카카오톡 공유 메시지도 같은 파일을 씁니다
-export const OG_IMAGE = { url: "/og/share.jpg", width: 1600, height: 800, alt: "이산하와 송시야" };
+// 공유 미리보기 그림(T132 · T146). 카카오톡 공유 메시지와 OG 미리보기가 같은 파일을 씁니다
+// 세로 사진을 자르지 않고 그대로 씁니다(T146). 카카오톡 공유 메시지의 그림 영역이 이 비율을 따라 세로로 뜹니다.
+// URL 미리보기(OG 스크랩)에서는 카카오가 800×400으로 가운데를 자릅니다
+export const OG_IMAGE = { url: "/og/share.jpg", width: 3478, height: 4517, alt: "이산하와 송시야" };
 
 export const VENUE = {
   name: "더채플앳청담 3층 커티지홀",

@@ -31,6 +31,8 @@ for (const [from, to] of FONT_MAP) {
   if (css.split(from).length !== 2) { console.error(`✗ 글꼴 토큰이 1회가 아닙니다: ${from.slice(0, 40)}`); process.exit(1); }
   css = css.replace(from, to);
 }
+// 그림 경로. 조립본은 파일로 열리므로 상대 경로, Next.js는 public 기준 절대 경로입니다(T145)
+css = css.replace(/url\(\.\.\/\.\.\/public\//g, 'url(/');
 // 접두사 중복 제거. Tailwind의 CSS 처리기(Lightning CSS)가 -webkit- 중복을 만나면 표준 선언을 떨어뜨리므로 표준만 남기고 접두사는 처리기에 맡깁니다
 css = css.replace(/\s*-webkit-backdrop-filter:[^;]*;/g, '').replace(/\s*-webkit-mask-image:[^;]*;/g, '').replace(/\s*-webkit-backface-visibility:[^;]*;/g, '');
 if (/^\s*(translate|rotate|scale):/m.test(css)) { console.error('✗ 조립본 CSS에 개별 변환 속성(translate·rotate·scale)이 있습니다. 처리기가 떨어뜨리므로 transform 함수로 바꿉니다'); process.exit(1); }

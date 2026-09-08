@@ -1,12 +1,10 @@
 // Scene11 오시는 길(12쪽, T110~T112 · T115 · T119). 종이 한 장에 식장 · 지도(카카오맵 JS SDK) · 지도 앱 링크 · 주차 · 지하철 · 버스
-import { NotePaper } from "@/components/ui/NotePaper";
 import { KAKAO_JS_KEY, VENUE } from "@/content/site";
 
 export function DirectionsScene({ mapRef, mapReady, mapFailed, onCopy }: { mapRef: React.Ref<HTMLDivElement>; mapReady: boolean; mapFailed: boolean; onCopy: (text: string, message: string) => void }) {
   return (
     <section id="directions" className="block story">
       <div className="sheet">
-        <NotePaper />
         <div className="sheet__head">
           <img className="sheet__mark" src="/intro/rose-seal.png" width={84} height={84} alt="" />
           <h2 className="sheet__title">오시는 길</h2>
