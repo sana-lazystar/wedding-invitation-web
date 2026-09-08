@@ -182,3 +182,5 @@ related: []
 2026-09-08 22:33:16 · develop · 4d42596 · Scene11~13 테이프 제거 · 카카오맵 SDK · 화환 문단 얇게 · 부모님 성함(디자인 논의 T112). `src/app/page.tsx` `src/app/layout.tsx` `src/app/globals.css`.
 
 2026-09-08 22:37:08 · develop · a338279 · 카카오맵 SDK 실패 시 안내 문구(디자인 논의 T113). `src/app/page.tsx`.
+
+2026-09-08 22:47:50 · develop · 2ceeb00 · 지도 상자 기울임 제거(디자인 논의 T115). `src/app/globals.css`.
