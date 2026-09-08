@@ -202,3 +202,5 @@ related: []
 2026-09-08 23:43:09 · develop · ec19ef6 · Scene14 봉투 크기 편지지 · 앞판 그림자 제거 · 다시 닫힘 임계(디자인 논의 T123~T125). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-08 23:44:59 · develop · 8861d83 · 카카오맵 SDK를 오시는 길 300px 앞에서 싣기(디자인 논의 T126). `src/app/page.tsx`.
+
+2026-09-09 00:13:17 · develop · 42e2557 · Scene9 초대(백합) 신설 · Scene8 수달 4 · 토끼 6 · 문구 교체(디자인 논의 T128). `src/app/page.tsx` `src/app/globals.css` `public/character/` `public/scene9/`.
