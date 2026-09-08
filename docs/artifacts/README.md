@@ -93,7 +93,7 @@ Scene2입니다(디자인 논의 T83). 이산하가 준 올리브 가지 그림(
 
 | 것 | 자리 |
 | --- | --- |
-| CSS · 마크업 | `index.html`의 "2. 핵심 정보" 구간(`#info`, `.info__*`). 세로 flex, 항목 사이 14px, 위아래 여백 36px. 가지 폭 32px, 아래 것은 `rotate(180deg)` |
+| CSS · 마크업 | `index.html`의 "2. 핵심 정보" 구간(`#info`, `.info__*`). 세로 flex, 항목 사이 14px, 위아래 여백 36px. 가지 폭 32px, 아래 것은 `rotate(180deg)`. 바탕은 흰 종이입니다(T84. `background: #FFFFFF` 위에 쪽지와 같은 종이 결 그림 `public/paper/note.png`을 `.info__paper`로 깔고, 가지와 글은 그 위) |
 | 산출 PNG | `public/scene2/branch.png`(알파 경계 상자에 6px 여백을 두고 잘라 폭 240, 256색, 5KB) |
 | Next.js | `src/app/page.tsx`의 `#info` 마크업. 경로만 `/scene2/…`입니다 |
 

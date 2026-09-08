@@ -98,7 +98,9 @@
     .names__and { font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); line-height: 1.4; }
 
     /* 2. 핵심 정보(T83). 올리브 가지 그림(이산하가 준 `public/scene2/branch.png`) 하나를 글 위에, 같은 그림을 180° 돌려 아래에 둡니다. 높이는 화면이 아니라 내용대로입니다(액자가 없어져 화면을 채울 필요가 없습니다). 글은 두 크기(T51) */
-    #info { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 36px 24px; }   /* 처음 72px · 26px이 너무 길어 반으로(T83 추가 지시) */
+    #info { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 36px 24px; background: #FFFFFF; }   /* 처음 72px · 26px이 너무 길어 반으로(T83 추가 지시). 바탕은 흰 종이(T84. 쪽지와 같은 종이 결 그림을 깔고 내용은 그 위) */
+    .info__paper { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .info__branch, .info__text { position: relative; }
     .info__branch { width: 32px; height: auto; }   /* 처음 190px에서 1/6로(T83 추가 지시) */
     .info__branch--flip { transform: rotate(180deg); }
     .info__text { display: flex; flex-direction: column; align-items: center; font-family: var(--font-name); text-align: center; white-space: nowrap; }
@@ -354,6 +356,7 @@
     </section>
 
     <section id="info" class="block">
+      <img class="info__paper" src="../../public/paper/note.png" alt="">
       <img class="info__branch" src="../../public/scene2/branch.png" width="240" height="139" alt="">
       <div class="info__text">
         <div class="info__big">2026년 10월 9일</div>

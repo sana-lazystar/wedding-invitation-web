@@ -910,6 +910,14 @@ jira:
 - 사진. Scene4 641×900(257KB), Scene6 688×900(46KB), Scene7 1100×720(70KB), Scene8 1100×733(96KB). JPEG 82. 가로 사진(7 · 8)은 `.photo-paper--wide`(폭 9/10). 자리표시 CSS는 지웠다.
 - 확인. 조립본 전체 캡처(WebKit 390)로 여섯 장면을 봤다. 진입 장면 마지막 프레임과 정지 화면 픽셀 차 0(WebKit · Chromium, localhost:3000). tsc · eslint 통과.
 
+### 2026-09-08 16:17:00 이전 · 이산하 (T84)
+
+- [Scene2] 배경을 흰색으로 하고 종이 질감을 넣어 달라.
+
+### 2026-09-08 16:17:00 · Claude (T84)
+
+- `#info`를 흰 바탕으로 하고 쪽지와 같은 종이 결 그림(`public/paper/note.png`)을 `.info__paper`(absolute, `object-fit: cover`)로 깔았다. 가지와 글은 그 위(relative). 구획 높이는 268px 그대로. 캡처로 확인(종이 250·250·248, 아래 바탕 243·236·223). tsc · eslint 통과.
+
 ## 결정
 
 행의 내용은 불변입니다. 상태 칸만 갱신할 수 있습니다.
