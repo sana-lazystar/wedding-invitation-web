@@ -214,3 +214,5 @@ related: []
 2026-09-09 00:45:07 · develop · 6b37fe5 · Scene14 만든 이 표기 · 떠 있는 메뉴를 쪽지 한 장으로(디자인 논의 T133 · T134). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-09 00:48:22 · develop · fa96cc3 · 떠 있는 메뉴를 메뉴 ↔ 닫기 토글로, 열린 쪽지는 평행하게 위에(디자인 논의 T135). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-09 00:50:33 · develop · 4d5545f · 사이트 아이콘을 장미 인장 묶음으로 교체(디자인 논의 T136). `src/app/favicon.ico` `src/app/icon1~4.png` `src/app/apple-icon.png` `public/android-icon-*.png` `public/ms-icon-*.png`.
