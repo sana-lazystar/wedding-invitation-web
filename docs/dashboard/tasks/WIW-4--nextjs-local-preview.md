@@ -174,3 +174,5 @@ related: []
 2026-09-08 21:11:39 · develop · d0d3837 · 사진첩 나무 틀 · 표지판 삭제 · 일반적인 격자(디자인 논의 T107). `src/app/page.tsx` `src/app/globals.css` `public/scene10/`(wood-frame · wood-sign 삭제).
 
 2026-09-08 21:18:45 · develop · a50352a · 사진첩 흰 바탕 · 굵은 왼쪽 제목 · 뷰어 장수 노토 산스 · 세로 테이프(디자인 논의 T108 · T109). `src/app/globals.css`.
+
+2026-09-08 21:25:41 · develop · 1be2247 · Scene11 오시는 길 · Scene12 하객 안내 · Scene13 마음 전하는 곳(디자인 논의 T110). `src/app/page.tsx` `src/app/globals.css`.
