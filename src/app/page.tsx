@@ -67,6 +67,23 @@ function loadKakaoSdk(): Promise<KakaoSdk> {
   }
   return kakaoSdkPromise;
 }
+
+// 배경 음악(디자인 논의 T137). iOS는 media 요소의 volume을 못 바꾸므로 페이드인은 되는 브라우저에서만
+function fadeInAudio(audio: HTMLAudioElement) {
+  try {
+    audio.volume = 0;
+  } catch {
+    return;
+  }
+  if (audio.volume !== 0) return;
+  const start = performance.now();
+  const step = (t: number) => {
+    const k = Math.min(1, (t - start) / 1200);
+    audio.volume = k;
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
 const VENUE_ROUGH = { lat: 37.5205, lng: 127.041 };
 type KakaoLatLng = { getLat: () => number; getLng: () => number };
 type KakaoMaps = {
@@ -117,6 +134,9 @@ function CopyIcon() {
 
 export default function Home() {
   const fabRef = useRef<HTMLElement>(null);
+  const bgmRef = useRef<HTMLAudioElement>(null);
+  const bgmWantedRef = useRef(true);
+  const [bgmOn, setBgmOn] = useState(false);
   const introRef = useRef<HTMLDivElement>(null);
   const introBackRef = useRef<HTMLDivElement>(null);
   const introFrontRef = useRef<HTMLDivElement>(null);
@@ -457,6 +477,88 @@ export default function Home() {
       opener?.focus({ preventScroll: true });
     };
   }, [viewer]);
+
+  // 배경 음악(디자인 논의 T137). 열 때 한 번 재생을 시도하고, 폰 브라우저가 막으면(소리 있는 자동재생은 사용자 동작 뒤에만) 첫 동작(터치 · 스크롤 끝 · 키)에서 시작합니다. 끈 것은 이 방문(sessionStorage) 동안 기억합니다. 화면을 벗어나면 멈추고 돌아오면 다시 켭니다
+  useEffect(() => {
+    const audio = bgmRef.current;
+    if (!audio) return;
+    let disposed = false;
+    let pausedByHide = false;
+    try {
+      bgmWantedRef.current = sessionStorage.getItem("bgm") !== "off";
+    } catch {
+      // 저장소를 못 쓰는 브라우저
+    }
+    const events = ["pointerdown", "touchend", "keydown"] as const;
+    const onFirst = (e: Event) => {
+      if ((e.target as Element | null)?.closest?.(".bgm")) return; // 스티커 자체의 누름은 토글이 맡습니다
+      void tryPlay();
+    };
+    const disarm = () => events.forEach((t) => document.removeEventListener(t, onFirst, true));
+    const arm = () => events.forEach((t) => document.addEventListener(t, onFirst, { capture: true, passive: true }));
+    const tryPlay = async () => {
+      if (!bgmWantedRef.current || disposed) return false;
+      try {
+        fadeInAudio(audio);
+        await audio.play();
+        setBgmOn(true);
+        disarm();
+        return true;
+      } catch {
+        return false;
+      }
+    };
+    void tryPlay().then((ok) => {
+      if (!ok && bgmWantedRef.current && !disposed) {
+        audio.preload = "auto"; // 막혔으면 미리 받아 두어 첫 동작에서 바로 나옵니다
+        audio.load();
+        arm();
+      }
+    });
+    const onVisibility = () => {
+      if (document.hidden) {
+        if (!audio.paused) {
+          audio.pause();
+          pausedByHide = true;
+        }
+      } else if (pausedByHide) {
+        pausedByHide = false;
+        audio.play().catch(() => {});
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      disposed = true;
+      disarm();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+  const toggleBgm = () => {
+    const audio = bgmRef.current;
+    if (!audio) return;
+    if (bgmWantedRef.current && !audio.paused) {
+      audio.pause();
+      bgmWantedRef.current = false;
+      setBgmOn(false);
+      try {
+        sessionStorage.setItem("bgm", "off");
+      } catch {
+        // 저장소를 못 쓰는 브라우저
+      }
+    } else {
+      bgmWantedRef.current = true;
+      try {
+        sessionStorage.removeItem("bgm");
+      } catch {
+        // 저장소를 못 쓰는 브라우저
+      }
+      fadeInAudio(audio);
+      audio
+        .play()
+        .then(() => setBgmOn(true))
+        .catch(() => setBgmOn(false));
+    }
+  };
 
   // 공유하기(디자인 논의 T132). SDK가 이미 실려 있으면 기다리지 않아 사용자 동작 안에서 카카오톡 창이 열립니다
   const share = async () => {
@@ -1054,6 +1156,14 @@ export default function Home() {
           <span className="fab__label">{menuOpen ? "닫기" : "메뉴"}</span>
         </button>
       </nav>
+      {/* 배경 음악(디자인 논의 T137). 음원은 이산하가 준 것(원본 docs/design/audio/, git 제외) */}
+      <audio ref={bgmRef} src="/audio/bgm.mp3" loop preload="none" />
+      <button type="button" className={bgmOn ? "bgm is-on" : "bgm"} aria-pressed={bgmOn} aria-label={bgmOn ? "배경 음악 끄기" : "배경 음악 켜기"} onClick={toggleBgm}>
+        <img className="note__paper" src="/paper/note.png" alt="" />
+        <span className="bgm__note" aria-hidden="true">
+          ♪
+        </span>
+      </button>
     </>
   );
 }
