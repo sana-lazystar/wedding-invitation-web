@@ -2,7 +2,6 @@
 // 공유하기는 카카오톡 공유(JS SDK)이고, 키가 없거나 SDK를 못 실으면 기기 공유 창 · 주소 복사로 내려갑니다
 "use client";
 
-import { NotePaper } from "@/components/ui/NotePaper";
 import { KAKAO_JS_KEY } from "@/content/site";
 import { useFabMenu } from "@/hooks/useFabMenu";
 import { loadKakaoSdk, shareInvitation } from "@/lib/kakao";
@@ -17,7 +16,6 @@ export function FabMenu({ onCopy }: { onCopy: (text: string, message: string) =>
   return (
     <nav className="fab" ref={fabRef} data-open={menuOpen ? "true" : "false"} aria-label="바로 가기">
       <div className="fab__menu" id="fabMenu" hidden={!menuOpen}>
-        <NotePaper />
         <a className="fab__item" href="#directions" onClick={() => setMenuOpen(false)}>
           오시는 길
         </a>
@@ -42,7 +40,6 @@ export function FabMenu({ onCopy }: { onCopy: (text: string, message: string) =>
           if (KAKAO_JS_KEY) loadKakaoSdk().catch(() => {}); // 공유하기를 누르기 전에 미리 싣습니다
         }}
       >
-        <NotePaper />
         <img className="fab__tape" src="/paper/tape-short.png" alt="" />
         <span className="fab__label">{menuOpen ? "×" : "···"}</span>
       </button>

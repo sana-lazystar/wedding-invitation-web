@@ -1,5 +1,4 @@
 // Scene13 마음 전하는 곳(14쪽, T110 · T111 · T119 · T120 · T131). 행을 누르면 계좌번호(숫자만)가 복사됩니다
-import { NotePaper } from "@/components/ui/NotePaper";
 import { CopyIcon } from "@/components/ui/CopyIcon";
 import { ACCOUNTS } from "@/content/accounts";
 
@@ -7,7 +6,6 @@ export function GiftScene({ onCopy }: { onCopy: (text: string, message: string) 
   return (
     <section id="gift" className="block story">
       <div className="sheet">
-        <NotePaper />
         <div className="sheet__head">
           <img className="sheet__mark" src="/intro/rose-seal.png" width={84} height={84} alt="" />
           <h2 className="sheet__title">마음 전하는 곳</h2>

@@ -3,7 +3,6 @@
 export function InfoScene() {
   return (
     <section id="info" className="block">
-      <img className="info__paper" src="/paper/info.jpg" alt="" />
       <img className="info__branch" src="/scene2/branch.png" width={240} height={139} alt="" />
       <div className="info__text">
         <div className="info__big">2026년 10월 9일</div>

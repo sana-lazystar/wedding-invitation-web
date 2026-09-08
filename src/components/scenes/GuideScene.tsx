@@ -1,12 +1,10 @@
 // Scene12 하객 안내(13쪽, T110 · T111). 종이 한 장에 격식체 두 문단
 
-import { NotePaper } from "@/components/ui/NotePaper";
 
 export function GuideScene() {
   return (
     <section id="guide" className="block story">
       <div className="sheet">
-        <NotePaper />
         <div className="sheet__head">
           <img className="sheet__mark" src="/intro/rose-seal.png" width={84} height={84} alt="" />
           <h2 className="sheet__title">하객 안내</h2>

@@ -1,16 +1,13 @@
 // Scene5 Part 1 신부(6쪽, T58 · T62 · T93). Scene4의 좌우 대칭. 컷아웃은 글 옆 칸에 붙습니다
 
-import { NotePaper } from "@/components/ui/NotePaper";
 
 export function Part1BrideScene() {
   return (
     <section id="part1-bride" className="block story">
       <div className="photo-paper photo-paper--left">
-        <NotePaper />
         <img className="photo-paper__photo" src="/scene5/bride-child.jpg" width={625} height={900} alt="신부 어릴 적 사진" />
       </div>
       <div className="note note--right note--memo note--tuck note--bride">
-        <NotePaper />
         <img className="note__who" src="/character/otter-basic.png" width={240} height={194} alt="" />
         <p className="note__text note__text--flow">
           제 신부는 다섯 살 때 빗소리가 좋다며 혼자 <br />우산 쓰고 동네를 걷던 아이였대요.

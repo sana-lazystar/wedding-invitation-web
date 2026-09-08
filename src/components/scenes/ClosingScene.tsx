@@ -1,12 +1,10 @@
 // Scene14 마지막(15쪽, T121~T125 · T133). 봉투 크기 편지지가 봉투에 담기고 뚜껑이 닫힙니다. 봉투 부품은 진입 장면 것을 그대로 씁니다
 
-import { NotePaper } from "@/components/ui/NotePaper";
 
 export function ClosingScene({ ref }: { ref: React.Ref<HTMLElement> }) {
   return (
     <section id="closing" className="block block--fixed closing" ref={ref}>
       <div className="closing__letter">
-        <NotePaper />
         <div className="closing__text">
           <p className="closing__big">고마움을 봉해 보냅니다.</p>
           <p className="closing__date">2026. 10. 09</p>
