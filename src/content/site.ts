@@ -8,9 +8,11 @@ export const SITE_DESCRIPTION = "26년 10월 9일 금요일 오후 6시 30분\n�
 export const THEME_COLOR = "#F3ECDF";
 
 // 공유 미리보기 그림(T132 · T146). 카카오톡 공유 메시지와 OG 미리보기가 같은 파일을 씁니다
-// 세로 사진을 자르지 않고 그대로 씁니다(T146). 카카오톡 공유 메시지의 그림 영역이 이 비율을 따라 세로로 뜹니다.
-// URL 미리보기(OG 스크랩)에서는 카카오가 800×400으로 가운데를 자릅니다
-export const OG_IMAGE = { url: "/og/share.jpg", width: 3478, height: 4517, alt: "이산하와 송시야" };
+// 공유 그림은 쓰임이 둘이라 파일도 둘입니다(T146 · T147).
+// OG_IMAGE는 주소를 붙여넣었을 때의 미리보기용입니다. 카카오가 800×400으로 자르므로 처음부터 2:1로 두 사람이 다 들어가게 잘라 둡니다.
+// SHARE_IMAGE는 카카오톡 공유 메시지(피드 템플릿)용입니다. 세로로 크게 뜨도록 3:4이고, 카카오가 얼굴 기준으로 다시 자르지 않도록 두 사람을 가운데에 두고 미리 잘라 둡니다
+export const OG_IMAGE = { url: "/og/share.jpg", width: 1600, height: 800, alt: "이산하와 송시야" };
+export const SHARE_IMAGE = { url: "/og/share-tall.jpg", width: 1200, height: 1600, alt: "이산하와 송시야" };
 
 export const VENUE = {
   name: "더채플앳청담 3층 커티지홀",
