@@ -164,3 +164,5 @@ related: []
 2026-09-08 20:12:18 · develop · e8c914e · 신랑 컷아웃 오른쪽 걸침 30(화면 안) · html overflow-x clip(디자인 논의 T101). `src/app/globals.css`.
 
 2026-09-08 20:13:37 · develop · 0f07318 · 신랑 컷아웃 위 0(디자인 논의 T101 보완). `src/app/globals.css`.
+
+2026-09-08 20:54:45 · develop · b4e7e13 · Scene10 추신·만화 뷰어 · 사진첩 나무 틀 · Swiper 뷰어(디자인 논의 T102~T104). `src/app/page.tsx` `src/app/globals.css` `src/content/gallery.json` `package.json` `package-lock.json` `public/scene10/` `public/paper/tape.png` `public/gallery/`.
