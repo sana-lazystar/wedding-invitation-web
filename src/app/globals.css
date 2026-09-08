@@ -412,18 +412,16 @@ body {
 .fab__button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .fab__tape { position: absolute; top: -7px; left: 50%; width: 44px; height: auto; transform: translateX(-50%) rotate(4deg); pointer-events: none; }
 .fab__label { position: relative; }
-/* 배경 음악(T137). 오른쪽 위 작은 둥근 종이 스티커에 음표. 열 때 재생을 시도하고, 폰 브라우저가 막으면(소리 있는 자동재생은 사용자 동작 뒤에만) 첫 터치 · 스크롤 끝 · 키에서 시작합니다. 재생 중엔 음표가 살랑이고 끄면 옅어지며 빗금이 갑니다. 끄면 그 방문(sessionStorage) 동안 꺼진 채입니다. 진입 장면 동안은 숨깁니다 */
+/* 배경 음악(T137 · T138). 오른쪽 위 음표 하나(T138. T137의 36px 둥근 종이 스티커는 3/4 크기로 줄이고 종이는 뺌). 열 때 재생을 시도하고, 폰 브라우저가 막으면(소리 있는 자동재생은 사용자 동작 뒤에만) 첫 터치 · 스크롤 끝 · 키에서 시작합니다. 재생 중엔 음표가 살랑이고 끄면 옅어지며 빗금이 갑니다. 끄면 그 방문(sessionStorage) 동안 꺼진 채입니다. 진입 장면 동안은 숨깁니다 */
 .bgm {
   position: fixed; top: calc(14px + env(safe-area-inset-top)); right: max(14px, calc((100vw - 430px) / 2 + 14px)); z-index: 10;
-  width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%; background: none; overflow: hidden;
-  box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 6px 12px -6px rgba(70, 48, 24, 0.35);
+  width: 28px; height: 28px; padding: 0; border: 0; background: none;
   cursor: pointer; -webkit-tap-highlight-color: transparent; transition: opacity 0.4s ease-out;
 }
-.bgm .note__paper { border-radius: 50%; }
-.bgm__note { position: relative; display: block; font-family: var(--font-name); font-size: 18px; line-height: 36px; color: var(--ink); opacity: 0.45; }
+.bgm__note { position: relative; display: block; font-family: var(--font-name); font-size: 20px; line-height: 28px; color: var(--ink); opacity: 0.45; }
 .bgm.is-on .bgm__note { opacity: 1; animation: bgm-sway 1.6s ease-in-out infinite; }
 @keyframes bgm-sway { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
-.bgm::after { content: ''; position: absolute; left: 50%; top: 50%; width: 22px; height: 1.5px; margin: -1px 0 0 -11px; background: var(--ink); transform: rotate(-45deg); opacity: 0.55; }
+.bgm::after { content: ''; position: absolute; left: 50%; top: 50%; width: 14px; height: 1.5px; margin: -1px 0 0 -7px; background: var(--ink); transform: rotate(-45deg); opacity: 0.55; }   /* 꺼짐 빗금. 음표 너비만큼(T138. 전에는 22px) */
 .bgm.is-on::after { display: none; }
 .is-intro .bgm { opacity: 0; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .bgm.is-on .bgm__note { animation: none; } }

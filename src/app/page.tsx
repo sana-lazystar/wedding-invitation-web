@@ -1159,7 +1159,6 @@ export default function Home() {
       {/* 배경 음악(디자인 논의 T137). 음원은 이산하가 준 것(원본 docs/design/audio/, git 제외) */}
       <audio ref={bgmRef} src="/audio/bgm.mp3" loop preload="none" />
       <button type="button" className={bgmOn ? "bgm is-on" : "bgm"} aria-pressed={bgmOn} aria-label={bgmOn ? "배경 음악 끄기" : "배경 음악 켜기"} onClick={toggleBgm}>
-        <img className="note__paper" src="/paper/note.png" alt="" />
         <span className="bgm__note" aria-hidden="true">
           ♪
         </span>
