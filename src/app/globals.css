@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* WIW-4 임시 적용. docs/artifacts/index.html의 CSS를 옮긴 것입니다(docs/scripts/sync-globals.mjs). 글꼴 확인 패널은 옮기지 않았습니다. */
-html { touch-action: pan-y; }   /* 손가락 두 개 확대와 두 번 탭 확대를 막습니다(T83). 세로 스크롤만. 메타의 user-scalable=no와 스크립트의 gesturestart 차단이 나머지 브라우저를 맡습니다 */
+html { touch-action: pan-y; overflow-x: clip; }   /* 가로 넘침(컷아웃 걸침)이 가로 스크롤을 만들지 않게(T101) */   /* 손가락 두 개 확대와 두 번 탭 확대를 막습니다(T83). 세로 스크롤만. 메타의 user-scalable=no와 스크립트의 gesturestart 차단이 나머지 브라우저를 맡습니다 */
 :root {
   --paper-bg: #F3ECDF;
   --paper: #FBF7EF;
@@ -159,9 +159,9 @@ body {
 /* 컷아웃 치수는 화면 폭 비례입니다(T100). --u = 1vw를 페이지 최대 폭 430px의 1/100(4.3px)로 막은 단위. 아래 숫자는 390px 화면에서의 px 값을 3.9로 나눈 것이라 390에서 전과 같고, 넓거나 좁은 화면에서는 메모지와의 비율이 같습니다 */
 .note__row { position: relative; display: flex; align-items: flex-end; justify-content: flex-end; --u: min(1vw, 4.3px); }
 .note__row .note__text { flex: 1 1 auto; min-width: 0; }
-.note__stamp-cell { flex: none; position: relative; width: calc(35.38 * var(--u)); height: 0; }   /* 390px에서 138. 컷아웃 198×160 중 안에 드는 폭(오른쪽 60px은 밖) */
+.note__stamp-cell { flex: none; position: relative; width: calc(43.08 * var(--u)); height: 0; }   /* 390px에서 168. 컷아웃 198×160 중 셀 안에 드는 폭(오른쪽 30px은 밖) */
 .note__stamp {
-  position: absolute; right: calc(-15.38 * var(--u)); top: calc(-5.13 * var(--u)); z-index: 1; height: calc(41.03 * var(--u)); width: auto; max-width: none;   /* 390px에서 오른쪽 -60 · 위 -20 · 높이 160 */   /* T89의 240에서 2/3인 160(T91), 오른쪽 걸침 30(T91) → 40(T92) → 56(T95) → 60px(T98), 위 10 → 0(T92) → -10(T95) → -20px(T97). 마지막 줄 오른쪽 끝 위로 20px 올라오지만 그 자리는 그림의 왼쪽 위 모서리라 투명합니다. max-width: none은 Next.js 기본 스타일(img max-width 100%)이 셀 폭에 가로를 잡아 눌리는 것을 막습니다(T90) */
+  position: absolute; right: calc(-7.69 * var(--u)); top: 0; z-index: 1; height: calc(41.03 * var(--u)); width: auto; max-width: none;   /* 390px에서 오른쪽 -30 · 위 0 · 높이 160. 위는 T97까지 -20이었는데 왼쪽으로 30 되돌리며 로터가 마지막 줄 "!"를 덮어 0으로(T101). 오른쪽 값은 셀(메모지 안쪽 여백 16px 안) 기준이라 종이 변 밖으로는 14px 나갑니다. T98까지 60이었는데 종이 변이 화면 끝에서 24px이라 꼬리가 화면 밖으로 잘렸습니다(T101). 회전 몫(약 8px)을 빼고 화면 안에 드는 최대가 30px */   /* T89의 240에서 2/3인 160(T91), 오른쪽 걸침 30(T91) → 40(T92) → 56(T95) → 60px(T98), 위 10 → 0(T92) → -10(T95) → -20px(T97). 마지막 줄 오른쪽 끝 위로 20px 올라오지만 그 자리는 그림의 왼쪽 위 모서리라 투명합니다. max-width: none은 Next.js 기본 스타일(img max-width 100%)이 셀 폭에 가로를 잡아 눌리는 것을 막습니다(T90) */
   transform: rotate(5deg);
   filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.22)) drop-shadow(0 6px 10px rgba(70, 48, 24, 0.28));
 }
