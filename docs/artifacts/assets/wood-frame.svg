@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+<!-- 사진첩 나무 틀(디자인 논의 T104). 널빤지 넉 장을 바람개비꼴로 이어 붙인 정사각 틀. 가운데는 비어 있고 3×3 타일이 그 안에 듭니다. 널빤지 폭은 틀의 5.5%(22/400)라 CSS가 그 비율로 안쪽 여백을 둡니다.
+     정형화된 액자가 아니라 손으로 이어 붙인 느낌이 목적입니다. 널빤지마다 색이 조금 다르고 0.3~0.5° 틀어졌으며, 가장자리는 거칠게 뜯겼고(feDisplacementMap), 이음매에 못 두 개와 옹이가 있습니다. 결은 널빤지 방향으로 늘인 feTurbulence입니다. 그늘은 CSS(drop-shadow)가 맡습니다. -->
+<defs>
+  <filter id="grainH" x="-3%" y="-10%" width="106%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.014 0.42" numOctaves="3" seed="3" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.38  0 0 0 0 0.24  0 0 0 0 0.11  0 0 0 0.42 0" result="g"/>
+    <feComposite in="g" in2="SourceAlpha" operator="in" result="gt"/>
+    <feBlend in="SourceGraphic" in2="gt" mode="multiply" result="wood"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="9" result="edge"/>
+    <feDisplacementMap in="wood" in2="edge" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="grainV" x="-10%" y="-3%" width="120%" height="106%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.42 0.014" numOctaves="3" seed="5" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.38  0 0 0 0 0.24  0 0 0 0 0.11  0 0 0 0.42 0" result="g"/>
+    <feComposite in="g" in2="SourceAlpha" operator="in" result="gt"/>
+    <feBlend in="SourceGraphic" in2="gt" mode="multiply" result="wood"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="13" result="edge"/>
+    <feDisplacementMap in="wood" in2="edge" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <linearGradient id="bevelH" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.22"/><stop offset="0.18" stop-color="#FFFFFF" stop-opacity="0"/>
+    <stop offset="0.82" stop-color="#3A2612" stop-opacity="0"/><stop offset="1" stop-color="#3A2612" stop-opacity="0.22"/>
+  </linearGradient>
+  <linearGradient id="bevelV" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.22"/><stop offset="0.18" stop-color="#FFFFFF" stop-opacity="0"/>
+    <stop offset="0.82" stop-color="#3A2612" stop-opacity="0"/><stop offset="1" stop-color="#3A2612" stop-opacity="0.22"/>
+  </linearGradient>
+  <radialGradient id="knot" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#7A5836" stop-opacity="0.55"/><stop offset="0.55" stop-color="#8E6A42" stop-opacity="0.35"/><stop offset="1" stop-color="#8E6A42" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="nail" cx="0.35" cy="0.35" r="0.65">
+    <stop offset="0" stop-color="#A08468"/><stop offset="0.6" stop-color="#6A4F35"/><stop offset="1" stop-color="#4A3524"/>
+  </radialGradient>
+</defs>
+<!-- 위 널빤지. 왼쪽 끝에서 오른쪽 널빤지 앞까지(바람개비) -->
+<g transform="rotate(0.35 190 11)">
+  <rect x="3" y="0" width="375" height="22" rx="1.5" fill="#CBA676" filter="url(#grainH)"/>
+  <rect x="3" y="0" width="375" height="22" rx="1.5" fill="url(#bevelH)"/>
+  <ellipse cx="128" cy="12" rx="9" ry="4" fill="url(#knot)"/>
+</g>
+<!-- 오른쪽 널빤지. 위 끝에서 아래 널빤지 앞까지 -->
+<g transform="rotate(-0.4 389 190)">
+  <rect x="378" y="3" width="22" height="375" rx="1.5" fill="#C29C6C" filter="url(#grainV)"/>
+  <rect x="378" y="3" width="22" height="375" rx="1.5" fill="url(#bevelV)"/>
+  <ellipse cx="389" cy="250" rx="4" ry="8" fill="url(#knot)"/>
+</g>
+<!-- 아래 널빤지. 오른쪽 끝에서 왼쪽 널빤지 앞까지 -->
+<g transform="rotate(-0.3 210 389)">
+  <rect x="22" y="378" width="375" height="22" rx="1.5" fill="#D0AC7C" filter="url(#grainH)"/>
+  <rect x="22" y="378" width="375" height="22" rx="1.5" fill="url(#bevelH)"/>
+  <ellipse cx="300" cy="389" rx="8" ry="3.5" fill="url(#knot)"/>
+</g>
+<!-- 왼쪽 널빤지. 아래 끝에서 위 널빤지 앞까지 -->
+<g transform="rotate(0.45 11 210)">
+  <rect x="0" y="22" width="22" height="375" rx="1.5" fill="#C6A070" filter="url(#grainV)"/>
+  <rect x="0" y="22" width="22" height="375" rx="1.5" fill="url(#bevelV)"/>
+  <ellipse cx="11" cy="120" rx="3.5" ry="7" fill="url(#knot)"/>
+</g>
+<!-- 이음매 그늘. 겹친 널빤지 끝이 아래 널빤지에 드리우는 얇은 그늘 -->
+<rect x="376" y="0" width="3" height="22" fill="#3A2612" fill-opacity="0.18"/>
+<rect x="378" y="376" width="22" height="3" fill="#3A2612" fill-opacity="0.18"/>
+<rect x="21" y="378" width="3" height="22" fill="#3A2612" fill-opacity="0.18"/>
+<rect x="0" y="21" width="22" height="3" fill="#3A2612" fill-opacity="0.18"/>
+<!-- 못. 이음매마다 둘 -->
+<g>
+  <circle cx="366" cy="7" r="2.3" fill="url(#nail)"/><circle cx="367" cy="15.5" r="2.3" fill="url(#nail)"/>
+  <circle cx="393" cy="366" r="2.3" fill="url(#nail)"/><circle cx="385" cy="367" r="2.3" fill="url(#nail)"/>
+  <circle cx="34" cy="393" r="2.3" fill="url(#nail)"/><circle cx="33" cy="384.5" r="2.3" fill="url(#nail)"/>
+  <circle cx="7" cy="34" r="2.3" fill="url(#nail)"/><circle cx="15" cy="33" r="2.3" fill="url(#nail)"/>
+</g>
+</svg>

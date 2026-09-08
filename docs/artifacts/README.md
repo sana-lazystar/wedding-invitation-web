@@ -2,13 +2,14 @@
 
 청첩장 시안의 작업 파일을 둡니다. 정본 텍스트는 `docs/ontology/`에 있고, 여기는 화면으로 보는 것입니다. 규칙 출처는 `docs/dashboard/discussions/2026-09-06--design-mockups.md` 결정 표(접두 "디자인 결정 N")입니다. 새 세션은 이 문서와 그 논의록의 마지막 T-로그를 읽으면 이어갈 수 있습니다.
 
-## 지금 상태 (2026-09-07)
+## 지금 상태 (2026-09-08)
 
 - 완료: 진입 장면(편지봉투) · Scene1 커버(와이어프레임 2쪽) · Scene2 핵심 정보(3쪽, 올리브 가지) · 떠 있는 바로 가기 메뉴
 - Scene3 인사(4쪽)는 쪽지 두 장에 수달(신랑) · 토끼(신부) 스티커 캐릭터가 걸칩니다(T51 예시 · T52 캐릭터). Scene4 Part 1 신랑(5쪽)은 어릴 적 사진 종이와 토끼 메모지입니다(T53). Scene5 Part 1 신부(6쪽)는 그 좌우 대칭입니다(T58). Scene6 Part 2 신랑(7쪽) · Scene7 Part 2 신부(8쪽) · Scene8 Part 3(9쪽)은 메모지까지 붙였고 웨딩 사진 셋은 빈 종이 자리표시입니다(T65). 종이는 흰색이고 캐릭터 아이콘은 43px입니다. 아래 "인사·이야기 (쪽지·메모지)"
 - 진입 장면(로딩)은 레이스 편지봉투입니다(T35 에셋 · T36~T49 장면 · T76 그림자·멈춤 · T77~T82 레이스 봉투). 봉투가 확대돼 있다가 물러나 잠깐 멈추고, 뚜껑이 봉인을 단 채 그림자를 드리우며 젖혀지고, 커버가 카드로 빠져나오며 화면을 채웁니다. 아래 "진입 장면 (로딩)"
 - 핵심 정보(Scene2)는 이산하가 준 올리브 가지 그림을 글 위아래에 둔 것입니다(T83. 액자는 T55~T82). 아래 "핵심 정보 (올리브 가지)"
-- 다음: Scene9 초대(10쪽, 편지지). 웨딩 사진 셋(신랑 · 신부 · 함께 있는 컷)은 T83에 Scene6~8에 들어갔습니다. 캐릭터 원본은 `../design/character/`에 기본 표정 둘과 다른 포즈 아홉(수달 1~3, 토끼 1~5, 둘이 허그)이 있습니다(T52)
+- Scene10(11쪽)은 추신 + 만화(위 절반, T102)와 사진첩(아래 절반, T103 · T104)입니다. 마스킹테이프로 붙인 추신 쪽지와 네 컷 만화 종이(누르면 90° 돌린 뷰어), 나무 틀 안의 3×3 타일(누르면 Swiper 뷰어. 흰 테두리 인화지 + 테이프 + 종이 단추 + 손글씨 장수). Scene9 초대(10쪽)는 이산하가 수정할 것이 있어 뒤로 미뤘고 Scene8과 Scene10 사이에 끼웁니다. 아래 "추신·만화 (뷰어)" · "사진첩 (나무 틀 · Swiper 뷰어)"
+- 다음: Scene11 오시는 길(12쪽) 또는 Scene9 초대. 사진첩의 8장 선정과 사진 교체는 이산하가 나중에 합니다. 웨딩 사진 셋(신랑 · 신부 · 함께 있는 컷)은 T83에 Scene6~8에 들어갔습니다. 캐릭터 원본은 `../design/character/`에 기본 표정 둘과 다른 포즈 아홉(수달 1~3, 토끼 1~5, 둘이 허그)이 있습니다(T52)
 - 콘셉트: 팝업북. 책은 서양 고서(앤티크)이고 붉은 가죽에 금박입니다. 질감 에셋은 CSS로 흉내 내지 않고 SVG → PNG로 만듭니다(디자인 결정 11, 아래 "질감 에셋 만들기")
 - Next.js 임시 적용(WIW-4)은 develop에 커밋돼 있습니다. develop → main PR과 배포는 이산하가 합니다
 
@@ -30,10 +31,10 @@ Artifact 발행은 2026-09-06 T31에 중단했습니다(디자인 결정 11). �
 | `canvas/Main.dc.html` | Claude Design 캔버스의 아트보드(동결. 결정 11 뒤로 고치지 않습니다) | 커밋 |
 | `canvas/FloatingMenu.dc.html` | 떠 있는 바로 가기 버튼의 열린 상태 | 커밋 |
 | `canvas/canvas.json` | 아트보드 배치와 메모 | 커밋 |
-| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 편지봉투 여섯(`lace-envelope-back` · `lace-envelope-front` · `lace-envelope-flap` · `lace-envelope-flap-inside` · `lace-rose-seal` · `lace-rose-seal-back`, T77~T82)과 쪽지 종이(`note-paper`, T51) · 핵심 정보 종이(`info-paper`, T86)입니다. 이전 아마 짜임 봉투(`envelope-*` · `wax-seal*`, T35~T42)는 T82에 지웠고 마지막 모습은 커밋 9929650에 있습니다. 레이스 셋(`lace-frill` · `oval-card` · `fleuron`, 이산하가 다른 세션에서 만듦, T50)은 T55에서 액자로 바뀌어 쓰지 않습니다 | 커밋 |
-| `../design/scene1/`, `../design/scene2/`, `../design/scene4/`, `../design/scene5/`, `../design/character/` | 이산하가 준 원본 이미지. 캐릭터는 스티커(흰 테두리 포함) PNG이고 `*--clean.png`는 가장자리 색 번짐을 지운 것 | 제외 (`docs/design/`) |
+| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 편지봉투 여섯(`lace-envelope-back` · `lace-envelope-front` · `lace-envelope-flap` · `lace-envelope-flap-inside` · `lace-rose-seal` · `lace-rose-seal-back`, T77~T82)과 쪽지 종이(`note-paper`, T51) · 핵심 정보 종이(`info-paper`, T86) · 마스킹테이프(`masking-tape`, T102) · 사진첩 나무 틀(`wood-frame`, T104)입니다. 이전 아마 짜임 봉투(`envelope-*` · `wax-seal*`, T35~T42)는 T82에 지웠고 마지막 모습은 커밋 9929650에 있습니다. 레이스 셋(`lace-frill` · `oval-card` · `fleuron`, 이산하가 다른 세션에서 만듦, T50)은 T55에서 액자로 바뀌어 쓰지 않습니다 | 커밋 |
+| `../design/scene1/`, `../design/scene2/`, `../design/scene4/`, `../design/scene5/`, `../design/scene10/`, `../design/character/` | 이산하가 준 원본 이미지. 캐릭터는 스티커(흰 테두리 포함) PNG이고 `*--clean.png`는 가장자리 색 번짐을 지운 것 | 제외 (`docs/design/`) |
 | `../design/canvas/*.png` | 캔버스용 축소본(PNG 무손실). 아트보드가 파일명으로 참조합니다 | 제외 |
-| `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/scene2/`, `public/paper/`, `public/character/`, `public/scene4/`, `public/scene5/` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
+| `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/scene2/`, `public/paper/`, `public/character/`, `public/scene4/`, `public/scene5/`, `public/scene10/`, `public/gallery/`, `src/content/gallery.json` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
 | 조립된 발행 파일 | Claude 세션 스크래치패드 | 커밋하지 않음 |
 | `src/app/favicon.ico` · `icon1~4.png` · `apple-icon.png` · `manifest.ts`, `public/android-icon-*.png` · `ms-icon-*.png` · `browserconfig.xml` | 사이트 아이콘(T70). 이산하가 생성기로 만든 묶음이고 원본 전체는 `../design/favicon/`(git 제외). Next.js 파일 규약(favicon · icon · apple-icon · manifest)이 `<head>`를 만들고, 타일색·테마색은 `layout.tsx`에 있습니다. 조립본에는 넣지 않습니다 | 커밋 |
 
@@ -125,6 +126,47 @@ Scene6~8(`#part2-groom` · `#part2-bride` · `#part3`, T65)은 사진 종이와 
 
 ```sh
 node docs/scripts/render-asset.mjs docs/artifacts/assets/note-paper.svg public/paper/note.png 1 && python3 docs/scripts/quantize-png.py public/paper/note.png
+```
+
+## 추신·만화 (뷰어)
+
+Scene10(와이어프레임 11쪽 위 절반, 디자인 논의 T102)입니다. Scene9 초대(편지)의 뒤에 붙는 추신이라, 이야기 구간의 메모지와 같은 부품(`.note`)에 마스킹테이프(`.note__tape`)만 더했습니다. 같은 종이 · 개구 18px · 나타나기이고, 테이프가 "나중에 덧붙였다"를 말합니다. 글은 "P.S. 저희가 결혼을 언제 결심했냐면요!" 한 줄이라 위아래 여백은 14px이고 -1.2° 기울입니다. 그 아래 네 컷 만화(이산하가 준 그림 한 장, 1664×1087)는 사진 종이(`.photo-paper`)와 같은 흰 테두리 4px에 전체 폭으로 붙였고 0.5° 기울입니다. 종이 전체가 버튼(`.comic__paper`)이고 오른쪽 위에 "크게 보기" 알약(`.comic__hint`)이 있습니다. 만화 종이는 기울이지 않습니다(T103. T102에는 0.5°). 오른쪽 아래는 떠 있는 메뉴 버튼에 가려져 피했습니다. 다른 제안 둘(만화풍 말풍선 · 만화 종이에 걸친 라벨 스티커)은 T102에 캡처만 있습니다.
+
+뷰어(`.comic-viewer`)는 화면 전체를 바탕색(베이지 `--paper-bg`)으로 덮고 만화를 시계 방향 90° 돌려 화면에 맞춥니다. 폰을 왼쪽으로 눕히면 바로 읽힙니다. 비율은 그대로이고 남는 위아래는 바탕색입니다. 그림 상자는 돌리기 전 기준으로 폭 = 화면 높이 · 높이 = 화면 폭이라 돌린 뒤 화면을 꼭 채우고 `object-fit: contain`이 비율을 지킵니다. 치수는 스크립트가 뷰어의 실제 크기를 재어 `--viewer-w` · `--viewer-h`로 넣습니다(인앱 브라우저는 vh가 툴바에 따라 다릅니다). 화면이 이미 가로(폰을 돌린 상태)면 돌리지 않습니다(`@media (orientation: landscape)`). 닫기는 × · 어디든 탭 · Esc입니다. 돌린 그림 상자가 화면 전체라 바탕만 골라 탭할 수 없어 어디를 눌러도 닫힙니다. 열려 있는 동안 뒤 페이지는 스크롤되지 않고(`html.is-viewer`, 뷰어 안 touchmove 막음) 닫으면 만화 종이로 초점이 돌아갑니다. 390×844에서 그림은 390×597, 위아래 바탕 123px씩입니다.
+
+| 것 | 자리 |
+| --- | --- |
+| CSS · 마크업 | `index.html`의 "10. 추신 + 만화"(`.comic` · `.note--ps` · `.note__tape` · `.comic__paper` · `.comic__hint` · `.comic-viewer*`) 구간, `#comic` 구획, `.page` 뒤의 `#comicViewer`, 스크립트의 만화 뷰어 부분 |
+| 에셋 원본 | 만화 `../design/scene10/샤산 청첩장 네컷.png`(1664×1087, 이산하). 테이프 `assets/masking-tape.svg`(200×48. 반투명 분홍 베이지, 뜯은 양 끝, 가로 섬유 결) |
+| 산출 | `public/scene10/comic.jpg`(원본 크기, JPEG 82 · 색 부표본 없음, 343KB. 종이와 뷰어가 같은 파일을 씁니다) · `public/paper/tape.png`(2배 400×96, 2KB) |
+| Next.js | `src/app/page.tsx`의 `#comic` 구획 · `#comicViewer` · 뷰어 `useEffect`(`comicOpen` 상태) |
+
+```sh
+python3 -c "from PIL import Image; Image.open('docs/design/scene10/샤산 청첩장 네컷.png').convert('RGB').save('public/scene10/comic.jpg', 'JPEG', quality=82, optimize=True, subsampling=0)"
+node docs/scripts/render-asset.mjs docs/artifacts/assets/masking-tape.svg public/paper/tape.png 2 && python3 docs/scripts/quantize-png.py public/paper/tape.png
+```
+
+만화는 선 그림이라 `sips`의 JPEG 82(505KB)보다 Pillow의 82 · 부표본 없음(343KB)이 작습니다. 256색 PNG(308KB)는 더 작지만 4컷 조명의 그러데이션이 팔레트에 눌릴 수 있어 JPEG로 했습니다.
+
+## 사진첩 (나무 틀 · Swiper 뷰어)
+
+Scene10의 아래 절반(와이어프레임 11쪽, 디자인 논의 T103 · T104)입니다. 추신과 같은 테이프 쪽지에 "사진첩"이라고 쓰고, 그 아래 나무 틀 안에 3×3 타일을 둡니다. 앞 8장이 미리보기이고 9번째 타일(`.gallery__tile--more`)은 9번째 사진을 흐리게(blur 3px, 가장자리가 비치지 않게 1.08배) 깔고 어두운 덮개 위에 "+N개"(N = 전체 − 8)를 씁니다. 타일은 흰 테두리 3px의 작은 사진 종이이고 기울이지 않으며 간격 8px입니다. 어느 타일을 눌러도 그 사진부터 뷰어가 열립니다. 사진 순서는 매니페스트 `src/content/gallery.json`이고 어느 8장을 보일지는 이산하가 나중에 고릅니다(그때 매니페스트 순서를 바꿉니다).
+
+나무 틀(T104)은 널빤지 넉 장을 바람개비꼴로 이어 붙인 정사각 그림입니다. 널빤지마다 색이 조금 다르고 0.3~0.5° 틀어졌으며, 가장자리는 거칠게 뜯겼고, 이음매마다 못 둘, 널빤지마다 옹이가 있습니다. 결은 널빤지 방향으로 늘인 feTurbulence입니다. 타일 판(`.gallery__board`) 뒤에 절대 위치로 깔고(`.gallery__frame`, 그늘은 CSS) 판 안쪽 여백은 널빤지 폭(틀의 5.5%) + 틈 2%입니다. 판이 정사각이라 틀도 정사각으로 맞습니다. 390px에서 틀 342, 타일 92입니다.
+
+뷰어(`.gallery-viewer`)는 어두운 반투명 바탕(뒤 페이지가 비칩니다) 위에 Swiper(디자인 결정 12. 조립본은 `node_modules/swiper/swiper-bundle.min.*`를 상대 경로로, Next.js는 `swiper/react`와 `swiper/css` · `swiper/css/navigation`)가 사진을 한 장씩 보여 주고, 좌우로 밀거나 화살표 · 키보드로 넘깁니다. 닫기는 오른쪽 위 × · Esc입니다(탭은 넘기기라 어디든 탭으로는 닫지 않습니다). Swiper는 처음 열 때 만듭니다(숨긴 채로는 크기를 못 잽니다. Next.js는 열려 있을 때만 그려 `initialSlide`가 먹게 합니다). 사진은 `loading="lazy"`와 `lazyPreloadPrevNext: 2`로 앞뒤 두 장만 미리 받습니다. 키보드 화살표는 열려 있을 때만 듣습니다. 테마(T104 제안, 적용해 둠). 사진은 페이지의 사진 종이처럼 흰 테두리 6px의 인화지(`.gallery-viewer__print`)에 그늘이고, 위 두 모서리에 마스킹테이프가 붙어 있으며, 화살표와 닫기는 크림색 종이 단추에 오크색 표시, 장수 "3 / 20"은 위 가운데 손글씨(개구 21px)입니다. 인화지 크기는 폭 = min(화면 폭, 남는 높이 × 비율)이고 `aspect-ratio`(슬라이드마다 `--ar` 인라인)가 높이를 정합니다. 남는 높이는 스크립트가 잰 뷰어 높이(`--viewer-h`)에서 위(닫기 · 장수) 64 · 아래 44px을 뺀 것입니다. 테두리 6px이 비율에 들어가므로 사진은 cover로 6px쯤 잘립니다. 덮개(뷰어) 공통 처리(뒤 스크롤 막기 · Esc · 초점 복귀 · 실측 치수 `--viewer-w` · `--viewer-h`)는 만화 뷰어와 같은 코드입니다.
+
+| 것 | 자리 |
+| --- | --- |
+| CSS · 마크업 | `index.html`의 "사진첩"(`.gallery__*`) · "사진 뷰어"(`.gallery-viewer*`) 구간, `#gallery` 구획, `.page` 뒤의 `#galleryViewer`, 스크립트의 덮개 공통 · 사진 뷰어 부분, `<head>`의 Swiper 번들 |
+| 에셋 원본 | 사진 `../gallery/NN.jpg`(원본 20장, git 제외). 틀 `assets/wood-frame.svg`(400×400, 널빤지 22). 테이프는 추신과 같은 `assets/masking-tape.svg` |
+| 산출 | `public/gallery/NN.jpg`(긴 변 1600, JPEG 80. 뷰어용) · `NN-thumb.jpg`(가운데 정사각 480. 타일용), 합계 2.5MB. `public/scene10/wood-frame.png`(2배 800×800, 256색 15KB). 매니페스트 `src/content/gallery.json`(id · width · height) |
+| 스크립트 | `docs/scripts/gallery-jpeg.py`(잠정. 산출 + 매니페스트 추가. 정식 파이프라인이 생기면 대체) |
+| Next.js | `src/app/page.tsx`의 `#gallery` 구획 · `#galleryViewer`(`Swiper` · `SwiperSlide`) · 덮개 `useEffect`(`viewer` 상태 · `galleryIndex`) · `GALLERY_PREVIEW` |
+
+```sh
+python3 docs/scripts/gallery-jpeg.py
+node docs/scripts/render-asset.mjs docs/artifacts/assets/wood-frame.svg public/scene10/wood-frame.png 2 && python3 docs/scripts/quantize-png.py public/scene10/wood-frame.png
 ```
 
 ## Artifact 발행 (중단)
