@@ -220,9 +220,9 @@
 
     /* 사진첩(와이어프레임 11쪽 아래 절반, T103 · T107 · T108). 흰 바탕 구획에 왼쪽 정렬한 굵은 제목 "사진첩"(노토 산스), 그 아래 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 9번째 사진을 흐리게 깔고 나머지 장수(+N개)를 씁니다. 타일은 테두리 없는 네모(모서리 4px, 사이 6px)이고 기울이지 않습니다. 어느 타일을 눌러도 그 사진부터 뷰어가 열립니다.
        T104~T106의 나무 틀과 표지판은 동화 느낌이 나서 T107에 지웠습니다(마지막 모습은 커밋 a8487a0. 에셋 wood-frame · wood-sign도 함께 지움). T103~T104의 테이프 쪽지 제목도 같습니다 */
-    /* 흰 바탕 구획(T108). 사진첩이 씁니다(이산하 지시. T110에 오시는 길 · 마음 전하는 곳도 썼다가 T111에 종이 한 장으로 되돌림). 제목은 왼쪽 정렬한 굵은 노토 산스(T108. T105~T107에는 가운데 500. 가운데용 넓은 자간 0.14em은 0.08로) */
+    /* 흰 바탕 구획(T108). 사진첩이 씁니다(이산하 지시. T110에 오시는 길 · 마음 전하는 곳도 썼다가 T111에 종이 한 장으로 되돌림). 제목은 가운데 정렬한 고운바탕 400 · 짙은 갈색(T117. T108~T116에는 왼쪽 굵은 노토 산스, T105~T107에는 가운데 500) */
     .plain { background: #FFFFFF; }
-    .plain__title { margin: 0; text-align: left; font-family: var(--font-ui); font-size: 16px; font-weight: 700; letter-spacing: 0.08em; color: var(--ink); }
+    .plain__title { margin: 0; text-align: center; font-family: var(--font-name); font-size: 16px; font-weight: 400; letter-spacing: 0.12em; text-indent: 0.12em; color: #2A1A0E; }   /* 고운바탕 400 · 짙은 갈색(Scene2 날짜와 같은 색) · 가운데(T117. T108~T116에는 노토 산스 700 왼쪽) */
     .gallery__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .gallery__tile {
       display: block; position: relative; width: 100%; aspect-ratio: 1; margin: 0; padding: 0; border: 0; border-radius: 4px; overflow: hidden;

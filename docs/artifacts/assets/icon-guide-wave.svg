@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+<!-- 하객 안내 머리 그림의 다른 안(디자인 논의 T116). 손을 들어 맞이하는 사람 하나. 올리브 가지와 같은 도장 실루엣. 종이 머리에 26px쯤으로 놓습니다 -->
+<defs>
+  <filter id="stamp" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="9" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.9" result="a"/>
+    <feComposite in="SourceGraphic" in2="a" operator="in"/>
+  </filter>
+</defs>
+<g fill="#3E3230" filter="url(#stamp)">
+  <circle cx="92" cy="62" r="22"/>
+  <path d="M46 170 C46 126 66 106 92 106 C118 106 138 126 138 170 Z"/>
+  <path d="M126 122 L154 70" stroke="#3E3230" stroke-width="15" stroke-linecap="round"/>
+  <circle cx="158" cy="58" r="12"/>
+</g>
+</svg>

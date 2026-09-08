@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
-<!-- 하객 안내 머리 그림(디자인 논의 T112 제안). 올리브 가지와 같은 도장 실루엣. 안내 종(손종)과 양옆의 울림 두 호. 종이 머리에 26px쯤으로 놓습니다 -->
+<!-- 하객 안내 머리 그림(디자인 논의 T112 제안 → T116 다시). 올리브 가지와 같은 도장 실루엣. 하객 셋(머리와 어깨)이 나란히 선 모양이고, 가운데 사람은 종이색 테두리로 앞뒤를 가릅니다. T112의 손종은 웹 알림처럼 보여 버렸습니다. 종이 머리에 26px쯤으로 놓습니다 -->
 <defs>
   <filter id="stamp" x="-5%" y="-5%" width="110%" height="110%">
     <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n"/>
@@ -7,10 +7,16 @@
     <feComposite in="SourceGraphic" in2="a" operator="in"/>
   </filter>
 </defs>
-<g fill="#3E3230" filter="url(#stamp)">
-  <path d="M100 22 C92 22 88 27 88 33 V42 C62 50 50 74 50 104 V132 L34 152 H166 L150 132 V104 C150 74 138 50 112 42 V33 C112 27 108 22 100 22 Z"/>
-  <path d="M82 160 H118 C118 172 110 180 100 180 C90 180 82 172 82 160 Z"/>
-  <path d="M30 78 C18 92 18 112 30 128 L22 134 C7 116 7 88 22 70 Z"/>
-  <path d="M170 78 C182 92 182 112 170 128 L178 134 C193 116 193 88 178 70 Z"/>
+<g filter="url(#stamp)">
+  <g fill="#3E3230">
+    <circle cx="50" cy="82" r="16"/>
+    <path d="M18 164 C18 132 32 116 50 116 C68 116 82 132 82 164 Z"/>
+    <circle cx="150" cy="82" r="16"/>
+    <path d="M118 164 C118 132 132 116 150 116 C168 116 182 132 182 164 Z"/>
+  </g>
+  <g fill="#3E3230" stroke="#FBF7EF" stroke-width="6" stroke-linejoin="round">
+    <circle cx="100" cy="58" r="21"/>
+    <path d="M58 166 C58 124 76 104 100 104 C124 104 142 124 142 166 Z"/>
+  </g>
 </g>
 </svg>
