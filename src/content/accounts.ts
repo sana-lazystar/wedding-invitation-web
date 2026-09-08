@@ -8,8 +8,8 @@ export const ACCOUNTS: AccountGroup[] = [
   {
     side: "신랑 측",
     rows: [
-      { role: "신랑 아버지", name: "이종노", bank: "하나", num: "468-910199-62707" },
-      { role: "신랑 어머니", name: "이은경", bank: "국민", num: "879602-01-133871" },
+      { role: "신랑 아버지", name: "이종노", bank: "하나은행", num: "468-910199-62707" },
+      { role: "신랑 어머니", name: "이은경", bank: "국민은행", num: "879602-01-133871" },
       { role: "신랑", name: "이산하", bank: "토스뱅크", num: "1001-6105-5173" },
     ],
   },
@@ -18,7 +18,7 @@ export const ACCOUNTS: AccountGroup[] = [
     rows: [
       { role: "신부 아버지", name: "송영봉", bank: "삼성증권", num: "7084-1174-8301" },
       { role: "신부 어머니", name: "임인화", bank: "삼성증권", num: "7082-4708-9301" },
-      { role: "신부", name: "송시야", bank: "국민", num: "879201-00-010006" },
+      { role: "신부", name: "송시야", bank: "국민은행", num: "879201-00-010006" },
     ],
   },
 ];
