@@ -150,3 +150,5 @@ related: []
 2026-09-08 17:08:23 · develop · 834b4c1 · 신랑 컷아웃 2/3 · 오른쪽 10px(디자인 논의 T91). `src/app/globals.css`.
 
 2026-09-08 17:10:15 · develop · f961dcc · 신랑 컷아웃 오른쪽·위 10px · 신부 컷아웃 3/4(디자인 논의 T92 · T93). `src/app/globals.css`.
+
+2026-09-08 17:12:57 · develop · 1459073 · Scene6 위 여백 20px 더(디자인 논의 T94). `src/app/globals.css`.
