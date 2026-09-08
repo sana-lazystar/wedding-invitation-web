@@ -204,3 +204,5 @@ related: []
 2026-09-08 23:44:59 · develop · 8861d83 · 카카오맵 SDK를 오시는 길 300px 앞에서 싣기(디자인 논의 T126). `src/app/page.tsx`.
 
 2026-09-09 00:13:17 · develop · 42e2557 · Scene9 초대(백합) 신설 · Scene8 수달 4 · 토끼 6 · 문구 교체(디자인 논의 T128). `src/app/page.tsx` `src/app/globals.css` `public/character/` `public/scene9/`.
+
+2026-09-09 00:19:31 · develop · 7164532 · Scene14 마지막 장면 효과 되살림(T126에 유실) · 꽃잎 오른쪽이 위 · 계좌 행 세 줄(디자인 논의 T129 · T130). `src/app/page.tsx` `src/app/globals.css`.
