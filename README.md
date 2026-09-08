@@ -1,38 +1,43 @@
 # wedding-invitation-web
 
-결혼식 모바일 청첩장 웹입니다. 작업·규격 문서는 `docs/`에 있고 시작점은 `CLAUDE.md`입니다.
+결혼식 모바일 청첩장 웹입니다. 코드와 작업 문서를 한 레포에 둡니다.
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+- 작업 · 규격 문서는 `docs/`에 있고, 시작점은 `CLAUDE.md`입니다.
+- 시안의 정본은 `docs/artifacts/index.html`(CSS · 마크업)입니다. `src/app/globals.css`는 `node docs/scripts/sync-globals.mjs`가 그 파일에서 만드는 파생물이라 직접 고치지 않습니다.
+- 화면 구조와 고치는 자리는 `docs/artifacts/README.md`에 정리돼 있습니다.
 
-## Getting Started
-
-First, run the development server:
+## 띄우기
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+지도(카카오맵)와 카카오톡 공유를 켜려면 `.env.local`에 앱 키가 필요합니다. 키가 없어도 나머지는 그대로 돕니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+NEXT_PUBLIC_KAKAO_MAP_KEY={Kakao Developers 앱의 JavaScript 키}
+```
 
-## Learn More
+## 게이트
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npx tsc --noEmit -p .
+npx eslint src
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+문서를 고쳤으면 `node docs/ontology/tools/check-refs.mjs`와 `node docs/ontology/tools/check-doc-style.mjs`도 지나야 합니다. pre-commit 훅이 두 검사를 겁니다(설치는 `sh docs/ontology/tools/install-hook.sh` 1회).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 코드 구조 (`src/`)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| 자리 | 무엇 |
+| --- | --- |
+| `app/page.tsx` | 조립만 합니다. 훅을 부르는 순서가 곧 효과 순서입니다 |
+| `app/layout.tsx` · `app/manifest.ts` | 메타(제목 · 설명 · OG · 아이콘)와 웹 앱 매니페스트 |
+| `components/scenes/` | 와이어프레임 한 쪽 = 파일 하나. 마크업은 조립본과 1:1입니다 |
+| `components/viewers/` | 만화 · 사진 덮개 |
+| `components/ui/` | 늘 떠 있는 것(알림 · 바로 가기 메뉴 · 음악)과 작은 부품 |
+| `hooks/` | 화면 높이 고정 · 진입 장면 · 쪽지 나타나기 · 덮개 · 지도 · 마지막 장면 · 음악 · 메뉴 · 알림 |
+| `lib/` | 바깥 것을 다루는 도구(클립보드 · 소리 · 카카오 SDK) |
+| `content/` | 값(제목 · 설명 · 예식장 · 계좌 · 사진첩 매니페스트) |
