@@ -12,7 +12,7 @@
 | `inline-artifact.mjs` | 조립본을 Artifact 발행용으로 인라인합니다 | 있음. 디자인 결정 11로 쓰지 않음 |
 | `unmatte.py` | 컷아웃 가장자리 색 번짐을 지웁니다 | 있음 |
 | `sticker-border.py` | 컷아웃 PNG에 흰 스티커 테두리를 굽습니다. 사진 컷아웃을 캐릭터 스티커와 같은 문법으로 맞출 때 | 있음 (디자인 논의 T53) |
-| `gallery-jpeg.py` | 갤러리 사진의 잠정 산출. `docs/gallery/NN.jpg` → `public/gallery/NN.jpg`(긴 변 1600, JPEG 80) + `NN-thumb.jpg`(정사각 480), 매니페스트 `src/content/gallery.json`에 없는 번호를 끝에 보탬 | 있음 (디자인 논의 T103). 정식 파이프라인이 생기면 대체 |
+| `gallery-jpeg.py` | 갤러리 사진의 잠정 산출. `docs/gallery/N.jpg`(번호 1~3자리, jpg · JPG) → `public/gallery/NN.jpg`(두 자리 id, 긴 변 1600, JPEG 80) + `NN-thumb.jpg`(정사각 480), 매니페스트 `src/content/gallery.json`에 없는 번호를 숫자 순으로 끝에 보탬. 사진을 통째로 바꾸면 산출과 매니페스트를 지우고 다시 돌립니다 | 있음 (디자인 논의 T103 · T121). 정식 파이프라인이 생기면 대체 |
 | `gen-lace-frill.py` | 레이스 프릴 SVG(`docs/artifacts/assets/lace-frill.svg`)를 만듭니다. 타원 둘레를 호 길이로 균등 분할해 주름잎을 놓습니다 | 있음. 쓰지 않음 (이산하가 다른 세션에서 작성. 디자인 논의 T50. Scene2가 T55에서 액자로 바뀜) |
 
 ## 사진 추가·순서 변경 절차

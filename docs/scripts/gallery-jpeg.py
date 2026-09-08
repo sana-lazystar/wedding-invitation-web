@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """갤러리 사진 산출(잠정, WIW-4 · 디자인 논의 T103).
 
-docs/gallery/NN.jpg(원본, git 제외)마다 public/gallery/NN.jpg(긴 변 1600, JPEG 80. 뷰어용)와 NN-thumb.jpg(가운데 정사각 480, JPEG 80. 타일용)를 만들고,
+docs/gallery/N.jpg(원본, git 제외. 번호는 1~3자리, 확장자 jpg · JPG)마다 public/gallery/NN.jpg(긴 변 1600, JPEG 80. 뷰어용)와 NN-thumb.jpg(가운데 정사각 480, JPEG 80. 타일용)를 만들고,
 매니페스트 src/content/gallery.json에 없는 번호를 끝에 보탭니다(id · width · height. 뷰어용 치수). 있는 항목의 순서와 내용은 건드리지 않습니다(docs/scripts/README.md §사진 추가·순서 변경 절차).
 정식 파이프라인(images.mjs, WebP 여러 폭)이 생기면 이 스크립트를 대체합니다. EXIF 회전을 픽셀에 적용합니다.
 
@@ -28,9 +28,10 @@ os.makedirs(os.path.dirname(MANIFEST), exist_ok=True)
 manifest = json.load(open(MANIFEST, encoding="utf-8")) if os.path.exists(MANIFEST) else []
 known = {item["id"] for item in manifest}
 
-names = sorted(n for n in os.listdir(SRC) if re.fullmatch(r"\d{2}\.jpe?g", n, re.IGNORECASE))
+# 파일 이름은 번호 + .jpg(.JPG). 번호는 1~3자리이고 id는 두 자리로 채웁니다(1.jpg → 01). 숫자 순으로 돕니다
+names = sorted((n for n in os.listdir(SRC) if re.fullmatch(r"\d{1,3}\.jpe?g", n, re.IGNORECASE)), key=lambda n: int(n.split(".")[0]))
 for name in names:
-    photo_id = name.split(".")[0]
+    photo_id = name.split(".")[0].zfill(2)
     full = os.path.join(OUT, f"{photo_id}.jpg")
     thumb = os.path.join(OUT, f"{photo_id}-thumb.jpg")
     if not force and os.path.exists(full) and os.path.exists(thumb) and photo_id in known:
