@@ -166,3 +166,5 @@ related: []
 2026-09-08 20:13:37 · develop · 0f07318 · 신랑 컷아웃 위 0(디자인 논의 T101 보완). `src/app/globals.css`.
 
 2026-09-08 20:54:45 · develop · b4e7e13 · Scene10 추신·만화 뷰어 · 사진첩 나무 틀 · Swiper 뷰어(디자인 논의 T102~T104). `src/app/page.tsx` `src/app/globals.css` `src/content/gallery.json` `package.json` `package-lock.json` `public/scene10/` `public/paper/tape.png` `public/gallery/`.
+
+2026-09-08 21:03:13 · develop · b6d63f4 · 사진첩 제목 · 뷰어 장수 아래 · 위 가운데 테이프 · 반투명 화살표 단추(디자인 논의 T105). `src/app/page.tsx` `src/app/globals.css` `public/paper/tape-short.png`.
