@@ -156,23 +156,24 @@ body {
 .photo-paper--center { align-self: center; transform: rotate(0.4deg); }
 .photo-paper--wide { width: 90%; }   /* 가로 사진(Scene8)은 폭 9/10(T83. Scene7은 T90에 세로 사진으로 바뀌어 3/4). 자리표시(T65)는 웨딩 사진 셋이 들어와 지웠습니다 */
 /* 컷아웃 스티커(T61 · T62 · T67 · T87 · T88 · T89). 메모지는 글 높이만큼이고 컷아웃은 종이 밖으로 걸칩니다. 신랑(Scene4): 글은 정한 줄바꿈(<br>) 넉 줄이 폭을 다 써서 컷아웃(198×160. T89 1.5배 뒤 T91에 2/3)이 설 옆 열이 없으므로, 글 아래 높이 0인 셀(.note__stamp-cell)에 윗변을 맞춰 붙입니다. 종이와는 아래 여백 20px만 겹치고 약 150px가 종이 밖입니다. 그래서 그 메모지에 아래 여백 116px을 주어 다음 장면 사진에 닿지 않게 합니다(T89 · T91). 신부(Scene5): 앞 두 줄은 전체 폭, 나머지 글은 셀 옆 열에서 흐르고(네모 영역, T62), 컷아웃(98×243. T89 1.5배 뒤 T93에 3/4)은 셀 왼쪽 아래에 붙어 왼쪽 18px · 아래 101px 삐져나옵니다(종이 아래 81px). 셀 높이 150 + 101 = 251 = 243 + 8이라 컷아웃 윗변이 칸 윗변 8px 아래에 있고, 글이 셀보다 길면 셀이 칸 아래에 붙어 컷아웃이 내려갑니다. 전에는 float라 메모지가 컷아웃 높이까지 커졌습니다(T61 · T62 · T67) */
-.note__row { position: relative; display: flex; align-items: flex-end; justify-content: flex-end; }
+/* 컷아웃 치수는 화면 폭 비례입니다(T100). --u = 1vw를 페이지 최대 폭 430px의 1/100(4.3px)로 막은 단위. 아래 숫자는 390px 화면에서의 px 값을 3.9로 나눈 것이라 390에서 전과 같고, 넓거나 좁은 화면에서는 메모지와의 비율이 같습니다 */
+.note__row { position: relative; display: flex; align-items: flex-end; justify-content: flex-end; --u: min(1vw, 4.3px); }
 .note__row .note__text { flex: 1 1 auto; min-width: 0; }
-.note__stamp-cell { flex: none; position: relative; width: 138px; height: 0; }   /* 컷아웃 198×160 중 안에 드는 폭(오른쪽 60px은 밖) */
+.note__stamp-cell { flex: none; position: relative; width: calc(35.38 * var(--u)); height: 0; }   /* 390px에서 138. 컷아웃 198×160 중 안에 드는 폭(오른쪽 60px은 밖) */
 .note__stamp {
-  position: absolute; right: -60px; top: -20px; z-index: 1; height: 160px; width: auto; max-width: none;   /* T89의 240에서 2/3인 160(T91), 오른쪽 걸침 30(T91) → 40(T92) → 56(T95) → 60px(T98), 위 10 → 0(T92) → -10(T95) → -20px(T97). 마지막 줄 오른쪽 끝 위로 20px 올라오지만 그 자리는 그림의 왼쪽 위 모서리라 투명합니다. max-width: none은 Next.js 기본 스타일(img max-width 100%)이 셀 폭에 가로를 잡아 눌리는 것을 막습니다(T90) */
+  position: absolute; right: calc(-15.38 * var(--u)); top: calc(-5.13 * var(--u)); z-index: 1; height: calc(41.03 * var(--u)); width: auto; max-width: none;   /* 390px에서 오른쪽 -60 · 위 -20 · 높이 160 */   /* T89의 240에서 2/3인 160(T91), 오른쪽 걸침 30(T91) → 40(T92) → 56(T95) → 60px(T98), 위 10 → 0(T92) → -10(T95) → -20px(T97). 마지막 줄 오른쪽 끝 위로 20px 올라오지만 그 자리는 그림의 왼쪽 위 모서리라 투명합니다. max-width: none은 Next.js 기본 스타일(img max-width 100%)이 셀 폭에 가로를 잡아 눌리는 것을 막습니다(T90) */
   transform: rotate(5deg);
   filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.22)) drop-shadow(0 6px 10px rgba(70, 48, 24, 0.28));
 }
-#part1-groom .note--memo { margin-bottom: 116px; }   /* 컷아웃이 종이 아래 약 154px까지 오므로 다음 장면 사진(간격 60)과 10px 떨어지게(T89 · T91) */
+#part1-groom .note--memo { margin-bottom: calc(29.74 * min(1vw, 4.3px)); }   /* 390px에서 116(T100) */   /* 컷아웃이 종이 아래 약 154px까지 오므로 다음 장면 사진(간격 60)과 10px 떨어지게(T89 · T91) */
 /* 5. Part 1 신부(와이어프레임 6쪽). Scene4와 좌우 대칭입니다(T58). 사진 종이는 왼쪽, 메모지는 수달(신랑)이 오른쪽 위에, 신부 컷아웃이 왼쪽 아래에 */
 .photo-paper--left { align-self: flex-start; transform: rotate(0.7deg); }
 /* 신부 메모지(T60 · T61 · T88 · T89). 신부 컷아웃은 324px로 메모지 왼쪽 아래에 서고 아래 두 문장이 그 옆 열에서 흐릅니다. 본문 24px 들여쓰기는 T88에 뺐습니다 */
 .note__row--left { justify-content: flex-start; gap: 16px; }   /* 신부는 컷아웃이 왼쪽, 글과의 사이 16px */
-.note__stamp-cell--left { width: 80px; height: 150px; }   /* 컷아웃 98×243 중 안에 드는 부분(왼쪽 18px은 밖) */
-.note__stamp--left { right: auto; left: -18px; top: auto; bottom: -101px; transform: rotate(-4deg); height: 243px; }   /* T89 324의 3/4(T93). 왼쪽 18px · 아래 101px 걸침(종이 아래 81px). 셀 150 + 101 = 251 = 243 + 8이라 윗변이 칸 윗변 8px 아래에 있어 회전(-4°)해도 앞 줄과 안 닿습니다 */
-#part1-bride .note--memo { margin-bottom: 40px; }
-#part2-groom { padding-top: 70px; }   /* Scene6 위는 30에 20px 더(T94), 다시 20px 더(T96) */   /* 컷아웃이 종이 아래 81px까지 오므로 다음 장면 첫 메모지(간격 60 + 30)와 겹치지 않게(T89 · T93) */
+.note__stamp-cell--left { width: calc(20.51 * var(--u)); height: calc(38.46 * var(--u)); }   /* 390px에서 80×150. 컷아웃 98×243 중 안에 드는 부분(왼쪽 18px은 밖) */
+.note__stamp--left { right: auto; left: calc(-4.62 * var(--u)); top: auto; bottom: calc(-25.9 * var(--u)); transform: rotate(-4deg); height: calc(62.31 * var(--u)); }   /* 390px에서 왼쪽 -18 · 아래 -101 · 높이 243 */   /* T89 324의 3/4(T93). 왼쪽 18px · 아래 101px 걸침(종이 아래 81px). 셀 150 + 101 = 251 = 243 + 8이라 윗변이 칸 윗변 8px 아래에 있어 회전(-4°)해도 앞 줄과 안 닿습니다 */
+#part1-bride .note--memo { margin-bottom: calc(10.26 * min(1vw, 4.3px)); }   /* 390px에서 40(T100) */
+#part2-groom { padding-top: 70px; }   /* Scene6 위는 30에 20px 더(T94), 다시 20px 더(T96) */
 
 /* 떠 있는 바로 가기 버튼 */
 .fab {
