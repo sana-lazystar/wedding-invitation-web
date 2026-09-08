@@ -30,7 +30,7 @@ Artifact 발행은 2026-09-06 T31에 중단했습니다(디자인 결정 11). �
 | `canvas/Main.dc.html` | Claude Design 캔버스의 아트보드(동결. 결정 11 뒤로 고치지 않습니다) | 커밋 |
 | `canvas/FloatingMenu.dc.html` | 떠 있는 바로 가기 버튼의 열린 상태 | 커밋 |
 | `canvas/canvas.json` | 아트보드 배치와 메모 | 커밋 |
-| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 편지봉투 여섯(`lace-envelope-back` · `lace-envelope-front` · `lace-envelope-flap` · `lace-envelope-flap-inside` · `lace-rose-seal` · `lace-rose-seal-back`, T77~T82)과 쪽지 종이(`note-paper`, T51)입니다. 이전 아마 짜임 봉투(`envelope-*` · `wax-seal*`, T35~T42)는 T82에 지웠고 마지막 모습은 커밋 9929650에 있습니다. 레이스 셋(`lace-frill` · `oval-card` · `fleuron`, 이산하가 다른 세션에서 만듦, T50)은 T55에서 액자로 바뀌어 쓰지 않습니다 | 커밋 |
+| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 편지봉투 여섯(`lace-envelope-back` · `lace-envelope-front` · `lace-envelope-flap` · `lace-envelope-flap-inside` · `lace-rose-seal` · `lace-rose-seal-back`, T77~T82)과 쪽지 종이(`note-paper`, T51) · 핵심 정보 종이(`info-paper`, T86)입니다. 이전 아마 짜임 봉투(`envelope-*` · `wax-seal*`, T35~T42)는 T82에 지웠고 마지막 모습은 커밋 9929650에 있습니다. 레이스 셋(`lace-frill` · `oval-card` · `fleuron`, 이산하가 다른 세션에서 만듦, T50)은 T55에서 액자로 바뀌어 쓰지 않습니다 | 커밋 |
 | `../design/scene1/`, `../design/scene2/`, `../design/scene4/`, `../design/scene5/`, `../design/character/` | 이산하가 준 원본 이미지. 캐릭터는 스티커(흰 테두리 포함) PNG이고 `*--clean.png`는 가장자리 색 번짐을 지운 것 | 제외 (`docs/design/`) |
 | `../design/canvas/*.png` | 캔버스용 축소본(PNG 무손실). 아트보드가 파일명으로 참조합니다 | 제외 |
 | `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/scene2/`, `public/paper/`, `public/character/`, `public/scene4/`, `public/scene5/` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
@@ -89,12 +89,12 @@ node docs/scripts/render-asset.mjs docs/artifacts/assets/lace-rose-seal-back.svg
 
 ## 핵심 정보 (올리브 가지)
 
-Scene2입니다(디자인 논의 T83). 이산하가 준 올리브 가지 그림(`../design/scene2/2_핵심정보 에셋 2.png`, 1230×1278, 가지는 그중 636×362) 하나를 글 위에 둡니다(처음엔 같은 그림을 180° 돌려 글 아래에도 두었다가 T85에 뺐습니다). 높이는 화면이 아니라 내용대로 236px입니다(액자가 없어져 화면을 채울 필요가 없습니다. 처음 만든 190px 가지와 72px 여백은 너무 커서 1/6과 반으로 줄였습니다). 앞서 쓴 액자 선화(T55~T82, `2_핵심정보 에셋.png`)와 레이스 타원 카드(T50~T51)는 걷어냈습니다. 액자의 마지막 모습은 커밋 c7c8199에 있습니다.
+Scene2입니다(디자인 논의 T83). 이산하가 준 올리브 가지 그림(`../design/scene2/2_핵심정보 에셋 2.png`, 1230×1278, 가지는 그중 636×362) 하나를 글 위에 둡니다(처음엔 같은 그림을 180° 돌려 글 아래에도 두었다가 T85에 뺐습니다). 높이는 내용 높이 236px의 5/4인 295px(`min-height`, 내용은 세로 가운데)입니다(T86. 액자가 없어져 화면을 채울 필요가 없습니다. 처음 만든 190px 가지와 72px 여백은 너무 커서 1/6과 반으로 줄였습니다). 앞서 쓴 액자 선화(T55~T82, `2_핵심정보 에셋.png`)와 레이스 타원 카드(T50~T51)는 걷어냈습니다. 액자의 마지막 모습은 커밋 c7c8199에 있습니다.
 
 | 것 | 자리 |
 | --- | --- |
-| CSS · 마크업 | `index.html`의 "2. 핵심 정보" 구간(`#info`, `.info__*`). 세로 flex, 가지와 글 사이 21px(T85. 14px의 1.5배), 위아래 여백 36px. 가지 폭 32px. 바탕은 흰 종이입니다(T84. `background: #FFFFFF` 위에 쪽지와 같은 종이 결 그림 `public/paper/note.png`을 `.info__paper`로 깔고, 가지와 글은 그 위) |
-| 산출 PNG | `public/scene2/branch.png`(알파 경계 상자에 6px 여백을 두고 잘라 폭 240, 256색, 5KB) |
+| CSS · 마크업 | `index.html`의 "2. 핵심 정보" 구간(`#info`, `.info__*`). 세로 flex, 가지와 글 사이 21px(T85. 14px의 1.5배), 위아래 여백 36px. 가지 폭 32px. 바탕은 흰 종이입니다(T84 · T86. `background: #FFFFFF` 위에 전용 종이 결 그림 `public/paper/info.jpg`(원본 `assets/info-paper.svg`)을 `.info__paper`로 깔고, 가지와 글은 그 위. 쪽지 종이는 결이 1px 단위라 구획 크기로 늘리면 뭉개져 따로 만들었고, 세기는 첫 판의 1/8쯤입니다. 첫 판은 회색 회벽처럼 보여 1/4로, 다시 반으로 내렸습니다) |
+| 산출 PNG | `public/scene2/branch.png`(알파 경계 상자에 6px 여백을 두고 잘라 폭 240, 256색, 5KB) · 종이 `public/paper/info.jpg`(1.5배 1350×780. 투명도가 없고 결이 온통 노이즈라 PNG는 1.7MB가 되어 JPEG 82, 211KB) |
 | Next.js | `src/app/page.tsx`의 `#info` 마크업. 경로만 `/scene2/…`입니다 |
 
 글은 네 줄, 크기는 둘입니다(T51). 큰 글자(18px, 700, 아주 짙은 갈색 `#2A1A0E`. T85에 작은 글자보다 3px 크게) "2026년 10월 9일" · "금요일 오후 6시 30분", 16px 띄고 작은 글자(15px) "더채플앳청담 3층 커티지홀" · "강남구 선릉로 757". 고정 px입니다.
@@ -103,6 +103,7 @@ Scene2입니다(디자인 논의 T83). 이산하가 준 올리브 가지 그림(
 
 ```sh
 python3 -c "from PIL import Image; import numpy as np; im=Image.open('docs/design/scene2/2_핵심정보 에셋 2.png').convert('RGBA'); a=np.array(im)[:,:,3]; ys,xs=np.where(a>=8); c=im.crop((xs.min()-6,ys.min()-6,xs.max()+7,ys.max()+7)); c.resize((240, round(c.height*240/c.width)), Image.LANCZOS).save('public/scene2/branch.png')" && python3 docs/scripts/quantize-png.py public/scene2/branch.png
+node docs/scripts/render-asset.mjs docs/artifacts/assets/info-paper.svg /tmp/info-paper.png 1.5 && sips -s format jpeg -s formatOptions 82 /tmp/info-paper.png --out public/paper/info.jpg
 ```
 
 ## 인사·이야기 (쪽지·메모지)
