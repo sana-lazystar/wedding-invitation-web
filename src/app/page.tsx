@@ -443,41 +443,35 @@ export default function Home() {
             </span>
           </button>
         </section>
-        {/* 사진첩(와이어프레임 11쪽 아래 절반, 디자인 논의 T103~T106). 나무 틀 위에 세운 표지판 "사진첩", 틀 안에 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 흐린 사진 위에 나머지 장수 */}
+        {/* 사진첩(와이어프레임 11쪽 아래 절반, 디자인 논의 T103~T107). 가운데 제목 "사진첩", 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 흐린 사진 위에 나머지 장수. 나무 틀 · 표지판(T104~T106)은 T107에 지웠습니다 */}
         <section id="gallery" className="block story gallery">
-          <div className="gallery__board">
-            <img className="gallery__frame" src="/scene10/wood-frame.png" width={800} height={800} alt="" />
-            <div className="gallery__sign">
-              <img className="gallery__sign-wood" src="/scene10/wood-sign.png" width={480} height={128} alt="" />
-              <h2 className="gallery__title">사진첩</h2>
-            </div>
-            <ul className="gallery__grid" id="galleryGrid">
-              {gallery.slice(0, GALLERY_PREVIEW + 1).map((item, i) => {
-                const more = i === GALLERY_PREVIEW;
-                return (
-                  <li key={item.id}>
-                    <button
-                      type="button"
-                      className={more ? "gallery__tile gallery__tile--more" : "gallery__tile"}
-                      data-index={i}
-                      aria-label={more ? `사진 ${i + 1}부터 크게 보기. ${galleryMore}장 더` : `사진 ${i + 1} 크게 보기`}
-                      onClick={(e) => {
-                        openerRef.current = e.currentTarget;
-                        setViewer({ kind: "gallery", index: i });
-                      }}
-                    >
-                      <img className="gallery__thumb" src={`/gallery/${item.id}-thumb.jpg`} width={480} height={480} alt="" loading="lazy" />
-                      {more && (
-                        <span className="gallery__more" aria-hidden="true">
-                          +{galleryMore}개
-                        </span>
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+          <h2 className="gallery__title">사진첩</h2>
+          <ul className="gallery__grid" id="galleryGrid">
+            {gallery.slice(0, GALLERY_PREVIEW + 1).map((item, i) => {
+              const more = i === GALLERY_PREVIEW;
+              return (
+                <li key={item.id}>
+                  <button
+                    type="button"
+                    className={more ? "gallery__tile gallery__tile--more" : "gallery__tile"}
+                    data-index={i}
+                    aria-label={more ? `사진 ${i + 1}부터 크게 보기. ${galleryMore}장 더` : `사진 ${i + 1} 크게 보기`}
+                    onClick={(e) => {
+                      openerRef.current = e.currentTarget;
+                      setViewer({ kind: "gallery", index: i });
+                    }}
+                  >
+                    <img className="gallery__thumb" src={`/gallery/${item.id}-thumb.jpg`} width={480} height={480} alt="" loading="lazy" />
+                    {more && (
+                      <span className="gallery__more" aria-hidden="true">
+                        +{galleryMore}개
+                      </span>
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
         </section>
         {/* 12쪽(오시는 길)부터 여기 아래에 이어 붙입니다 */}
       </div>
