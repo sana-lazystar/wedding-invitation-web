@@ -142,3 +142,5 @@ related: []
 2026-09-08 16:46:37 · develop · 23b0420 · 메모지 높이는 글 기준 · 컷아웃 걸침 · 사진 위 아이콘 틀 · 4/5 폭 · 장면 간격 1.5배(디자인 논의 T87). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-08 16:55:07 · develop · cc3572d · Scene4 · 5 첫 메모지 줄바꿈 지정 · 컷아웃 셀을 글 아래로(디자인 논의 T88). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 17:04:01 · develop · 33ea4a9 · Scene4 · 5 메모지를 글 높이로 · 컷아웃 1.5배 · 신부 글은 컷아웃 옆 열(디자인 논의 T89). `src/app/page.tsx` `src/app/globals.css`.
