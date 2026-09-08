@@ -4,11 +4,11 @@
 
 ## 지금 상태 (2026-09-07)
 
-- 완료: 진입 장면(편지봉투) · Scene1 커버(와이어프레임 2쪽) · Scene2 핵심 정보(3쪽, 액자) · 떠 있는 바로 가기 메뉴
+- 완료: 진입 장면(편지봉투) · Scene1 커버(와이어프레임 2쪽) · Scene2 핵심 정보(3쪽, 올리브 가지) · 떠 있는 바로 가기 메뉴
 - Scene3 인사(4쪽)는 쪽지 두 장에 수달(신랑) · 토끼(신부) 스티커 캐릭터가 걸칩니다(T51 예시 · T52 캐릭터). Scene4 Part 1 신랑(5쪽)은 어릴 적 사진 종이와 토끼 메모지입니다(T53). Scene5 Part 1 신부(6쪽)는 그 좌우 대칭입니다(T58). Scene6 Part 2 신랑(7쪽) · Scene7 Part 2 신부(8쪽) · Scene8 Part 3(9쪽)은 메모지까지 붙였고 웨딩 사진 셋은 빈 종이 자리표시입니다(T65). 종이는 흰색이고 캐릭터 아이콘은 43px입니다. 아래 "인사·이야기 (쪽지·메모지)"
 - 진입 장면(로딩)은 레이스 편지봉투입니다(T35 에셋 · T36~T49 장면 · T76 그림자·멈춤 · T77~T82 레이스 봉투). 봉투가 확대돼 있다가 물러나 잠깐 멈추고, 뚜껑이 봉인을 단 채 그림자를 드리우며 젖혀지고, 커버가 카드로 빠져나오며 화면을 채웁니다. 아래 "진입 장면 (로딩)"
-- 핵심 정보(Scene2)는 이산하가 준 장식 테두리 액자입니다(T55). 그림 한 장에 글은 HTML로 얹습니다. 아래 "핵심 정보 (액자)"
-- 다음: 웨딩 사진 셋(신랑 · 신부 · 함께 있는 컷)을 받아 Scene6~8 자리표시에 넣기, 그다음 Scene9 초대(10쪽, 편지지). 캐릭터 원본은 `../design/character/`에 기본 표정 둘과 다른 포즈 아홉(수달 1~3, 토끼 1~5, 둘이 허그)이 있습니다(T52)
+- 핵심 정보(Scene2)는 이산하가 준 올리브 가지 그림을 글 위아래에 둔 것입니다(T83. 액자는 T55~T82). 아래 "핵심 정보 (올리브 가지)"
+- 다음: Scene9 초대(10쪽, 편지지). 웨딩 사진 셋(신랑 · 신부 · 함께 있는 컷)은 T83에 Scene6~8에 들어갔습니다. 캐릭터 원본은 `../design/character/`에 기본 표정 둘과 다른 포즈 아홉(수달 1~3, 토끼 1~5, 둘이 허그)이 있습니다(T52)
 - 콘셉트: 팝업북. 책은 서양 고서(앤티크)이고 붉은 가죽에 금박입니다. 질감 에셋은 CSS로 흉내 내지 않고 SVG → PNG로 만듭니다(디자인 결정 11, 아래 "질감 에셋 만들기")
 - Next.js 임시 적용(WIW-4)은 develop에 커밋돼 있습니다. develop → main PR과 배포는 이산하가 합니다
 
@@ -68,7 +68,7 @@ SVG 루트에 `width` · `height`(px)가 있어야 합니다. 배율 1.5에 256�
 
 커버의 그림(홀 사진 · 두 사람 · 그늘)은 폭 기준 고정 크기 무대(`.cover-bg`, 폭 106%, 홀 사진 비율, 커버 아랫변에 붙음)에 있습니다(T75). 카카오톡 인앱 브라우저는 주소창이 사라질 때 창 높이 자체가 바뀌어 `svh`까지 변하므로, 높이 기준이면 그림이 늘었다 줄었다 합니다. 폭 기준이면 크기는 그대로이고 위쪽 커튼이 더 잘리거나 덜 잘릴 뿐입니다. 상단 흐림 띠는 글 자리(커버) 기준이라 무대 밖 형제입니다. 두 사람 값(높이 25.9% · 아래 21.1%)은 390×844에서 전(높이 기준 27% · 22%)과 같은 크기·자리가 되도록 환산한 것입니다.
 
-화면 높이 단위는 `svh`입니다(T72). 커버·핵심 정보의 `min-height`와 액자 폭 계산에 `dvh`를 쓰면 iOS·인앱 브라우저에서 툴바가 접히고 펴질 때 구획 높이가 변해 스크롤 중 아래 내용이 밀립니다(390px에서 툴바 60px이면 120px). 화자 아이콘·컷아웃·사진 `img`에는 원본 크기(`width` · `height`)를 적어 그림이 내려오기 전에도 비율만큼 자리를 잡습니다.
+커버 높이는 처음 잰 화면 높이를 px로 박은 `--vh-fixed`입니다(T83, 스크립트 `fixVh`). 카카오톡 인앱 브라우저는 주소창이 사라질 때 창 높이 자체가 바뀌어 `svh`(T72)까지 변하므로 스크롤 중 커버 높이가 변했습니다. 폭이 바뀌면(회전) 다시 재고, 높이만 바뀌는 것은 첫 스크롤 전(진입 장면 중. 인앱 브라우저가 열린 직후 툴바를 자리 잡는 때)에만 받습니다. 핵심 정보는 내용 높이입니다(T83). 확대는 막습니다(T83. 메타 `maximum-scale=1, user-scalable=no`, `html { touch-action: pan-y }`, iOS는 메타를 무시하므로 `gesturestart`와 두 손가락 `touchmove`를 스크립트로 차단). `dvh`를 쓰면 iOS·인앱 브라우저에서 툴바가 접히고 펴질 때 구획 높이가 변해 스크롤 중 아래 내용이 밀립니다(390px에서 툴바 60px이면 120px). 화자 아이콘·컷아웃·사진 `img`에는 원본 크기(`width` · `height`)를 적어 그림이 내려오기 전에도 비율만큼 자리를 잡습니다.
 
 카드는 커버 자체입니다(사본이 아닙니다). 봉투 안에서는 봉투 폭의 92%로 있다가 제 높이의 35%만큼 먼저 올라오고, 봉투가 사라진 뒤 화면 전체로 커집니다. 먼저 올라오는 양이 중요합니다. 올라오기 전에 봉투가 사라지면 세로 화면 비율 때문에 아랫변이 화면 밖에 있어 벽처럼 보이고, 확장이 아니라 밀려 올라가는 것으로 보입니다(T46 · T47). 층이 핵심입니다. 바탕(`.intro`, z 25) < 뒷판(`.intro-layer--back`, z 26) < 카드(z 30) < 앞판(`.intro-layer--front`, z 35) < 뚜껑 그림자(`.intro-layer--cast`, z 35. 앞판 뒤에 있어 그 위) < 뚜껑(`.intro-layer--flap`, z 36) < 넘어가기(고정, z 40). 카드는 앞판 뒤, 뒷판 앞에 끼워져 입구(옆 날개 사이 삼각형)로 보이고(T42), 앞판이 카드를 자연히 가리므로 클립이 필요 없습니다. 카드가 봉투 밑변 아래로 삐져나오는 부분은 앞판 층 안의 바탕색 바닥(`.intro__floor`)이 가리고, 바닥은 봉투와 함께 내려가고 흐려지므로 봉투가 내려갈 때는 윗변을 따라, 흐려질 때는 같은 박자로 카드가 드러납니다(T44 · T48). 커버에는 transform만 걸립니다. 뚜껑은 옆면(90°)을 지나는 순간 z 28로 내려가 카드 뒤로 갑니다. 뚜껑 그림자 층은 125°에 z 27로 내려가 뚜껑 뒤로 갑니다(아래 그림자 문단). 뒷판·앞판·뚜껑 층은 같은 확대·하강·흐려짐 애니메이션을 씁니다. Next.js에서 장면이 끝날 때 커버의 층 지정 해제는 봉투 층이 빠지는 렌더와 같은 프레임(useLayoutEffect)에 합니다. 먼저 지우면 바탕이 커버를 덮는 한 프레임이 생겨 깜빡입니다(T41). 커버의 글 상자 둘(`.cover-head` · `.names`)은 `transform: translateZ(0)` · `will-change`로 제 합성 층에 둡니다(T66). iOS Safari는 커버가 변환 애니메이션 중일 때 흐림 층(backdrop-filter)을 앞으로 올려 위쪽 글을 덮었습니다(폰에서 이산하가 봄. 데스크톱 WebKit·Chrome은 재현 안 됨). 다른 곳에 흐림 층 위 글을 둘 때도 같은 규칙입니다. 확대는 카드가 화면 세로 가운데에 선 상태에서 시작하므로 위 가운데 기준 변환이 곧 가운데 확대입니다. 마지막 키프레임은 변환·클립·필터가 없어 커버 정지 화면과 같습니다(프레임 픽셀 비교로 확인). 봉투 상자(600px)는 화면보다 넓을 수 있어 grid 정렬 대신 absolute + 음수 margin으로 가운데를 맞춥니다. 뚜껑은 원근이 있는 봉투 안에서 윗변을 축으로 돌고, 바깥면과 안쪽면 그림을 같은 자리에 겹쳐 90°에서 바꿉니다(3D 두 면을 쓰지 않습니다). 봉인은 뚜껑의 자식이라 함께 젖혀집니다. 앞면은 바깥면 위, 뒷면은 안쪽면 아래에 같은 자리로 두고 90°에서 바꾸므로, 젖혀진 뒤에는 뚜껑 끝보다 큰 봉인의 뒷면이 끝 둘레로 보입니다. 아래 날개와 봉인의 그늘은 PNG에 굽고, 봉투·앞판·뚜껑·카드의 그림자는 CSS입니다(아래 문단).
 
@@ -87,22 +87,22 @@ node docs/scripts/render-asset.mjs docs/artifacts/assets/lace-rose-seal-back.svg
 
 걷어낸 첫 판(팝업북 · 붉은 가죽 고서)을 다시 볼 때는 커밋 1f1a819의 `docs/artifacts/index.html`과 논의록 T31~T33을 봅니다. 그때 배운 것은 지금 판에도 적용합니다. 3D 컨테이너(`transform-style: preserve-3d`)에는 clip-path · overflow · opacity를 걸지 않습니다(평면화됩니다). 3D 변환 안에서는 CSS mask · SVG mask를 쓰지 않고 그림 파일로 둡니다. 클래스 이름은 페이지 구획(`.block`)과 겹치지 않게 짓습니다. 장면의 마지막 프레임은 커버와 픽셀 단위로 겹치게 하고, 걷힐 때 아무것도 움직이지 않게 합니다.
 
-## 핵심 정보 (액자)
+## 핵심 정보 (올리브 가지)
 
-Scene2입니다(디자인 논의 T55). 이산하가 준 장식 테두리 선화(`../design/scene2/2_핵심정보 에셋.png`, 940×1672, 안쪽 투명) 한 장을 액자로 두고 글을 HTML로 얹습니다. 안쪽이 투명이라 바탕 종이색이 그대로 보입니다. 앞서 쓴 레이스 타원 카드(T50~T51)는 걷어냈습니다. 산출 PNG(`public/lace/`)는 지웠고 원본 SVG 셋과 생성기는 `assets/` · `docs/scripts/`에 남겨 두었지만 쓰지 않습니다.
+Scene2입니다(디자인 논의 T83). 이산하가 준 올리브 가지 그림(`../design/scene2/2_핵심정보 에셋 2.png`, 1230×1278, 가지는 그중 636×362) 하나를 글 위에, 같은 그림을 180° 돌려 글 아래에 둡니다. 높이는 화면이 아니라 내용대로 268px입니다(액자가 없어져 화면을 채울 필요가 없습니다. 처음 만든 190px 가지와 72px 여백은 너무 커서 1/6과 반으로 줄였습니다). 앞서 쓴 액자 선화(T55~T82, `2_핵심정보 에셋.png`)와 레이스 타원 카드(T50~T51)는 걷어냈습니다. 액자의 마지막 모습은 커밋 c7c8199에 있습니다.
 
 | 것 | 자리 |
 | --- | --- |
-| CSS · 마크업 | `index.html`의 "2. 핵심 정보" 구간(`.frame*`). 액자(`.frame`)는 좌우 12px 여백 안에서 폭을 다 쓰고 화면 높이에도 맞춥니다. 글 상자는 테두리 안쪽(가로 12~88%, 세로 13~85%. 위아래 가운데 장식과 옆 가운데 장식을 피한 값)에 세로 가운데로 쌓습니다 |
-| 산출 PNG | `public/scene2/frame.png`(원본 크기 그대로 256색, 98KB) |
-| Next.js | `src/app/page.tsx`의 `.frame` 마크업. 경로만 `/scene2/…`입니다 |
+| CSS · 마크업 | `index.html`의 "2. 핵심 정보" 구간(`#info`, `.info__*`). 세로 flex, 항목 사이 14px, 위아래 여백 36px. 가지 폭 32px, 아래 것은 `rotate(180deg)` |
+| 산출 PNG | `public/scene2/branch.png`(알파 경계 상자에 6px 여백을 두고 잘라 폭 240, 256색, 5KB) |
+| Next.js | `src/app/page.tsx`의 `#info` 마크업. 경로만 `/scene2/…`입니다 |
 
-글은 네 줄, 크기는 둘입니다(T51). 큰 글자(20px, 700) "2026년 10월 9일" · "금요일 오후 6시 30분", 16px 띄고 작은 글자(15px) "더채플앳청담 3층 커티지홀" · "강남구 선릉로 757". 액자 안쪽이 넓어(390px 화면에서 278px) 타원 때문에 쓰던 판 폭 기준 크기(cqw)는 걷어내고 고정 px입니다.
+글은 네 줄, 크기는 둘입니다(T51). 큰 글자(20px, 700) "2026년 10월 9일" · "금요일 오후 6시 30분", 16px 띄고 작은 글자(15px) "더채플앳청담 3층 커티지홀" · "강남구 선릉로 757". 고정 px입니다.
 
 달력 카드는 T57에 넣었다가 T58에서 걷어냈습니다(커밋 4a75ca4에 있습니다).
 
 ```sh
-cp "docs/design/scene2/2_핵심정보 에셋.png" public/scene2/frame.png && python3 docs/scripts/quantize-png.py public/scene2/frame.png
+python3 -c "from PIL import Image; import numpy as np; im=Image.open('docs/design/scene2/2_핵심정보 에셋 2.png').convert('RGBA'); a=np.array(im)[:,:,3]; ys,xs=np.where(a>=8); c=im.crop((xs.min()-6,ys.min()-6,xs.max()+7,ys.max()+7)); c.resize((240, round(c.height*240/c.width)), Image.LANCZOS).save('public/scene2/branch.png')" && python3 docs/scripts/quantize-png.py public/scene2/branch.png
 ```
 
 ## 인사·이야기 (쪽지·메모지)
@@ -134,11 +134,11 @@ node docs/scripts/render-asset.mjs docs/artifacts/assets/note-paper.svg public/p
 
 ```sh
 sips -s format png -Z 900 원본.PNG --out docs/design/canvas/hall.png
-python3 docs/scripts/unmatte.py docs/design/scene1/scene1--married-couple.png docs/design/scene1/scene1--married-couple--clean.png
+python3 docs/scripts/unmatte.py docs/design/scene1/scene--1-married-couple.png docs/design/scene1/scene--1-married-couple--clean.png
 # 원본에 투명 여백이 있으면 알파 경계 상자로 잘라 꽉 찬 컷아웃으로 만듭니다(T74. CSS가 그림 상자 높이를 27%로 잡으므로 여백이 있으면 사람이 작아집니다)
-python3 -c "from PIL import Image; import numpy as np; p='docs/design/scene1/scene1--married-couple--clean.png'; im=Image.open(p).convert('RGBA'); a=np.array(im)[:,:,3]; ys,xs=np.where(a>=8); im.crop((xs.min(),ys.min(),xs.max()+1,ys.max()+1)).save(p)"
-sips -s format png -Z 400 docs/design/scene1/scene1--married-couple--clean.png --out docs/design/canvas/couple.png
-sips -s format png -Z 700 docs/design/scene1/scene1--married-couple--clean.png --out public/scene1/couple.png
+python3 -c "from PIL import Image; import numpy as np; p='docs/design/scene1/scene--1-married-couple--clean.png'; im=Image.open(p).convert('RGBA'); a=np.array(im)[:,:,3]; ys,xs=np.where(a>=8); im.crop((xs.min(),ys.min(),xs.max()+1,ys.max()+1)).save(p)"
+sips -s format png -Z 400 docs/design/scene1/scene--1-married-couple--clean.png --out docs/design/canvas/couple.png
+sips -s format png -Z 700 docs/design/scene1/scene--1-married-couple--clean.png --out public/scene1/couple.png
 python3 docs/scripts/unmatte.py "docs/design/character/0_수달_기본.png" docs/design/character/otter-basic--clean.png
 sips -s format png -Z 240 docs/design/character/otter-basic--clean.png --out public/character/otter-basic.png
 ```
@@ -151,6 +151,11 @@ sips -s format png -Z 240 docs/design/character/otter-basic--clean.png --out pub
 sips -s format jpeg -s formatOptions 82 -Z 900 "docs/design/scene4/3_산하 1.jpg" --out public/scene4/groom-child.jpg
 python3 docs/scripts/unmatte.py "docs/design/scene4/3_산하 2.png" docs/design/scene4/groom-child-ride--clean.png
 python3 docs/scripts/sticker-border.py docs/design/scene4/groom-child-ride--clean.png public/scene4/groom-child-ride.png 300 7 && python3 docs/scripts/quantize-png.py public/scene4/groom-child-ride.png
+sips -s format jpeg -s formatOptions 82 -Z 900 "docs/design/scene6/4_산하.jpg" --out public/scene6/groom.jpg
+sips -s format jpeg -s formatOptions 82 -Z 1100 "docs/design/scene7/4_시야.jpg" --out public/scene7/bride.jpg
+sips -s format jpeg -s formatOptions 82 -Z 1100 "docs/design/scene8/5_산하시야.jpg" --out public/scene8/couple.jpg
 ```
 
-Next.js에는 원본을 `public/scene*/`로 복사합니다(최적화 전. 발송본은 이미지 파이프라인을 거칩니다). Scene2는 T50에서 열린 봉투 일러스트가 레이스 타원 카드로, T55에서 다시 액자 선화로 바뀌었습니다.
+웨딩 사진 셋(T83)은 세로(Scene6)는 최대 900, 가로(Scene7 · 8)는 사진 종이가 폭 9/10(`.photo-paper--wide`)이라 최대 1100입니다.
+
+Next.js에는 원본을 `public/scene*/`로 복사합니다(최적화 전. 발송본은 이미지 파이프라인을 거칩니다). Scene2는 T50에서 열린 봉투 일러스트가 레이스 타원 카드로, T55에서 다시 액자 선화로, T83에 올리브 가지로 바뀌었습니다.
