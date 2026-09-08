@@ -607,12 +607,12 @@ export default function Home() {
             })}
           </ul>
         </section>
-        {/* 11. 오시는 길(와이어프레임 12쪽, 디자인 논의 T110~T112). 크림색 바탕 위 종이 한 장(.sheet). 지도는 카카오맵 JS SDK(키가 있을 때). 지도 링크는 식장 이름 검색이라 좌표가 없어도 됩니다 */}
+        {/* 11. 오시는 길(와이어프레임 12쪽, 디자인 논의 T110~T112 · T119). 크림색 바탕 위 종이 한 장(.sheet. 머리는 봉투의 장미 봉인). 지도는 카카오맵 JS SDK(키가 있을 때). 지도 링크는 식장 이름 검색이라 좌표가 없어도 됩니다 */}
         <section id="directions" className="block story">
           <div className="sheet">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <div className="sheet__head">
-              <img className="sheet__branch" src="/scene2/branch.png" width={240} height={139} alt="" />
+              <img className="sheet__mark" src="/intro/rose-seal.png" width={84} height={84} alt="" />
               <h2 className="sheet__title">오시는 길</h2>
             </div>
             <div className="sheet__body">
@@ -675,7 +675,7 @@ export default function Home() {
           <div className="sheet">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <div className="sheet__head">
-              <img className="sheet__branch" src="/scene2/branch.png" width={240} height={139} alt="" />
+              <img className="sheet__mark" src="/intro/rose-seal.png" width={84} height={84} alt="" />
               <h2 className="sheet__title">하객 안내</h2>
             </div>
             <div className="sheet__body">
@@ -686,15 +686,14 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 13. 마음 전하는 곳(와이어프레임 14쪽, 디자인 논의 T110 · T111). 종이 한 장에 봉투의 장미 봉인. 행을 누르면 계좌번호가 복사됩니다 */}
+        {/* 13. 마음 전하는 곳(와이어프레임 14쪽, 디자인 논의 T110 · T111 · T119). 종이 한 장. 행을 누르면 계좌번호가 복사됩니다 */}
         <section id="gift" className="block story">
           <div className="sheet">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <div className="sheet__head">
-              <img className="sheet__branch" src="/scene2/branch.png" width={240} height={139} alt="" />
+              <img className="sheet__mark" src="/intro/rose-seal.png" width={84} height={84} alt="" />
               <h2 className="sheet__title">마음 전하는 곳</h2>
             </div>
-            <img className="gift__seal" src="/intro/rose-seal.png" width={84} height={84} alt="" />
             <div className="sheet__body">
               <p className="sheet__text sheet__text--center">참석이 어려우신 분들을 위해 안내드립니다.</p>
               {ACCOUNTS.map((group) => (
