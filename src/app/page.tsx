@@ -16,6 +16,39 @@ export default function Home() {
   const coverRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [introDone, setIntroDone] = useState(false);
+  const vhLockedRef = useRef(false);
+
+  // 화면 높이 고정 · 확대 막기(디자인 논의 T83). 카카오톡 인앱 브라우저는 스크롤로 주소창이 사라질 때 창 높이 자체가 바뀌어 svh까지 변하므로, 처음 잰 높이를 --vh-fixed(px)로 박습니다. 폭이 바뀌면(회전 · 창 크기 조절) 다시 재고 높이만 바뀌는 것(툴바)은 무시합니다. 인앱 브라우저는 열린 직후 툴바를 자리 잡으며 높이가 한 번 더 바뀌므로, 스크롤하기 전(진입 장면 중)에는 높이 변화도 받습니다. iOS는 메타의 user-scalable=no를 무시하므로 손가락 두 개 움직임과 제스처 이벤트도 막습니다
+  useEffect(() => {
+    const root = document.documentElement;
+    let width = 0;
+    const fix = () => {
+      width = window.innerWidth;
+      root.style.setProperty("--vh-fixed", `${window.innerHeight}px`);
+    };
+    const onResize = () => {
+      if (window.innerWidth !== width || !vhLockedRef.current) fix();
+    };
+    const onScroll = () => {
+      if (window.scrollY > 0) vhLockedRef.current = true;
+    };
+    const onGesture = (e: Event) => e.preventDefault();
+    const onPinch = (e: TouchEvent) => {
+      if (e.touches.length > 1) e.preventDefault();
+    };
+    fix();
+    window.addEventListener("resize", onResize);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("gesturestart", onGesture);
+    document.addEventListener("touchmove", onPinch, { passive: false });
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("gesturestart", onGesture);
+      document.removeEventListener("touchmove", onPinch);
+      root.style.removeProperty("--vh-fixed");
+    };
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -204,17 +237,16 @@ export default function Home() {
             <div className="names__name">송시야</div>
           </div>
         </section>
-        <section id="info" className="block block--fixed">
-          <div className="frame">
-            <img className="frame__art" src="/scene2/frame.png" alt="" />
-            <div className="frame__text">
-              <div className="frame__big">2026년 10월 9일</div>
-              <div className="frame__big">금요일 오후 6시 30분</div>
-              <div className="frame__gap" />
-              <div className="frame__small">더채플앳청담 3층 커티지홀</div>
-              <div className="frame__small">강남구 선릉로 757</div>
-            </div>
+        <section id="info" className="block">
+          <img className="info__branch" src="/scene2/branch.png" width={240} height={139} alt="" />
+          <div className="info__text">
+            <div className="info__big">2026년 10월 9일</div>
+            <div className="info__big">금요일 오후 6시 30분</div>
+            <div className="info__gap" />
+            <div className="info__small">더채플앳청담 3층 커티지홀</div>
+            <div className="info__small">강남구 선릉로 757</div>
           </div>
+          <img className="info__branch info__branch--flip" src="/scene2/branch.png" width={240} height={139} alt="" />
         </section>
         <section id="greeting" className="block greeting">
           <div className="note note--right">
@@ -235,7 +267,7 @@ export default function Home() {
         <section id="part1-groom" className="block story">
           <div className="photo-paper">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="photo-paper__photo" src="/scene4/groom-child.jpg" width={650} height={900} alt="신랑 어릴 적 사진" />
+            <img className="photo-paper__photo" src="/scene4/groom-child.jpg" width={641} height={900} alt="신랑 어릴 적 사진" />
           </div>
           <div className="note note--left note--memo note--tuck">
             <img className="note__paper" src="/paper/note.png" alt="" />
@@ -273,9 +305,7 @@ export default function Home() {
           </div>
           <div className="photo-paper photo-paper--right">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <div className="photo-paper__blank">
-              <span>신랑 웨딩 사진</span>
-            </div>
+            <img className="photo-paper__photo" src="/scene6/groom.jpg" width={688} height={900} alt="신랑 웨딩 사진" />
           </div>
           <div className="note note--left note--memo note--tuck">
             <img className="note__paper" src="/paper/note.png" alt="" />
@@ -289,11 +319,9 @@ export default function Home() {
           </div>
         </section>
         <section id="part2-bride" className="block story">
-          <div className="photo-paper photo-paper--left">
+          <div className="photo-paper photo-paper--left photo-paper--wide">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <div className="photo-paper__blank">
-              <span>신부 웨딩 사진</span>
-            </div>
+            <img className="photo-paper__photo" src="/scene7/bride.jpg" width={1100} height={720} alt="신부 웨딩 사진" />
           </div>
           <div className="note note--right note--memo note--tuck">
             <img className="note__paper" src="/paper/note.png" alt="" />
@@ -307,11 +335,9 @@ export default function Home() {
           </div>
         </section>
         <section id="part3" className="block story">
-          <div className="photo-paper photo-paper--center">
+          <div className="photo-paper photo-paper--center photo-paper--wide">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <div className="photo-paper__blank">
-              <span>함께 있는 컷</span>
-            </div>
+            <img className="photo-paper__photo" src="/scene8/couple.jpg" width={1100} height={733} alt="이산하와 송시야" />
           </div>
           <div className="note note--right note--memo note--tuck note--indent">
             <img className="note__paper" src="/paper/note.png" alt="" />

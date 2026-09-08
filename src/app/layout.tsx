@@ -50,8 +50,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  maximumScale: 1,
+  userScalable: false, // 확대 막기(디자인 논의 T83). iOS는 무시하므로 page.tsx가 제스처도 막습니다
   viewportFit: "cover",
-  colorScheme: "light",
   themeColor: "#F3ECDF",
 };
 
