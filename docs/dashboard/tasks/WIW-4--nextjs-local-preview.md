@@ -194,3 +194,5 @@ related: []
 2026-09-08 23:14:00 · develop · 5e6d460 · 마음 전하는 곳 실제 계좌번호 · 복사는 숫자만(디자인 논의 T120). `src/app/page.tsx`.
 
 2026-09-08 23:14:20 · develop · b24e250 · globals.css 재생성(T120 조립본 주석 반영). `src/app/globals.css`.
+
+2026-09-08 23:23:19 · develop · e29415d · Scene14 마지막(봉투 닫힘) · 사진첩 원본 44장 · 연락처 메뉴 삭제(디자인 논의 T121). `src/app/page.tsx` `src/app/globals.css` `src/content/gallery.json` `public/gallery/`.
