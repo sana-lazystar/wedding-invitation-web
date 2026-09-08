@@ -324,9 +324,9 @@ export default function Home() {
           </div>
         </section>
         <section id="part2-bride" className="block story">
-          <div className="photo-paper photo-paper--left photo-paper--wide">
+          <div className="photo-paper photo-paper--left">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="photo-paper__photo" src="/scene7/bride.jpg" width={1100} height={720} alt="신부 웨딩 사진" />
+            <img className="photo-paper__photo" src="/scene7/bride.jpg" width={769} height={1100} alt="신부 웨딩 사진" />
           </div>
           <div className="note-wrap note-wrap--right note-wrap--tuck note--w80">
             <div className="note note--right note--memo">
