@@ -34,12 +34,12 @@ Artifact 발행은 2026-09-06 T31에 중단했습니다(디자인 결정 11). �
 | `canvas/Main.dc.html` | Claude Design 캔버스의 아트보드(동결. 결정 11 뒤로 고치지 않습니다) | 커밋 |
 | `canvas/FloatingMenu.dc.html` | 떠 있는 바로 가기 버튼의 열린 상태 | 커밋 |
 | `canvas/canvas.json` | 아트보드 배치와 메모 | 커밋 |
-| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 편지봉투 여섯(`lace-envelope-back` · `lace-envelope-front` · `lace-envelope-flap` · `lace-envelope-flap-inside` · `lace-rose-seal` · `lace-rose-seal-back`, T77~T82)과 쪽지 종이(`note-paper`, T51) · 핵심 정보 종이(`info-paper`, T86) · 마스킹테이프(`masking-tape`, T102. 짧은 것 `masking-tape-short`, T105)입니다. 사진첩 나무 틀(`wood-frame`, T104) · 표지판(`wood-sign`, T106)은 동화 느낌이라 T107에 지웠고 마지막 모습은 커밋 a8487a0에 있습니다. 이전 아마 짜임 봉투(`envelope-*` · `wax-seal*`, T35~T42)는 T82에 지웠고 마지막 모습은 커밋 9929650에 있습니다. 레이스 셋(`lace-frill` · `oval-card` · `fleuron`, 이산하가 다른 세션에서 만듦, T50)은 T55에서 액자로 바뀌어 쓰지 않습니다 | 커밋 |
+| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 편지봉투 여섯(`lace-envelope-back` · `lace-envelope-front` · `lace-envelope-flap` · `lace-envelope-flap-inside` · `lace-rose-seal` · `lace-rose-seal-back`, T77~T82)과 쪽지 종이(`note-paper`, T51) · 핵심 정보 종이(`info-paper`, T86) · 마스킹테이프(`masking-tape`, T102. 짧은 것 `masking-tape-short`, T105)입니다. 사진첩 나무 틀(`wood-frame`, T104) · 표지판(`wood-sign`, T106)은 동화 느낌이라 T107에 지웠고 마지막 모습은 커밋 a8487a0에 있습니다. 이전 아마 짜임 봉투(`envelope-*` · `wax-seal*`, T35~T42)는 T82에 지웠고 마지막 모습은 커밋 9929650에 있습니다. 레이스 셋(`lace-frill` · `oval-card` · `fleuron`, 이산하가 다른 세션에서 만듦, T50)은 T55에서 액자로 바뀌어 쓰지 않게 됐고 WIW-5에 지웠습니다(마지막 모습은 커밋 217c045) | 커밋 |
 | `../design/scene1/`, `../design/scene2/`, `../design/scene4/`, `../design/scene5/`, `../design/scene10/`, `../design/character/` | 이산하가 준 원본 이미지. 캐릭터는 스티커(흰 테두리 포함) PNG이고 `*--clean.png`는 가장자리 색 번짐을 지운 것 | 제외 (`docs/design/`) |
 | `../design/canvas/*.png` | 캔버스용 축소본(PNG 무손실). 아트보드가 파일명으로 참조합니다 | 제외 |
-| `src/app/{layout,page}.tsx`, `src/app/globals.css`, `public/intro/`, `public/scene1/`, `public/scene2/`, `public/paper/`, `public/character/`, `public/scene4/`, `public/scene5/`, `public/scene10/`, `public/gallery/`, `src/content/gallery.json` | Next.js 임시 적용(WIW-4). `globals.css`는 조립본에서 생성한 파생물, `page.tsx` 마크업은 조립본과 손으로 맞춥니다 | 커밋 |
+| `src/app/`, `src/components/`, `src/hooks/`, `src/lib/`, `src/content/`, `public/intro/`, `public/scene1/`, `public/scene2/`, `public/paper/`, `public/character/`, `public/scene4/`, `public/scene5/`, `public/scene10/`, `public/gallery/`, `src/content/gallery.json` | Next.js 적용(WIW-4 적용 · WIW-5 구조 분해). `globals.css`는 조립본에서 생성한 파생물이고, 장면 마크업은 `src/components/scenes/`의 파일마다 조립본의 한 구획과 1:1입니다. 조립본이 바뀌면 그 파일만 손으로 맞춥니다. 효과는 `src/hooks/`, 값은 `src/content/`, 바깥 것을 다루는 도구는 `src/lib/`입니다 | 커밋 |
 | 조립된 발행 파일 | Claude 세션 스크래치패드 | 커밋하지 않음 |
-| `src/app/favicon.ico` · `icon1~4.png` · `apple-icon.png` · `manifest.ts`, `public/android-icon-*.png` · `ms-icon-*.png` · `browserconfig.xml` | 사이트 아이콘(T70. T136에 장미 인장으로 교체). 이산하가 생성기로 만든 묶음이고 원본 전체는 `../design/favicon/`(처음 것) · `../design/favicon/generated/`(인장, git 제외). Next.js 파일 규약(favicon · icon · apple-icon · manifest)이 `<head>`를 만들고, 타일색·테마색은 `layout.tsx`에 있습니다. 조립본에는 넣지 않습니다 | 커밋 |
+| `src/app/favicon.ico` · `icon1~4.png` · `apple-icon.png` · `manifest.ts`, `public/android-icon-*.png` · `ms-icon-144x144.png` | 사이트 아이콘(T70. T136에 장미 인장으로 교체). 이산하가 생성기로 만든 묶음이고 원본 전체는 `../design/favicon/`(처음 것) · `../design/favicon/generated/`(인장, git 제외). Next.js 파일 규약(favicon · icon · apple-icon · manifest)이 `<head>`를 만들고, 타일색·테마색은 `layout.tsx`에 있습니다. 윈도 타일 설정(`browserconfig.xml`)과 그것만 참조하던 ms 아이콘 셋은 어디서도 연결되지 않아 WIW-5에 지웠습니다. 조립본에는 넣지 않습니다 | 커밋 |
 
 ## 고치는 순서
 
@@ -227,7 +227,7 @@ Scene14(와이어프레임 15쪽, 디자인 논의 T121~T123)는 진입 장면�
 
 ## Artifact 발행 (중단)
 
-결정 11로 중단했습니다. 스크립트 `docs/scripts/inline-artifact.mjs`는 남겨 두지만 쓰지 않습니다. 다시 하게 되면 새 세션에서 같은 링크를 먼저 `read`한 뒤 `url`을 지정해 발행해야 링크가 유지됩니다.
+결정 11로 중단했습니다. 스크립트 `docs/scripts/inline-artifact.mjs`는 WIW-5에 지웠습니다(마지막 모습은 커밋 217c045). 다시 하게 되면 새 세션에서 같은 링크를 먼저 `read`한 뒤 `url`을 지정해 발행해야 링크가 유지됩니다.
 
 ## 이미지 축소
 
