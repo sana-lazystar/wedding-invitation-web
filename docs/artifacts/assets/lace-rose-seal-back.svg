@@ -4,11 +4,11 @@
     <filter id="waxBack" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
       <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="9" result="warpN"/>
       <feDisplacementMap in="SourceGraphic" in2="warpN" scale="3" xChannelSelector="R" yChannelSelector="G" result="shape"/>
-      <feFlood flood-color="#DBD5CA" result="dark"/>
+      <feFlood flood-color="#E2CFCD" result="dark"/>
       <feComposite in="dark" in2="shape" operator="in" result="base"/>
       <feGaussianBlur in="shape" stdDeviation="4" result="soft"/>
       <feComposite in="soft" in2="shape" operator="in" result="inner"/>
-      <feFlood flood-color="#E6E1D8" result="mid"/>
+      <feFlood flood-color="#EDDDDB" result="mid"/>
       <feComposite in="mid" in2="inner" operator="in" result="midIn"/>
       <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="2" seed="4" result="grainN"/>
       <feColorMatrix in="grainN" type="matrix" values="0 0 0 0 0.5  0 0 0 0 0.46  0 0 0 0 0.4  0 0 0 0.12 0" result="grain"/>
