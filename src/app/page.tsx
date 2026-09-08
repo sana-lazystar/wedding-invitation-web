@@ -39,7 +39,34 @@ const VENUE_SEARCH = encodeURIComponent("더채플앳청담");
 
 // 카카오맵(디자인 논의 T112. 스택 논의의 외부 의존 메모대로 JS SDK, 무료). 키는 Kakao Developers 앱의 JavaScript 키를 NEXT_PUBLIC_KAKAO_MAP_KEY에 두고, 앱의 Web 플랫폼에 localhost:3000과 배포 도메인을 등록합니다. 키가 없으면 자리표시만 보입니다.
 // 중심은 대략값으로 시작하고 SDK의 지오코더가 주소로 바로잡습니다
-const KAKAO_MAP_KEY = process.env.NEXT_PUBLIC_KAKAO_MAP_KEY;
+const KAKAO_MAP_KEY = process.env.NEXT_PUBLIC_KAKAO_MAP_KEY; // 지도와 카카오톡 공유가 같이 쓰는 앱의 JavaScript 키(디자인 논의 T112 · T132)
+
+// 카카오톡 공유(디자인 논의 T132). SDK는 메뉴를 열 때 미리 싣고, 공유하기를 누르면 피드 템플릿(사진 · 제목 · 날짜 · 단추 둘)으로 보냅니다. 키가 없거나 SDK를 못 실으면 기기 공유 창(navigator.share), 그것도 없으면 주소 복사입니다. 단추 · 이미지 URL은 앱에 등록한 도메인이어야 하므로 현재 origin을 씁니다
+const SITE_TITLE = "이산하 ♥ 송시야 결혼합니다.";
+const SITE_DESCRIPTION = "26년 10월 9일 금요일 오후 6시 30분\n더채플앳청담";
+const KAKAO_SDK_URL = "https://t1.kakaocdn.net/kakao_js_sdk/2.8.3/kakao.min.js";
+const KAKAO_SDK_INTEGRITY = "sha384-oroumrnFVE0xtgqyDZJARgERibXg2C28380uaUZz2kHDS5CR7tu20eGiOU6GkTpy"; // 2.8.3 파일에서 잰 값(2026-09-09)
+type KakaoSdk = { isInitialized: () => boolean; init: (key: string) => void; Share: { sendDefault: (settings: Record<string, unknown>) => void } };
+let kakaoSdkPromise: Promise<KakaoSdk> | null = null;
+function loadKakaoSdk(): Promise<KakaoSdk> {
+  if (window.Kakao) return Promise.resolve(window.Kakao);
+  if (!kakaoSdkPromise) {
+    kakaoSdkPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = KAKAO_SDK_URL;
+      script.integrity = KAKAO_SDK_INTEGRITY;
+      script.crossOrigin = "anonymous";
+      script.async = true;
+      script.onload = () => (window.Kakao ? resolve(window.Kakao) : reject(new Error("Kakao SDK missing")));
+      script.onerror = () => {
+        kakaoSdkPromise = null;
+        reject(new Error("Kakao SDK load failed"));
+      };
+      document.head.appendChild(script);
+    });
+  }
+  return kakaoSdkPromise;
+}
 const VENUE_ROUGH = { lat: 37.5205, lng: 127.041 };
 type KakaoLatLng = { getLat: () => number; getLng: () => number };
 type KakaoMaps = {
@@ -55,6 +82,7 @@ type KakaoMaps = {
 declare global {
   interface Window {
     kakao?: { maps: KakaoMaps };
+    Kakao?: KakaoSdk;
   }
 }
 
@@ -429,6 +457,45 @@ export default function Home() {
       opener?.focus({ preventScroll: true });
     };
   }, [viewer]);
+
+  // 공유하기(디자인 논의 T132). SDK가 이미 실려 있으면 기다리지 않아 사용자 동작 안에서 카카오톡 창이 열립니다
+  const share = async () => {
+    setMenuOpen(false);
+    const url = `${window.location.origin}/`;
+    if (KAKAO_MAP_KEY) {
+      try {
+        const Kakao = window.Kakao ?? (await loadKakaoSdk());
+        if (!Kakao.isInitialized()) Kakao.init(KAKAO_MAP_KEY);
+        Kakao.Share.sendDefault({
+          objectType: "feed",
+          content: {
+            title: SITE_TITLE,
+            description: SITE_DESCRIPTION,
+            imageUrl: `${window.location.origin}/og/share.jpg`,
+            imageWidth: 1600,
+            imageHeight: 800,
+            link: { mobileWebUrl: url, webUrl: url },
+          },
+          buttons: [
+            { title: "청첩장 보기", link: { mobileWebUrl: url, webUrl: url } },
+            { title: "위치 보기", link: { mobileWebUrl: `${url}#directions`, webUrl: `${url}#directions` } },
+          ],
+        });
+        return;
+      } catch {
+        // SDK를 못 실었거나 도메인이 등록되지 않았을 때. 아래 기기 공유로
+      }
+    }
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: SITE_TITLE, text: SITE_DESCRIPTION, url });
+      } catch {
+        // 사용자가 공유 창을 닫음
+      }
+      return;
+    }
+    copy(url, "주소를 복사했습니다");
+  };
 
   useEffect(() => {
     const onDocumentClick = (e: MouseEvent) => {
@@ -952,9 +1019,21 @@ export default function Home() {
       </div>
 
       <nav className="fab" ref={fabRef} data-open={menuOpen ? "true" : "false"} aria-label="바로 가기">
-        <div className="fab__menu" id="fabMenu" hidden={!menuOpen} onClick={() => setMenuOpen(false)}>
-          <a href="#directions">오시는 길</a>
-          <a href="#gift">마음 전하는 곳</a>
+        <div className="fab__menu" id="fabMenu" hidden={!menuOpen}>
+          <img className="note__paper" src="/paper/note.png" alt="" />
+          <img className="fab__tape" src="/paper/tape.png" alt="" />
+          <a className="fab__item" href="#directions" onClick={() => setMenuOpen(false)}>
+            오시는 길
+          </a>
+          <a className="fab__item" href="#gallery" onClick={() => setMenuOpen(false)}>
+            사진첩
+          </a>
+          <a className="fab__item" href="#gift" onClick={() => setMenuOpen(false)}>
+            마음 전하는 곳
+          </a>
+          <button type="button" className="fab__item" onClick={share}>
+            공유하기
+          </button>
         </div>
         <button
           type="button"
@@ -962,17 +1041,14 @@ export default function Home() {
           aria-expanded={menuOpen}
           aria-controls="fabMenu"
           aria-label={menuOpen ? "메뉴 닫기" : "바로 가기 메뉴"}
-          onClick={() => setMenuOpen((open) => !open)}
+          onClick={() => {
+            setMenuOpen((open) => !open);
+            if (KAKAO_MAP_KEY) loadKakaoSdk().catch(() => {}); // 공유하기를 누르기 전에 미리 싣습니다
+          }}
         >
-          {menuOpen ? (
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-              <path d="M6 6l10 10M16 6L6 16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
-          ) : (
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-              <path d="M4 6.5h14M4 11h14M4 15.5h14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
-          )}
+          <img className="note__paper" src="/paper/note.png" alt="" />
+          <img className="fab__tape fab__tape--small" src="/paper/tape-short.png" alt="" />
+          <span className="fab__label">{menuOpen ? "닫기" : "메뉴"}</span>
         </button>
       </nav>
     </>

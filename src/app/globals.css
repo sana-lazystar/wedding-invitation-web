@@ -378,41 +378,39 @@ body {
 .closing.is-settled.is-open .closing__layer--cast { z-index: 27; transition-delay: 0.74s; }
 @media (prefers-reduced-motion: reduce) { .closing .closing__layer { display: none; } .closing.is-closing .closing__letter { animation: none; } }
 
-/* 떠 있는 바로 가기 버튼 */
+/* 떠 있는 바로 가기(T132. 전에는 오크색 동그라미에 ≡ 아이콘이라 흔한 앱 단추 같았음). 테이프로 붙인 작은 쪽지 "메뉴"를 누르면 그 위로 쪽지 한 장이 나타나고 네 항목(오시는 길 · 사진첩 · 마음 전하는 곳 · 공유하기)이 손글씨로 있습니다. 종이 결(note.png) · 테이프 · 그늘 · 기울기는 이야기 구간의 쪽지와 같은 문법입니다. 공유하기는 Next.js에서 카카오톡 공유(JS SDK)이고 조립본은 기기 공유 창 · 주소 복사만 합니다 */
 .fab {
   position: fixed;
   right: max(20px, calc((100vw - 430px) / 2 + 20px));
   bottom: calc(20px + env(safe-area-inset-bottom));
   z-index: 10;
-  display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
-  font-family: var(--font-ui);
+  display: flex; flex-direction: column; align-items: flex-end; gap: 16px;
+  font-family: var(--font-memo);
 }
 .fab__menu {
-  width: 176px;
-  display: flex; flex-direction: column;
-  background: var(--paper);
-  border-radius: 14px;
-  box-shadow: 0 16px 32px -12px rgba(70, 48, 24, 0.45);
-  overflow: hidden;
-}
-.fab__menu a {
-  display: flex; align-items: center; justify-content: space-between;
-  height: 48px; padding: 0 18px;
-  font-size: 15px; font-weight: 500;
-  color: var(--ink); text-decoration: none;
+  position: relative; width: 168px; display: flex; flex-direction: column; padding: 18px 16px 12px;
+  border-radius: 3px; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
+  transform: rotate(-1.5deg); animation: fab-in 0.25s ease-out both;
 }
 .fab__menu[hidden] { display: none; }   /* 조립본에는 Tailwind 초기화가 없어 hidden 속성을 display: flex가 이깁니다 */
-.fab__menu a + a { border-top: 1px solid var(--rule); }
-.fab__menu a::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--oak); }
-.fab__menu a:focus-visible { outline: 2px solid var(--oak); outline-offset: -4px; }
-.fab__button {
-  width: 52px; height: 52px; border-radius: 50%; border: 0; padding: 0;
-  background: var(--oak); color: var(--paper);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 10px 20px -8px rgba(70, 48, 24, 0.55);
-  cursor: pointer;
+@keyframes fab-in { from { opacity: 0; transform: translateY(8px) rotate(-1.5deg); } to { opacity: 1; transform: translateY(0) rotate(-1.5deg); } }
+@media (prefers-reduced-motion: reduce) { .fab__menu { animation: none; } }
+.fab__tape { position: absolute; top: -9px; left: 50%; width: 72px; height: auto; transform: translateX(-50%) rotate(-3deg); pointer-events: none; }
+.fab__tape--small { top: -7px; width: 44px; transform: translateX(-50%) rotate(4deg); }
+.fab__item {
+  position: relative; display: flex; align-items: center; gap: 10px; height: 40px; margin: 0; padding: 0 4px;
+  border: 0; background: none; font: inherit; font-size: 18px; line-height: 1; color: var(--ink); text-decoration: none; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
+.fab__item::before { content: ''; flex: none; width: 5px; height: 5px; border-radius: 50%; background: var(--oak); }
+.fab__item:focus-visible { outline: 2px solid var(--oak); outline-offset: -2px; border-radius: 3px; }
+.fab__button {
+  position: relative; width: 64px; height: 46px; margin: 0; padding: 8px 0 0; border: 0; border-radius: 3px; background: none;
+  box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
+  transform: rotate(2deg); font: inherit; font-size: 18px; line-height: 1; color: var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.fab__button:active { transform: rotate(2deg) scale(0.97); }
 .fab__button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.fab__label { position: relative; }
 
 
 /* 0. 진입 장면(로딩). 편지봉투가 화면 높이의 2/3로 확대돼 있다가(좌우가 잘림) 물러나 폭이 화면의 92%가 된 뒤 0.3초 멈추고, 뚜껑이 열리고, 뚜껑이 80% 열렸을 때부터 편지지(커버 자체)가 올라오는 것과 동시에 봉투가 아래로 내려가 편지지가 거의 다 보이며, 이어서 편지지가 화면 전체로 커지는 것과 동시에 봉투가 0.3초에 흐려져 사라져 Scene1이 됩니다(디자인 논의 T36~T49 · T76). 5.0초.
