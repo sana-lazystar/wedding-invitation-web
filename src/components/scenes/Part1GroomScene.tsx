@@ -12,8 +12,8 @@ export function Part1GroomScene() {
       <div className="note note--left note--memo note--tuck">
         <NotePaper />
         <img className="note__who" src="/character/rabbit-1.png" width={240} height={164} alt="" />
-        <p className="note__text">
-          제 신랑은 어릴 때 시를 써서 상도 받던<br />문학소년이었대요. 무협지를 좋아해서 작가를<br />꿈꾸기도 했고요. 그랬던 아이는 커서<br />냉철하고 이성적인 개발자가 됐어요!
+        <p className="note__text note__text--flow">
+          제 신랑은 어릴 때 시를 써서 상도 받던 <br />문학소년이었대요. 무협지를 좋아해서 작가를 <br />꿈꾸기도 했고요. 그랬던 아이는 커서 <br />냉철하고 이성적인 개발자가 됐어요!
         </p>
         <div className="note__row">
           <div className="note__stamp-cell">

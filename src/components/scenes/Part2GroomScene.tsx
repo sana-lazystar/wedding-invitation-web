@@ -5,7 +5,7 @@ import { NotePaper } from "@/components/ui/NotePaper";
 export function Part2GroomScene() {
   return (
     <section id="part2-groom" className="block story">
-      <div className="note note--left note--memo note--who-right note--w68">
+      <div className="note note--left note--memo note--who-right">
         <NotePaper />
         <img className="note__who" src="/character/otter-basic.png" width={240} height={194} alt="" />
         <img className="note__who note__who--inner" src="/character/rabbit-2.png" width={240} height={198} alt="" />

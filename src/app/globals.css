@@ -149,9 +149,10 @@ body {
 .note-wrap--left .note-wrap__who { left: -9px; transform: rotate(-5deg); }
 #part3 .note-wrap__who { top: -19px; }   /* Scene8 첫 메모지 아이콘은 4px 아래(T99) */
 @media (prefers-reduced-motion: reduce) { .note-wrap__who { opacity: 1; transition: none; } }
-/* 폭 변형(T87. 틀 규칙 뒤에 두어 틀의 fit-content를 이깁니다). 지금의 4/5로 줄인 메모지. Scene6 첫 메모지는 글만큼(85%)의 4/5인 68%, Scene7 첫 메모지는 전체의 4/5인 80% */
-.note--w68 { width: 68%; }
+/* 폭 변형(T87. 틀 규칙 뒤에 두어 틀의 fit-content를 이깁니다). 지금의 4/5로 줄인 메모지. Scene7 첫 메모지는 전체의 4/5인 80%입니다. Scene6 첫 메모지의 68%(`.note--w68`)는 430px보다 좁은 화면에서 한 줄짜리 글이 두 줄로 접혀 T143에 지웠고, 그 메모지는 다른 메모지처럼 글만큼(fit-content)입니다 */
 .note--w80 { width: 80%; }
+/* 하드 줄바꿈은 390px에 맞춰 짠 것이라 그보다 좁은 화면에서는 한 줄이 접혀 낱말 하나가 남습니다. 좁은 화면에서는 줄바꿈을 지워 글이 제 흐름대로 접히게 합니다(T143) */
+@media (max-width: 389px) { .note__text--flow br { display: none; } }
 /* 합창 메모지(T65). 화자 둘이 오른쪽 위에 나란히. 바깥쪽이 첫째, 안쪽(`--inner`)이 둘째 */
 .note--right .note__who--inner { right: 46px; transform: rotate(-4deg); }
 .photo-paper--center { align-self: center; transform: rotate(0.4deg); }

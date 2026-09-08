@@ -12,8 +12,8 @@ export function Part1BrideScene() {
       <div className="note note--right note--memo note--tuck note--bride">
         <NotePaper />
         <img className="note__who" src="/character/otter-basic.png" width={240} height={194} alt="" />
-        <p className="note__text">
-          제 신부는 다섯 살 때 빗소리가 좋다며 혼자<br />우산 쓰고 동네를 걷던 아이였대요.
+        <p className="note__text note__text--flow">
+          제 신부는 다섯 살 때 빗소리가 좋다며 혼자 <br />우산 쓰고 동네를 걷던 아이였대요.
         </p>
         <div className="note__row note__row--left">
           <div className="note__stamp-cell note__stamp-cell--left">
