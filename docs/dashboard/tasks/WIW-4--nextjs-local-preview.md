@@ -126,3 +126,5 @@ related: []
 2026-09-07 02:05:53 · develop · 87a1a52 · Scene1 두 사람 컷아웃 새 원본으로 교체(디자인 논의 T74). `public/scene1/couple.png`.
 
 2026-09-07 02:15:22 · develop · 369e2d1 · 커버 그림 폭 기준 고정 크기 무대, 흐림 띠 커버 기준(디자인 논의 T75). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 15:26:27 · develop · 64563b7 · 진입 장면 뚜껑·봉투 그림자(광원 우측 상단 45°) · 물러난 뒤 0.3초 멈춤(디자인 논의 T76). `src/app/page.tsx` `src/app/globals.css`.
