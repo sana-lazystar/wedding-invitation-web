@@ -163,9 +163,9 @@ export default function Home() {
               <div className="intro__env">
                 <div className="intro__cast">
                   <img className="intro__cast-img" src="/intro/envelope-flap.png" alt="" />
-                  <img className="intro__cast-img intro__cast-img--seal" src="/intro/wax-seal.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--seal" src="/intro/rose-seal.png" alt="" />
                   <img className="intro__cast-img intro__cast-img--soft" src="/intro/envelope-flap.png" alt="" />
-                  <img className="intro__cast-img intro__cast-img--seal intro__cast-img--soft" src="/intro/wax-seal.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--seal intro__cast-img--soft" src="/intro/rose-seal.png" alt="" />
                 </div>
               </div>
             </div>
@@ -174,10 +174,10 @@ export default function Home() {
             <div className="intro__zoom">
               <div className="intro__env">
                 <div className="intro__flap">
-                  <img className="intro__seal-back" src="/intro/wax-seal-back.png" alt="" />
+                  <img className="intro__seal-back" src="/intro/rose-seal-back.png" alt="" />
                   <img className="intro__flap-in" src="/intro/envelope-flap-inside.png" alt="" />
                   <img className="intro__flap-out" src="/intro/envelope-flap.png" alt="" />
-                  <img className="intro__seal" src="/intro/wax-seal.png" alt="" />
+                  <img className="intro__seal" src="/intro/rose-seal.png" alt="" />
                 </div>
               </div>
             </div>
