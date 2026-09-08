@@ -210,3 +210,5 @@ related: []
 2026-09-09 00:21:36 · develop · 6900d61 · 계좌 행을 "신랑 아버지" · 계좌번호 · 은행 성함 순서로(디자인 논의 T131). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-09 00:35:43 · develop · 9c99be3 · 떠 있는 메뉴를 쪽지로 · 카카오톡 공유 · OG 메타(디자인 논의 T132). `src/app/page.tsx` `src/app/layout.tsx` `src/app/globals.css` `public/og/share.jpg`.
+
+2026-09-09 00:45:07 · develop · 6b37fe5 · Scene14 만든 이 표기 · 떠 있는 메뉴를 쪽지 한 장으로(디자인 논의 T133 · T134). `src/app/page.tsx` `src/app/globals.css`.
