@@ -1430,6 +1430,15 @@ jira:
 - 닫기 줄과 작은 쪽지 숨김(T134)을 되돌렸다. 작은 쪽지는 늘 보이고 손글씨가 "메뉴" ↔ "닫기"로 바뀐다. 열린 쪽지는 기울기 0°이고 작은 쪽지 위 14px에 뜬다(내려앉는 8px 효과는 그대로). 항목 넷 · 가는 줄 · 고운바탕은 T134 그대로.
 - 확인(WebKit 390, Next.js · 조립본): 열면 손글씨 "닫기", 쪽지 transform 없음, 쪽지 아랫변과 작은 쪽지 윗변 사이 13px, 다시 누르면 닫히고 "메뉴". 오류 0. tsc · eslint 통과.
 
+### 2026-09-09 00:50:32 이전 · 이산하 (T136)
+
+- 파비콘 생성기 산출물(apple-icon 57~180 · android-icon 36~192 · favicon 16 · 32 · 96 · ms-icon 70~310 · favicon.ico · manifest.json · browserconfig.xml)을 `docs/design/favicon/generated`에 모아 두었다. 진행해 달라.
+
+### 2026-09-09 00:50:32 · Claude (T136)
+
+- T70과 같은 배정으로 바꿔 끼웠다. `src/app/favicon.ico`(← favicon.ico) · `icon1~4.png`(← favicon 16 · 32 · 96, android 192) · `apple-icon.png`(← apple-icon 180), `public/android-icon-*`(36 · 48 · 72 · 96 · 144 · 192) · `ms-icon-*`(70 · 144 · 150 · 310). 열여섯 파일. 생성기의 `manifest.json`("App", 흰색)과 `browserconfig.xml`(흰 타일색)은 쓰지 않고 우리 `manifest.ts` · `browserconfig.xml`(크림색)을 그대로 둔다. 생성기가 준 `<link>` 목록은 Next.js 파일 규약이 같은 것을 만들어 따로 넣지 않는다(apple-touch-icon 여러 크기 대신 180 하나, iOS는 이것으로 충분).
+- 확인: 열여섯 파일 크기 · 그림(장미 인장, 크림 바탕)을 한 줄로 늘어놓아 봄. dev 서버 `<head>`에 favicon.ico · icon 16 · 32 · 96 · 192 · apple-touch-icon 180 · manifest가 새 해시로 붙음.
+
 ## 결정
 
 행의 내용은 불변입니다. 상태 칸만 갱신할 수 있습니다.
