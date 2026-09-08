@@ -136,3 +136,5 @@ related: []
 2026-09-08 16:17:00 · develop · 71d701d · Scene2 바탕을 흰 종이로(디자인 논의 T84). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-08 16:18:02 · develop · cae2cc5 · Scene2 가지 하나 · 간격 21px · 날짜 글자 18px 짙은 갈색(디자인 논의 T85). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 16:22:48 · develop · 59aca06 · Scene2 전용 흰 종이 결 · 높이 295px(디자인 논의 T86). `public/paper/info.jpg` `src/app/page.tsx` `src/app/globals.css`.
