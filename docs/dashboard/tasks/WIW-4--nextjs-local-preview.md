@@ -170,3 +170,5 @@ related: []
 2026-09-08 21:03:13 · develop · b6d63f4 · 사진첩 제목 · 뷰어 장수 아래 · 위 가운데 테이프 · 반투명 화살표 단추(디자인 논의 T105). `src/app/page.tsx` `src/app/globals.css` `public/paper/tape-short.png`.
 
 2026-09-08 21:09:00 · develop · a8487a0 · 사진첩 나무 표지판 · 뷰어 인화지 테두리 4px(디자인 논의 T106). `src/app/page.tsx` `src/app/globals.css` `public/scene10/wood-sign.png`.
+
+2026-09-08 21:11:39 · develop · d0d3837 · 사진첩 나무 틀 · 표지판 삭제 · 일반적인 격자(디자인 논의 T107). `src/app/page.tsx` `src/app/globals.css` `public/scene10/`(wood-frame · wood-sign 삭제).
