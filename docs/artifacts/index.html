@@ -108,7 +108,7 @@
     .info__gap { height: 16px; }
 
     /* 3. 인사(와이어프레임 4쪽, 0.3화면). 쪽지 두 장에 한 줄씩. 화자 캐릭터(수달 = 신랑, 토끼 = 신부. 이산하가 준 스티커 그림, T52)가 쪽지 위 모서리에 걸칩니다. 신랑 쪽지는 오른쪽 정렬에 오른쪽 위, 신부 쪽지는 왼쪽 정렬에 왼쪽 위. 종이 결은 그림(`public/paper/note.png`), 그늘·기울기는 CSS */
-    .greeting { display: flex; flex-direction: column; gap: 22px; padding: 40px 24px 14px; }
+    .greeting { display: flex; flex-direction: column; gap: 22px; padding: 48px 24px 21px; }   /* 위 여백은 40에서 8px 더, 아래는 14의 1.5배(T87. 장면 사이 간격 1.5배) */
     .note {
       position: relative; width: fit-content; max-width: 100%;   /* 쪽지 폭은 글만큼(T64. 전에는 80%) */
       padding: 20px 16px;   /* 와이어프레임 메모지 안쪽 여백 좌우 16 · 위아래 20. 화자 얼굴은 쪽지 안 20px까지 와서 첫 줄 글자(반행간 5px 아래에서 시작)와 겹치지 않습니다 */
@@ -123,7 +123,7 @@
     .note--right { --tilt: 0.6deg; align-self: flex-end; }
     .note--left { --tilt: -0.8deg; align-self: flex-start; }
     .note__paper { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 3px; }
-    .note__text { position: relative; margin: 0; display: flow-root; word-break: keep-all; }   /* flow-root: 안의 float(컷아웃)를 높이에 넣습니다. keep-all: 한글 낱말 안에서 줄을 바꾸지 않습니다 */
+    .note__text { position: relative; margin: 0; word-break: keep-all; }   /* 안의 float(컷아웃)는 높이에 넣지 않습니다(T87. 전에는 flow-root). 메모지는 글 높이만큼이고 컷아웃은 아래로 걸칩니다. keep-all: 한글 낱말 안에서 줄을 바꾸지 않습니다 */
     /* 화자 아이콘. 흰 테두리(다이컷)는 그림에 이미 있어 그늘만 CSS로 붙입니다. 높이 43px(T53 36px의 1.2배, T63. 앞으로의 캐릭터 아이콘도 이 크기), 위 기준을 4px 내려 아래가 쪽지 안 +20px(첫 줄 위 여백과 같음)까지 옵니다. 살짝 기울여 붙인 스티커처럼 */
     .note__who {
       position: absolute; top: -23px; height: 43px; width: auto;
@@ -132,7 +132,7 @@
     .note--right .note__who { right: -8px; transform: rotate(6deg); }
     .note--left .note__who { left: -9px; transform: rotate(-5deg); }
     /* 4. Part 1 신랑(와이어프레임 5쪽, 약 1.2화면). 어릴 적 사진을 붙인 종이가 위, 토끼(신부)가 소개하는 메모지가 아래입니다(T53). 인사 블록이 0.3화면이라 사진 종이가 인사와 같은 화면에 걸쳐 보입니다. 메모지는 쪽지와 같은 부품(`.note`)이고 폭만 전체입니다. 오른쪽 아래에는 어릴 적 사진 컷아웃(헬리콥터)이 스티커처럼 걸칩니다 */
-    .story { display: flex; flex-direction: column; gap: 22px; padding: 20px 24px; }   /* 장면 사이는 20 + 20 = 40px로 같습니다(T67) */
+    .story { display: flex; flex-direction: column; gap: 22px; padding: 30px 24px; }   /* 장면 사이는 30 + 30 = 60px로 같습니다(T67 40px의 1.5배, T87). 컷아웃이 종이 아래로 44px 걸쳐도 다음 장면에 닿지 않습니다 */
     .photo-paper {
       position: relative; z-index: 1; width: 75%; align-self: flex-end; padding: 4px; border-radius: 3px;   /* 사진 종이는 폭의 3/4, 오른쪽, 흰 테두리 4px(T56). 메모지 위에 겹치므로 앞 층 */
       box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
@@ -144,17 +144,33 @@
     .note--indent { margin-left: 20px; }   /* 와이어프레임의 들여 놓은 메모지(독백) */
     /* 아이콘을 메모지 정렬과 반대쪽에 두는 변형(T69 · T73). Scene6 독백 메모지는 왼쪽 정렬에 아이콘 오른쪽, Scene7 독백 메모지는 오른쪽 정렬에 아이콘 왼쪽. 사진 종이 뒤로 겹치는 메모지(`.note--tuck`)의 아이콘은 사진과 반대쪽에 둬야 가려지지 않습니다 */
     .note--left.note--who-right .note__who { left: auto; right: -8px; transform: rotate(6deg); }
+    .note--left.note--who-right .note__who--inner { right: 46px; transform: rotate(-4deg); }   /* 왼쪽 정렬 합창 메모지(Scene6 첫 메모지, T87) */
     .note--right.note--who-left .note__who { right: auto; left: -9px; transform: rotate(-5deg); }
+    /* 사진 뒤로 겹친 메모지의 화자 아이콘을 사진 위에 두는 틀(T87). 메모지는 기울기(transform) 때문에 제 쌓임 맥락이라 안의 아이콘이 사진(z 1) 위로 못 나옵니다. 아이콘을 메모지 밖 틀(.note-wrap)에 두고 z 2로 올립니다. 틀이 정렬·겹침·들여쓰기·폭을 맡고 안의 메모지는 틀을 채웁니다. 나타나기(is-in)는 틀과 메모지에 따로 겁니다 */
+    .note-wrap { position: relative; width: fit-content; max-width: 100%; }
+    .note-wrap > .note { width: 100%; max-width: none; margin-top: 0; }
+    .note-wrap--right { align-self: flex-end; }
+    .note-wrap--left { align-self: flex-start; }
+    .note-wrap--tuck { margin-top: -48px; }
+    .note-wrap--tuck > .note { padding-top: 44px; }
+    .note-wrap__who { z-index: 2; opacity: 0; transition: opacity 0.45s ease-out; }
+    .note-wrap.is-in .note-wrap__who { opacity: 1; }
+    .note-wrap--right .note-wrap__who { right: -8px; transform: rotate(6deg); }
+    .note-wrap--left .note-wrap__who { left: -9px; transform: rotate(-5deg); }
+    @media (prefers-reduced-motion: reduce) { .note-wrap__who { opacity: 1; transition: none; } }
+    /* 폭 변형(T87. 틀 규칙 뒤에 두어 틀의 fit-content를 이깁니다). 지금의 4/5로 줄인 메모지. Scene6 첫 메모지는 글만큼(85%)의 4/5인 68%, Scene7 첫 메모지는 전체의 4/5인 80% */
+    .note--w68 { width: 68%; }
+    .note--w80 { width: 80%; }
     /* 합창 메모지(T65). 화자 둘이 오른쪽 위에 나란히. 바깥쪽이 첫째, 안쪽(`--inner`)이 둘째 */
     .note--right .note__who--inner { right: 46px; transform: rotate(-4deg); }
     .photo-paper--center { align-self: center; transform: rotate(0.4deg); }
     .photo-paper--wide { width: 90%; }   /* 가로 사진(Scene7 · 8)은 폭 9/10(T83). 자리표시(T65)는 웨딩 사진 셋이 들어와 지웠습니다 */
-    /* 컷아웃 스티커(T61 · T62 · T67). 본문 안의 float라 글이 그 네모 영역(여백 포함)을 피해 흐릅니다(실루엣 아님, T62). 앞의 빈 float(`.note__push`, 폭 0 · 두 줄 높이)를 clear로 넘어 셋째 줄부터 비킵니다. 아래 여백은 음수로 두지 않습니다. 음수면 그림 아랫부분을 상자 밖으로 쳐서 줄이 적은 넓은 화면에서 마지막 줄이 그림에 덮였습니다(T67). 그래서 컷아웃은 메모지 안에 온전히 있고 바깥쪽으로만 조금 나갑니다 */
-    .note__push { float: right; width: 0; height: 58px; }   /* 두 줄(18px × 1.6) */
-    .note__push--left { float: left; }
+    /* 컷아웃 스티커(T61 · T62 · T67 · T87). 메모지의 마지막 문장을 칸(.note__row)에 넣고 그 옆에 고정 크기 셀(.note__stamp-cell)을 두어 글이 셀을 피해 흐릅니다(사각 영역, T62). 컷아웃은 셀의 오른쪽 아래에 절대 위치로 붙어 셀 밖으로 오른쪽 34px · 아래 64px 삐져나옵니다. 그래서 메모지 높이는 글(과 셀)만큼이고 컷아웃은 종이 아래로 44px 걸칩니다(T87. 전에는 float라 메모지가 컷아웃 높이까지 커졌습니다). 글이 셀보다 길어도 셀이 칸 아래에 붙어 컷아웃이 글을 덮지 않습니다 */
+    .note__row { position: relative; display: flex; align-items: flex-end; gap: 8px; }   /* 글과 컷아웃 사이 8px(16의 반, T87) */
+    .note__row .note__text { flex: 1 1 auto; min-width: 0; }
+    .note__stamp-cell { flex: none; position: relative; width: 164px; height: 96px; }   /* 컷아웃 198×160 중 안에 드는 부분 */
     .note__stamp {
-      float: right; clear: right; position: relative; z-index: 1; height: 144px; width: auto;
-      margin: 10px -22px 0 16px;   /* 안쪽 여백 16px은 회전(5°)으로 상자 밖에 그려지는 부분 몫. 오른쪽으로 10px 더(T62) */
+      position: absolute; right: -34px; bottom: -64px; z-index: 1; height: 160px; width: auto;   /* 144px에서 키움(T87) */
       transform: rotate(5deg);
       filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.22)) drop-shadow(0 6px 10px rgba(70, 48, 24, 0.28));
     }
@@ -162,7 +178,9 @@
     .photo-paper--left { align-self: flex-start; transform: rotate(0.7deg); }
     /* 신부 메모지(T60 · T61). 본문은 24px 오른쪽으로. 신부 컷아웃은 1.5배(216px)로 왼쪽에 서고 셋째 줄부터 글이 오른쪽으로 비켜 흐릅니다 */
     .note--bride .note__text { padding-left: 24px; }
-    .note__stamp--left { float: left; clear: left; height: 216px; margin: 0 16px 0 -12px; transform: rotate(-4deg); }   /* 왼쪽으로 10px 더(T62) */
+    .note__row--left { flex-direction: row-reverse; gap: 16px; }   /* 신부는 컷아웃이 왼쪽, 글과의 사이 16px */
+    .note__stamp-cell--left { width: 75px; height: 152px; }   /* 컷아웃 87×216 중 안에 드는 부분 */
+    .note__stamp--left { right: auto; left: -12px; transform: rotate(-4deg); height: 216px; }   /* 왼쪽으로 12px 걸침(T62) */
 
     /* 떠 있는 바로 가기 버튼 */
     .fab {
@@ -387,7 +405,11 @@
       <div class="note note--left note--memo note--tuck">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
         <img class="note__who" src="../../public/character/rabbit-1.png" width="240" height="164" alt="">
-        <p class="note__text"><span class="note__push"></span><img class="note__stamp" src="../../public/scene4/groom-child-ride.png" width="401" height="324" alt="">제 신랑은 어릴 때 시를 써서 상도 받던 문학소년이었대요. 무협지를 좋아해서 작가를 꿈꾸기도 했고요. 그랬던 아이는 커서 냉철하고 이성적인 개발자가 됐어요!</p>
+        <p class="note__text">제 신랑은 어릴 때 시를 써서 상도 받던 문학소년이었대요. 무협지를 좋아해서 작가를 꿈꾸기도 했고요.</p>
+        <div class="note__row">
+          <p class="note__text">그랬던 아이는 커서 냉철하고 이성적인 개발자가 됐어요!</p>
+          <div class="note__stamp-cell"><img class="note__stamp" src="../../public/scene4/groom-child-ride.png" width="401" height="324" alt=""></div>
+        </div>
       </div>
     </section>
 
@@ -399,12 +421,16 @@
       <div class="note note--right note--memo note--tuck note--bride">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
         <img class="note__who" src="../../public/character/otter-basic.png" width="240" height="194" alt="">
-        <p class="note__text"><span class="note__push note__push--left"></span><img class="note__stamp note__stamp--left" src="../../public/scene5/bride-child-cutout.png" width="130" height="324" alt="">제 신부는 다섯 살 때 빗소리가 좋다며 혼자 우산 쓰고 동네를 걷던 아이였대요. 글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고 다녔고요. 그랬던 아이는 커서 상황을 분석하고 길을 찾는 사업전략가가 됐어요. 그래도 여전히 꿈을 꾸는 사람이고요.</p>
+        <p class="note__text">제 신부는 다섯 살 때 빗소리가 좋다며 혼자 우산 쓰고 동네를 걷던 아이였대요. 글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고 다녔고요.</p>
+        <div class="note__row note__row--left">
+          <p class="note__text">그랬던 아이는 커서 상황을 분석하고 길을 찾는 사업전략가가 됐어요. 그래도 여전히 꿈을 꾸는 사람이고요.</p>
+          <div class="note__stamp-cell note__stamp-cell--left"><img class="note__stamp note__stamp--left" src="../../public/scene5/bride-child-cutout.png" width="130" height="324" alt=""></div>
+        </div>
       </div>
     </section>
 
     <section id="part2-groom" class="block story">
-      <div class="note note--right note--memo">
+      <div class="note note--left note--memo note--who-right note--w68">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
         <img class="note__who" src="../../public/character/otter-basic.png" width="240" height="194" alt="">
         <img class="note__who note__who--inner" src="../../public/character/rabbit-2.png" width="240" height="198" alt="">
@@ -431,10 +457,12 @@
         <img class="note__paper" src="../../public/paper/note.png" alt="">
         <img class="photo-paper__photo" src="../../public/scene7/bride.jpg" width="1100" height="720" alt="신부 웨딩 사진">
       </div>
-      <div class="note note--right note--memo note--tuck">
-        <img class="note__paper" src="../../public/paper/note.png" alt="">
-        <img class="note__who" src="../../public/character/otter-1.png" width="240" height="183" alt="">
-        <p class="note__text">사실 저는 그때 연애 생각이 없었어요. 당분간 일에만 집중하자는 마음이었죠. 그런데 이 사람이 자꾸 제 주변을 맴돌더라고요.</p>
+      <div class="note-wrap note-wrap--right note-wrap--tuck note--w80">
+        <div class="note note--right note--memo">
+          <img class="note__paper" src="../../public/paper/note.png" alt="">
+          <p class="note__text">사실 저는 그때 연애 생각이 없었어요. 당분간 일에만 집중하자는 마음이었죠. 그런데 이 사람이 자꾸 제 주변을 맴돌더라고요.</p>
+        </div>
+        <img class="note__who note-wrap__who" src="../../public/character/otter-1.png" width="240" height="183" alt="">
       </div>
       <div class="note note--right note--memo note--indent note--who-left">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
@@ -448,10 +476,12 @@
         <img class="note__paper" src="../../public/paper/note.png" alt="">
         <img class="photo-paper__photo" src="../../public/scene8/couple.jpg" width="1100" height="733" alt="이산하와 송시야">
       </div>
-      <div class="note note--right note--memo note--tuck note--indent">
-        <img class="note__paper" src="../../public/paper/note.png" alt="">
-        <img class="note__who" src="../../public/character/otter-3.png" width="223" height="240" alt="">
-        <p class="note__text">어른이 되고는 꿈을 꾸지 않던 제가, 이 사람을 만나 다시 꿈꾸게 됐어요. 사랑도 많아졌고요.</p>
+      <div class="note-wrap note-wrap--right note-wrap--tuck note--indent">
+        <div class="note note--right note--memo">
+          <img class="note__paper" src="../../public/paper/note.png" alt="">
+          <p class="note__text">어른이 되고는 꿈을 꾸지 않던 제가, 이 사람을 만나 다시 꿈꾸게 됐어요. 사랑도 많아졌고요.</p>
+        </div>
+        <img class="note__who note-wrap__who" src="../../public/character/otter-3.png" width="223" height="240" alt="">
       </div>
       <div class="note note--left note--memo">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
@@ -603,7 +633,7 @@
       document.getElementById('fontbarHide').addEventListener('click', function () { document.getElementById('fontbar').hidden = true; });
 
       // 쪽지는 화면에 들어올 때 한 번 내려앉으며 나타납니다(T51). 움직임 줄이기면 CSS가 바로 보이게 합니다
-      var notes = Array.prototype.slice.call(document.querySelectorAll('.note'));
+      var notes = Array.prototype.slice.call(document.querySelectorAll('.note, .note-wrap'));
       if ('IntersectionObserver' in window) {
         var noteObserver = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) { if (entry.isIntersecting) { entry.target.classList.add('is-in'); noteObserver.unobserve(entry.target); } });
