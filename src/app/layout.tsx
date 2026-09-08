@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image", title: SITE_TITLE, description: SITE_DESCRIPTION, images: ["/og/share.jpg"] },
   robots: { index: false, follow: false },
-  // 아이콘(디자인 논의 T70). favicon.ico · icon1~4.png · apple-icon.png은 app/ 파일 규약으로 자동 연결되고, 매니페스트는 manifest.ts입니다. 아래는 규약이 없는 것만
+  // 아이콘(디자인 논의 T70 · T136 장미 인장). favicon.ico · icon1~4.png · apple-icon.png은 app/ 파일 규약으로 자동 연결되고, 매니페스트는 manifest.ts입니다. 아래는 규약이 없는 것만
   appleWebApp: { title: "이산하 · 송시야 청첩장" },
   other: {
     "msapplication-TileColor": "#F3ECDF",
