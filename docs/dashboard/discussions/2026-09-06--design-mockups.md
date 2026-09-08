@@ -1387,6 +1387,19 @@ jira:
 - 행의 세 줄을 관계(`.account__role`. "신랑 아버지" · "신랑 어머니" · "신랑" · "신부 아버지" · "신부 어머니" · "신부") · 계좌번호(`.account__num`) · 은행 + 성함(`.account__holder`)으로 바꿨다. 굵기 · 크기는 T130과 같다(관계 15px · 700, 아래 두 줄 14px · 300). "신랑 측" · "신부 측" 소제목은 두었다. 복사 표시와 동작은 그대로다.
 - 확인(WebKit 390, Next.js): 여섯 행 캡처, 계산된 글꼴 굵기 700 / 300 / 300, 읽기 이름표 "신랑 아버지 하나 이종노 468-… 복사". 오류 0. tsc · eslint 통과.
 
+### 2026-09-09 00:35:43 이전 · 이산하 (T132)
+
+- 오른쪽 아래 떠 있는 햄버거 단추가 너무 흔한 앱 UI 같다. 사이트 테마대로 고쳐 달라. 항목은 오시는 길 · 사진첩 · 마음 전하는 곳 · 공유하기 넷이고 공유하기는 카카오톡 공유(SDK)다.
+- OG. 이미지는 `docs/design/og/og-image.jpeg`. 카카오톡 공유 단추도 넣는다. title "이산하 ♥ 송시야 결혼합니다.", description "26년 10월 9일 금요일 오후 6시 30분". description에 줄바꿈이 된다면 "더채플앳청담"을 다음 줄에. 더 전달할 것이 있으면 알려 달라.
+
+### 2026-09-09 00:35:43 · Claude (T132)
+
+- 떠 있는 메뉴. 단추는 테이프로 붙인 작은 쪽지(64×46, 2°) 위 손글씨(개구) "메뉴"이고 열리면 "닫기"로 바뀐다. 누르면 그 위로 쪽지 한 장(168px, -1.5°, 위 가운데 테이프)이 8px 내려앉으며 나타나고 네 항목이 오크색 점과 손글씨 18px로 있다. 종이 결 · 테이프 · 그늘 · 기울기는 이야기 구간 쪽지의 부품을 그대로 쓴다(`.note__paper` · `tape.png` · `tape-short.png`). 오크색 동그라미와 ≡ · × 아이콘은 뺐다. 항목 셋은 앵커(`#directions` · `#gallery` · `#gift`), 공유하기는 단추다.
+- 카카오톡 공유. 지도와 같은 앱의 JavaScript 키(`NEXT_PUBLIC_KAKAO_MAP_KEY`)로 JS SDK 2.8.3(t1.kakaocdn.net, integrity는 파일에서 잰 값)을 메뉴를 열 때 미리 싣고, 공유하기를 누르면 `Kakao.init` 뒤 `Share.sendDefault` 피드 템플릿으로 보낸다. 내용은 제목 · 설명(날짜 줄바꿈 예식장) · 사진(`/og/share.jpg` 1600×800) · 단추 "청첩장 보기"(`/`) · "위치 보기"(`/#directions`). 단추 · 이미지 URL은 앱에 등록한 도메인이어야 해서 카카오맵 링크 대신 우리 주소를 쓴다. SDK가 이미 실려 있으면 기다리지 않아 사용자 동작 안에서 창이 열린다. 키가 없거나 SDK 실패면 기기 공유 창(`navigator.share`), 그것도 없으면 주소 복사 + 알림. 조립본의 공유하기는 기기 공유 창 · 주소 복사만이다(키 · 도메인이 필요해서).
+- OG. `layout.tsx`에 `metadataBase`(Vercel이 빌드마다 주는 production 도메인 `VERCEL_PROJECT_PRODUCTION_URL`. 커스텀 도메인을 붙이면 그것으로 바뀜. 로컬은 localhost, `NEXT_PUBLIC_SITE_URL`로 덮어쓸 수 있음) · `openGraph`(type website · locale ko_KR · url / · siteName "이산하 · 송시야 청첩장" · title · description · 이미지 1600×800 alt) · `twitter` summary_large_image. 이미지는 `docs/design/og/og-image.jpeg`(3716×1858, 이미 2:1)를 1600×800 JPEG 82로 줄인 `public/og/share.jpg`(158KB). 파일 규약(`opengraph-image.jpg`) 대신 `public/`에 둔 것은 카카오톡 공유 메시지도 같은 절대 URL을 쓰기 때문이다. `description`은 "26년 10월 9일 금요일 오후 6시 30분\n더채플앳청담"으로 셋(meta description · og · twitter) 다 같다. 줄바꿈은 카카오톡 공유 메시지(SDK)에서는 두 줄로 보이고, URL 미리보기(OG 스크랩)에서 지켜지는지는 배포 뒤 실제 카드로 확인해야 한다(한 줄로 붙으면 "… 6시 30분 더채플앳청담"으로 보인다. 그때 빼거나 " · "로 잇는다).
+- 확인(WebKit 390, Next.js): 메뉴 열림 · 닫힘 캡처, 항목 넷의 앵커, 메뉴를 열면 SDK 스크립트가 붙고(`Share`는 init 전에는 없음) 공유하기를 누르면 init 뒤 페이로드가 위 내용대로 감(sendDefault를 가로채 확인). 서버 HTML에 og:title · og:description(줄바꿈 포함) · og:url · og:site_name · og:locale · og:image(폭 · 높이 · alt) · og:type · twitter 넷, `/og/share.jpg` 200. 조립본도 오류 0. tsc · eslint 통과.
+- 이산하가 할 것. 카카오 개발자 콘솔에서 앱 이름 · 아이콘(메시지 하단에 뜸)을 청첩장답게, JavaScript SDK 도메인에 배포 주소(`https://wedding-invitation-web-mu.vercel.app`)와 `http://localhost:3000`이 있는지 확인. 배포 뒤 카카오 공유 디버거(developers.kakao.com/tool/debugger/sharing)에서 주소를 넣어 캐시를 다시 스크랩하고 카드에서 줄바꿈 · 사진을 본다. Vercel 환경 변수는 그대로다(같은 키).
+
 ## 결정
 
 행의 내용은 불변입니다. 상태 칸만 갱신할 수 있습니다.
