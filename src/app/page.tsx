@@ -132,7 +132,7 @@ export default function Home() {
 
   // 쪽지는 화면에 들어올 때 한 번 내려앉으며 나타납니다(디자인 논의 T51). 움직임 줄이기면 CSS가 바로 보이게 합니다
   useEffect(() => {
-    const notes = Array.from(document.querySelectorAll<HTMLElement>(".note"));
+    const notes = Array.from(document.querySelectorAll<HTMLElement>(".note, .note-wrap"));
     if (!("IntersectionObserver" in window)) {
       notes.forEach((el) => el.classList.add("is-in"));
       return;
@@ -272,12 +272,14 @@ export default function Home() {
           <div className="note note--left note--memo note--tuck">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/rabbit-1.png" width={240} height={164} alt="" />
-            <p className="note__text">
-              <span className="note__push" />
-              <img className="note__stamp" src="/scene4/groom-child-ride.png" width={401} height={324} alt="" />
-              제 신랑은 어릴 때 시를 써서 상도 받던 문학소년이었대요. 무협지를 좋아해서 작가를 꿈꾸기도 했고요. 그랬던 아이는 커서 냉철하고 이성적인
-              개발자가 됐어요!
-            </p>
+            <p className="note__text">제 신랑은 어릴 때 시를 써서 상도 받던 문학소년이었대요. 무협지를 좋아해서 작가를 꿈꾸기도 했고요.</p>
+            <div className="note__row">
+              <p className="note__text">그랬던 아이는 커서 냉철하고 이성적인
+              개발자가 됐어요!</p>
+              <div className="note__stamp-cell">
+                <img className="note__stamp" src="/scene4/groom-child-ride.png" width={401} height={324} alt="" />
+              </div>
+            </div>
           </div>
         </section>
         <section id="part1-bride" className="block story">
@@ -288,16 +290,18 @@ export default function Home() {
           <div className="note note--right note--memo note--tuck note--bride">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/otter-basic.png" width={240} height={194} alt="" />
-            <p className="note__text">
-              <span className="note__push note__push--left" />
-              <img className="note__stamp note__stamp--left" src="/scene5/bride-child-cutout.png" width={130} height={324} alt="" />
-              제 신부는 다섯 살 때 빗소리가 좋다며 혼자 우산 쓰고 동네를 걷던 아이였대요. 글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고 다녔고요. 그랬던 아이는
-              커서 상황을 분석하고 길을 찾는 사업전략가가 됐어요. 그래도 여전히 꿈을 꾸는 사람이고요.
-            </p>
+            <p className="note__text">제 신부는 다섯 살 때 빗소리가 좋다며 혼자 우산 쓰고 동네를 걷던 아이였대요. 글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고 다녔고요.</p>
+            <div className="note__row note__row--left">
+              <p className="note__text">그랬던 아이는
+              커서 상황을 분석하고 길을 찾는 사업전략가가 됐어요. 그래도 여전히 꿈을 꾸는 사람이고요.</p>
+              <div className="note__stamp-cell note__stamp-cell--left">
+                <img className="note__stamp note__stamp--left" src="/scene5/bride-child-cutout.png" width={130} height={324} alt="" />
+              </div>
+            </div>
           </div>
         </section>
         <section id="part2-groom" className="block story">
-          <div className="note note--right note--memo">
+          <div className="note note--left note--memo note--who-right note--w68">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/otter-basic.png" width={240} height={194} alt="" />
             <img className="note__who note__who--inner" src="/character/rabbit-2.png" width={240} height={198} alt="" />
@@ -323,10 +327,12 @@ export default function Home() {
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="photo-paper__photo" src="/scene7/bride.jpg" width={1100} height={720} alt="신부 웨딩 사진" />
           </div>
-          <div className="note note--right note--memo note--tuck">
-            <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/otter-1.png" width={240} height={183} alt="" />
-            <p className="note__text">사실 저는 그때 연애 생각이 없었어요. 당분간 일에만 집중하자는 마음이었죠. 그런데 이 사람이 자꾸 제 주변을 맴돌더라고요.</p>
+          <div className="note-wrap note-wrap--right note-wrap--tuck note--w80">
+            <div className="note note--right note--memo">
+              <img className="note__paper" src="/paper/note.png" alt="" />
+              <p className="note__text">사실 저는 그때 연애 생각이 없었어요. 당분간 일에만 집중하자는 마음이었죠. 그런데 이 사람이 자꾸 제 주변을 맴돌더라고요.</p>
+            </div>
+            <img className="note__who note-wrap__who" src="/character/otter-1.png" width={240} height={183} alt="" />
           </div>
           <div className="note note--right note--memo note--indent note--who-left">
             <img className="note__paper" src="/paper/note.png" alt="" />
@@ -339,10 +345,12 @@ export default function Home() {
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="photo-paper__photo" src="/scene8/couple.jpg" width={1100} height={733} alt="이산하와 송시야" />
           </div>
-          <div className="note note--right note--memo note--tuck note--indent">
-            <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/otter-3.png" width={223} height={240} alt="" />
-            <p className="note__text">어른이 되고는 꿈을 꾸지 않던 제가, 이 사람을 만나 다시 꿈꾸게 됐어요. 사랑도 많아졌고요.</p>
+          <div className="note-wrap note-wrap--right note-wrap--tuck note--indent">
+            <div className="note note--right note--memo">
+              <img className="note__paper" src="/paper/note.png" alt="" />
+              <p className="note__text">어른이 되고는 꿈을 꾸지 않던 제가, 이 사람을 만나 다시 꿈꾸게 됐어요. 사랑도 많아졌고요.</p>
+            </div>
+            <img className="note__who note-wrap__who" src="/character/otter-3.png" width={223} height={240} alt="" />
           </div>
           <div className="note note--left note--memo">
             <img className="note__paper" src="/paper/note.png" alt="" />
