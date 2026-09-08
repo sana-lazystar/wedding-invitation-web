@@ -5,6 +5,16 @@
 // 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
 // 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T49). 편지지는 커버 자체이고, 봉투 안에서 봉투 폭의 92%로 있다가 봉투가 내려가는 것과 동시에 올라오고, 이어서 화면 전체로 커집니다. 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Keyboard, Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import gallery from "@/content/gallery.json";
+
+// 사진첩(디자인 논의 T103 · T104). 매니페스트 순서가 표시 순서이고 앞 8장이 타일, 9번째 타일은 나머지 장수(+N개)입니다. 사진은 docs/scripts/gallery-jpeg.py의 잠정 산출이고 어느 8장을 보일지는 이산하가 나중에 고릅니다
+const GALLERY_PREVIEW = 8;
+const galleryMore = gallery.length - GALLERY_PREVIEW;
+type Viewer = { kind: "comic" } | { kind: "gallery"; index: number };
 
 export default function Home() {
   const fabRef = useRef<HTMLElement>(null);
@@ -17,6 +27,11 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [introDone, setIntroDone] = useState(false);
   const vhLockedRef = useRef(false);
+  const comicViewerRef = useRef<HTMLDivElement>(null);
+  const galleryViewerRef = useRef<HTMLDivElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);   // 덮개를 연 버튼. 닫으면 초점을 돌립니다
+  const [viewer, setViewer] = useState<Viewer | null>(null);
+  const [galleryIndex, setGalleryIndex] = useState(0);
 
   // 화면 높이 고정 · 확대 막기(디자인 논의 T83). 카카오톡 인앱 브라우저는 스크롤로 주소창이 사라질 때 창 높이 자체가 바뀌어 svh까지 변하므로, 처음 잰 높이를 --vh-fixed(px)로 박습니다. 폭이 바뀌면(회전 · 창 크기 조절) 다시 재고 높이만 바뀌는 것(툴바)은 무시합니다. 인앱 브라우저는 열린 직후 툴바를 자리 잡으며 높이가 한 번 더 바뀌므로, 첫 터치 전(진입 장면 중)에는 높이 변화도 받습니다. iOS는 메타의 user-scalable=no를 무시하므로 손가락 두 개 움직임과 제스처 이벤트도 막습니다
   useEffect(() => {
@@ -158,6 +173,35 @@ export default function Home() {
     notes.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
+
+  // 덮개(뷰어) 공통(디자인 논의 T102 · T103). 열면 뒤 페이지 스크롤을 막고(html.is-viewer + 덮개 안 touchmove 막음) Esc로 닫으며, 닫으면 연 버튼으로 초점을 돌립니다. 덮개의 실제 높이 · 폭을 --viewer-h · --viewer-w로 넣어 만화(90° 회전 상자)와 인화지 크기 계산에 씁니다(인앱 브라우저는 vh가 툴바에 따라 다릅니다). 만화 뷰어는 어디를 탭해도 닫히고(돌린 그림 상자가 화면 전체라 바탕만 골라 탭할 수 없습니다), 사진 뷰어는 × · Esc로만 닫힙니다(탭은 넘기기)
+  useEffect(() => {
+    const el = viewer?.kind === "comic" ? comicViewerRef.current : viewer?.kind === "gallery" ? galleryViewerRef.current : null;
+    if (!viewer || !el) return;
+    const root = document.documentElement;
+    const opener = openerRef.current;
+    const size = () => {
+      el.style.setProperty("--viewer-w", `${el.clientWidth}px`);
+      el.style.setProperty("--viewer-h", `${el.clientHeight}px`);
+    };
+    const onMove = (e: TouchEvent) => e.preventDefault();
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setViewer(null);
+    };
+    size();
+    root.classList.add("is-viewer");
+    window.addEventListener("resize", size);
+    el.addEventListener("touchmove", onMove, { passive: false });
+    document.addEventListener("keydown", onKeyDown);
+    el.querySelector<HTMLButtonElement>(".comic-viewer__close, .gallery-viewer__close")?.focus({ preventScroll: true });
+    return () => {
+      root.classList.remove("is-viewer");
+      window.removeEventListener("resize", size);
+      el.removeEventListener("touchmove", onMove);
+      document.removeEventListener("keydown", onKeyDown);
+      opener?.focus({ preventScroll: true });
+    };
+  }, [viewer]);
 
   useEffect(() => {
     const onDocumentClick = (e: MouseEvent) => {
@@ -371,7 +415,127 @@ export default function Home() {
             <p className="note__text">MBTI 궁합이 &apos;파국&apos;으로 나올 만큼 성향이 다르지만, 달랐기에 서로의 빈틈을 채우고, 장점은 더 빛낼 수 있었어요.</p>
           </div>
         </section>
-        {/* 9쪽(초대)부터 여기 아래에 이어 붙입니다 */}
+        {/* 9쪽 초대(Scene9)는 수정 사항이 있어 뒤로 미루고, 나중에 이 자리(Scene8과 Scene10 사이)에 끼웁니다(디자인 논의 T102) */}
+        {/* 10. 추신 + 만화(와이어프레임 11쪽 위 절반, 디자인 논의 T102). 사진첩(같은 쪽 아래 절반)은 다음 구획입니다(T103) */}
+        <section id="comic" className="block story comic">
+          <div className="note note--left note--memo note--ps">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="note__tape" src="/paper/tape.png" alt="" />
+            <p className="note__text">P.S. 저희가 결혼을 언제 결심했냐면요!</p>
+          </div>
+          <button
+            type="button"
+            className="photo-paper comic__paper"
+            id="comicOpen"
+            aria-haspopup="dialog"
+            aria-controls="comicViewer"
+            aria-label="만화 크게 보기"
+            onClick={(e) => {
+              openerRef.current = e.currentTarget;
+              setViewer({ kind: "comic" });
+            }}
+          >
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="photo-paper__photo" src="/scene10/comic.jpg" width={1664} height={1087} alt="네 컷 만화. 결혼을 결심한 이야기" loading="lazy" />
+            <span className="comic__hint" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M7.5 1.5h3v3M4.5 10.5h-3v-3M10.5 1.5L7 5M1.5 10.5L5 7" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              크게 보기
+            </span>
+          </button>
+        </section>
+        {/* 사진첩(와이어프레임 11쪽 아래 절반, 디자인 논의 T103 · T104). 추신과 같은 테이프 쪽지에 "사진첩", 나무 틀 안에 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 흐린 사진 위에 나머지 장수 */}
+        <section id="gallery" className="block story gallery">
+          <div className="note note--left note--memo note--ps">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="note__tape" src="/paper/tape.png" alt="" />
+            <p className="note__text">사진첩</p>
+          </div>
+          <div className="gallery__board">
+            <img className="gallery__frame" src="/scene10/wood-frame.png" width={800} height={800} alt="" />
+            <ul className="gallery__grid" id="galleryGrid">
+              {gallery.slice(0, GALLERY_PREVIEW + 1).map((item, i) => {
+                const more = i === GALLERY_PREVIEW;
+                return (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      className={more ? "gallery__tile gallery__tile--more" : "gallery__tile"}
+                      data-index={i}
+                      aria-label={more ? `사진 ${i + 1}부터 크게 보기. ${galleryMore}장 더` : `사진 ${i + 1} 크게 보기`}
+                      onClick={(e) => {
+                        openerRef.current = e.currentTarget;
+                        setGalleryIndex(i);
+                        setViewer({ kind: "gallery", index: i });
+                      }}
+                    >
+                      <img className="gallery__thumb" src={`/gallery/${item.id}-thumb.jpg`} width={480} height={480} alt="" loading="lazy" />
+                      {more && (
+                        <span className="gallery__more" aria-hidden="true">
+                          +{galleryMore}개
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </section>
+        {/* 12쪽(오시는 길)부터 여기 아래에 이어 붙입니다 */}
+      </div>
+
+      {/* 만화 뷰어(디자인 논의 T102). 그림은 같은 파일이라 다시 내려받지 않습니다 */}
+      <div
+        className="comic-viewer"
+        id="comicViewer"
+        ref={comicViewerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="만화 크게 보기"
+        hidden={viewer?.kind !== "comic"}
+        onClick={() => setViewer(null)}
+      >
+        <img className="comic-viewer__img" src="/scene10/comic.jpg" width={1664} height={1087} alt="네 컷 만화. 결혼을 결심한 이야기" />
+        <button type="button" className="comic-viewer__close" aria-label="닫기">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M6 6l10 10M16 6L6 16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      {/* 사진 뷰어(디자인 논의 T103 · T104). 타일을 누르면 그 사진부터 Swiper로 봅니다. Swiper는 열려 있을 때만 그려 initialSlide가 먹게 합니다. 사진은 흰 테두리 인화지에 테이프, 단추는 종이, 장수는 손글씨 */}
+      <div className="gallery-viewer" id="galleryViewer" ref={galleryViewerRef} role="dialog" aria-modal="true" aria-label="사진첩" hidden={viewer?.kind !== "gallery"}>
+        {viewer?.kind === "gallery" && (
+          <Swiper
+            className="gallery-viewer__swiper"
+            modules={[Navigation, Keyboard]}
+            navigation
+            keyboard={{ enabled: true }}
+            initialSlide={viewer.index}
+            lazyPreloadPrevNext={2}
+            onSlideChange={(s) => setGalleryIndex(s.activeIndex)}
+          >
+            {gallery.map((item, i) => (
+              <SwiperSlide key={item.id}>
+                <figure className="gallery-viewer__print" style={{ "--ar": `${item.width} / ${item.height}` } as React.CSSProperties}>
+                  <img className="gallery-viewer__img" src={`/gallery/${item.id}.jpg`} width={item.width} height={item.height} alt={`사진 ${i + 1}`} loading="lazy" />
+                  <img className="gallery-viewer__tape gallery-viewer__tape--left" src="/paper/tape.png" alt="" />
+                  <img className="gallery-viewer__tape gallery-viewer__tape--right" src="/paper/tape.png" alt="" />
+                </figure>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
+        <div className="gallery-viewer__count" aria-live="polite">
+          {galleryIndex + 1} / {gallery.length}
+        </div>
+        <button type="button" className="gallery-viewer__close" aria-label="닫기" onClick={() => setViewer(null)}>
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M6 6l10 10M16 6L6 16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+        </button>
       </div>
 
       <nav className="fab" ref={fabRef} data-open={menuOpen ? "true" : "false"} aria-label="바로 가기">

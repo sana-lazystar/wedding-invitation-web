@@ -175,6 +175,79 @@ body {
 #part1-bride .note--memo { margin-bottom: calc(10.26 * min(1vw, 4.3px)); }   /* 390px에서 40(T100) */
 #part2-groom { padding-top: 70px; }   /* Scene6 위는 30에 20px 더(T94), 다시 20px 더(T96) */
 
+/* 10. 추신 + 만화(와이어프레임 11쪽 위 절반, T102). 편지(Scene9 초대) 뒤에 붙는 추신입니다. 마스킹테이프로 바탕에 붙인 쪽지 한 장에 "P.S. …" 한 줄이 있고, 그 아래 네 컷 만화(이산하가 준 그림 한 장, 1664×1087)를 사진 종이처럼 흰 테두리에 붙였습니다. 추신은 이야기 구간의 메모지와 같은 부품(.note)이라 같은 종이 · 글꼴 · 나타나기이고, 테이프만 더해 "나중에 덧붙인 것"으로 읽힙니다. 만화 종이는 버튼이라 누르면 뷰어가 열립니다 */
+.comic { padding-top: 30px; }
+.note--ps { --tilt: -1.2deg; padding: 14px 18px 14px 16px; }   /* 한 줄이라 위아래 여백은 14px */
+.note__tape { position: absolute; top: -9px; left: 14px; width: 72px; height: auto; transform: rotate(-3deg); pointer-events: none; }   /* 테이프 그림(public/paper/tape.png, 원본 assets/masking-tape.svg). 쪽지 왼쪽 위 변에 걸칩니다 */
+.comic__paper {
+  width: 100%; align-self: center; margin: 0; border: 0; padding: 4px; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+  transform: none; -webkit-tap-highlight-color: transparent;   /* 사진 종이(-0.7°)와 달리 기울이지 않습니다(T103. T102에는 0.5°) */
+}
+.comic__paper:focus-visible { outline: 2px solid var(--oak); outline-offset: 4px; }
+.comic__hint {   /* 오른쪽 위. 오른쪽 아래는 떠 있는 메뉴 버튼(고정)에 가려집니다 */
+  position: absolute; right: 12px; top: 12px; z-index: 1; display: inline-flex; align-items: center; gap: 4px; padding: 6px 10px 6px 8px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88); box-shadow: 0 1px 3px rgba(70, 48, 24, 0.28);
+  font-family: var(--font-ui); font-size: 11px; font-weight: 500; line-height: 1; letter-spacing: 0.02em; color: var(--ink-soft);
+}
+/* 만화 뷰어. 화면 전체를 바탕색(베이지)으로 덮고 만화를 90° 돌려(시계 방향. 폰을 왼쪽으로 눕히면 바로 읽힙니다) 화면에 맞춥니다. 비율은 그대로이고 남는 위아래는 바탕색입니다. 그림 상자는 돌리기 전 기준으로 폭 = 화면 높이 · 높이 = 화면 폭이라(스크립트가 --viewer-w · --viewer-h로 잰 값) 돌린 뒤 화면을 꼭 채우고, object-fit: contain이 비율을 지킵니다. 화면이 이미 가로(폰을 돌린 상태)면 돌리지 않습니다. 닫기는 × · 어디든 탭 · Esc. 열려 있는 동안 뒤 페이지는 스크롤되지 않습니다(html.is-viewer) */
+.comic-viewer { position: fixed; inset: 0; z-index: 45; overflow: hidden; background: var(--paper-bg); touch-action: none; animation: viewer-in 0.22s ease-out both; }
+.comic-viewer[hidden] { display: none; }
+.comic-viewer__img {
+  position: absolute; left: 50%; top: 50%; width: var(--viewer-h, 100vh); height: var(--viewer-w, 100vw); max-width: none; object-fit: contain;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+@media (orientation: landscape) { .comic-viewer__img { width: var(--viewer-w, 100vw); height: var(--viewer-h, 100vh); transform: translate(-50%, -50%); } }
+.comic-viewer__close {
+  position: absolute; top: calc(12px + env(safe-area-inset-top)); right: calc(12px + env(safe-area-inset-right)); width: 44px; height: 44px; border-radius: 50%; border: 0; padding: 0;
+  display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.78); color: var(--ink); box-shadow: 0 2px 8px rgba(70, 48, 24, 0.22); cursor: pointer;
+}
+.comic-viewer__close:focus-visible { outline: 2px solid var(--oak); outline-offset: 3px; }
+.is-viewer { overflow: hidden; }
+@keyframes viewer-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .comic-viewer { animation: none; } }
+
+/* 사진첩(와이어프레임 11쪽 아래 절반, T103). 추신과 같은 테이프 쪽지에 "사진첩", 그 아래 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 9번째 사진을 흐리게 깔고 나머지 장수(+N개)를 씁니다. 타일은 흰 테두리 3px의 작은 사진 종이이고 기울이지 않습니다. 어느 타일을 눌러도 그 사진부터 뷰어가 열립니다 */
+/* 나무 틀(T104). 널빤지 넉 장을 바람개비꼴로 이어 붙인 정사각 그림(public/scene10/wood-frame.png ← assets/wood-frame.svg)을 타일 판 뒤에 깔고, 판 안쪽 여백을 널빤지 폭(틀의 5.5%) + 틈 2%로 둡니다. 타일 판이 정사각이라 틀도 정사각으로 맞습니다. 그늘은 CSS */
+.gallery__board { position: relative; padding: 7.5%; }
+.gallery__frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.25)) drop-shadow(0 10px 16px rgba(70, 48, 24, 0.28)); }
+.gallery__grid { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.gallery__tile {
+  display: block; position: relative; width: 100%; aspect-ratio: 1; margin: 0; padding: 3px; border: 0; border-radius: 3px; overflow: hidden;
+  background: #fff; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 8px 14px -8px rgba(70, 48, 24, 0.35); cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.gallery__tile:focus-visible { outline: 2px solid var(--oak); outline-offset: 3px; }
+.gallery__thumb { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 1px; }
+.gallery__tile--more .gallery__thumb { filter: blur(3px); transform: scale(1.08); }   /* 흐림의 가장자리가 비치지 않게 조금 키웁니다 */
+.gallery__more { position: absolute; inset: 3px; display: flex; align-items: center; justify-content: center; background: rgba(47, 42, 37, 0.45); color: #fff; font-family: var(--font-ui); font-size: 17px; font-weight: 500; letter-spacing: 0.02em; }
+/* 사진 뷰어(T103 · T104). 어두운 반투명 바탕(뒤 페이지가 비칩니다) 위에 Swiper(설치한 라이브러리. 조립본은 node_modules의 번들, Next.js는 swiper/react)가 사진을 한 장씩 보여 주고, 좌우로 밀거나 화살표 · 키보드로 넘깁니다. 닫기는 오른쪽 위 × · Esc.
+   테마(T104 제안). 사진은 페이지의 사진 종이처럼 흰 테두리 6px의 인화지(.gallery-viewer__print)이고 위 두 모서리에 마스킹테이프가 붙어 있습니다. 화살표와 닫기는 크림색 종이 단추에 오크색 표시, 장수는 위 가운데 손글씨(개구)입니다.
+   인화지 크기는 폭 = min(화면 폭, 남는 높이 × 비율)이고 aspect-ratio가 높이를 정합니다(--ar = 폭/높이, 슬라이드마다 인라인). 남는 높이는 스크립트가 잰 뷰어 높이(--viewer-h)에서 위(닫기 · 장수) · 아래 여백을 뺀 것입니다. 테두리 6px이 비율에 들어가므로 사진은 cover로 6px쯤 잘립니다 */
+.gallery-viewer { position: fixed; inset: 0; z-index: 45; background: rgba(38, 30, 22, 0.9); animation: viewer-in 0.22s ease-out both; --gv-top: calc(64px + env(safe-area-inset-top)); --gv-bottom: calc(44px + env(safe-area-inset-bottom)); }
+.gallery-viewer[hidden] { display: none; }
+.gallery-viewer .gallery-viewer__swiper { position: absolute; inset: 0; --swiper-navigation-color: var(--oak); --swiper-navigation-size: 40px; --swiper-navigation-sides-offset: 8px; }   /* 선택자를 둘로 두어 Swiper CSS(.swiper { position: relative })를 이깁니다. Next.js에서는 swiper/css가 globals.css 뒤에 실리므로 같은 우선순위면 밀립니다(T104) */
+.gallery-viewer .swiper-slide { display: flex; align-items: center; justify-content: center; padding: var(--gv-top) 16px var(--gv-bottom); }
+.gallery-viewer__print {
+  position: relative; margin: 0; padding: 6px; background: #fff; aspect-ratio: var(--ar);
+  width: min(100%, calc((var(--viewer-h, 100vh) - var(--gv-top) - var(--gv-bottom)) * var(--ar)));
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 18px 32px -12px rgba(0, 0, 0, 0.55);
+}
+.gallery-viewer__img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+.gallery-viewer__tape { position: absolute; top: -8px; width: 64px; height: auto; pointer-events: none; }
+.gallery-viewer__tape--left { left: -20px; transform: rotate(-38deg); }
+.gallery-viewer__tape--right { right: -20px; transform: rotate(38deg); }
+.gallery-viewer .swiper-button-prev, .gallery-viewer .swiper-button-next { border-radius: 50%; background: rgba(251, 247, 239, 0.92); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); }
+.gallery-viewer .swiper-button-prev::after, .gallery-viewer .swiper-button-next::after { font-size: 15px; font-weight: 700; }
+.gallery-viewer .swiper-button-prev::after { margin-left: -2px; }
+.gallery-viewer .swiper-button-next::after { margin-right: -2px; }
+.gallery-viewer .swiper-button-disabled { opacity: 0.3; }
+.gallery-viewer__close {
+  position: absolute; top: calc(12px + env(safe-area-inset-top)); right: calc(12px + env(safe-area-inset-right)); z-index: 2; width: 40px; height: 40px; border-radius: 50%; border: 0; padding: 0;
+  display: flex; align-items: center; justify-content: center; background: rgba(251, 247, 239, 0.92); color: var(--oak); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); cursor: pointer;
+}
+.gallery-viewer__close:focus-visible { outline: 2px solid #FBF7EF; outline-offset: 3px; }
+.gallery-viewer__count { position: absolute; top: calc(18px + env(safe-area-inset-top)); left: 0; right: 0; z-index: 1; text-align: center; font-family: var(--font-memo); font-size: 21px; line-height: 28px; letter-spacing: 0.06em; color: #FBF7EF; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .gallery-viewer { animation: none; } }
+
 /* 떠 있는 바로 가기 버튼 */
 .fab {
   position: fixed;
