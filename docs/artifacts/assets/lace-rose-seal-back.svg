@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" viewBox="0 0 84 84">
+  <!-- 장미 봉인 뒷면(T77 시안). 종이에 붙었던 납작한 밀랍 밑면. 렌더 6배 -->
+  <defs>
+    <filter id="waxBack" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="9" result="warpN"/>
+      <feDisplacementMap in="SourceGraphic" in2="warpN" scale="3" xChannelSelector="R" yChannelSelector="G" result="shape"/>
+      <feFlood flood-color="#CFC8BC" result="dark"/>
+      <feComposite in="dark" in2="shape" operator="in" result="base"/>
+      <feGaussianBlur in="shape" stdDeviation="4" result="soft"/>
+      <feComposite in="soft" in2="shape" operator="in" result="inner"/>
+      <feFlood flood-color="#DDD7CC" result="mid"/>
+      <feComposite in="mid" in2="inner" operator="in" result="midIn"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="2" seed="4" result="grainN"/>
+      <feColorMatrix in="grainN" type="matrix" values="0 0 0 0 0.5  0 0 0 0 0.46  0 0 0 0 0.4  0 0 0 0.12 0" result="grain"/>
+      <feComposite in="grain" in2="shape" operator="in" result="grainIn"/>
+      <feMerge><feMergeNode in="base"/><feMergeNode in="midIn"/><feMergeNode in="grainIn"/></feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#waxBack)"><circle cx="42" cy="42" r="31" fill="#4a4a4a"/></g>
+</svg>

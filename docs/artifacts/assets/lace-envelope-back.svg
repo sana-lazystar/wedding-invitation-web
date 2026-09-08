@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <!-- 레이스 봉투 뒷판(T77 시안). 그냥 네모. 렌더 1.5배 -->
+  <defs>
+    <filter id="felt" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="9" result="grain"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.16 0.8" numOctaves="2" seed="23" result="fibH"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.8 0.16" numOctaves="2" seed="24" result="fibV"/>
+      <feComposite in="fibH" in2="fibV" operator="arithmetic" k2="0.5" k3="0.5" result="fib"/>
+      <feComposite in="grain" in2="fib" operator="arithmetic" k2="0.35" k3="0.65" result="bump1"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="5" result="cloud"/>
+      <feComposite in="bump1" in2="cloud" operator="arithmetic" k2="0.6" k3="0.4" result="bump"/>
+      <feDiffuseLighting in="bump" surfaceScale="0.55" diffuseConstant="1" lighting-color="#ffffff" result="lit">
+        <feDistantLight azimuth="315" elevation="62"/>
+      </feDiffuseLighting>
+      <feComposite in="SourceGraphic" in2="lit" operator="arithmetic" k1="0.72" k2="0.36" k3="0" k4="0" result="base"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="3" seed="7" result="m"/>
+      <feColorMatrix in="m" type="matrix" values="0 0 0 0 0.34  0 0 0 0 0.30  0 0 0 0 0.26  0 0 0 0.09 0" result="mottle"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.5" numOctaves="1" seed="33" result="f1"/>
+      <feColorMatrix in="f1" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.09 -0.02" result="fibers"/>
+      <feMerge><feMergeNode in="base"/><feMergeNode in="mottle"/><feMergeNode in="fibers"/></feMerge>
+    </filter>
+    <linearGradient id="light" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.20"/><stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0"/><stop offset="1" stop-color="#4A4036" stop-opacity="0.09"/>
+    </linearGradient><clipPath id="body"><rect x="0" y="0" width="600" height="400" rx="3"/></clipPath></defs>
+  <g clip-path="url(#body)">
+    <rect width="600" height="400" fill="#E3DED5" filter="url(#felt)"/>
+    <rect width="600" height="400" fill="url(#light)"/>
+  </g>
+</svg>
