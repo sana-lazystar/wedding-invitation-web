@@ -16,21 +16,21 @@ const galleryMore = gallery.length - GALLERY_PREVIEW;
 type Viewer = { kind: "comic" } | { kind: "gallery"; index: number };
 
 // 마음 전하는 곳(디자인 논의 T110 · T112 · T120). 성함 · 계좌번호는 이산하가 준 실값. 표시는 하이픈, 복사는 숫자만. 관계를 이름 앞에 씁니다
-const ACCOUNTS: { side: string; rows: { who: string; bank: string; num: string }[] }[] = [
+const ACCOUNTS: { side: string; rows: { role: string; name: string; bank: string; num: string }[] }[] = [
   {
     side: "신랑 측",
     rows: [
-      { who: "아버지 · 이종노", bank: "하나", num: "468-910199-62707" },
-      { who: "어머니 · 이은경", bank: "국민", num: "879602-01-133871" },
-      { who: "신랑 · 이산하", bank: "토스뱅크", num: "1001-6105-5173" },
+      { role: "아버지", name: "이종노", bank: "하나", num: "468-910199-62707" },
+      { role: "어머니", name: "이은경", bank: "국민", num: "879602-01-133871" },
+      { role: "신랑", name: "이산하", bank: "토스뱅크", num: "1001-6105-5173" },
     ],
   },
   {
     side: "신부 측",
     rows: [
-      { who: "아버지 · 송영봉", bank: "삼성증권", num: "7084-1174-8301" },
-      { who: "어머니 · 임인화", bank: "삼성증권", num: "7082-4708-9301" },
-      { who: "신부 · 송시야", bank: "국민", num: "879201-00-010006" },
+      { role: "아버지", name: "송영봉", bank: "삼성증권", num: "7084-1174-8301" },
+      { role: "어머니", name: "임인화", bank: "삼성증권", num: "7082-4708-9301" },
+      { role: "신부", name: "송시야", bank: "국민", num: "879201-00-010006" },
     ],
   },
 ];
@@ -304,6 +304,78 @@ export default function Home() {
       if (timer) clearTimeout(timer);
       script?.removeEventListener("load", init);
       script?.removeEventListener("error", fail);
+    };
+  }, []);
+
+  // 마지막 장면(디자인 논의 T121 · T123). 봉투 · 편지지 치수를 구획 크기에서 계산해 --c-* 변수에 넣고, 구획이 60% 보이면 한 번 재생합니다(is-closing). 움직임 줄이기면 편지지만
+  useEffect(() => {
+    const closing = closingRef.current;
+    if (!closing) return;
+    const apply = () => {
+      const w = closing.clientWidth;
+      const h = closing.clientHeight;
+      const envW = Math.min(w, 430) * 0.92; // 봉투 폭 = 화면 폭(페이지 폭 430까지)의 92%
+      const z1 = envW / 600;
+      const envTop = h / 2 - 200 * z1; // 가운데 선 봉투 윗변
+      const lw = envW * 0.92; // 편지지 = 봉투 폭의 92% × 봉투 좌표 440
+      const lh = 440 * z1;
+      const tys = h / 2 - lh / 2; // 처음 자리(구획 가운데)
+      const ty0 = envTop + 14 * z1; // 주머니 안(봉투 윗변 바로 아래)
+      const ty1 = ty0 - lh * 0.62; // 다시 열었을 때(제 높이의 62%만큼 위로)
+      const drop1 = Math.max(0, tys + lh - 70 - envTop); // 봉투가 나타나는 자리까지 내려간 거리
+      closing.style.setProperty("--c-z1", String(z1));
+      closing.style.setProperty("--c-drop1", `${drop1 / z1}px`);
+      closing.style.setProperty("--c-lw", `${lw}px`);
+      closing.style.setProperty("--c-lh", `${lh}px`);
+      closing.style.setProperty("--c-tys", `${tys}px`);
+      closing.style.setProperty("--c-ty0", `${ty0}px`);
+      closing.style.setProperty("--c-ty1", `${ty1}px`);
+    };
+    apply();
+    window.addEventListener("resize", apply);
+    let observer: IntersectionObserver | null = null;
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              closing.classList.add("is-closing");
+              observer?.disconnect();
+            }
+          });
+        },
+        { threshold: 0.6 },
+      );
+      observer.observe(closing);
+    }
+    // 다시 열고 닫기(디자인 논의 T122). 첫 재생이 끝나면(뚜껑 닫힘 애니메이션 끝) is-settled를 붙이고, 그 뒤 구획이 보이는 동안 스크롤을 올리면 is-open, 내리면 뗍니다. 페이지 끝의 튕김(iOS)은 scrollY가 최대를 넘었다 돌아오는 것이라 최대 근처 값은 무시합니다
+    let settled = false;
+    let lastY = window.scrollY;
+    const onAnimationEnd = (e: AnimationEvent) => {
+      if (e.animationName !== "closing-flap") return;
+      settled = true;
+      closing.classList.add("is-settled");
+    };
+    const onScroll = () => {
+      const y = window.scrollY;
+      const dy = y - lastY;
+      lastY = y;
+      if (!settled) return;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (y < 0 || y >= max - 1) return;
+      const r = closing.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const seen = (Math.min(r.bottom, vh) - Math.max(r.top, 0)) / vh; // 구획이 화면을 차지하는 비율
+      if (dy < -1 && seen >= 0.3) closing.classList.add("is-open");
+      else if (dy > 1 && seen >= 0.85) closing.classList.remove("is-open"); // 닫힘은 거의 다 내려왔을 때(디자인 논의 T125)
+    };
+    closing.addEventListener("animationend", onAnimationEnd);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("resize", apply);
+      window.removeEventListener("scroll", onScroll);
+      closing.removeEventListener("animationend", onAnimationEnd);
+      observer?.disconnect();
     };
   }, []);
 
@@ -581,8 +653,8 @@ export default function Home() {
             <p className="invite__names">이종노 · 이은경<span className="invite__role">의 아들</span>이산하<br />송영봉 · 임인화<span className="invite__role">의 딸</span>송시야</p>
             <p className="invite__from">올림</p>
           </div>
-          <img className="invite__sticker invite__petal--1" src="/scene9/petal-1.png" width={358} height={450} alt="" />
           <img className="invite__sticker invite__petal--2" src="/scene9/petal-2.png" width={395} height={450} alt="" />
+          <img className="invite__sticker invite__petal--1" src="/scene9/petal-1.png" width={358} height={450} alt="" />
         </section>
         {/* 10. 추신 + 만화(와이어프레임 11쪽 위 절반, 디자인 논의 T102). 사진첩(같은 쪽 아래 절반)은 다음 구획입니다(T103) */}
         <section id="comic" className="block story comic">
@@ -740,12 +812,13 @@ export default function Home() {
                     <button
                       type="button"
                       className="account"
-                      key={row.who}
-                      aria-label={`${row.who} ${row.bank} ${row.num} 복사`}
+                      key={row.name}
+                      aria-label={`${row.role} · ${row.name} ${row.bank} ${row.num} 복사`}
                       onClick={() => copy(row.num.replace(/-/g, ""), "계좌번호를 복사했습니다")}
                     >
                       <span className="account__text">
-                        <span className="account__who">{row.who}</span>
+                        <span className="account__role">{row.role}</span>
+                        <span className="account__name">{row.name}</span>
                         <span className="account__num">
                           {row.bank} {row.num}
                         </span>
