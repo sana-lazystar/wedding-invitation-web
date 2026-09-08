@@ -13,6 +13,7 @@
 - Scene11 오시는 길(12쪽) · Scene12 하객 안내(13쪽) · Scene13 마음 전하는 곳(14쪽)은 T110에 Claude가 구성하고 T111에 테마에 맞게 다시 짰습니다. 크림색 바탕 위 흰 종이 한 장씩(`.sheet`. 쪽지 결 · 봉투의 장미 봉인 + 고운바탕 제목. 테이프는 T112에, 올리브 가지는 T119에 뺌)입니다. 계좌 행은 누르면 번호가 복사됩니다. 지도는 카카오맵 JS SDK(키 `NEXT_PUBLIC_KAKAO_MAP_KEY`, T112)입니다. 아래 "오시는 길 · 하객 안내 · 마음 전하는 곳"
 - Scene14 마지막(15쪽)은 봉투 크기의 편지지 카드 "고마움을 봉해 보냅니다."가 진입 장면을 거꾸로 돌려 봉투에 담기고 봉인되며, 그 뒤 스크롤을 올리면 열려 글이 보이고 내리면 닫힙니다(T121~T123). 봉투 앞판의 그림자 필터는 편지지 위에 선을 그려 뺐습니다(T124). 아래 "마지막 (봉투 닫힘)"
 - 다음: 남은 장면은 없습니다. OG · 카카오톡 공유는 T132에 넣었고, 카카오 콘솔의 앱 이름 · 아이콘 · SDK 도메인 확인과 배포 뒤 캐시 재스크랩은 이산하가 합니다. 사진첩은 이산하가 준 원본 44장이고 타일은 1~8 + "+36개"입니다(T121). 웨딩 사진 셋(신랑 · 신부 · 함께 있는 컷)은 T83에 Scene6~8에 들어갔습니다. 캐릭터 원본은 `../design/character/`에 기본 표정 둘과 다른 포즈 열하나(수달 1~4, 토끼 1~6, 둘이 허그)가 있습니다(T52 · T128)
+- 종이 결은 폰에서 보이는 세기로 맞춥니다(T144). 화면에 깔릴 때 무늬가 뭉개지므로 무늬 간격을 넓히고 요철을 깊게 하는 쪽이 세기만 올리는 것보다 낫습니다. 값과 근거는 두 SVG 머리 주석에 있습니다
 - 콘셉트: 팝업북. 책은 서양 고서(앤티크)이고 붉은 가죽에 금박입니다. 질감 에셋은 CSS로 흉내 내지 않고 SVG → PNG로 만듭니다(디자인 결정 11, 아래 "질감 에셋 만들기")
 - Next.js 임시 적용(WIW-4)은 develop에 커밋돼 있습니다. develop → main PR과 배포는 이산하가 합니다
 
@@ -98,7 +99,7 @@ Scene2입니다(디자인 논의 T83). 이산하가 준 올리브 가지 그림(
 | 것 | 자리 |
 | --- | --- |
 | CSS · 마크업 | `index.html`의 "2. 핵심 정보" 구간(`#info`, `.info__*`). 세로 flex, 가지와 글 사이 21px(T85. 14px의 1.5배), 위아래 여백 36px. 가지 폭 32px. 바탕은 흰 종이입니다(T84 · T86. `background: #FFFFFF` 위에 전용 종이 결 그림 `public/paper/info.jpg`(원본 `assets/info-paper.svg`)을 `.info__paper`로 깔고, 가지와 글은 그 위. 쪽지 종이는 결이 1px 단위라 구획 크기로 늘리면 뭉개져 따로 만들었고, 세기는 첫 판의 1/8쯤입니다. 첫 판은 회색 회벽처럼 보여 1/4로, 다시 반으로 내렸습니다) |
-| 산출 PNG | `public/scene2/branch.png`(알파 경계 상자에 6px 여백을 두고 잘라 폭 240, 256색, 5KB) · 종이 `public/paper/info.jpg`(1.5배 1350×780. 투명도가 없고 결이 온통 노이즈라 PNG는 1.7MB가 되어 JPEG 82, 211KB) |
+| 산출 PNG | `public/scene2/branch.png`(알파 경계 상자에 6px 여백을 두고 잘라 폭 240, 256색, 5KB) · 종이 `public/paper/info.jpg`(1.5배 1350×780. 투명도가 없고 결이 온통 노이즈라 PNG는 1.7MB가 되어 JPEG 82, 427KB. T144에 결을 3.2배로 올려 늘었습니다) |
 | Next.js | `src/app/page.tsx`의 `#info` 마크업. 경로만 `/scene2/…`입니다 |
 
 글은 네 줄, 크기는 둘입니다(T51). 큰 글자(18px, 700, 아주 짙은 갈색 `#2A1A0E`. T85에 작은 글자보다 3px 크게) "2026년 10월 9일" · "금요일 오후 6시 30분", 16px 띄고 작은 글자(15px) "더채플앳청담 3층 커티지홀" · "강남구 선릉로 757". 고정 px입니다.
@@ -123,8 +124,8 @@ Scene6~8(`#part2-groom` · `#part2-bride` · `#part3`, T65)은 사진 종이와 
 | 것 | 자리 |
 | --- | --- |
 | CSS · 마크업 | `index.html`의 "3. 인사"(`.greeting` · `.note*`) · "4. Part 1 신랑"(`.story` · `.photo-paper` · `.note--memo` · `.note__stamp`) · "5. Part 1 신부"(`--left` 변형 둘) 구간과 스크립트의 쪽지 등장 부분 |
-| 에셋 원본 | `assets/note-paper.svg`(흰 종이 + 결 + 옅은 얼룩. 720×480. 그늘·모서리는 CSS). 캐릭터는 `../design/character/0_수달_기본.png` · `0_토끼_기본.png` · `0_토끼 1.PNG`(이산하, T52~T53). Scene4 사진은 `../design/scene4/3_산하 1.jpg`(대표) · `3_산하 2.png`(컷아웃), Scene5는 `../design/scene5/3_시야 1.jpeg` · `3_시야 2.png`(파일명이 NFD라 셸에서 어긋나면 `bride-child.jpeg` · `bride-child-cutout.png` 사본을 씁니다) |
-| 산출 PNG | `public/paper/note.png`(1배, 214KB). 쪽지마다 `object-fit: cover`로 깔리므로 크기가 달라도 결이 늘어나지 않습니다. 4~8쪽의 메모지도 같은 그림을 씁니다. 캐릭터는 `public/character/{otter,rabbit}-{basic,1,2,…}.png` · `hug.png`(열한 장, 높이 240px, 52~83KB). Scene4는 `public/scene4/groom-child.jpg`(폭 900, 269KB) · `groom-child-ride.png`(높이 300 + 테두리, 25KB), Scene5는 `public/scene5/bride-child.jpg`(144KB) · `bride-child-cutout.png`(10KB). 아래 "이미지 축소" |
+| 에셋 원본 | `assets/note-paper.svg`(흰 종이 + 결 + 옅은 얼룩. 720×480. 그늘·모서리는 CSS. 결은 T144에 무늬 3배 · 요철 깊게로 4.4배 강화). 캐릭터는 `../design/character/0_수달_기본.png` · `0_토끼_기본.png` · `0_토끼 1.PNG`(이산하, T52~T53). Scene4 사진은 `../design/scene4/3_산하 1.jpg`(대표) · `3_산하 2.png`(컷아웃), Scene5는 `../design/scene5/3_시야 1.jpeg` · `3_시야 2.png`(파일명이 NFD라 셸에서 어긋나면 `bride-child.jpeg` · `bride-child-cutout.png` 사본을 씁니다) |
+| 산출 PNG | `public/paper/note.png`(1배, 304KB. T144 전에는 185KB). 쪽지마다 `object-fit: cover`로 깔리므로 크기가 달라도 결이 늘어나지 않습니다. 4~8쪽의 메모지도 같은 그림을 씁니다. 캐릭터는 `public/character/{otter,rabbit}-{basic,1,2,…}.png` · `hug.png`(열한 장, 높이 240px, 52~83KB). Scene4는 `public/scene4/groom-child.jpg`(폭 900, 269KB) · `groom-child-ride.png`(높이 300 + 테두리, 25KB), Scene5는 `public/scene5/bride-child.jpg`(144KB) · `bride-child-cutout.png`(10KB). 아래 "이미지 축소" |
 | Next.js | `src/app/page.tsx`의 `#greeting` · `#part1-groom` · `#part1-bride` 마크업과 쪽지 등장 `useEffect`. 메모지도 `.note`라 같이 나타납니다 |
 
 ```sh
