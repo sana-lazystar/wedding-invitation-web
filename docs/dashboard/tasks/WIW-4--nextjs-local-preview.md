@@ -218,3 +218,5 @@ related: []
 2026-09-09 00:50:33 · develop · 4d5545f · 사이트 아이콘을 장미 인장 묶음으로 교체(디자인 논의 T136). `src/app/favicon.ico` `src/app/icon1~4.png` `src/app/apple-icon.png` `public/android-icon-*.png` `public/ms-icon-*.png`.
 
 2026-09-09 01:00:02 · develop · 2d82746 · 배경 음악 · 첫 동작에서 시작 · 음표 스티커(디자인 논의 T137). `src/app/page.tsx` `src/app/globals.css` `public/audio/bgm.mp3`.
+
+2026-09-09 01:01:41 · develop · 16fef28 · 음악 단추를 종이 없이 음표만 · 28px · 빗금 14px(디자인 논의 T138). `src/app/page.tsx` `src/app/globals.css`.
