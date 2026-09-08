@@ -224,3 +224,5 @@ related: []
 2026-09-09 01:03:21 · develop · f3646cd · 음악 페이드인 진행도 0~1 · 겹친 페이드 취소(디자인 논의 T139). `src/app/page.tsx`.
 
 2026-09-09 01:12:08 · develop · 3828b73 · 음악 단추 · 지나가는 음표 셋 · difference 블렌드(디자인 논의 T140). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-09 01:14:20 · develop · bc6a648 · 떠 있는 쪽지 기호 ··· / ×(디자인 논의 T141). `src/app/page.tsx` `src/app/globals.css`.
