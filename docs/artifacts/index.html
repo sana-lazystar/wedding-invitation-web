@@ -1463,12 +1463,14 @@
       var bgmToggle = document.getElementById('bgmToggle');
       var bgmWanted = true;
       try { bgmWanted = sessionStorage.getItem('bgm') !== 'off'; } catch (e) {}
+      var fadeRaf = 0;
       var fadeIn = function () {
+        cancelAnimationFrame(fadeRaf);   // 겹쳐 시작하면 앞 것을 취소(T139)
         try { audio.volume = 0; } catch (e) { return; }
         if (audio.volume !== 0) return;   // iOS는 volume을 못 바꿉니다
         var start = performance.now();
-        var step = function (t) { var k = Math.min(1, (t - start) / 1200); audio.volume = k; if (k < 1) requestAnimationFrame(step); };
-        requestAnimationFrame(step);
+        var step = function (t) { var k = Math.min(1, Math.max(0, (t - start) / 1200)); audio.volume = k; if (k < 1) fadeRaf = requestAnimationFrame(step); };   // rAF 시각이 start보다 앞설 수 있어 0 아래를 막습니다(T139. 음수 volume은 예외)
+        fadeRaf = requestAnimationFrame(step);
       };
       var setBgmUi = function (on) { bgmToggle.classList.toggle('is-on', on); bgmToggle.setAttribute('aria-pressed', on ? 'true' : 'false'); bgmToggle.setAttribute('aria-label', on ? '배경 음악 끄기' : '배경 음악 켜기'); };
       var firstEvents = ['pointerdown', 'touchend', 'keydown'];
