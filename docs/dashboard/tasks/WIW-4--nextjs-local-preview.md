@@ -134,3 +134,5 @@ related: []
 2026-09-08 16:15:32 · develop · fd966d6 · 확대 막기 · 커버 높이 고정 · Scene2 올리브 가지 · 두 사람 컷아웃 · Scene4 사진 · 웨딩 사진 셋(디자인 논의 T83). `src/app/layout.tsx` `src/app/page.tsx` `src/app/globals.css` `public/scene1/couple.png` `public/scene2/branch.png` `public/scene4/groom-child.jpg` `public/scene6/groom.jpg` `public/scene7/bride.jpg` `public/scene8/couple.jpg`.
 
 2026-09-08 16:17:00 · develop · 71d701d · Scene2 바탕을 흰 종이로(디자인 논의 T84). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 16:18:02 · develop · cae2cc5 · Scene2 가지 하나 · 간격 21px · 날짜 글자 18px 짙은 갈색(디자인 논의 T85). `src/app/page.tsx` `src/app/globals.css`.
