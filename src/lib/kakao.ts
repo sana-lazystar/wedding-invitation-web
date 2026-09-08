@@ -1,6 +1,6 @@
 // 카카오 SDK 둘(디자인 논의 T112 · T132). 지도는 dapi의 지도 SDK, 공유는 t1의 JavaScript SDK이고 앱 키는 같습니다.
 // 창(window)에 붙는 전역 이름도 여기서 선언합니다
-import { KAKAO_JS_KEY, OG_IMAGE, SITE_DESCRIPTION, SITE_TITLE } from "@/content/site";
+import { KAKAO_JS_KEY, SHARE_IMAGE, SITE_DESCRIPTION, SITE_TITLE } from "@/content/site";
 
 // ── 지도 SDK가 창에 붙이는 것 중 쓰는 것만 적은 타입
 type KakaoLatLng = { getLat: () => number; getLng: () => number };
@@ -63,9 +63,9 @@ export async function shareInvitation(copyFallback: (text: string, message: stri
         content: {
           title: SITE_TITLE,
           description: SITE_DESCRIPTION,
-          imageUrl: `${window.location.origin}${OG_IMAGE.url}`,
-          imageWidth: OG_IMAGE.width,
-          imageHeight: OG_IMAGE.height,
+          imageUrl: `${window.location.origin}${SHARE_IMAGE.url}`,
+          imageWidth: SHARE_IMAGE.width,
+          imageHeight: SHARE_IMAGE.height,
           link: { mobileWebUrl: url, webUrl: url },
         },
         buttons: [
