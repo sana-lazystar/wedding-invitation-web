@@ -15,6 +15,57 @@ const GALLERY_PREVIEW = 8;
 const galleryMore = gallery.length - GALLERY_PREVIEW;
 type Viewer = { kind: "comic" } | { kind: "gallery"; index: number };
 
+// 마음 전하는 곳(디자인 논의 T110). 성함 · 계좌번호는 자리표시(디자인 결정 6). 관계를 이름 앞에 씁니다
+const ACCOUNTS: { side: string; rows: { who: string; bank: string; num: string }[] }[] = [
+  {
+    side: "신랑 측",
+    rows: [
+      { who: "아버지 · 이OO", bank: "농협", num: "000-0000-0000" },
+      { who: "어머니 · 문OO", bank: "국민", num: "000-00-0000-000" },
+      { who: "신랑 · 이산하", bank: "카카오뱅크", num: "0000-00-000000" },
+    ],
+  },
+  {
+    side: "신부 측",
+    rows: [
+      { who: "아버지 · 송OO", bank: "농협", num: "000-0000-0000" },
+      { who: "어머니 · 장OO", bank: "신한", num: "000-000-000000" },
+      { who: "신부 · 송시야", bank: "농협", num: "000-0000-0000" },
+    ],
+  },
+];
+const VENUE_ADDRESS = "서울 강남구 선릉로 757";
+const VENUE_SEARCH = encodeURIComponent("더채플앳청담");
+
+// 복사(디자인 논의 T110). clipboard API가 없으면(http · 옛 브라우저) 숨긴 textarea로 복사합니다
+async function copyText(text: string) {
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.setAttribute("readonly", "");
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  let ok = false;
+  try {
+    ok = document.execCommand("copy");
+  } catch {
+    ok = false;
+  }
+  ta.remove();
+  if (!ok) throw new Error("copy");
+}
+
+function CopyIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M9.5 4.5V3a1.5 1.5 0 0 0-1.5-1.5H3A1.5 1.5 0 0 0 1.5 3v5A1.5 1.5 0 0 0 3 9.5h1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default function Home() {
   const fabRef = useRef<HTMLElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
@@ -30,6 +81,21 @@ export default function Home() {
   const galleryViewerRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);   // 덮개를 연 버튼. 닫으면 초점을 돌립니다
   const [viewer, setViewer] = useState<Viewer | null>(null);
+  const [toast, setToast] = useState("");
+  const [toastShown, setToastShown] = useState(false);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const showToast = (text: string) => {
+    setToast(text);
+    setToastShown(true);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToastShown(false), 1600);
+  };
+  const copy = (text: string, message: string) => {
+    copyText(text).then(
+      () => showToast(message),
+      () => showToast("복사하지 못했습니다. 길게 눌러 복사해 주세요"),
+    );
+  };
 
   // 화면 높이 고정 · 확대 막기(디자인 논의 T83). 카카오톡 인앱 브라우저는 스크롤로 주소창이 사라질 때 창 높이 자체가 바뀌어 svh까지 변하므로, 처음 잰 높이를 --vh-fixed(px)로 박습니다. 폭이 바뀌면(회전 · 창 크기 조절) 다시 재고 높이만 바뀌는 것(툴바)은 무시합니다. 인앱 브라우저는 열린 직후 툴바를 자리 잡으며 높이가 한 번 더 바뀌므로, 첫 터치 전(진입 장면 중)에는 높이 변화도 받습니다. iOS는 메타의 user-scalable=no를 무시하므로 손가락 두 개 움직임과 제스처 이벤트도 막습니다
   useEffect(() => {
@@ -444,8 +510,8 @@ export default function Home() {
           </button>
         </section>
         {/* 사진첩(와이어프레임 11쪽 아래 절반, 디자인 논의 T103~T107). 가운데 제목 "사진첩", 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 흐린 사진 위에 나머지 장수. 나무 틀 · 표지판(T104~T106)은 T107에 지웠습니다 */}
-        <section id="gallery" className="block story gallery">
-          <h2 className="gallery__title">사진첩</h2>
+        <section id="gallery" className="block story plain">
+          <h2 className="plain__title">사진첩</h2>
           <ul className="gallery__grid" id="galleryGrid">
             {gallery.slice(0, GALLERY_PREVIEW + 1).map((item, i) => {
               const more = i === GALLERY_PREVIEW;
@@ -473,7 +539,96 @@ export default function Home() {
             })}
           </ul>
         </section>
-        {/* 12쪽(오시는 길)부터 여기 아래에 이어 붙입니다 */}
+        {/* 11. 오시는 길(와이어프레임 12쪽, 디자인 논의 T110). 사진첩과 같은 흰 바탕 구획. 약도는 이산하가 그림을 주면 교체합니다. 지도 링크는 식장 이름 검색이라 좌표가 없어도 됩니다 */}
+        <section id="directions" className="block story plain">
+          <h2 className="plain__title">오시는 길</h2>
+          <div className="venue">
+            <p className="venue__name">더채플앳청담 3층 커티지홀</p>
+            <p className="venue__addr">{VENUE_ADDRESS}</p>
+          </div>
+          <div className="map-paper" role="img" aria-label="약도 자리">
+            약도
+          </div>
+          <div className="chips">
+            <a className="chip" href={`https://map.naver.com/p/search/${VENUE_SEARCH}`} target="_blank" rel="noopener">
+              네이버 지도
+            </a>
+            <a className="chip" href={`https://map.kakao.com/link/search/${VENUE_SEARCH}`} target="_blank" rel="noopener">
+              카카오맵
+            </a>
+            <button type="button" className="chip" onClick={() => copy(VENUE_ADDRESS, "주소를 복사했습니다")}>
+              주소 복사
+            </button>
+          </div>
+          <div className="route">
+            <h3 className="route__label">주차</h3>
+            <p className="route__text">주차는 웨딩홀 앞으로 오셔서 주차 직원의 안내를 받으신 후 이동해 주시기 바랍니다. 1시간 30분 무료 주차가 가능합니다.</p>
+          </div>
+          <div className="route">
+            <h3 className="route__label">지하철</h3>
+            <p className="route__text">
+              <span className="line line--7">7호선</span>
+              <span className="line line--bundang">수인분당선</span>강남구청역 3번 출구
+              <br />
+              <span className="line line--bundang">수인분당선</span>압구정로데오역 5번 출구
+              <br />
+              강남구청역에서 셔틀버스 10분 간격
+            </p>
+          </div>
+          <div className="route">
+            <h3 className="route__label">버스</h3>
+            <p className="route__text">
+              <span className="line line--trunk">간선</span>301, 342, 472
+              <br />
+              <span className="line line--branch">지선</span>3011, 4412
+              <br />
+              영동고교 앞 정류장 하차
+            </p>
+          </div>
+        </section>
+
+        {/* 12. 하객 안내(와이어프레임 13쪽, 디자인 논의 T110). 크림색 바탕 위 흰 종이 한 장. 신부대기실 시각은 추정(U-5) */}
+        <section id="guide" className="block guide">
+          <div className="guide__paper">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <h2 className="guide__title">하객 안내</h2>
+            <p className="guide__text">신부대기실은 6시 10분경 정리될 예정입니다. 신부와 사진을 남기고 싶으신 분들께서는 참고해 주시면 감사하겠습니다.</p>
+            <hr className="guide__rule" />
+            <p className="guide__text">축하 화환은 정중히 사양합니다. 오셔서 축복해 주시는 것만으로 충분히 감사합니다.</p>
+          </div>
+        </section>
+
+        {/* 13. 마음 전하는 곳(와이어프레임 14쪽, 디자인 논의 T110). 행을 누르면 계좌번호가 복사됩니다 */}
+        <section id="gift" className="block story plain">
+          <h2 className="plain__title">마음 전하는 곳</h2>
+          <p className="gift__lead">참석이 어려우신 분들을 위해 안내드립니다.</p>
+          {ACCOUNTS.map((group) => (
+            <div className="gift__group" key={group.side}>
+              <h3 className="gift__side">{group.side}</h3>
+              {group.rows.map((row) => (
+                <button
+                  type="button"
+                  className="account"
+                  key={row.who}
+                  aria-label={`${row.who} ${row.bank} ${row.num} 복사`}
+                  onClick={() => copy(row.num, "계좌번호를 복사했습니다")}
+                >
+                  <span className="account__text">
+                    <span className="account__who">{row.who}</span>
+                    <span className="account__num">
+                      {row.bank} {row.num}
+                    </span>
+                  </span>
+                  <span className="account__copy" aria-hidden="true">
+                    <CopyIcon />
+                    복사
+                  </span>
+                </button>
+              ))}
+            </div>
+          ))}
+        </section>
+        {/* 15쪽(마지막, Scene14)부터 여기 아래에 이어 붙입니다. 10쪽 초대(Scene9)는 Scene8과 Scene10 사이 */}
       </div>
 
       {/* 만화 뷰어(디자인 논의 T102). 그림은 같은 파일이라 다시 내려받지 않습니다 */}
@@ -534,6 +689,10 @@ export default function Home() {
             <path d="M6 6l10 10M16 6L6 16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
           </svg>
         </button>
+      </div>
+
+      <div className={toastShown ? "toast is-shown" : "toast"} role="status" aria-live="polite">
+        {toast}
       </div>
 
       <nav className="fab" ref={fabRef} data-open={menuOpen ? "true" : "false"} aria-label="바로 가기">
