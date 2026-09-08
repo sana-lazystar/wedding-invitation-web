@@ -35,7 +35,7 @@ Artifact 발행은 2026-09-06 T31에 중단했습니다(디자인 결정 11). �
 | `canvas/Main.dc.html` | Claude Design 캔버스의 아트보드(동결. 결정 11 뒤로 고치지 않습니다) | 커밋 |
 | `canvas/FloatingMenu.dc.html` | 떠 있는 바로 가기 버튼의 열린 상태 | 커밋 |
 | `canvas/canvas.json` | 아트보드 배치와 메모 | 커밋 |
-| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 편지봉투 여섯(`lace-envelope-back` · `lace-envelope-front` · `lace-envelope-flap` · `lace-envelope-flap-inside` · `lace-rose-seal` · `lace-rose-seal-back`, T77~T82)과 쪽지 종이(`note-paper`, T51) · 핵심 정보 종이(`info-paper`, T86) · 마스킹테이프(`masking-tape`, T102. 짧은 것 `masking-tape-short`, T105)입니다. 사진첩 나무 틀(`wood-frame`, T104) · 표지판(`wood-sign`, T106)은 동화 느낌이라 T107에 지웠고 마지막 모습은 커밋 a8487a0에 있습니다. 이전 아마 짜임 봉투(`envelope-*` · `wax-seal*`, T35~T42)는 T82에 지웠고 마지막 모습은 커밋 9929650에 있습니다. 레이스 셋(`lace-frill` · `oval-card` · `fleuron`, 이산하가 다른 세션에서 만듦, T50)은 T55에서 액자로 바뀌어 쓰지 않게 됐고 WIW-5에 지웠습니다(마지막 모습은 커밋 217c045) | 커밋 |
+| `assets/*.svg` | 질감 에셋의 원본(SVG). 산출 PNG는 쓰는 자리(`public/…`)에 둡니다. 편지봉투 여섯(`lace-envelope-back` · `lace-envelope-front` · `lace-envelope-flap` · `lace-envelope-flap-inside` · `lace-rose-seal` · `lace-rose-seal-back`, T77~T82)과 종이 결 타일(`note-tile`, T145. 그전의 쪽지 종이(T51) · 핵심 정보 종이(T86)는 T145에 지웠고 마지막 모습은 커밋 26bb6be) · 마스킹테이프(`masking-tape`, T102. 짧은 것 `masking-tape-short`, T105)입니다. 사진첩 나무 틀(`wood-frame`, T104) · 표지판(`wood-sign`, T106)은 동화 느낌이라 T107에 지웠고 마지막 모습은 커밋 a8487a0에 있습니다. 이전 아마 짜임 봉투(`envelope-*` · `wax-seal*`, T35~T42)는 T82에 지웠고 마지막 모습은 커밋 9929650에 있습니다. 레이스 셋(`lace-frill` · `oval-card` · `fleuron`, 이산하가 다른 세션에서 만듦, T50)은 T55에서 액자로 바뀌어 쓰지 않게 됐고 WIW-5에 지웠습니다(마지막 모습은 커밋 217c045) | 커밋 |
 | `../design/scene1/`, `../design/scene2/`, `../design/scene4/`, `../design/scene5/`, `../design/scene10/`, `../design/character/` | 이산하가 준 원본 이미지. 캐릭터는 스티커(흰 테두리 포함) PNG이고 `*--clean.png`는 가장자리 색 번짐을 지운 것 | 제외 (`docs/design/`) |
 | `../design/canvas/*.png` | 캔버스용 축소본(PNG 무손실). 아트보드가 파일명으로 참조합니다 | 제외 |
 | `src/app/`, `src/components/`, `src/hooks/`, `src/lib/`, `src/content/`, `public/intro/`, `public/scene1/`, `public/scene2/`, `public/paper/`, `public/character/`, `public/scene4/`, `public/scene5/`, `public/scene10/`, `public/gallery/`, `src/content/gallery.json` | Next.js 적용(WIW-4 적용 · WIW-5 구조 분해). `globals.css`는 조립본에서 생성한 파생물이고, 장면 마크업은 `src/components/scenes/`의 파일마다 조립본의 한 구획과 1:1입니다. 조립본이 바뀌면 그 파일만 손으로 맞춥니다. 효과는 `src/hooks/`, 값은 `src/content/`, 바깥 것을 다루는 도구는 `src/lib/`입니다 | 커밋 |
@@ -98,8 +98,8 @@ Scene2입니다(디자인 논의 T83). 이산하가 준 올리브 가지 그림(
 
 | 것 | 자리 |
 | --- | --- |
-| CSS · 마크업 | `index.html`의 "2. 핵심 정보" 구간(`#info`, `.info__*`). 세로 flex, 가지와 글 사이 21px(T85. 14px의 1.5배), 위아래 여백 36px. 가지 폭 32px. 바탕은 흰 종이입니다(T84 · T86. `background: #FFFFFF` 위에 전용 종이 결 그림 `public/paper/info.jpg`(원본 `assets/info-paper.svg`)을 `.info__paper`로 깔고, 가지와 글은 그 위. 쪽지 종이는 결이 1px 단위라 구획 크기로 늘리면 뭉개져 따로 만들었고, 세기는 첫 판의 1/8쯤입니다. 첫 판은 회색 회벽처럼 보여 1/4로, 다시 반으로 내렸습니다) |
-| 산출 PNG | `public/scene2/branch.png`(알파 경계 상자에 6px 여백을 두고 잘라 폭 240, 256색, 5KB) · 종이 `public/paper/info.jpg`(1.5배 1350×780. 투명도가 없고 결이 온통 노이즈라 PNG는 1.7MB가 되어 JPEG 82, 427KB. T144에 결을 3.2배로 올려 늘었습니다) |
+| CSS · 마크업 | `index.html`의 "2. 핵심 정보" 구간(`#info`, `.info__*`). 세로 flex, 가지와 글 사이 21px(T85. 14px의 1.5배), 위아래 여백 36px. 가지 폭 32px. 바탕은 흰 종이입니다(T84 · T86. `background: #FFFFFF` 위에 다른 종이와 같은 결 타일(`public/paper/note-tile.png`)을 CSS 배경으로 깔고, 가지와 글은 그 위(T145. 그전에는 이 구획만 쓰는 전용 그림을 깔았고 마지막 모습은 커밋 26bb6be). 쪽지 종이는 결이 1px 단위라 구획 크기로 늘리면 뭉개져 따로 만들었고, 세기는 첫 판의 1/8쯤입니다. 첫 판은 회색 회벽처럼 보여 1/4로, 다시 반으로 내렸습니다) |
+| 산출 PNG | `public/scene2/branch.png`(알파 경계 상자에 6px 여백을 두고 잘라 폭 240, 256색, 5KB) · 종이는 다른 종이와 같은 결 타일 `public/paper/note-tile.png`입니다(T145. 그전의 전용 그림은 커밋 26bb6be) |
 | Next.js | `src/app/page.tsx`의 `#info` 마크업. 경로만 `/scene2/…`입니다 |
 
 글은 네 줄, 크기는 둘입니다(T51). 큰 글자(18px, 700, 아주 짙은 갈색 `#2A1A0E`. T85에 작은 글자보다 3px 크게) "2026년 10월 9일" · "금요일 오후 6시 30분", 16px 띄고 작은 글자(15px) "더채플앳청담 3층 커티지홀" · "강남구 선릉로 757". 고정 px입니다.
@@ -108,7 +108,6 @@ Scene2입니다(디자인 논의 T83). 이산하가 준 올리브 가지 그림(
 
 ```sh
 python3 -c "from PIL import Image; import numpy as np; im=Image.open('docs/design/scene2/2_핵심정보 에셋 2.png').convert('RGBA'); a=np.array(im)[:,:,3]; ys,xs=np.where(a>=8); c=im.crop((xs.min()-6,ys.min()-6,xs.max()+7,ys.max()+7)); c.resize((240, round(c.height*240/c.width)), Image.LANCZOS).save('public/scene2/branch.png')" && python3 docs/scripts/quantize-png.py public/scene2/branch.png
-node docs/scripts/render-asset.mjs docs/artifacts/assets/info-paper.svg /tmp/info-paper.png 1.5 && sips -s format jpeg -s formatOptions 82 /tmp/info-paper.png --out public/paper/info.jpg
 ```
 
 ## 인사·이야기 (쪽지·메모지)
@@ -124,12 +123,12 @@ Scene6~8(`#part2-groom` · `#part2-bride` · `#part3`, T65)은 사진 종이와 
 | 것 | 자리 |
 | --- | --- |
 | CSS · 마크업 | `index.html`의 "3. 인사"(`.greeting` · `.note*`) · "4. Part 1 신랑"(`.story` · `.photo-paper` · `.note--memo` · `.note__stamp`) · "5. Part 1 신부"(`--left` 변형 둘) 구간과 스크립트의 쪽지 등장 부분 |
-| 에셋 원본 | `assets/note-paper.svg`(흰 종이 + 결 + 옅은 얼룩. 720×480. 그늘·모서리는 CSS. 결은 T144에 무늬 3배 · 요철 깊게로 4.4배 강화). 캐릭터는 `../design/character/0_수달_기본.png` · `0_토끼_기본.png` · `0_토끼 1.PNG`(이산하, T52~T53). Scene4 사진은 `../design/scene4/3_산하 1.jpg`(대표) · `3_산하 2.png`(컷아웃), Scene5는 `../design/scene5/3_시야 1.jpeg` · `3_시야 2.png`(파일명이 NFD라 셸에서 어긋나면 `bride-child.jpeg` · `bride-child-cutout.png` 사본을 씁니다) |
-| 산출 PNG | `public/paper/note.png`(1배, 304KB. T144 전에는 185KB). 쪽지마다 `object-fit: cover`로 깔리므로 크기가 달라도 결이 늘어나지 않습니다. 4~8쪽의 메모지도 같은 그림을 씁니다. 캐릭터는 `public/character/{otter,rabbit}-{basic,1,2,…}.png` · `hug.png`(열한 장, 높이 240px, 52~83KB). Scene4는 `public/scene4/groom-child.jpg`(폭 900, 269KB) · `groom-child-ride.png`(높이 300 + 테두리, 25KB), Scene5는 `public/scene5/bride-child.jpg`(144KB) · `bride-child-cutout.png`(10KB). 아래 "이미지 축소" |
+| 에셋 원본 | `assets/note-tile.svg`(흰 종이에 결 + 옅은 얼룩. 480×480 이음매 없는 타일. 바탕색 · 그러데이션 · 그늘 · 모서리는 CSS. 결은 T144에 강화하고 T145에 타일로 바꿨습니다). 캐릭터는 `../design/character/0_수달_기본.png` · `0_토끼_기본.png` · `0_토끼 1.PNG`(이산하, T52~T53). Scene4 사진은 `../design/scene4/3_산하 1.jpg`(대표) · `3_산하 2.png`(컷아웃), Scene5는 `../design/scene5/3_시야 1.jpeg` · `3_시야 2.png`(파일명이 NFD라 셸에서 어긋나면 `bride-child.jpeg` · `bride-child-cutout.png` 사본을 씁니다) |
+| 산출 PNG | `public/paper/note-tile.png`(1배 480×480, 162KB). 모든 종이가 이 타일을 319px로 이어 붙여 깔므로 종이 크기와 무관하게 결이 같습니다(T145. 그전에는 한 장을 늘려 깔아 0.36~1.83배로 달라 보였습니다). 4~8쪽의 메모지도 같은 그림을 씁니다. 캐릭터는 `public/character/{otter,rabbit}-{basic,1,2,…}.png` · `hug.png`(열한 장, 높이 240px, 52~83KB). Scene4는 `public/scene4/groom-child.jpg`(폭 900, 269KB) · `groom-child-ride.png`(높이 300 + 테두리, 25KB), Scene5는 `public/scene5/bride-child.jpg`(144KB) · `bride-child-cutout.png`(10KB). 아래 "이미지 축소" |
 | Next.js | `src/app/page.tsx`의 `#greeting` · `#part1-groom` · `#part1-bride` 마크업과 쪽지 등장 `useEffect`. 메모지도 `.note`라 같이 나타납니다 |
 
 ```sh
-node docs/scripts/render-asset.mjs docs/artifacts/assets/note-paper.svg public/paper/note.png 1 && python3 docs/scripts/quantize-png.py public/paper/note.png
+node docs/scripts/render-asset.mjs docs/artifacts/assets/note-tile.svg public/paper/note-tile.png 1 && python3 docs/scripts/quantize-png.py public/paper/note-tile.png
 ```
 
 ## 초대 (백합)
@@ -183,14 +182,14 @@ node docs/scripts/render-asset.mjs docs/artifacts/assets/masking-tape-short.svg 
 
 ## 오시는 길 · 하객 안내 · 마음 전하는 곳 (종이 한 장)
 
-Scene11~13(와이어프레임 12~14쪽, 디자인 논의 T110 · T111)은 이산하가 "테마를 토대로 자연스럽게 구성하라"고 맡긴 것입니다. T110에 흰 띠 + 굵은 노토 산스 제목으로 짰다가 정보 페이지처럼 보여 T111에 다시 했습니다. 안내 장면 셋은 크림색 바탕 위 흰 종이 한 장씩(`.sheet`)입니다. 쪽지와 같은 종이 결(`note.png`), 기울임 없음(위 가운데 테이프는 T112에 뺐습니다), 머리(`.sheet__head`)에 봉투의 장미 봉인(`.sheet__mark`. `public/intro/rose-seal.png` 29px. T119. T111~T118에는 Scene2의 올리브 가지 28px)과 고운바탕 제목(`.sheet__title`. 18px · 700 · 자간 0.12em)입니다. 작은 표제(`.sheet__label`. 주차 · 지하철 · 버스 · 신랑 측 · 신부 측)는 고운바탕 15px에 앞의 오크색 점(떠 있는 메뉴의 점과 같은 것)이고, 본문(`.sheet__text` · `.route__text`)은 노토 산스 15px입니다. 캐릭터는 없습니다(격식 구간). 사진첩의 흰 띠 · 굵은 왼쪽 제목(`.plain`)은 이산하 지시(T108)라 그대로입니다.
+Scene11~13(와이어프레임 12~14쪽, 디자인 논의 T110 · T111)은 이산하가 "테마를 토대로 자연스럽게 구성하라"고 맡긴 것입니다. T110에 흰 띠 + 굵은 노토 산스 제목으로 짰다가 정보 페이지처럼 보여 T111에 다시 했습니다. 안내 장면 셋은 크림색 바탕 위 흰 종이 한 장씩(`.sheet`)입니다. 쪽지와 같은 종이 결(타일 `note-tile.png`), 기울임 없음(위 가운데 테이프는 T112에 뺐습니다), 머리(`.sheet__head`)에 봉투의 장미 봉인(`.sheet__mark`. `public/intro/rose-seal.png` 29px. T119. T111~T118에는 Scene2의 올리브 가지 28px)과 고운바탕 제목(`.sheet__title`. 18px · 700 · 자간 0.12em)입니다. 작은 표제(`.sheet__label`. 주차 · 지하철 · 버스 · 신랑 측 · 신부 측)는 고운바탕 15px에 앞의 오크색 점(떠 있는 메뉴의 점과 같은 것)이고, 본문(`.sheet__text` · `.route__text`)은 노토 산스 15px입니다. 캐릭터는 없습니다(격식 구간). 사진첩의 흰 띠 · 굵은 왼쪽 제목(`.plain`)은 이산하 지시(T108)라 그대로입니다.
 
 오시는 길(`#directions`)은 식장 이름(고운바탕) · 주소(`.venue`. Scene2와 같은 값) 가운데, 지도(`.map-paper`. 흰 테두리 4px 사진 종이 안의 카카오맵. 기울이지 않습니다(T115). T112. Next.js에서 키 `NEXT_PUBLIC_KAKAO_MAP_KEY`가 있으면 오시는 길이 화면 300px 앞에 올 때(IntersectionObserver, T126) JS SDK를 싣고 대략 중심에 지도 · 표식을 놓은 뒤 지오코더가 주소로 바로잡습니다. 키가 없거나 조립본(file://)이면 크림색 자리표시 문구, SDK가 안 실리면(401. 도메인 미등록 · 카카오맵 API 미활성) 지도 앱으로 안내하는 문구(T113). 로컬에서는 T120에 지도가 뜨는 것을 확인했습니다. 키는 Kakao Developers 앱의 JavaScript 키(로컬 `.env.local`에 있음, T113)이고 앱의 Web 플랫폼에 `http://localhost:3000`과 배포 도메인을 등록해야 합니다. 로컬은 `.env.local`, 배포는 Vercel 환경 변수), 알약 셋(`.chip`. 가운데 정렬, 오크색 테두리. 네이버 지도 · 카카오맵은 식장 이름 검색 링크라 좌표가 없어도 되고, 주소 복사는 아래 복사 알림을 씁니다), 주차 · 지하철 · 버스(`.route`. 주차가 맨 앞)입니다. 노선 이름은 색 알약(`.line`. 7호선 올리브 · 수인분당선 노랑 · 간선 파랑 · 지선 초록)입니다. 하객 안내(`#guide`)는 종이 한 장에 가운데 정렬 격식체 두 문단과 사이 가는 줄(`.sheet__rule`)입니다. 둘째 문단(화환 사양)은 얇고 작게(`.sheet__text--light`. 14px · 300. T112. 노토 산스 300을 이 때문에 실었습니다). 신부대기실 시각은 추정(U-5)입니다. 마음 전하는 곳(`#gift`)은 안내 문장, 신랑 측 · 신부 측 각 세 행입니다(오른쪽 위 봉인은 T119에 머리로 옮김). 행 전체가 단추(`.account`. 크림색 종이 조각, "신랑 아버지"(관계) · 계좌번호 · 은행 + 성함의 세 줄(T131. 관계만 15px · 700이고 아래 두 줄은 14px · 300으로 같음. T130에는 관계 · 성함 · 은행 + 번호, 그 전에는 "관계 · 성함" 한 줄 + 번호 한 줄), 오른쪽에 오크색 복사 표시)이고 누르면 계좌번호만(은행명 없이, 하이픈 없는 숫자) 복사되며 화면 아래 가운데 알림(`.toast`)이 1.6초 뜹니다. 접지 않고 늘 펼칩니다. 성함 · 번호는 이산하가 준 실값입니다(T112 · T120. 표시는 하이픈). 복사는 clipboard API, 없으면(http · 옛 브라우저) 숨긴 textarea와 execCommand입니다. 떠 있는 메뉴는 오시는 길 · 마음 전하는 곳 둘입니다("연락처"는 T121에 필요 없다고 하여 뺌).
 
 | 것 | 자리 |
 | --- | --- |
 | CSS · 마크업 | `index.html`의 "종이 한 장" · "11. 오시는 길" · "12. 하객 안내" · "13. 마음 전하는 곳" · "복사 알림" 구간, `#directions` · `#guide` · `#gift` 구획, `.page` 뒤의 `#toast`, 스크립트의 복사 부분(`[data-copy]`) |
-| 에셋 | 종이 `public/paper/note.png` · 봉인 `public/intro/rose-seal.png`을 다시 씁니다. 머리 그림 제안(T112 핀 · 손종 · 봉투, T116 사람들, T118 새 셋 · 찻잔 · 튤립)은 T119에 봉인으로 정하며 지웠고 마지막 모습은 커밋 0da427b에 있습니다 |
+| 에셋 | 종이 `public/paper/note-tile.png` · 봉인 `public/intro/rose-seal.png`을 다시 씁니다. 머리 그림 제안(T112 핀 · 손종 · 봉투, T116 사람들, T118 새 셋 · 찻잔 · 튤립)은 T119에 봉인으로 정하며 지웠고 마지막 모습은 커밋 0da427b에 있습니다 |
 | Next.js | `src/app/page.tsx`의 같은 구획 · `ACCOUNTS` · `VENUE_ADDRESS` · `copyText` · `showToast` · `CopyIcon` |
 | 기다리는 것 | 배포 주소에서 지도가 뜨는지(Vercel 환경 변수 · 카카오 앱 Web 도메인) |
 
@@ -201,19 +200,19 @@ Scene14(와이어프레임 15쪽, 디자인 논의 T121~T123)는 진입 장면�
 | 것 | 자리 |
 | --- | --- |
 | CSS · 마크업 | `index.html`의 "14. 마지막" 구간(`.closing*`와 `.closing.is-closing .intro__*` 애니메이션, `closing-*` 키프레임, `.closing.is-settled` · `.is-open` 전이), `#closing` 구획, 스크립트의 마지막 장면 부분(치수 계산 · IntersectionObserver · animationend · 스크롤 방향) |
-| 에셋 | 새것 없음. `public/intro/*`와 `public/paper/note.png`를 다시 씁니다 |
+| 에셋 | 새것 없음. `public/intro/*`와 `public/paper/note-tile.png`를 다시 씁니다 |
 | Next.js | `src/app/page.tsx`의 `#closing` 구획(`closingRef`)과 마지막 장면 `useEffect` |
 
 ## 떠 있는 메뉴 · 공유 · OG (쪽지)
 
 오른쪽 아래 떠 있는 메뉴(`.fab`, 디자인 논의 T132 · T134. 전에는 오크색 동그라미에 ≡ 아이콘이라 흔한 앱 단추 같았습니다)는 테이프로 붙인 작은 쪽지(`.fab__button`, 64×46 · 2°) 위 기호이고 닫힘은 가운뎃점 셋(···), 열림은 ×입니다(T141. T132~T140에는 손글씨 "메뉴" · "닫기". 노토 산스 20px · 700). 누르면 그 위로(사이 14px) 쪽지 한 장(`.fab__menu`, 172px. 테이프 없음 · 기울이지 않음)이 8px 내려앉으며 나타나고 네 항목(`.fab__item`. 오시는 길 `#directions` · 사진첩 `#gallery` · 마음 전하는 곳 `#gift` · 공유하기 단추)이 고운바탕 15px로 가는 줄 사이에 있으며 T132에는 열린 쪽지에도 테이프 · 오크색 점 · 손글씨가 있어 난잡해 T134에 뺐고, T134의 닫기 줄과 작은 쪽지 숨김 · 기울기는 T135에 되돌렸습니다. 종이 결 · 그늘은 이야기 구간 쪽지의 부품 그대로입니다. 작은 쪽지 · 바깥 누름 · Esc · 항목 선택으로 닫힙니다.
 
-공유하기는 Next.js에서 카카오톡 공유(JS SDK 2.8.3, 지도와 같은 앱의 JavaScript 키)입니다. 메뉴를 열 때 SDK를 미리 싣고, 누르면 피드 템플릿(제목 · 설명 · `/og/share.jpg` · 단추 "청첩장 보기" · "위치 보기")으로 보냅니다. 키가 없거나 SDK를 못 실으면 기기 공유 창, 그것도 없으면 주소 복사 + 알림입니다. 조립본은 기기 공유 창 · 주소 복사만 합니다. OG 미리보기는 `src/app/layout.tsx`의 `metadata`(metadataBase · openGraph · twitter)이고 이미지는 `public/og/share.jpg`(1600×800, 2:1. 원본 `../design/og/og-image.jpeg`)입니다. 설명 "26년 10월 9일 금요일 오후 6시 30분" 뒤 줄바꿈으로 "더채플앳청담"이 있고, URL 미리보기에서 줄바꿈이 지켜지는지는 배포 뒤 확인합니다. 카카오는 미리보기를 며칠 캐시하므로 배포 뒤 공유 디버거에서 다시 스크랩합니다.
+공유하기는 Next.js에서 카카오톡 공유(JS SDK 2.8.3, 지도와 같은 앱의 JavaScript 키)입니다. 메뉴를 열 때 SDK를 미리 싣고, 누르면 피드 템플릿(제목 · 설명 · `/og/share.jpg` · 단추 "청첩장 보기" · "위치 보기")으로 보냅니다. 키가 없거나 SDK를 못 실으면 기기 공유 창, 그것도 없으면 주소 복사 + 알림입니다. 조립본은 기기 공유 창 · 주소 복사만 합니다. OG 미리보기는 `src/app/layout.tsx`의 `metadata`(metadataBase · openGraph · twitter)이고 이미지는 `public/og/share.jpg`(3478×4517. 세로 사진을 자르지 않고 그대로 씁니다. 원본 `../design/og/og-image-v2.jpeg`, T146. 처음 것은 2:1로 자른 것이었습니다, T132)입니다. 카카오톡 공유 메시지의 그림이 세로로 크게 뜨도록 자르지 않았고, URL 미리보기에서는 카카오가 800×400으로 가운데를 자릅니다. 설명 "26년 10월 9일 금요일 오후 6시 30분" 뒤 줄바꿈으로 "더채플앳청담"이 있고, URL 미리보기에서 줄바꿈이 지켜지는지는 배포 뒤 확인합니다. 카카오는 미리보기를 며칠 캐시하므로 배포 뒤 공유 디버거에서 다시 스크랩합니다.
 
 | 것 | 자리 |
 | --- | --- |
 | CSS · 마크업 | `index.html`의 "떠 있는 바로 가기" 구간(`.fab*`), `<nav class="fab">`, 스크립트의 메뉴 · 공유하기 부분 |
-| 에셋 | `public/paper/note.png` · `tape.png` · `tape-short.png`(있던 것), `public/og/share.jpg` |
+| 에셋 | `public/paper/note-tile.png` · `tape.png` · `tape-short.png`(있던 것), `public/og/share.jpg` |
 | Next.js | `src/app/page.tsx`의 `.fab` 마크업 · `share` · `loadKakaoSdk`, `src/app/layout.tsx`의 `metadata` |
 
 ## 배경 음악 (음표 스티커)
@@ -223,7 +222,7 @@ Scene14(와이어프레임 15쪽, 디자인 논의 T121~T123)는 진입 장면�
 | 것 | 자리 |
 | --- | --- |
 | CSS · 마크업 | `index.html`의 "배경 음악" 구간(`.bgm*`), `<audio id="bgm">` · `#bgmToggle`, 스크립트의 배경 음악 부분 |
-| 에셋 | `public/audio/bgm.mp3`, `public/paper/note.png`(있던 것) |
+| 에셋 | `public/audio/bgm.mp3`, `public/paper/note-tile.png`(있던 것) |
 | Next.js | `src/app/page.tsx`의 `bgmRef` · 배경 음악 `useEffect` · `toggleBgm` · `fadeInAudio` |
 
 ## Artifact 발행 (중단)
