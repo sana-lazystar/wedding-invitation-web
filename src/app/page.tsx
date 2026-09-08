@@ -247,7 +247,6 @@ export default function Home() {
             <div className="info__small">더채플앳청담 3층 커티지홀</div>
             <div className="info__small">강남구 선릉로 757</div>
           </div>
-          <img className="info__branch info__branch--flip" src="/scene2/branch.png" width={240} height={139} alt="" />
         </section>
         <section id="greeting" className="block greeting">
           <div className="note note--right">
