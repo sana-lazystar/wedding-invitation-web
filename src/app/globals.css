@@ -202,9 +202,9 @@ body {
 .fab__button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
 
-/* 0. 진입 장면(로딩). 편지봉투가 화면 높이의 2/3로 확대돼 있다가(좌우가 잘림) 물러나 폭이 화면의 92%가 되는 것과 동시에 뚜껑이 열리고, 뚜껑이 80% 열렸을 때부터 편지지(커버 자체)가 올라오는 것과 동시에 봉투가 아래로 내려가 편지지가 거의 다 보이며, 이어서 편지지가 화면 전체로 커지는 것과 동시에 봉투가 0.3초에 흐려져 사라져 Scene1이 됩니다(디자인 논의 T36~T49). 3.7초.
+/* 0. 진입 장면(로딩). 편지봉투가 화면 높이의 2/3로 확대돼 있다가(좌우가 잘림) 물러나 폭이 화면의 92%가 된 뒤 0.3초 멈추고, 뚜껑이 열리고, 뚜껑이 80% 열렸을 때부터 편지지(커버 자체)가 올라오는 것과 동시에 봉투가 아래로 내려가 편지지가 거의 다 보이며, 이어서 편지지가 화면 전체로 커지는 것과 동시에 봉투가 0.3초에 흐려져 사라져 Scene1이 됩니다(디자인 논의 T36~T49 · T76). 5.0초.
    편지지는 커버 자체입니다. 봉투 안에서는 봉투 폭의 92%로 있다가 제 높이의 35%만큼 먼저 올라오고, 봉투가 사라진 뒤 화면 전체로 커집니다. 먼저 올라오는 양이 중요합니다. 올라오기 전에 봉투가 사라지면 세로 화면 비율 때문에 아랫변이 화면 밖에 있어 벽처럼 보이고, 확장이 아니라 밀려 올라가는 것으로 보입니다(T46 · T47). 봉투 층이 앞에 있어 확대가 섞여도 가릴 것이 없습니다.
-   층 구조가 핵심입니다. 바탕(.intro, z 25) < 뒷판(.intro-layer--back, z 26. 그냥 네모) < 카드 = 커버 자체(z 30) < 앞판(.intro-layer--front, z 35. 옆 날개 둘 + 아래 날개, 입구는 투명) < 뚜껑(.intro-layer--flap, z 36 → 옆면을 지나는 1.2초에 28로 내려가 카드 뒤). 봉투는 뒷판 · 앞판 · 뚜껑 세 장이고, 카드는 앞판 뒤, 뒷판 앞에 끼워져 입구(옆 날개 사이 삼각형)로 보입니다(T42). 앞판이 카드를 자연히 가리므로 클립이 필요 없고, 봉투가 아래로 빠져나가면 그 뒤의 카드가 그대로 드러납니다.
+   층 구조가 핵심입니다. 바탕(.intro, z 25) < 뒷판(.intro-layer--back, z 26. 그냥 네모) < 카드 = 커버 자체(z 30) < 앞판(.intro-layer--front, z 35. 옆 날개 둘 + 아래 날개, 입구는 투명) < 뚜껑 그림자(.intro-layer--cast, z 35. 앞판 뒤에 있어 그 위 → 125°에 27로 내려가 뚜껑 뒤) < 뚜껑(.intro-layer--flap, z 36 → 옆면을 지나는 2.59초에 28로 내려가 카드 뒤). 봉투는 뒷판 · 앞판 · 뚜껑 세 장이고, 카드는 앞판 뒤, 뒷판 앞에 끼워져 입구(옆 날개 사이 삼각형)로 보입니다(T42). 앞판이 카드를 자연히 가리므로 클립이 필요 없고, 봉투가 아래로 빠져나가면 그 뒤의 카드가 그대로 드러납니다.
    카드가 봉투 밑변 아래로 삐져나오는 부분은 앞판 층 안의 바탕색 "바닥"(.intro__floor, 봉투 밑변 아래 전부)이 가립니다. 바닥은 봉투와 함께 내려가고 흐려지므로 클립이 필요 없고, 봉투가 내려갈 때는 윗변을 따라, 흐려질 때는 같은 박자로 카드가 드러납니다.
    치수는 봉투 좌표(600×400)입니다. 배율 --z0(높이 = 화면의 2/3) · --z1(폭 92%), 봉투 하강 --drop1, 카드 값 --card-ty0(봉투 안 자리) · --card-ty1(조금 올라온 자리) · --card-s0(봉투 안 배율)는 스크립트가 화면 크기에서 계산해 넣습니다. 뒷판·앞판·뚜껑 층은 같은 확대·하강·흐려짐 애니메이션을 씁니다.
    마지막 프레임은 커버 정지 화면과 같습니다(변환 · 클립 · 필터 없음). 봉투 상자는 화면보다 넓을 수 있어 absolute + 음수 margin으로 가운데를 맞춥니다 */
@@ -214,13 +214,23 @@ body {
 .is-intro-shown .intro-layer { visibility: visible; }
 .intro-layer--back { z-index: 26; }
 .intro-layer--front { z-index: 35; }
+.intro-layer--cast { z-index: 35; }   /* 앞판 층 뒤에 두어 앞판·카드 위, 뚜껑 아래에 그려집니다 */
 .intro-layer--flap { z-index: 36; }
 .intro__zoom { position: absolute; left: 50%; top: 50%; width: 600px; height: 400px; margin: -200px 0 0 -300px; transform: scale(var(--z0, 2.1)); }
 .intro__env { position: relative; width: 600px; height: 400px; perspective: 1400px; }
 .intro__back, .intro__front { position: absolute; left: 0; top: 0; width: 600px; height: 400px; }
 .intro__floor { position: absolute; left: -1000px; top: 400px; width: 2600px; height: 2000px; background: #E9E1D2; }
-.intro__front { filter: drop-shadow(0 18px 24px rgba(70, 48, 24, 0.28)) drop-shadow(0 2px 3px rgba(70, 48, 24, 0.25)); }
-.intro__flap { position: absolute; left: 0; top: 0; width: 600px; height: 236px; transform-origin: 50% 0; filter: drop-shadow(1.2px 2.6px 1.3px rgba(74, 54, 32, 0.34)) drop-shadow(0 0 3.2px rgba(74, 54, 32, 0.3)); }
+/* 그림자. 광원은 봉투 기준 우측 상단 45°, 높이 45°(T76). 봉투가 탁자에 드리우는 그림자는 바닥(.intro__floor) 위에 그려져야 봉투 아랫변 아래에도 보이므로 앞판 층의 상자(.intro__table)로 두고, 앞판 자체는 카드에 닿는 얇은 그림자만 둡니다 */
+.intro__table { position: absolute; left: 0; top: 0; width: 600px; height: 400px; border-radius: 3px; box-shadow: -13px 13px 20px rgba(70, 48, 24, 0.26), -2px 2px 4px rgba(70, 48, 24, 0.18); }
+.intro__front { filter: drop-shadow(-1.5px 1.5px 2px rgba(70, 48, 24, 0.26)); }
+.intro__flap { position: absolute; left: 0; top: 0; width: 600px; height: 236px; transform-origin: 50% 0; filter: drop-shadow(0 0 2.4px rgba(74, 54, 32, 0.22)); }
+/* 뚜껑 그림자. 뚜껑과 봉인의 어두운 실루엣(.intro__cast)이 뚜껑과 같은 회전(rotateX)을 하고, 같은 transform 목록 앞의 matrix3d가 그 3D 결과를 광원 방향으로 봉투 면(z=0)에 투영합니다(z를 x로 -0.7071, y로 +0.7071 옮기고 z는 0.001로 눌러 평평하게). 뚜껑이 세워질수록 그림자가 왼쪽 아래로 길어지고, 125°에서 선으로 접힌 뒤 윗변 위로 넘어갑니다. 회전 애니메이션이 같은 곡선·시각이라 어긋나지 않습니다.
+   투영과 회전은 한 요소의 transform 목록에 함께 둡니다. 바깥 요소(preserve-3d)에 투영을 두고 안쪽에서 회전하면 WebKit이 투영을 무시합니다(T76 실험. Chromium은 됩니다).
+   실루엣은 선명한 것과 흐린 것 두 벌을 겹쳐 뚜껑이 높이 설수록 흐린 쪽이 보이게 합니다(불투명도만 움직여 합성기에서 처리). 뚜껑은 종이 두께만큼(4px) 떠 있어 닫혀 있을 때도 왼쪽 아래로 얇은 그림자가 납니다 */
+.intro__cast { position: absolute; left: 0; top: 0; width: 600px; height: 236px; transform-origin: 50% 0; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(0deg); }
+.intro__cast-img { position: absolute; left: 0; top: 0; width: 600px; height: 236px; filter: brightness(0) invert(0.25) sepia(1) blur(2.5px); opacity: 0.3; }
+.intro__cast-img--seal { left: 230px; top: 135px; width: 140px; height: 140px; }
+.intro__cast-img--soft { filter: brightness(0) invert(0.25) sepia(1) blur(10px); opacity: 0; }
 .intro__flap-out, .intro__flap-in { position: absolute; left: 0; top: 0; width: 600px; height: 236px; }
 .intro__flap-in { opacity: 0; }
 /* 봉인은 뚜껑의 자식이라 함께 젖혀집니다. 앞면은 바깥면 위에, 뒷면(어두운 밀랍)은 안쪽면 아래에 같은 자리로 두고 옆면에서 바꿉니다. 봉인이 뚜껑 끝보다 커서 젖혀진 뒤에는 뚜껑 끝 둘레로 뒷면이 보입니다 */
@@ -234,24 +244,32 @@ body {
 }
 .is-intro #cover { z-index: 30; transform-origin: 50% 0; visibility: hidden; }
 .is-intro-shown #cover { visibility: visible; }
-/* 시간표. 0~0.4 확대된 채 · 0.4~1.4 물러남 · 0.4~2.4 뚜껑(옆면 1.29, 80%는 1.58) · 1.58~2.48 편지지가 올라오고 동시에 봉투가 내려가 편지지가 거의 다 보임 · 2.6~3.7 편지지가 화면 전체로 커지고 그 시작에 봉투가 0.3초에 흐려짐. 끝 */
+/* 시간표(T76). 0~0.4 확대된 채 · 0.4~1.4 물러남 · 1.4~1.7 멈춤 · 1.7~3.7 뚜껑(옆면 2.59, 그림자가 윗변을 넘는 125°는 2.75, 80%는 2.88) · 2.88~3.78 편지지가 올라오고 동시에 봉투가 내려가 편지지가 거의 다 보임 · 3.9~5.0 편지지가 화면 전체로 커지고 그 시작에 봉투가 0.3초에 흐려짐. 끝 */
 .is-intro-shown .intro__zoom { animation: intro-zoom 1s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both; }
-.is-intro-shown .intro__flap { animation: intro-flap 2s cubic-bezier(0.55, 0, 0.3, 1) 0.4s both; }
-/* 면 교체 시각 = 뚜껑이 90°를 지나는 순간. 곡선 cubic-bezier(0.55, 0, 0.3, 1)은 진행 50%가 시간 44.4%에 오므로 0.4 + 2 × 0.444 = 1.29초. 뚜껑 층도 이때 카드 뒤로 */
-.is-intro-shown .intro__flap-out, .is-intro-shown .intro__seal { animation: intro-hide 1ms linear 1.29s both; }
-.is-intro-shown .intro__flap-in, .is-intro-shown .intro__seal-back { animation: intro-show 1ms linear 1.29s both; }
-.is-intro-shown .intro-layer--flap { animation: intro-flap-layer 1ms linear 1.29s both; }
-.is-intro-shown .intro__env { animation: intro-drop 0.9s cubic-bezier(0.45, 0.05, 0.3, 1) 1.58s both, intro-fade 0.3s ease-in-out 2.6s both; }
+.is-intro-shown .intro__flap { animation: intro-flap 2s cubic-bezier(0.55, 0, 0.3, 1) 1.7s both; }
+.is-intro-shown .intro__cast { animation: intro-cast 2s cubic-bezier(0.55, 0, 0.3, 1) 1.7s both; }
+.is-intro-shown .intro__cast-img { animation: intro-cast-sharp 2s ease-in-out 1.7s both; }
+.is-intro-shown .intro__cast-img--soft { animation: intro-cast-soft 2s ease-in-out 1.7s both; }
+/* 면 교체 시각 = 뚜껑이 90°를 지나는 순간. 곡선 cubic-bezier(0.55, 0, 0.3, 1)은 진행 50%가 시간 44.4%에 오므로 1.7 + 2 × 0.444 = 2.59초. 뚜껑 층도 이때 카드 뒤로. 그림자 층은 그림자가 선으로 접히는 125°(진행 69.6% = 시간 52.7%, 2.75초)에 뚜껑 뒤로 */
+.is-intro-shown .intro__flap-out, .is-intro-shown .intro__seal { animation: intro-hide 1ms linear 2.59s both; }
+.is-intro-shown .intro__flap-in, .is-intro-shown .intro__seal-back { animation: intro-show 1ms linear 2.59s both; }
+.is-intro-shown .intro-layer--flap { animation: intro-flap-layer 1ms linear 2.59s both; }
+.is-intro-shown .intro-layer--cast { animation: intro-cast-layer 1ms linear 2.75s both; }
+.is-intro-shown .intro__env { animation: intro-drop 0.9s cubic-bezier(0.45, 0.05, 0.3, 1) 2.88s both, intro-fade 0.3s ease-in-out 3.9s both; }
 /* 뒤의 커지기 애니메이션은 forwards만 두어 앞의 조금 올라오기 값을 덮지 않습니다 */
-.is-intro-shown #cover { animation: intro-card-peek 0.9s cubic-bezier(0.45, 0.05, 0.3, 1) 1.58s both, intro-card-rise 1.1s cubic-bezier(0.45, 0.05, 0.3, 1) 2.6s forwards; }
-.is-intro-shown .intro__skip { animation: intro-skip 3.2s linear 0s both; }
+.is-intro-shown #cover { animation: intro-card-peek 0.9s cubic-bezier(0.45, 0.05, 0.3, 1) 2.88s both, intro-card-rise 1.1s cubic-bezier(0.45, 0.05, 0.3, 1) 3.9s forwards; }
+.is-intro-shown .intro__skip { animation: intro-skip 4.5s linear 0s both; }
 @keyframes intro-zoom { from { transform: scale(var(--z0, 2.1)); } to { transform: scale(var(--z1, 0.57)); } }
 @keyframes intro-flap { from { transform: rotateX(0deg); } to { transform: rotateX(180deg); } }
+@keyframes intro-cast { from { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(0deg); } to { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(180deg); } }
+@keyframes intro-cast-sharp { 0% { opacity: 0.3; } 44% { opacity: 0.1; } 100% { opacity: 0.3; } }
+@keyframes intro-cast-soft { 0% { opacity: 0; } 44% { opacity: 0.24; } 100% { opacity: 0; } }
 @keyframes intro-flap-layer { from { z-index: 36; } to { z-index: 28; } }
+@keyframes intro-cast-layer { from { z-index: 35; } to { z-index: 27; } }
 @keyframes intro-hide { from { opacity: 1; } to { opacity: 0; } }
 @keyframes intro-show { from { opacity: 0; } to { opacity: 1; } }
 @keyframes intro-drop { from { transform: translateY(0); } to { transform: translateY(var(--drop1)); } }
 @keyframes intro-fade { from { opacity: 1; } to { opacity: 0; } }
-@keyframes intro-skip { 0% { opacity: 0; } 14% { opacity: 0; } 23% { opacity: 1; } 92% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes intro-skip { 0% { opacity: 0; } 10% { opacity: 0; } 17% { opacity: 1; } 93% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes intro-card-peek { from { transform: translateY(var(--card-ty0)) scale(var(--card-s0)); } to { transform: translateY(var(--card-ty1)) scale(var(--card-s0)); } }
 @keyframes intro-card-rise { from { transform: translateY(var(--card-ty1)) scale(var(--card-s0)); } to { transform: translateY(0) scale(1); } }

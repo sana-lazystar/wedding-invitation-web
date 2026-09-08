@@ -11,6 +11,7 @@ export default function Home() {
   const introRef = useRef<HTMLDivElement>(null);
   const introBackRef = useRef<HTMLDivElement>(null);
   const introFrontRef = useRef<HTMLDivElement>(null);
+  const introCastRef = useRef<HTMLDivElement>(null);
   const introFlapRef = useRef<HTMLDivElement>(null);
   const coverRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,7 +20,7 @@ export default function Home() {
   useEffect(() => {
     const root = document.documentElement;
     const cover = coverRef.current;
-    const layers = [introRef.current, introBackRef.current, introFrontRef.current, introFlapRef.current];
+    const layers = [introRef.current, introBackRef.current, introFrontRef.current, introCastRef.current, introFlapRef.current];
     if (!cover || layers.some((el) => !el)) return;
     let finished = false;
     const onIntroTouchMove = (e: TouchEvent) => e.preventDefault();
@@ -67,7 +68,7 @@ export default function Home() {
       if (started || finished) return;
       started = true;
       root.classList.add("is-intro-shown");
-      safety = window.setTimeout(finishIntro, 6500);
+      safety = window.setTimeout(finishIntro, 7800);
     };
     const imgs = layers.flatMap((el) => Array.from(el!.querySelectorAll("img")));
     Promise.all(imgs.map((im) => (im.decode ? im.decode().catch(() => undefined) : Promise.resolve()))).then(startIntro);
@@ -152,7 +153,20 @@ export default function Home() {
             <div className="intro__zoom">
               <div className="intro__env">
                 <div className="intro__floor" />
+                <div className="intro__table" />
                 <img className="intro__front" src="/intro/envelope-front.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div className="intro-layer intro-layer--cast" ref={introCastRef} aria-hidden="true">
+            <div className="intro__zoom">
+              <div className="intro__env">
+                <div className="intro__cast">
+                  <img className="intro__cast-img" src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--seal" src="/intro/wax-seal.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--soft" src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--seal intro__cast-img--soft" src="/intro/wax-seal.png" alt="" />
+                </div>
               </div>
             </div>
           </div>
