@@ -176,6 +176,23 @@ body {
 #part1-bride .note--memo { margin-bottom: calc(10.26 * min(1vw, 4.3px)); }   /* 390px에서 40(T100) */
 #part2-groom { padding-top: 70px; }   /* Scene6 위는 30에 20px 더(T94), 다시 20px 더(T96) */
 
+/* 9. 초대(와이어프레임 10쪽, T127). 이산하가 준 참고 그림(docs/design/scene9/scene-9-reference.png, 390×980)을 그대로 옮긴 것입니다. 크림 바탕에 종이 없이 글만 가운데 정렬이고, 왼쪽 위에 백합 한 송이, 오른쪽 아래에 꽃잎 둘이 스티커로 걸칩니다(그림은 public/scene9/. 흰 테두리는 그림에 있고 그늘만 CSS). 스티커는 구획 밖으로 잘립니다(overflow hidden. 참고 그림에서도 왼쪽 · 오른쪽 변에서 잘림). 글은 고운바탕이고 굵은 줄(17px · 700) · 옅은 줄(16px · 400) · 작은 줄(11.5~12px)의 세 단계이며 줄바꿈은 참고 그림대로 고정합니다. 세로 자리는 참고 그림의 글줄 위치를 px로 옮긴 것이라 화면 폭과 무관하고, 스티커는 모서리에 붙습니다. 스티커의 크기 · 각도 · 자리는 참고 그림에 그림 마스크를 겹쳐 맞춘 값입니다 */
+.invite { position: relative; overflow: hidden; padding: 315px 24px 134px; text-align: center; font-family: var(--font-name); word-break: keep-all; }
+.invite__text { position: relative; z-index: 1; }
+.invite__strong { margin: 0; font-size: 17px; font-weight: 700; line-height: 32px; color: #4A3828; }
+.invite__light { margin: 25px 0 0; font-size: 16px; line-height: 29px; color: #7C6A58; }
+.invite__verse { margin: 38px 0 0; }
+.invite__verse strong { display: block; font-size: 17px; font-weight: 700; line-height: 32px; color: #4A3828; }
+.invite__verse span { display: block; font-size: 11.5px; line-height: 20px; color: #A0907C; }
+.invite__verse + .invite__light { margin-top: 39px; }
+.invite__names { margin: 41px 0 0; font-size: 15px; font-weight: 700; line-height: 31px; color: #4A3828; }
+.invite__role { margin: 0 0.6em; }
+.invite__from { margin: 14px 0 0; font-size: 12px; line-height: 22px; letter-spacing: 0.1em; text-indent: 0.1em; color: #A0907C; }
+.invite__sticker { position: absolute; height: auto; pointer-events: none; filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.14)) drop-shadow(0 6px 8px rgba(70, 48, 24, 0.16)); }
+.invite__lily { width: 154px; left: 8px; top: 52px; transform: rotate(62deg); }
+.invite__petal--1 { width: 70px; right: 3px; bottom: 19px; transform: rotate(-55deg); }   /* 오른쪽 것. 밑동이 오른쪽 변에 닿습니다 */
+.invite__petal--2 { width: 84px; right: 67px; bottom: 39px; transform: rotate(-96deg); }   /* 왼쪽 것. 오른쪽 꽃잎 위에 겹칩니다 */
+
 /* 10. 추신 + 만화(와이어프레임 11쪽 위 절반, T102). 편지(Scene9 초대) 뒤에 붙는 추신입니다. 마스킹테이프로 바탕에 붙인 쪽지 한 장에 "P.S. …" 한 줄이 있고, 그 아래 네 컷 만화(이산하가 준 그림 한 장, 1664×1087)를 사진 종이처럼 흰 테두리에 붙였습니다. 추신은 이야기 구간의 메모지와 같은 부품(.note)이라 같은 종이 · 글꼴 · 나타나기이고, 테이프만 더해 "나중에 덧붙인 것"으로 읽힙니다. 만화 종이는 버튼이라 누르면 뷰어가 열립니다 */
 .comic { padding-top: 30px; }
 .note--ps { --tilt: -1.2deg; padding: 14px 18px 14px 16px; }   /* 한 줄이라 위아래 여백은 14px */

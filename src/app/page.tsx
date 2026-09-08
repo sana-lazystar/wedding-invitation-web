@@ -557,20 +557,33 @@ export default function Home() {
               <img className="note__paper" src="/paper/note.png" alt="" />
               <p className="note__text">어른이 되고는 꿈을 꾸지 않던 제가, 이 사람을 만나 다시 꿈꾸게 됐어요. 사랑도 많아졌고요.</p>
             </div>
-            <img className="note__who note-wrap__who" src="/character/otter-3.png" width={223} height={240} alt="" />
+            <img className="note__who note-wrap__who" src="/character/otter-4.png" width={240} height={207} alt="" />
           </div>
           <div className="note note--left note--memo">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/rabbit-5.png" width={240} height={184} alt="" />
+            <img className="note__who" src="/character/rabbit-6.png" width={240} height={177} alt="" />
             <p className="note__text">마음이 여렸던 저는 이 사람 덕분에 많이 단단해졌어요! 누군가에게 기대는 법도 배웠고요!</p>
           </div>
           <div className="note note--right note--memo">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/hug.png" width={240} height={189} alt="" />
-            <p className="note__text">MBTI 궁합이 &apos;파국&apos;으로 나올 만큼 성향이 다르지만, 달랐기에 서로의 빈틈을 채우고, 장점은 더 빛낼 수 있었어요.</p>
+            <p className="note__text">그런 저희가 이제 하나가 됩니다.</p>
           </div>
         </section>
-        {/* 9쪽 초대(Scene9)는 수정 사항이 있어 뒤로 미루고, 나중에 이 자리(Scene8과 Scene10 사이)에 끼웁니다(디자인 논의 T102) */}
+        {/* 9. 초대(와이어프레임 10쪽, 디자인 논의 T127). 참고 그림 docs/design/scene9/scene-9-reference.png를 옮긴 것. 백합 · 꽃잎은 이산하가 준 그림 */}
+        <section id="invite" className="block invite">
+          <img className="invite__sticker invite__lily" src="/scene9/lily.png" width={577} height={900} alt="" />
+          <div className="invite__text">
+            <p className="invite__strong">서로에게 사랑을 덧입히며<br />두 마음을 하나로 엮어 왔습니다.</p>
+            <p className="invite__light">혼자였다면 오지 못했을 자리에<br />둘이라서 도착했고, 그 매듭에는<br />여러분이 함께 계셨습니다.</p>
+            <p className="invite__verse"><strong>사랑은 온전하게 연결하는 띠입니다.</strong><span>골로새서 3장 14절</span></p>
+            <p className="invite__light">훗날 이날의 사진첩을 꺼내볼 때,<br />그 안에 저희와 함께 웃고 있는<br />여러분이 계셨으면 좋겠습니다.</p>
+            <p className="invite__names">이종노 · 이은경<span className="invite__role">의 아들</span>이산하<br />송영봉 · 임인화<span className="invite__role">의 딸</span>송시야</p>
+            <p className="invite__from">올림</p>
+          </div>
+          <img className="invite__sticker invite__petal--1" src="/scene9/petal-1.png" width={358} height={450} alt="" />
+          <img className="invite__sticker invite__petal--2" src="/scene9/petal-2.png" width={395} height={450} alt="" />
+        </section>
         {/* 10. 추신 + 만화(와이어프레임 11쪽 위 절반, 디자인 논의 T102). 사진첩(같은 쪽 아래 절반)은 다음 구획입니다(T103) */}
         <section id="comic" className="block story comic">
           <div className="note note--left note--memo note--ps">
@@ -798,7 +811,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-        {/* 10쪽 초대(Scene9)는 Scene8과 Scene10 사이에 끼웁니다 */}
       </div>
 
       {/* 만화 뷰어(디자인 논의 T102). 그림은 같은 파일이라 다시 내려받지 않습니다 */}
