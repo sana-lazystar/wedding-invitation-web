@@ -15,22 +15,22 @@ const GALLERY_PREVIEW = 8;
 const galleryMore = gallery.length - GALLERY_PREVIEW;
 type Viewer = { kind: "comic" } | { kind: "gallery"; index: number };
 
-// 마음 전하는 곳(디자인 논의 T110 · T112). 부모님 성함은 이산하가 준 실명(T112), 계좌번호는 자리표시(디자인 결정 6). 관계를 이름 앞에 씁니다
+// 마음 전하는 곳(디자인 논의 T110 · T112 · T120). 성함 · 계좌번호는 이산하가 준 실값. 표시는 하이픈, 복사는 숫자만. 관계를 이름 앞에 씁니다
 const ACCOUNTS: { side: string; rows: { who: string; bank: string; num: string }[] }[] = [
   {
     side: "신랑 측",
     rows: [
-      { who: "아버지 · 이종노", bank: "농협", num: "000-0000-0000" },
-      { who: "어머니 · 이은경", bank: "국민", num: "000-00-0000-000" },
-      { who: "신랑 · 이산하", bank: "카카오뱅크", num: "0000-00-000000" },
+      { who: "아버지 · 이종노", bank: "하나", num: "468-910199-62707" },
+      { who: "어머니 · 이은경", bank: "국민", num: "879602-01-133871" },
+      { who: "신랑 · 이산하", bank: "토스뱅크", num: "1001-6105-5173" },
     ],
   },
   {
     side: "신부 측",
     rows: [
-      { who: "아버지 · 송영봉", bank: "농협", num: "000-0000-0000" },
-      { who: "어머니 · 임인화", bank: "신한", num: "000-000-000000" },
-      { who: "신부 · 송시야", bank: "농협", num: "000-0000-0000" },
+      { who: "아버지 · 송영봉", bank: "삼성증권", num: "7084-1174-8301" },
+      { who: "어머니 · 임인화", bank: "삼성증권", num: "7082-4708-9301" },
+      { who: "신부 · 송시야", bank: "국민", num: "879201-00-010006" },
     ],
   },
 ];
@@ -686,7 +686,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 13. 마음 전하는 곳(와이어프레임 14쪽, 디자인 논의 T110 · T111 · T119). 종이 한 장. 행을 누르면 계좌번호가 복사됩니다 */}
+        {/* 13. 마음 전하는 곳(와이어프레임 14쪽, 디자인 논의 T110 · T111 · T119 · T120). 종이 한 장. 행을 누르면 계좌번호(숫자만)가 복사됩니다 */}
         <section id="gift" className="block story">
           <div className="sheet">
             <img className="note__paper" src="/paper/note.png" alt="" />
@@ -705,7 +705,7 @@ export default function Home() {
                       className="account"
                       key={row.who}
                       aria-label={`${row.who} ${row.bank} ${row.num} 복사`}
-                      onClick={() => copy(row.num, "계좌번호를 복사했습니다")}
+                      onClick={() => copy(row.num.replace(/-/g, ""), "계좌번호를 복사했습니다")}
                     >
                       <span className="account__text">
                         <span className="account__who">{row.who}</span>
