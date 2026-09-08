@@ -132,3 +132,5 @@ related: []
 2026-09-08 15:59:53 · develop · 48f4ef4 · 진입 장면 봉투를 레이스 봉투로 대체(디자인 논의 T77~T82). `public/intro/*.png` `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-08 16:15:32 · develop · fd966d6 · 확대 막기 · 커버 높이 고정 · Scene2 올리브 가지 · 두 사람 컷아웃 · Scene4 사진 · 웨딩 사진 셋(디자인 논의 T83). `src/app/layout.tsx` `src/app/page.tsx` `src/app/globals.css` `public/scene1/couple.png` `public/scene2/branch.png` `public/scene4/groom-child.jpg` `public/scene6/groom.jpg` `public/scene7/bride.jpg` `public/scene8/couple.jpg`.
+
+2026-09-08 16:17:00 · develop · 71d701d · Scene2 바탕을 흰 종이로(디자인 논의 T84). `src/app/page.tsx` `src/app/globals.css`.
