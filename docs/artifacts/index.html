@@ -8,7 +8,8 @@
   <!-- 글꼴 후보. 시안 확인용으로 여럿을 싣습니다. 확정되면 쓰는 것만 남깁니다 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;600&family=Hahmlet:wght@400;600&family=Song+Myung&family=Diphylleia&family=Grandiflora+One&family=Nanum+Pen+Script&family=Nanum+Brush+Script&family=Gaegu:wght@400;700&family=Hi+Melody&family=Gamja+Flower&family=Gowun+Dodum&family=Nanum+Gothic:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500&family=Cormorant+Garamond:wght@500;600&display=swap">
+  <link rel="stylesheet" href="../../node_modules/swiper/swiper-bundle.min.css">   <!-- 사진 뷰어(T103). Next.js는 swiper/react와 swiper/css를 씁니다 -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;600&family=Hahmlet:wght@400;600&family=Song+Myung&family=Diphylleia&family=Grandiflora+One&family=Nanum+Pen+Script&family=Nanum+Brush+Script&family=Gaegu:wght@400;700&family=Hi+Melody&family=Gamja+Flower&family=Gowun+Dodum&family=Nanum+Gothic:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500&family=Cormorant+Garamond:wght@500;600&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <style>
     * { box-sizing: border-box; }
@@ -57,6 +58,7 @@
       padding: calc(56px + env(safe-area-inset-top)) 24px 48px;   /* 아래 여백은 배경(커버 상자 = 고정 높이) 아랫변 기준 48px. 안전 영역을 더하지 않습니다(T50) */
       overflow: hidden;
       isolation: isolate;   /* 커버 안의 층 순서를 커버 안에서 닫습니다(T66) */
+      background: var(--paper-bg);   /* 홀 사진이 오기 전에도 불투명하게(T124). 진입 장면에서 카드가 비치지 않도록 */
     }
     /* 무대(T75). 홀 사진·두 사람·그늘은 폭 기준 고정 크기 상자(폭 106%, 홀 사진 비율)에 있고 커버 아랫변에 붙습니다. 인앱 브라우저(카카오톡)는 주소창이 사라질 때 창 높이 자체가 바뀌어 svh까지 변하므로 높이 기준이면 그림이 늘었다 줄었다 합니다. 폭 기준이면 크기는 그대로이고 위쪽 커튼이 더 잘리거나 덜 잘릴 뿐입니다. 폭 106%(좌우 3%씩 잘림)는 세로 비율 0.444까지 폰 화면을 채웁니다. 두 사람 값은 390×844에서 전(높이 기준 27% · 22%)과 같은 크기·자리가 되도록 환산했습니다 */
     .cover-bg { position: absolute; left: 50%; bottom: 0; width: 106%; aspect-ratio: 860 / 1829; transform: translateX(-50%); z-index: 0; overflow: hidden; }
@@ -186,41 +188,272 @@
     #part1-bride .note--memo { margin-bottom: calc(10.26 * min(1vw, 4.3px)); }   /* 390px에서 40(T100) */
     #part2-groom { padding-top: 70px; }   /* Scene6 위는 30에 20px 더(T94), 다시 20px 더(T96) */
 
-    /* 떠 있는 바로 가기 버튼 */
+    /* 9. 초대(와이어프레임 10쪽, T127). 이산하가 준 참고 그림(docs/design/scene9/scene-9-reference.png, 390×980)을 그대로 옮긴 것입니다. 크림 바탕에 종이 없이 글만 가운데 정렬이고, 왼쪽 위에 백합 한 송이, 오른쪽 아래에 꽃잎 둘이 스티커로 걸칩니다(그림은 public/scene9/. 흰 테두리는 그림에 있고 그늘만 CSS). 스티커는 구획 밖으로 잘립니다(overflow hidden. 참고 그림에서도 왼쪽 · 오른쪽 변에서 잘림). 글은 고운바탕이고 굵은 줄(17px · 700) · 옅은 줄(16px · 400) · 작은 줄(11.5~12px)의 세 단계이며 줄바꿈은 참고 그림대로 고정합니다. 세로 자리는 참고 그림의 글줄 위치를 px로 옮긴 것이라 화면 폭과 무관하고, 스티커는 모서리에 붙습니다. 스티커의 크기 · 각도 · 자리는 참고 그림에 그림 마스크를 겹쳐 맞춘 값입니다 */
+    .invite { position: relative; overflow: hidden; padding: 315px 24px 134px; text-align: center; font-family: var(--font-name); word-break: keep-all; }
+    .invite__text { position: relative; z-index: 1; }
+    .invite__strong { margin: 0; font-size: 17px; font-weight: 700; line-height: 32px; color: #4A3828; }
+    .invite__light { margin: 25px 0 0; font-size: 16px; line-height: 29px; color: #7C6A58; }
+    .invite__verse { margin: 38px 0 0; }
+    .invite__verse strong { display: block; font-size: 17px; font-weight: 700; line-height: 32px; color: #4A3828; }
+    .invite__verse span { display: block; font-size: 11.5px; line-height: 20px; color: #A0907C; }
+    .invite__verse + .invite__light { margin-top: 39px; }
+    .invite__names { margin: 41px 0 0; font-size: 15px; font-weight: 700; line-height: 31px; color: #4A3828; }
+    .invite__role { margin: 0 0.6em; }
+    .invite__from { margin: 14px 0 0; font-size: 12px; line-height: 22px; letter-spacing: 0.1em; text-indent: 0.1em; color: #A0907C; }
+    .invite__sticker { position: absolute; height: auto; pointer-events: none; filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.14)) drop-shadow(0 6px 8px rgba(70, 48, 24, 0.16)); }
+    .invite__lily { width: 154px; left: 8px; top: 52px; transform: rotate(62deg); }
+    .invite__petal--1 { width: 70px; right: 3px; bottom: 19px; transform: rotate(-55deg); }   /* 오른쪽 것. 밑동이 오른쪽 변에 닿고 왼쪽 꽃잎 위에 겹칩니다(T129. 처음엔 반대였음) */
+    .invite__petal--2 { width: 84px; right: 67px; bottom: 39px; transform: rotate(-96deg); }   /* 왼쪽 것. 오른쪽 꽃잎 아래입니다 */
+
+    /* 10. 추신 + 만화(와이어프레임 11쪽 위 절반, T102). 편지(Scene9 초대) 뒤에 붙는 추신입니다. 마스킹테이프로 바탕에 붙인 쪽지 한 장에 "P.S. …" 한 줄이 있고, 그 아래 네 컷 만화(이산하가 준 그림 한 장, 1664×1087)를 사진 종이처럼 흰 테두리에 붙였습니다. 추신은 이야기 구간의 메모지와 같은 부품(.note)이라 같은 종이 · 글꼴 · 나타나기이고, 테이프만 더해 "나중에 덧붙인 것"으로 읽힙니다. 만화 종이는 버튼이라 누르면 뷰어가 열립니다 */
+    .comic { padding-top: 30px; }
+    .note--ps { --tilt: -1.2deg; padding: 14px 18px 14px 16px; }   /* 한 줄이라 위아래 여백은 14px */
+    .note__tape { position: absolute; top: -9px; left: 14px; width: 72px; height: auto; transform: rotate(-3deg); pointer-events: none; }   /* 테이프 그림(public/paper/tape.png, 원본 assets/masking-tape.svg). 쪽지 왼쪽 위 변에 걸칩니다 */
+    .comic__paper {
+      width: 100%; align-self: center; margin: 0; border: 0; padding: 4px; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+      transform: none; -webkit-tap-highlight-color: transparent;   /* 사진 종이(-0.7°)와 달리 기울이지 않습니다(T103. T102에는 0.5°) */
+    }
+    .comic__paper:focus-visible { outline: 2px solid var(--oak); outline-offset: 4px; }
+    .comic__hint {   /* 오른쪽 위. 오른쪽 아래는 떠 있는 메뉴 버튼(고정)에 가려집니다 */
+      position: absolute; right: 12px; top: 12px; z-index: 1; display: inline-flex; align-items: center; gap: 4px; padding: 6px 10px 6px 8px; border-radius: 999px;
+      background: rgba(255, 255, 255, 0.88); box-shadow: 0 1px 3px rgba(70, 48, 24, 0.28);
+      font-family: var(--font-ui); font-size: 11px; font-weight: 500; line-height: 1; letter-spacing: 0.02em; color: var(--ink-soft);
+    }
+    /* 만화 뷰어. 화면 전체를 바탕색(베이지)으로 덮고 만화를 90° 돌려(시계 방향. 폰을 왼쪽으로 눕히면 바로 읽힙니다) 화면에 맞춥니다. 비율은 그대로이고 남는 위아래는 바탕색입니다. 그림 상자는 돌리기 전 기준으로 폭 = 화면 높이 · 높이 = 화면 폭이라(스크립트가 --viewer-w · --viewer-h로 잰 값) 돌린 뒤 화면을 꼭 채우고, object-fit: contain이 비율을 지킵니다. 화면이 이미 가로(폰을 돌린 상태)면 돌리지 않습니다. 닫기는 × · 어디든 탭 · Esc. 열려 있는 동안 뒤 페이지는 스크롤되지 않습니다(html.is-viewer) */
+    .comic-viewer { position: fixed; inset: 0; z-index: 45; overflow: hidden; background: var(--paper-bg); touch-action: none; animation: viewer-in 0.22s ease-out both; }
+    .comic-viewer[hidden] { display: none; }
+    .comic-viewer__img {
+      position: absolute; left: 50%; top: 50%; width: var(--viewer-h, 100vh); height: var(--viewer-w, 100vw); max-width: none; object-fit: contain;
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+    @media (orientation: landscape) { .comic-viewer__img { width: var(--viewer-w, 100vw); height: var(--viewer-h, 100vh); transform: translate(-50%, -50%); } }
+    .comic-viewer__close {
+      position: absolute; top: calc(12px + env(safe-area-inset-top)); right: calc(12px + env(safe-area-inset-right)); width: 44px; height: 44px; border-radius: 50%; border: 0; padding: 0;
+      display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.78); color: var(--ink); box-shadow: 0 2px 8px rgba(70, 48, 24, 0.22); cursor: pointer;
+    }
+    .comic-viewer__close:focus-visible { outline: 2px solid var(--oak); outline-offset: 3px; }
+    .is-viewer { overflow: hidden; }
+    @keyframes viewer-in { from { opacity: 0; } to { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { .comic-viewer { animation: none; } }
+
+    /* 사진첩(와이어프레임 11쪽 아래 절반, T103 · T107 · T108). 흰 바탕 구획에 왼쪽 정렬한 굵은 제목 "사진첩"(노토 산스), 그 아래 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 9번째 사진을 흐리게 깔고 나머지 장수(+N개)를 씁니다. 타일은 테두리 없는 네모(모서리 4px, 사이 6px)이고 기울이지 않습니다. 어느 타일을 눌러도 그 사진부터 뷰어가 열립니다.
+       T104~T106의 나무 틀과 표지판은 동화 느낌이 나서 T107에 지웠습니다(마지막 모습은 커밋 a8487a0. 에셋 wood-frame · wood-sign도 함께 지움). T103~T104의 테이프 쪽지 제목도 같습니다 */
+    /* 흰 바탕 구획(T108). 사진첩이 씁니다(이산하 지시. T110에 오시는 길 · 마음 전하는 곳도 썼다가 T111에 종이 한 장으로 되돌림). 제목은 가운데 정렬한 고운바탕 400 · 짙은 갈색(T117. T108~T116에는 왼쪽 굵은 노토 산스, T105~T107에는 가운데 500) */
+    .plain { background: #FFFFFF; }
+    .plain__title { margin: 0; text-align: center; font-family: var(--font-name); font-size: 18px; font-weight: 700; letter-spacing: 0.12em; text-indent: 0.12em; color: #2A1A0E; }   /* 고운바탕 18px · 700(T118. T117에는 16px · 400) · 짙은 갈색(Scene2 날짜와 같은 색) · 가운데(T117. T108~T116에는 노토 산스 700 왼쪽) */
+    .gallery__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .gallery__tile {
+      display: block; position: relative; width: 100%; aspect-ratio: 1; margin: 0; padding: 0; border: 0; border-radius: 4px; overflow: hidden;
+      background: var(--rule); cursor: pointer; -webkit-tap-highlight-color: transparent;   /* 바탕색은 사진이 오기 전 자리 */
+    }
+    .gallery__tile:focus-visible { outline: 2px solid var(--oak); outline-offset: 3px; }
+    .gallery__thumb { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .gallery__tile--more .gallery__thumb { filter: blur(3px); transform: scale(1.08); }   /* 흐림의 가장자리가 비치지 않게 조금 키웁니다 */
+    .gallery__more { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(47, 42, 37, 0.45); color: #fff; font-family: var(--font-ui); font-size: 17px; font-weight: 500; letter-spacing: 0.02em; }
+    /* 사진 뷰어(T103 · T104 · T105). 어두운 반투명 바탕(뒤 페이지가 비칩니다) 위에 Swiper(설치한 라이브러리. 조립본은 node_modules의 번들, Next.js는 swiper/react)가 사진을 한 장씩 보여 주고, 좌우로 밀거나 화살표 · 키보드로 넘깁니다. 닫기는 오른쪽 위 × · Esc.
+       테마(T104 제안 · T105 손질). 사진은 페이지의 사진 종이처럼 흰 테두리 4px의 인화지(.gallery-viewer__print. T106. 전에는 6)이고 위 가운데에 마스킹테이프 한 장이 가로로 붙어 있습니다(T122. T109에는 세로, T105에는 7°, T104에는 양 모서리에 얇은 것 둘). 장수 "3 / 44"는 아래 가운데에 고정된 노토 산스 15px(T122. T105~T121에는 슬라이드마다 사진 아래라 넘길 때 따라갔음). 화살표는 ×와 같은 크기 · 굵기(원 40px, 선 1.6px)의 크림색 종이 단추이고 전체가 반투명합니다(T105). 화살표 단추는 Swiper 기본 단추 대신 우리 단추를 넘깁니다(navigation prevEl · nextEl).
+       인화지 크기는 폭 = min(화면 폭, 남는 높이 × 비율)이고 aspect-ratio가 높이를 정합니다(--ar = 폭/높이, 슬라이드마다 인라인). 남는 높이는 스크립트가 잰 뷰어 높이(--viewer-h)에서 위(닫기) · 아래(장수 줄 포함) 여백을 뺀 것입니다. 사진은 그 안 가운데에 옵니다(가로 사진도). 테두리 4px이 비율에 들어가므로 사진은 cover로 4px쯤 잘립니다 */
+    .gallery-viewer { position: fixed; inset: 0; z-index: 45; background: rgba(38, 30, 22, 0.9); animation: viewer-in 0.22s ease-out both; --gv-top: calc(60px + env(safe-area-inset-top)); --gv-bottom: calc(66px + env(safe-area-inset-bottom)); }   /* 아래 여백 66 = 장수 줄 28 + 아래 22 + 사이 16(T122) */
+    .gallery-viewer[hidden] { display: none; }
+    .gallery-viewer .gallery-viewer__swiper { position: absolute; inset: 0; }   /* 선택자를 둘로 두어 Swiper CSS(.swiper { position: relative })를 이깁니다. Next.js에서는 swiper/css가 globals.css 뒤에 실리므로 같은 우선순위면 밀립니다(T104) */
+    .gallery-viewer .swiper-slide { display: flex; align-items: center; justify-content: center; padding: var(--gv-top) 16px var(--gv-bottom); }
+    .gallery-viewer__print {
+      position: relative; margin: 0; padding: 4px; background: #fff; aspect-ratio: var(--ar);   /* 흰 테두리 4px(T106. T104~T105에는 6) */
+      width: min(100%, calc((var(--viewer-h, 100vh) - var(--gv-top) - var(--gv-bottom)) * var(--ar)));
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 18px 32px -12px rgba(0, 0, 0, 0.55);
+    }
+    .gallery-viewer__img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+    .gallery-viewer__tape { position: absolute; top: -15px; left: 50%; width: 76px; height: auto; transform: translateX(-50%) rotate(-3deg); pointer-events: none; }   /* 짧은 테이프 그림(public/paper/tape-short.png, 120×48)을 76px 폭 · 두께 30px으로 위 가운데에 가로로(T122. T109에는 세로, T105에는 7°). 살짝 -3° */
+    .gallery-viewer__count { position: absolute; left: 0; right: 0; bottom: calc(22px + env(safe-area-inset-bottom)); z-index: 1; margin: 0; text-align: center; font-family: var(--font-ui); font-size: 15px; font-weight: 500; line-height: 28px; letter-spacing: 0.1em; color: #FBF7EF; pointer-events: none; }   /* 노토 산스(T109). 슬라이드 밖에 하나만 두어 넘겨도 제자리(T122. T105~T121에는 슬라이드마다 사진 아래). 스크립트가 slideChange에 갱신 */
+    .gallery-viewer__nav {
+      position: absolute; top: 50%; z-index: 2; width: 40px; height: 40px; margin-top: -20px; border-radius: 50%; border: 0; padding: 0;
+      display: flex; align-items: center; justify-content: center; background: rgba(251, 247, 239, 0.9); color: var(--oak); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); opacity: 0.55; cursor: pointer;
+    }
+    .gallery-viewer__nav--prev { left: 8px; }
+    .gallery-viewer__nav--next { right: 8px; }
+    .gallery-viewer__nav.swiper-button-disabled { opacity: 0.2; pointer-events: none; }   /* Swiper가 양 끝에서 붙이는 클래스 */
+    .gallery-viewer__nav.swiper-button-lock { display: none; }
+    .gallery-viewer__nav:focus-visible { outline: 2px solid #FBF7EF; outline-offset: 3px; }
+    .gallery-viewer__close {
+      position: absolute; top: calc(12px + env(safe-area-inset-top)); right: calc(12px + env(safe-area-inset-right)); z-index: 2; width: 40px; height: 40px; border-radius: 50%; border: 0; padding: 0;
+      display: flex; align-items: center; justify-content: center; background: rgba(251, 247, 239, 0.92); color: var(--oak); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); cursor: pointer;
+    }
+    .gallery-viewer__close:focus-visible { outline: 2px solid #FBF7EF; outline-offset: 3px; }
+    @media (prefers-reduced-motion: reduce) { .gallery-viewer { animation: none; } }
+
+    /* 종이 한 장(T111). 초대 뒤의 안내 장면(오시는 길 · 하객 안내 · 마음 전하는 곳)은 크림색 바탕 위에 놓인 흰 종이 한 장씩입니다. 쪽지와 같은 종이 결, 기울임 없음(위 가운데 테이프는 T112에 뺌), 머리에 봉투의 장미 봉인(T119. T111~T118에는 Scene2의 올리브 가지)과 고운바탕 제목. 캐릭터는 없습니다(격식 구간). T110의 흰 띠 · 굵은 노토 산스 제목은 정보 페이지처럼 보여 테마와 어긋났습니다 */
+    .sheet { position: relative; padding: 34px 22px 28px; border-radius: 3px; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35); }
+    .sheet__head { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 0 0 20px; }
+    .sheet__mark { width: 29px; height: 29px; filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.2)); }   /* 봉투의 장미 봉인(public/intro/rose-seal.png). 마음 전하는 곳 오른쪽 위에 44px로 있던 것을 2/3로 줄여 세 종이의 머리로(T119. T111~T118에는 올리브 가지 28px) */
+    .sheet__title { margin: 0; font-family: var(--font-name); font-size: 18px; font-weight: 700; line-height: 1.4; letter-spacing: 0.12em; text-indent: 0.12em; color: var(--ink); }
+    .sheet__body { position: relative; display: flex; flex-direction: column; gap: 20px; }
+    .sheet__text { margin: 0; font-size: 15px; line-height: 1.8; color: var(--ink-soft); word-break: keep-all; }
+    .sheet__text--center { text-align: center; }
+    .sheet__text--light { font-size: 14px; font-weight: 300; }   /* 하객 안내 둘째 문단(화환 사양). 얇고 작게(T112). 노토 산스 300은 이 때문에 실었습니다 */
+    .sheet__rule { height: 1px; margin: 0; border: 0; background: var(--rule); }
+    /* 작은 표제(주차 · 지하철 · 버스 · 신랑 측 · 신부 측). 고운바탕에 앞의 오크색 점(떠 있는 메뉴의 점과 같은 것) */
+    .sheet__label { display: flex; align-items: center; gap: 8px; margin: 0; font-family: var(--font-name); font-size: 15px; font-weight: 700; line-height: 1.5; color: var(--ink); }
+    .sheet__label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--oak); }
+    /* 11. 오시는 길(와이어프레임 12쪽, T110 · T111). 식장 이름 · 주소, 지도(흰 테두리 사진 종이 안의 카카오맵, T112. 기울임 없음, T115), 알약 셋(네이버 지도 · 카카오맵은 식장 이름 검색 링크, 주소 복사), 주차 · 지하철 · 버스(주차가 맨 앞). 노선은 색 알약(7호선 올리브 · 수인분당선 노랑 · 간선 파랑 · 지선 초록) */
+    .venue { text-align: center; }
+    .venue__name { margin: 0; font-family: var(--font-name); font-size: 15px; font-weight: 700; line-height: 1.6; color: var(--ink); }
+    .venue__addr { margin: 2px 0 0; font-size: 14px; line-height: 1.6; color: var(--muted); }
+    .map-paper { position: relative; z-index: 1; padding: 4px; border-radius: 3px; background: #fff; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35); }   /* 기울이지 않습니다(T115. T111에는 -0.6°) */
+    .map-paper__inner { position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper-bg); }
+    .map-paper__map { position: absolute; inset: 0; }   /* 카카오맵이 그리는 자리(Next.js. 키는 NEXT_PUBLIC_KAKAO_MAP_KEY). 조립본은 file://라 SDK를 못 써 자리표시만 */
+    .map-paper__note { position: relative; padding: 0 16px; font-family: var(--font-name); font-size: 14px; line-height: 1.6; letter-spacing: 0.1em; text-align: center; color: var(--muted); }
+    .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .chip { display: inline-flex; align-items: center; height: 34px; margin: 0; padding: 0 14px; border: 1px solid rgba(185, 142, 94, 0.55); border-radius: 999px; background: var(--paper); font-family: var(--font-ui); font-size: 13px; font-weight: 500; line-height: 1; color: var(--ink); text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .chip:active { background: var(--rule); }
+    .chip:focus-visible { outline: 2px solid var(--oak); outline-offset: 2px; }
+    .route { display: flex; flex-direction: column; gap: 6px; }
+    .route__text { margin: 0; padding-left: 14px; font-size: 15px; line-height: 1.75; color: var(--ink-soft); word-break: keep-all; }
+    .line { display: inline-block; margin-right: 6px; padding: 0 7px; border-radius: 999px; font-family: var(--font-ui); font-size: 12px; font-weight: 700; line-height: 20px; color: #fff; vertical-align: 1px; }
+    .line + .line { margin-left: -2px; }
+    .line--7 { background: #747F00; }
+    .line--bundang { background: #F5A200; }
+    .line--trunk { background: #3D5BAB; }
+    .line--branch { background: #5BB025; }
+    /* 12. 하객 안내(와이어프레임 13쪽, 0.6화면, T110 · T111). 종이 한 장에 가운데 정렬 격식체 두 문단과 사이 가는 줄. 신부대기실 시각은 추정(U-5) */
+    /* 13. 마음 전하는 곳(와이어프레임 14쪽, 1.3화면, T110 · T111). 계좌 여섯은 접지 않고 늘 펼쳐 두고 행 전체가 복사 단추(계좌번호만, 은행명 없이. 복사되는 값은 하이픈 없는 숫자, 표시는 하이픈. T120). 행은 크림색 종이 조각. 관계를 이름 앞에. 성함 · 계좌번호는 이산하가 준 실값(T112 · T120. 자리표시였던 디자인 결정 6은 폐기). 오른쪽 위 봉인(T111)은 T119에 머리로 옮김. 부모님 성함은 T112에 이산하가 준 실명 */
+    .gift__group { display: flex; flex-direction: column; gap: 8px; }
+    .gift__group .sheet__label { margin-bottom: 2px; }
+    .account {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; margin: 0; padding: 12px 16px;
+      border: 0; border-radius: 6px; background: var(--paper-bg); font: inherit; color: inherit; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+    .account:active { background: var(--rule); }
+    .account:focus-visible { outline: 2px solid var(--oak); outline-offset: 2px; }
+    .account__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    /* 행은 세 줄(T130 · T131). "신랑 아버지"(관계, 가장 굵음) · 계좌번호 · "은행 성함"의 순서이고 아래 두 줄은 얇게 같은 크기. T130에는 관계 · 성함 · 은행 + 번호, 그 전에는 "관계 · 성함" 한 줄과 번호 한 줄 */
+    .account__role { font-size: 15px; font-weight: 700; line-height: 1.5; color: var(--ink); }
+    .account__num, .account__holder { font-size: 14px; font-weight: 300; line-height: 1.5; color: var(--ink-soft); }
+    .account__num { letter-spacing: 0.02em; }
+    .account__copy { flex: none; display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-ui); font-size: 13px; line-height: 1; color: var(--oak); }
+    /* 복사 알림(T110). 화면 아래 가운데, 떠 있는 메뉴 단추 위. 1.6초 뒤 사라집니다 */
+    .toast { position: fixed; left: 50%; bottom: calc(92px + env(safe-area-inset-bottom)); z-index: 12; transform: translateX(-50%); padding: 10px 16px; border-radius: 999px; background: rgba(47, 42, 37, 0.9); color: #FBF7EF; font-family: var(--font-ui); font-size: 14px; line-height: 1.4; white-space: nowrap; opacity: 0; transition: opacity 0.25s ease-out; pointer-events: none; }
+    .toast.is-shown { opacity: 1; }
+
+    /* 14. 마지막(와이어프레임 15쪽, T121 · T123). 봉투 크기의 편지지 카드(폭 = 봉투 폭의 92%, 높이 = 봉투 좌표 440)가 화면 가운데에 있고 "고마움을 봉해 보냅니다."가 그 위쪽(높이의 38%)에 있습니다. 구획이 60% 보이면 진입 장면을 거꾸로 돌립니다. 0~0.3초 내려가 있던 봉투가 스르륵 나타나고(윗변이 편지지 아랫변 70px 위), 0.3~1.2초 봉투가 가운데로 올라오는 것과 동시에 편지지가 주머니 자리로 내려가 담기고, 1.2~3.2초 뚜껑이 봉인을 단 채 그림자를 드리우며 닫힙니다(옆면 2.09초에 면 · 층 교체, 125° 1.9초에 그림자 층 교체). 끝은 닫힌 봉투가 가운데에 선 채이고 확대(포커스인)는 없습니다. T121에는 편지지가 화면 전체였다가 줄어들었는데 너무 커서 봉투 크기로 바꿨습니다(T123).
+       층 구조 · 배율 계산은 진입 장면과 같습니다(변수 --c-*는 스크립트가 구획 크기에서 계산). 화면 고정이 아니라 구획 안 절대 위치라 스크롤과 함께 움직입니다. 봉투 · 뚜껑 · 봉인 · 그림자 부품(.intro__*)은 진입 장면 것을 그대로 쓰고, 시작 상태(뚜껑 열림 · 안쪽면 · 봉인 뒷면 · 봉투 투명 · 내려간 자리)만 여기서 덮어씁니다. 편지지 아랫부분이 봉투 밑으로 삐져나오는 것은 앞판 층의 바닥(.closing__floor, 구획 바탕색)이 가립니다. 움직임 줄이기면 편지지만 보입니다 */
+    .closing { position: relative; overflow: hidden; isolation: isolate; background: var(--paper-bg); }
+    /* 구획 아래 만든 이 표기(T133. 나중에 사업화할 수도 있어 이산하가 넣음). 코모런트 작은 글자 두 줄, 봉투 아래. 떠 있는 메뉴(아래 20 + 46px)와 겹치지 않게 그 위입니다. 층은 봉투 층들(26~36) 위 */
+    .closing__credit { position: absolute; left: 0; right: 0; bottom: calc(76px + env(safe-area-inset-bottom)); z-index: 40; margin: 0; text-align: center; font-family: var(--font-latin); font-size: 11px; font-weight: 500; line-height: 1.6; letter-spacing: 0.08em; color: var(--muted); pointer-events: none; }
+    .closing__letter { position: absolute; left: 50%; top: 0; z-index: 30; width: var(--c-lw, 330px); height: var(--c-lh, 263px); margin-left: calc(var(--c-lw, 330px) / -2); border-radius: 3px; overflow: hidden; background: #FBF7EF; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35); transform: translateY(var(--c-tys, 290px)); }   /* 바탕색은 종이 그림이 오기 전에도 불투명하게(T124) */
+    .closing__text { position: absolute; left: 16px; right: 16px; top: 38%; transform: translateY(-50%); text-align: center; }   /* 위쪽에 두어 다시 열었을 때(편지지가 62% 나옴) 봉투 위로 보입니다 */
+    .closing__big { margin: 0; font-family: var(--font-name); font-size: 20px; font-weight: 700; line-height: 1.6; letter-spacing: 0.06em; color: #2A1A0E; }
+    .closing__date { margin: 10px 0 0; font-family: var(--font-latin); font-size: 16px; line-height: 1.4; letter-spacing: 0.16em; color: var(--ink-soft); }
+    .closing__layer { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .closing__layer--back { z-index: 26; }
+    .closing__layer--front { z-index: 35; }
+    .closing__layer--cast { z-index: 27; }   /* 뚜껑이 열려 있을 때는 카드 뒤. 125°를 지나며 35로 */
+    .closing__layer--flap { z-index: 28; }   /* 열린 뚜껑은 카드 뒤. 옆면(90°)을 지나며 36으로 */
+    .closing__zoom { position: absolute; left: 50%; top: 50%; width: 600px; height: 400px; margin: -200px 0 0 -300px; transform: scale(var(--c-z1, 0.57)); }
+    .closing__floor { position: absolute; left: -1000px; top: 400px; width: 2600px; height: 2000px; background: var(--paper-bg); }
+    .closing .intro__env { opacity: 0; transform: translateY(var(--c-drop1, 0px)); }
+    .closing .intro__flap { transform: rotateX(180deg); }
+    .closing .intro__cast { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(180deg); }
+    .closing .intro__flap-out, .closing .intro__seal { opacity: 0; }
+    .closing .intro__flap-in, .closing .intro__seal-back { opacity: 1; }
+    .closing.is-closing .closing__letter { animation: closing-letter-tuck 0.9s cubic-bezier(0.45, 0.05, 0.3, 1) 0.3s both; }
+    .closing.is-closing .intro__env { animation: closing-env-in 0.3s ease-in-out 0s both, closing-env-rise 0.9s cubic-bezier(0.45, 0.05, 0.3, 1) 0.3s forwards; }
+    .closing.is-closing .intro__flap { animation: closing-flap 2s cubic-bezier(0.55, 0, 0.3, 1) 1.2s both; }
+    .closing.is-closing .intro__cast { animation: closing-cast 2s cubic-bezier(0.55, 0, 0.3, 1) 1.2s both; }
+    .closing.is-closing .intro__cast-img { animation: intro-cast-sharp 2s ease-in-out 1.2s both; }
+    .closing.is-closing .intro__cast-img--soft { animation: intro-cast-soft 2s ease-in-out 1.2s both; }
+    .closing.is-closing .intro__flap-out, .closing.is-closing .intro__seal { animation: intro-show 1ms linear 2.09s both; }
+    .closing.is-closing .intro__flap-in, .closing.is-closing .intro__seal-back { animation: intro-hide 1ms linear 2.09s both; }
+    .closing.is-closing .closing__layer--flap { animation: closing-flap-layer 1ms linear 2.09s both; }
+    .closing.is-closing .closing__layer--cast { animation: closing-cast-layer 1ms linear 1.9s both; }
+    @keyframes closing-letter-tuck { from { transform: translateY(var(--c-tys)); } to { transform: translateY(var(--c-ty0)); } }
+    @keyframes closing-env-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes closing-env-rise { from { transform: translateY(var(--c-drop1)); } to { transform: translateY(0); } }
+    @keyframes closing-flap { from { transform: rotateX(180deg); } to { transform: rotateX(0deg); } }
+    @keyframes closing-cast { from { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(180deg); } to { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(0deg); } }
+    @keyframes closing-flap-layer { from { z-index: 28; } to { z-index: 36; } }
+    @keyframes closing-cast-layer { from { z-index: 27; } to { z-index: 35; } }
+    /* 다시 열고 닫기(T122 · T123). 첫 재생이 끝나면(is-settled) 키프레임을 끄고 끝 상태를 기본값으로 둔 채 transition으로 움직입니다. 구획이 보이는 동안 스크롤을 올리면(is-open) 뚜껑이 열리고(1.4초) 편지지가 제 높이의 62%만큼 나와(0.9초 뒤 0.7초) 글이 봉투 위로 보이며, 내리면 편지지가 먼저 들어가고(0.7초) 뚜껑이 닫힙니다(0.4초 뒤 1.4초). 봉투는 그대로. 면 · 층 교체는 뚜껑이 옆면(90°)을 지나는 시각(전이 1.4초의 44.4% = 0.62초 + 지연)에 맞춘 1ms 전이입니다. transition이라 도중에 방향을 바꿔도 이어서 움직입니다 */
+    .closing.is-settled .closing__letter { animation: none; transform: translateY(var(--c-ty0)); transition: transform 0.7s cubic-bezier(0.45, 0.05, 0.3, 1) 0s; }
+    .closing.is-settled .intro__env { animation: none; opacity: 1; transform: translateY(0); }
+    .closing.is-settled .intro__flap { animation: none; transform: rotateX(0deg); transition: transform 1.4s cubic-bezier(0.55, 0, 0.3, 1) 0.4s; }
+    .closing.is-settled .intro__cast { animation: none; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(0deg); transition: transform 1.4s cubic-bezier(0.55, 0, 0.3, 1) 0.4s; }
+    .closing.is-settled .intro__cast-img { animation: none; opacity: 0.3; }
+    .closing.is-settled .intro__cast-img--soft { animation: none; opacity: 0; }
+    .closing.is-settled .intro__flap-out, .closing.is-settled .intro__seal { animation: none; opacity: 1; transition: opacity 1ms linear 1.02s; }
+    .closing.is-settled .intro__flap-in, .closing.is-settled .intro__seal-back { animation: none; opacity: 0; transition: opacity 1ms linear 1.02s; }
+    .closing.is-settled .closing__layer--flap { animation: none; z-index: 36; transition: z-index 1ms linear 1.02s; }
+    .closing.is-settled .closing__layer--cast { animation: none; z-index: 35; transition: z-index 1ms linear 0.9s; }
+    .closing.is-settled.is-open .closing__letter { transform: translateY(var(--c-ty1)); transition-delay: 0.9s; }
+    .closing.is-settled.is-open .intro__flap { transform: rotateX(180deg); transition-delay: 0s; }
+    .closing.is-settled.is-open .intro__cast { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(180deg); transition-delay: 0s; }
+    .closing.is-settled.is-open .intro__flap-out, .closing.is-settled.is-open .intro__seal { opacity: 0; transition-delay: 0.62s; }
+    .closing.is-settled.is-open .intro__flap-in, .closing.is-settled.is-open .intro__seal-back { opacity: 1; transition-delay: 0.62s; }
+    .closing.is-settled.is-open .closing__layer--flap { z-index: 28; transition-delay: 0.62s; }
+    .closing.is-settled.is-open .closing__layer--cast { z-index: 27; transition-delay: 0.74s; }
+    @media (prefers-reduced-motion: reduce) { .closing .closing__layer { display: none; } .closing.is-closing .closing__letter { animation: none; } }
+
+    /* 떠 있는 바로 가기(T132 · T134 · T135. 전에는 오크색 동그라미에 ≡ 아이콘이라 흔한 앱 단추 같았음). 테이프로 붙인 작은 쪽지에 손글씨 "메뉴"가 있고 열리면 "닫기"로 바뀝니다. 누르면 그 위로(사이 14px) 쪽지 한 장(테이프 없이, 기울이지 않음)이 8px 내려앉으며 나타나고 네 항목(오시는 길 · 사진첩 · 마음 전하는 곳 · 공유하기)이 고운바탕으로, 사이는 가는 줄입니다(T134에 열린 쪽지에도 있던 테이프 · 오크색 점 · 손글씨를 뺌. T134의 닫기 줄과 작은 쪽지 숨김은 T135에 되돌림). 종이 결 · 그늘은 이야기 구간 쪽지와 같은 부품입니다. 공유하기는 Next.js에서 카카오톡 공유(JS SDK)이고 조립본은 기기 공유 창 · 주소 복사만 합니다 */
     .fab {
       position: fixed;
       right: max(20px, calc((100vw - 430px) / 2 + 20px));
       bottom: calc(20px + env(safe-area-inset-bottom));
       z-index: 10;
-      display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
-      font-family: var(--font-ui);
+      display: flex; flex-direction: column; align-items: flex-end; gap: 14px;
+      font-family: var(--font-name);
     }
     .fab__menu {
-      width: 176px;
-      display: flex; flex-direction: column;
-      background: var(--paper);
-      border-radius: 14px;
-      box-shadow: 0 16px 32px -12px rgba(70, 48, 24, 0.45);
-      overflow: hidden;
-    }
-    .fab__menu a {
-      display: flex; align-items: center; justify-content: space-between;
-      height: 48px; padding: 0 18px;
-      font-size: 15px; font-weight: 500;
-      color: var(--ink); text-decoration: none;
+      position: relative; width: 172px; display: flex; flex-direction: column; padding: 4px 0;
+      border-radius: 3px; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
+      animation: fab-in 0.25s ease-out both;
     }
     .fab__menu[hidden] { display: none; }   /* 조립본에는 Tailwind 초기화가 없어 hidden 속성을 display: flex가 이깁니다 */
-    .fab__menu a + a { border-top: 1px solid var(--rule); }
-    .fab__menu a::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--oak); }
-    .fab__menu a:focus-visible { outline: 2px solid var(--oak); outline-offset: -4px; }
-    .fab__button {
-      width: 52px; height: 52px; border-radius: 50%; border: 0; padding: 0;
-      background: var(--oak); color: var(--paper);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 10px 20px -8px rgba(70, 48, 24, 0.55);
-      cursor: pointer;
+    @keyframes fab-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .fab__menu { animation: none; } }
+    .fab__item {
+      position: relative; display: flex; align-items: center; height: 46px; margin: 0 16px; padding: 0 4px;
+      border: 0; background: none; font: inherit; font-size: 15px; letter-spacing: 0.02em; line-height: 1; color: var(--ink); text-decoration: none; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
     }
+    .fab__item + .fab__item { border-top: 1px solid var(--rule); }
+    .fab__item:focus-visible { outline: 2px solid var(--oak); outline-offset: -2px; border-radius: 3px; }
+    .fab__button {
+      position: relative; width: 64px; height: 46px; margin: 0; padding: 8px 0 0; border: 0; border-radius: 3px; background: none;
+      box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
+      transform: rotate(2deg); font-family: var(--font-memo); font-size: 18px; line-height: 1; color: var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+    .fab__button:active { transform: rotate(2deg) scale(0.97); }
     .fab__button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+    .fab__tape { position: absolute; top: -7px; left: 50%; width: 44px; height: auto; transform: translateX(-50%) rotate(4deg); pointer-events: none; }
+    .fab__label { position: relative; font-family: var(--font-ui); font-size: 20px; font-weight: 700; letter-spacing: 0.1em; text-indent: 0.1em; }   /* 글자 "메뉴" · "닫기" 대신 기호(T141). 닫힘 = 가운뎃점 셋 ···, 열림 = ×. 개구의 점은 네모나서 노토 산스 */
+    /* 배경 음악(T137 · T138 · T140). 오른쪽 위 작은 원 영역. 재생 중엔 음표 셋(♪ ♫ ♩)이 아래에서 위로 살랑이며 지나가고(2.6초, 시간을 어긋나게, 위아래는 마스크로 흐림), 끄면 음표 하나가 옅어지고 짧은 빗금이 갑니다. 색은 흰 글자에 difference 블렌드라 밝은 바탕에서는 검게, 어두운 바탕(사진)에서는 희게 저절로 뒤집힙니다(T140). 열 때 재생을 시도하고, 폰 브라우저가 막으면(소리 있는 자동재생은 사용자 동작 뒤에만) 첫 터치 · 스크롤 끝 · 키에서 시작합니다. 끄면 그 방문(sessionStorage) 동안 꺼진 채입니다. 진입 장면 동안은 숨깁니다. T137에는 36px 둥근 종이 스티커, T138에 종이를 빼고 3/4로 */
+    .bgm {
+      position: fixed; top: calc(12px + env(safe-area-inset-top)); right: max(12px, calc((100vw - 430px) / 2 + 12px)); z-index: 10;
+      width: 34px; height: 34px; padding: 0; border: 0; background: none; color: #FFFFFF; mix-blend-mode: difference;
+      cursor: pointer; -webkit-tap-highlight-color: transparent; transition: opacity 0.4s ease-out;
+    }
+    .bgm__notes { position: absolute; inset: 0; overflow: hidden; border-radius: 50%; mask-image: linear-gradient(to bottom, transparent 0, #000 24%, #000 76%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 24%, #000 76%, transparent 100%); }
+    .bgm__note { position: absolute; left: 50%; bottom: -8px; font-family: var(--font-name); font-size: 15px; line-height: 1; transform: translateX(-50%); opacity: 0; }
+    .bgm__note--1 { margin-left: -7px; }
+    .bgm__note--2 { margin-left: 5px; font-size: 13px; }
+    .bgm__note--3 { margin-left: -1px; font-size: 12px; }
+    .bgm.is-on .bgm__note { animation: bgm-drift 2.6s linear infinite; }
+    .bgm.is-on .bgm__note--2 { animation-delay: -0.9s; }
+    .bgm.is-on .bgm__note--3 { animation-delay: -1.8s; }
+    @keyframes bgm-drift {
+      0% { transform: translate(-50%, 0) rotate(-6deg); opacity: 0; }
+      18% { opacity: 1; }
+      50% { transform: translate(calc(-50% + 3px), -22px) rotate(6deg); }
+      82% { opacity: 1; }
+      100% { transform: translate(-50%, -44px) rotate(-6deg); opacity: 0; }
+    }
+    .bgm__off { position: relative; display: block; font-family: var(--font-name); font-size: 20px; line-height: 34px; opacity: 0.55; }
+    .bgm.is-on .bgm__off { display: none; }
+    .bgm::after { content: ''; position: absolute; left: 50%; top: 50%; width: 14px; height: 1.5px; margin: -1px 0 0 -7px; background: currentColor; transform: rotate(-45deg); opacity: 0.6; }   /* 꺼짐 빗금. 음표 너비만큼(T138) */
+    .bgm.is-on::after { display: none; }
+    .is-intro .bgm { opacity: 0; pointer-events: none; }
+    @media (prefers-reduced-motion: reduce) {   /* 움직임 줄이기면 지나가는 음표 대신 정지한 음표 하나 */
+      .bgm.is-on .bgm__notes { display: none; }
+      .bgm.is-on .bgm__off { display: block; opacity: 1; }
+    }
 
 
     /* 0. 진입 장면(로딩). 편지봉투가 화면 높이의 2/3로 확대돼 있다가(좌우가 잘림) 물러나 폭이 화면의 92%가 된 뒤 0.3초 멈추고, 뚜껑이 열리고, 뚜껑이 80% 열렸을 때부터 편지지(커버 자체)가 올라오는 것과 동시에 봉투가 아래로 내려가 편지지가 거의 다 보이며, 이어서 편지지가 화면 전체로 커지는 것과 동시에 봉투가 0.3초에 흐려져 사라져 Scene1이 됩니다(디자인 논의 T36~T49 · T76). 5.0초.
@@ -241,9 +474,9 @@
     .intro__env { position: relative; width: 600px; height: 400px; perspective: 1400px; }
     .intro__back, .intro__front { position: absolute; left: 0; top: 0; width: 600px; height: 400px; }
     .intro__floor { position: absolute; left: -1000px; top: 400px; width: 2600px; height: 2000px; background: #E9E1D2; }
-    /* 그림자. 광원은 봉투 기준 우측 상단 45°, 높이 45°(T76). 봉투가 탁자에 드리우는 그림자는 바닥(.intro__floor) 위에 그려져야 봉투 아랫변 아래에도 보이므로 앞판 층의 상자(.intro__table)로 두고, 앞판 자체는 카드에 닿는 얇은 그림자만 둡니다 */
+    /* 그림자. 광원은 봉투 기준 우측 상단 45°, 높이 45°(T76). 봉투가 탁자에 드리우는 그림자는 바닥(.intro__floor) 위에 그려져야 봉투 아랫변 아래에도 보이므로 앞판 층의 상자(.intro__table)로 둡니다(앞판 자체의 얇은 그림자는 T124에 뺌) */
     .intro__table { position: absolute; left: 0; top: 0; width: 600px; height: 400px; border-radius: 3px; box-shadow: -13px 13px 20px rgba(70, 48, 24, 0.26), -2px 2px 4px rgba(70, 48, 24, 0.18); }
-    .intro__front { filter: drop-shadow(-1.5px 1.5px 2px rgba(70, 48, 24, 0.26)); }
+    /* 앞판에는 그림자 필터를 걸지 않습니다(T124). T76에 "카드에 닿는 얇은 그림자"로 drop-shadow를 걸었더니 날개의 사선 가장자리를 따라 편지지 위에 흐린 선이 그려져 봉투가 비치는 것처럼 보였습니다(진입 장면 · 마지막 장면 둘 다). 종이와 봉투 그림은 불투명하고 주머니 창의 알파는 0입니다 */
     .intro__flap { position: absolute; left: -20px; top: 0; width: 640px; height: 264px; transform-origin: 50% 0; filter: drop-shadow(0 0 2.4px rgba(74, 54, 32, 0.22)); }
     /* 뚜껑 그림자. 뚜껑과 봉인의 어두운 실루엣(.intro__cast)이 뚜껑과 같은 회전(rotateX)을 하고, 같은 transform 목록 앞의 matrix3d가 그 3D 결과를 광원 방향으로 봉투 면(z=0)에 투영합니다(z를 x로 -0.7071, y로 +0.7071 옮기고 z는 0.001로 눌러 평평하게). 뚜껑이 세워질수록 그림자가 왼쪽 아래로 길어지고, 125°에서 선으로 접힌 뒤 윗변 위로 넘어갑니다. 회전 애니메이션이 같은 곡선·시각이라 어긋나지 않습니다.
        투영과 회전은 한 요소의 transform 목록에 함께 둡니다. 바깥 요소(preserve-3d)에 투영을 두고 안쪽에서 회전하면 WebKit이 투영을 무시합니다(T76 실험. Chromium은 됩니다).
@@ -484,35 +717,483 @@
           <img class="note__paper" src="../../public/paper/note.png" alt="">
           <p class="note__text">어른이 되고는 꿈을 꾸지 않던 제가, 이 사람을 만나 다시 꿈꾸게 됐어요. 사랑도 많아졌고요.</p>
         </div>
-        <img class="note__who note-wrap__who" src="../../public/character/otter-3.png" width="223" height="240" alt="">
+        <img class="note__who note-wrap__who" src="../../public/character/otter-4.png" width="240" height="207" alt="">
       </div>
       <div class="note note--left note--memo">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
-        <img class="note__who" src="../../public/character/rabbit-5.png" width="240" height="184" alt="">
+        <img class="note__who" src="../../public/character/rabbit-6.png" width="240" height="177" alt="">
         <p class="note__text">마음이 여렸던 저는 이 사람 덕분에 많이 단단해졌어요! 누군가에게 기대는 법도 배웠고요!</p>
       </div>
       <div class="note note--right note--memo">
         <img class="note__paper" src="../../public/paper/note.png" alt="">
         <img class="note__who" src="../../public/character/hug.png" width="240" height="189" alt="">
-        <p class="note__text">MBTI 궁합이 '파국'으로 나올 만큼 성향이 다르지만, 달랐기에 서로의 빈틈을 채우고, 장점은 더 빛낼 수 있었어요.</p>
+        <p class="note__text">그런 저희가 이제 하나가 됩니다.</p>
       </div>
     </section>
 
-    <!-- 9쪽(초대)부터 여기 아래에 이어 붙입니다 -->
+    <!-- 9. 초대(와이어프레임 10쪽, T127). 참고 그림 docs/design/scene9/scene-9-reference.png를 옮긴 것. 백합 · 꽃잎은 이산하가 준 그림 -->
+    <section id="invite" class="block invite">
+      <img class="invite__sticker invite__lily" src="../../public/scene9/lily.png" width="577" height="900" alt="">
+      <div class="invite__text">
+        <p class="invite__strong">서로에게 사랑을 덧입히며<br>두 마음을 하나로 엮어 왔습니다.</p>
+        <p class="invite__light">혼자였다면 오지 못했을 자리에<br>둘이라서 도착했고, 그 매듭에는<br>여러분이 함께 계셨습니다.</p>
+        <p class="invite__verse"><strong>사랑은 온전하게 연결하는 띠입니다.</strong><span>골로새서 3장 14절</span></p>
+        <p class="invite__light">훗날 이날의 사진첩을 꺼내볼 때,<br>그 안에 저희와 함께 웃고 있는<br>여러분이 계셨으면 좋겠습니다.</p>
+        <p class="invite__names">이종노 · 이은경<span class="invite__role">의 아들</span>이산하<br>송영봉 · 임인화<span class="invite__role">의 딸</span>송시야</p>
+        <p class="invite__from">올림</p>
+      </div>
+      <img class="invite__sticker invite__petal--2" src="../../public/scene9/petal-2.png" width="395" height="450" alt="">
+      <img class="invite__sticker invite__petal--1" src="../../public/scene9/petal-1.png" width="358" height="450" alt="">
+    </section>
+
+    <!-- 10. 추신 + 만화(와이어프레임 11쪽 위 절반, T102). 사진첩(같은 쪽 아래 절반)은 다음 구획입니다(T103) -->
+    <section id="comic" class="block story comic">
+      <div class="note note--left note--memo note--ps">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <img class="note__tape" src="../../public/paper/tape.png" alt="">
+        <p class="note__text">P.S. 저희가 결혼을 언제 결심했냐면요!</p>
+      </div>
+      <button type="button" class="photo-paper comic__paper" id="comicOpen" aria-haspopup="dialog" aria-controls="comicViewer" aria-label="만화 크게 보기">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <img class="photo-paper__photo" src="../../public/scene10/comic.jpg" width="1664" height="1087" alt="네 컷 만화. 결혼을 결심한 이야기" loading="lazy">
+        <span class="comic__hint" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 1.5h3v3M4.5 10.5h-3v-3M10.5 1.5L7 5M1.5 10.5L5 7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path></svg>크게 보기</span>
+      </button>
+    </section>
+
+    <!-- 사진첩(와이어프레임 11쪽 아래 절반, T103). 사진은 docs/gallery/ 원본에서 docs/scripts/gallery-jpeg.py로 만든 잠정 산출(public/gallery/NN.jpg · NN-thumb.jpg)이고 어느 8장을 보일지는 이산하가 나중에 고릅니다. 순서 = src/content/gallery.json -->
+    <section id="gallery" class="block story plain">
+      <h2 class="plain__title">사진첩</h2>
+      <ul class="gallery__grid" id="galleryGrid">
+        <li><button type="button" class="gallery__tile" data-index="0" aria-label="사진 1 크게 보기"><img class="gallery__thumb" src="../../public/gallery/01-thumb.jpg" width="480" height="480" alt="" loading="lazy"></button></li>
+        <li><button type="button" class="gallery__tile" data-index="1" aria-label="사진 2 크게 보기"><img class="gallery__thumb" src="../../public/gallery/02-thumb.jpg" width="480" height="480" alt="" loading="lazy"></button></li>
+        <li><button type="button" class="gallery__tile" data-index="2" aria-label="사진 3 크게 보기"><img class="gallery__thumb" src="../../public/gallery/03-thumb.jpg" width="480" height="480" alt="" loading="lazy"></button></li>
+        <li><button type="button" class="gallery__tile" data-index="3" aria-label="사진 4 크게 보기"><img class="gallery__thumb" src="../../public/gallery/04-thumb.jpg" width="480" height="480" alt="" loading="lazy"></button></li>
+        <li><button type="button" class="gallery__tile" data-index="4" aria-label="사진 5 크게 보기"><img class="gallery__thumb" src="../../public/gallery/05-thumb.jpg" width="480" height="480" alt="" loading="lazy"></button></li>
+        <li><button type="button" class="gallery__tile" data-index="5" aria-label="사진 6 크게 보기"><img class="gallery__thumb" src="../../public/gallery/06-thumb.jpg" width="480" height="480" alt="" loading="lazy"></button></li>
+        <li><button type="button" class="gallery__tile" data-index="6" aria-label="사진 7 크게 보기"><img class="gallery__thumb" src="../../public/gallery/07-thumb.jpg" width="480" height="480" alt="" loading="lazy"></button></li>
+        <li><button type="button" class="gallery__tile" data-index="7" aria-label="사진 8 크게 보기"><img class="gallery__thumb" src="../../public/gallery/08-thumb.jpg" width="480" height="480" alt="" loading="lazy"></button></li>
+        <li><button type="button" class="gallery__tile gallery__tile--more" data-index="8" aria-label="사진 9부터 크게 보기. 36장 더"><img class="gallery__thumb" src="../../public/gallery/09-thumb.jpg" width="480" height="480" alt="" loading="lazy"><span class="gallery__more" aria-hidden="true">+36개</span></button></li>
+      </ul>
+    </section>
+
+    <!-- 11. 오시는 길(와이어프레임 12쪽, T110~T112). 크림색 바탕 위 종이 한 장. 지도는 Next.js에서 카카오맵 JS SDK로 그립니다(키는 NEXT_PUBLIC_KAKAO_MAP_KEY). 지도 링크는 식장 이름 검색이라 좌표가 없어도 됩니다 -->
+    <section id="directions" class="block story">
+      <div class="sheet">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <div class="sheet__head">
+          <img class="sheet__mark" src="../../public/intro/rose-seal.png" width="84" height="84" alt="">
+          <h2 class="sheet__title">오시는 길</h2>
+        </div>
+        <div class="sheet__body">
+          <div class="venue">
+            <p class="venue__name">더채플앳청담 3층 커티지홀</p>
+            <p class="venue__addr">서울 강남구 선릉로 757</p>
+          </div>
+          <div class="map-paper"><div class="map-paper__inner"><span class="map-paper__note" role="img" aria-label="지도 자리">지도 (카카오맵 · Next.js에서 표시)</span></div></div>
+          <div class="chips">
+            <a class="chip" href="https://map.naver.com/p/search/%EB%8D%94%EC%B1%84%ED%94%8C%EC%95%B3%EC%B2%AD%EB%8B%B4" target="_blank" rel="noopener">네이버 지도</a>
+            <a class="chip" href="https://map.kakao.com/link/search/%EB%8D%94%EC%B1%84%ED%94%8C%EC%95%B3%EC%B2%AD%EB%8B%B4" target="_blank" rel="noopener">카카오맵</a>
+            <button type="button" class="chip" data-copy="서울 강남구 선릉로 757" data-toast="주소를 복사했습니다">주소 복사</button>
+          </div>
+          <div class="route">
+            <h3 class="sheet__label">주차</h3>
+            <p class="route__text">주차는 웨딩홀 앞으로 오셔서 주차 직원의 안내를 받으신 후 이동해 주시기 바랍니다. 1시간 30분 무료 주차가 가능합니다.</p>
+          </div>
+          <div class="route">
+            <h3 class="sheet__label">지하철</h3>
+            <p class="route__text"><span class="line line--7">7호선</span><span class="line line--bundang">수인분당선</span>강남구청역 3번 출구<br><span class="line line--bundang">수인분당선</span>압구정로데오역 5번 출구<br>강남구청역에서 셔틀버스 10분 간격</p>
+          </div>
+          <div class="route">
+            <h3 class="sheet__label">버스</h3>
+            <p class="route__text"><span class="line line--trunk">간선</span>301, 342, 472<br><span class="line line--branch">지선</span>3011, 4412<br>영동고교 앞 정류장 하차</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. 하객 안내(와이어프레임 13쪽, T110 · T111). 종이 한 장에 격식체. 신부대기실 시각은 추정(U-5) -->
+    <section id="guide" class="block story">
+      <div class="sheet">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <div class="sheet__head">
+          <img class="sheet__mark" src="../../public/intro/rose-seal.png" width="84" height="84" alt="">
+          <h2 class="sheet__title">하객 안내</h2>
+        </div>
+        <div class="sheet__body">
+          <p class="sheet__text sheet__text--center">신부대기실은 6시 10분경 정리될 예정입니다. 신부와 사진을 남기고 싶으신 분들께서는 참고해 주시면 감사하겠습니다.</p>
+          <hr class="sheet__rule">
+          <p class="sheet__text sheet__text--center sheet__text--light">축하 화환은 정중히 사양합니다. 오셔서 축복해 주시는 것만으로 충분히 감사합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13. 마음 전하는 곳(와이어프레임 14쪽, T110 · T111 · T119 · T120). 종이 한 장. 행을 누르면 계좌번호(숫자만)가 복사됩니다. 성함 · 계좌번호는 실값 -->
+    <section id="gift" class="block story">
+      <div class="sheet">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <div class="sheet__head">
+          <img class="sheet__mark" src="../../public/intro/rose-seal.png" width="84" height="84" alt="">
+          <h2 class="sheet__title">마음 전하는 곳</h2>
+        </div>
+        <div class="sheet__body">
+          <p class="sheet__text sheet__text--center">참석이 어려우신 분들을 위해 안내드립니다.</p>
+          <div class="gift__group">
+            <h3 class="sheet__label">신랑 측</h3>
+            <button type="button" class="account" data-copy="46891019962707" data-toast="계좌번호를 복사했습니다" aria-label="신랑 아버지 하나 이종노 468-910199-62707 복사"><span class="account__text"><span class="account__role">신랑 아버지</span><span class="account__num">468-910199-62707</span><span class="account__holder">하나 이종노</span></span><span class="account__copy" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"></rect><path d="M9.5 4.5V3a1.5 1.5 0 0 0-1.5-1.5H3A1.5 1.5 0 0 0 1.5 3v5A1.5 1.5 0 0 0 3 9.5h1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path></svg>복사</span></button>
+            <button type="button" class="account" data-copy="87960201133871" data-toast="계좌번호를 복사했습니다" aria-label="신랑 어머니 국민 이은경 879602-01-133871 복사"><span class="account__text"><span class="account__role">신랑 어머니</span><span class="account__num">879602-01-133871</span><span class="account__holder">국민 이은경</span></span><span class="account__copy" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"></rect><path d="M9.5 4.5V3a1.5 1.5 0 0 0-1.5-1.5H3A1.5 1.5 0 0 0 1.5 3v5A1.5 1.5 0 0 0 3 9.5h1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path></svg>복사</span></button>
+            <button type="button" class="account" data-copy="100161055173" data-toast="계좌번호를 복사했습니다" aria-label="신랑 토스뱅크 이산하 1001-6105-5173 복사"><span class="account__text"><span class="account__role">신랑</span><span class="account__num">1001-6105-5173</span><span class="account__holder">토스뱅크 이산하</span></span><span class="account__copy" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"></rect><path d="M9.5 4.5V3a1.5 1.5 0 0 0-1.5-1.5H3A1.5 1.5 0 0 0 1.5 3v5A1.5 1.5 0 0 0 3 9.5h1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path></svg>복사</span></button>
+          </div>
+          <div class="gift__group">
+            <h3 class="sheet__label">신부 측</h3>
+            <button type="button" class="account" data-copy="708411748301" data-toast="계좌번호를 복사했습니다" aria-label="신부 아버지 삼성증권 송영봉 7084-1174-8301 복사"><span class="account__text"><span class="account__role">신부 아버지</span><span class="account__num">7084-1174-8301</span><span class="account__holder">삼성증권 송영봉</span></span><span class="account__copy" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"></rect><path d="M9.5 4.5V3a1.5 1.5 0 0 0-1.5-1.5H3A1.5 1.5 0 0 0 1.5 3v5A1.5 1.5 0 0 0 3 9.5h1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path></svg>복사</span></button>
+            <button type="button" class="account" data-copy="708247089301" data-toast="계좌번호를 복사했습니다" aria-label="신부 어머니 삼성증권 임인화 7082-4708-9301 복사"><span class="account__text"><span class="account__role">신부 어머니</span><span class="account__num">7082-4708-9301</span><span class="account__holder">삼성증권 임인화</span></span><span class="account__copy" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"></rect><path d="M9.5 4.5V3a1.5 1.5 0 0 0-1.5-1.5H3A1.5 1.5 0 0 0 1.5 3v5A1.5 1.5 0 0 0 3 9.5h1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path></svg>복사</span></button>
+            <button type="button" class="account" data-copy="87920100010006" data-toast="계좌번호를 복사했습니다" aria-label="신부 국민 송시야 879201-00-010006 복사"><span class="account__text"><span class="account__role">신부</span><span class="account__num">879201-00-010006</span><span class="account__holder">국민 송시야</span></span><span class="account__copy" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"></rect><path d="M9.5 4.5V3a1.5 1.5 0 0 0-1.5-1.5H3A1.5 1.5 0 0 0 1.5 3v5A1.5 1.5 0 0 0 3 9.5h1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path></svg>복사</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14. 마지막(와이어프레임 15쪽, T121 · T123). 봉투 크기의 편지지 카드에 "고마움을 봉해 보냅니다." 구획이 보이면 진입 장면을 거꾸로: 봉투가 올라와 편지지를 담고 뚜껑이 닫힙니다. 봉투 그림은 진입 장면 것 -->
+    <section id="closing" class="block block--fixed closing">
+      <div class="closing__letter">
+        <img class="note__paper" src="../../public/paper/note.png" alt="">
+        <div class="closing__text">
+          <p class="closing__big">고마움을 봉해 보냅니다.</p>
+          <p class="closing__date">2026. 10. 09</p>
+        </div>
+      </div>
+      <div class="closing__layer closing__layer--back" aria-hidden="true">
+        <div class="closing__zoom"><div class="intro__env"><img class="intro__back" src="../../public/intro/envelope-back.png" alt=""></div></div>
+      </div>
+      <div class="closing__layer closing__layer--front" aria-hidden="true">
+        <div class="closing__zoom"><div class="intro__env"><div class="closing__floor"></div><div class="intro__table"></div><img class="intro__front" src="../../public/intro/envelope-front.png" alt=""></div></div>
+      </div>
+      <div class="closing__layer closing__layer--cast" aria-hidden="true">
+        <div class="closing__zoom"><div class="intro__env"><div class="intro__cast">
+          <img class="intro__cast-img" src="../../public/intro/envelope-flap.png" alt="">
+          <img class="intro__cast-img intro__cast-img--seal" src="../../public/intro/rose-seal.png" alt="">
+          <img class="intro__cast-img intro__cast-img--soft" src="../../public/intro/envelope-flap.png" alt="">
+          <img class="intro__cast-img intro__cast-img--seal intro__cast-img--soft" src="../../public/intro/rose-seal.png" alt="">
+        </div></div></div>
+      </div>
+      <div class="closing__layer closing__layer--flap" aria-hidden="true">
+        <div class="closing__zoom"><div class="intro__env"><div class="intro__flap">
+          <img class="intro__seal-back" src="../../public/intro/rose-seal-back.png" alt="">
+          <img class="intro__flap-in" src="../../public/intro/envelope-flap-inside.png" alt="">
+          <img class="intro__flap-out" src="../../public/intro/envelope-flap.png" alt="">
+          <img class="intro__seal" src="../../public/intro/rose-seal.png" alt="">
+        </div></div></div>
+      </div>
+      <p class="closing__credit">Designed &amp; Created by Sanha &amp; Siya<br>© 2026. All rights reserved.</p>
+    </section>
+
 
   </div>
 
+  <!-- 만화 뷰어(T102). 만화 종이를 누르면 열립니다. 그림은 같은 파일이라 다시 내려받지 않습니다 -->
+  <div class="comic-viewer" id="comicViewer" role="dialog" aria-modal="true" aria-label="만화 크게 보기" hidden>
+    <img class="comic-viewer__img" src="../../public/scene10/comic.jpg" width="1664" height="1087" alt="네 컷 만화. 결혼을 결심한 이야기">
+    <button type="button" class="comic-viewer__close" id="comicClose" aria-label="닫기"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M6 6l10 10M16 6L6 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg></button>
+  </div>
+
+  <!-- 사진 뷰어(T103). 타일을 누르면 그 사진부터 열립니다. 전체 44장(T121. 이산하가 다시 준 원본 44장). Swiper는 열 때 만듭니다(숨긴 채로는 크기를 못 잽니다) -->
+  <div class="gallery-viewer" id="galleryViewer" role="dialog" aria-modal="true" aria-label="사진첩" hidden>
+    <div class="swiper gallery-viewer__swiper" id="gallerySwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/01.jpg" width="1067" height="1600" alt="사진 1" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1066 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/02.jpg" width="1066" height="1600" alt="사진 2" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/03.jpg" width="1067" height="1600" alt="사진 3" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/04.jpg" width="1067" height="1600" alt="사진 4" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1280 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/05.jpg" width="1280" height="1600" alt="사진 5" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
+            <img class="gallery-viewer__img" src="../../public/gallery/06.jpg" width="1600" height="1067" alt="사진 6" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/07.jpg" width="1067" height="1600" alt="사진 7" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1066 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/08.jpg" width="1066" height="1600" alt="사진 8" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/09.jpg" width="1067" height="1600" alt="사진 9" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
+            <img class="gallery-viewer__img" src="../../public/gallery/10.jpg" width="1600" height="1067" alt="사진 10" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
+            <img class="gallery-viewer__img" src="../../public/gallery/11.jpg" width="1600" height="1067" alt="사진 11" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/12.jpg" width="1067" height="1600" alt="사진 12" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1280 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/13.jpg" width="1280" height="1600" alt="사진 13" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1280 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/14.jpg" width="1280" height="1600" alt="사진 14" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1280 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/15.jpg" width="1280" height="1600" alt="사진 15" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1200 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/16.jpg" width="1200" height="1600" alt="사진 16" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/17.jpg" width="1067" height="1600" alt="사진 17" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1080 / 1440;">
+            <img class="gallery-viewer__img" src="../../public/gallery/18.jpg" width="1080" height="1440" alt="사진 18" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1066 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/19.jpg" width="1066" height="1600" alt="사진 19" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1066 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/20.jpg" width="1066" height="1600" alt="사진 20" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1066 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/21.jpg" width="1066" height="1600" alt="사진 21" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/22.jpg" width="1067" height="1600" alt="사진 22" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/23.jpg" width="1067" height="1600" alt="사진 23" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1056 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/24.jpg" width="1056" height="1600" alt="사진 24" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
+            <img class="gallery-viewer__img" src="../../public/gallery/25.jpg" width="1600" height="1067" alt="사진 25" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/26.jpg" width="1067" height="1600" alt="사진 26" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
+            <img class="gallery-viewer__img" src="../../public/gallery/27.jpg" width="1600" height="1067" alt="사진 27" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/28.jpg" width="1067" height="1600" alt="사진 28" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/29.jpg" width="1067" height="1600" alt="사진 29" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/30.jpg" width="1067" height="1600" alt="사진 30" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1280 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/31.jpg" width="1280" height="1600" alt="사진 31" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
+            <img class="gallery-viewer__img" src="../../public/gallery/32.jpg" width="1600" height="1067" alt="사진 32" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
+            <img class="gallery-viewer__img" src="../../public/gallery/33.jpg" width="1600" height="1067" alt="사진 33" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/34.jpg" width="1067" height="1600" alt="사진 34" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/35.jpg" width="1067" height="1600" alt="사진 35" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/36.jpg" width="1067" height="1600" alt="사진 36" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/37.jpg" width="1067" height="1600" alt="사진 37" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/38.jpg" width="1067" height="1600" alt="사진 38" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/39.jpg" width="1067" height="1600" alt="사진 39" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/40.jpg" width="1067" height="1600" alt="사진 40" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
+            <img class="gallery-viewer__img" src="../../public/gallery/41.jpg" width="1600" height="1067" alt="사진 41" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
+            <img class="gallery-viewer__img" src="../../public/gallery/42.jpg" width="1600" height="1067" alt="사진 42" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1080 / 1440;">
+            <img class="gallery-viewer__img" src="../../public/gallery/43.jpg" width="1080" height="1440" alt="사진 43" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+        <div class="swiper-slide">
+          <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
+            <img class="gallery-viewer__img" src="../../public/gallery/44.jpg" width="1067" height="1600" alt="사진 44" loading="lazy">
+            <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
+          </figure>
+        </div>
+      </div>
+    </div>
+    <div class="gallery-viewer__count" id="galleryCount" aria-live="polite">1 / 44</div>
+    <button type="button" class="gallery-viewer__nav gallery-viewer__nav--prev" id="galleryPrev" aria-label="이전 사진"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M13.5 5.5L8 11l5.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+    <button type="button" class="gallery-viewer__nav gallery-viewer__nav--next" id="galleryNext" aria-label="다음 사진"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M8.5 5.5L14 11l-5.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+    <button type="button" class="gallery-viewer__close" id="galleryClose" aria-label="닫기"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M6 6l10 10M16 6L6 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg></button>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <nav class="fab" id="fab" data-open="false" aria-label="바로 가기">
     <div class="fab__menu" id="fabMenu" hidden>
-      <a href="#directions">오시는 길</a>
-      <a href="#contact">연락처</a>
-      <a href="#gift">마음 전하는 곳</a>
+      <img class="note__paper" src="../../public/paper/note.png" alt="">
+      <a class="fab__item" href="#directions">오시는 길</a>
+      <a class="fab__item" href="#gallery">사진첩</a>
+      <a class="fab__item" href="#gift">마음 전하는 곳</a>
+      <button type="button" class="fab__item" id="fabShare">공유하기</button>
     </div>
     <button type="button" class="fab__button" id="fabButton" aria-expanded="false" aria-controls="fabMenu" aria-label="바로 가기 메뉴">
-      <svg class="icon-open" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M4 6.5h14M4 11h14M4 15.5h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
-      <svg class="icon-close" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true" style="display: none;"><path d="M6 6l10 10M16 6L6 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+      <img class="note__paper" src="../../public/paper/note.png" alt="">
+      <img class="fab__tape" src="../../public/paper/tape-short.png" alt="">
+      <span class="fab__label" id="fabLabel">···</span>
     </button>
   </nav>
+  <!-- 배경 음악(T137). 음원은 이산하가 준 것(원본 docs/design/audio/, git 제외) -->
+  <audio id="bgm" src="../../public/audio/bgm.mp3" loop preload="none"></audio>
+  <button type="button" class="bgm" id="bgmToggle" aria-pressed="false" aria-label="배경 음악 켜기">
+    <span class="bgm__notes" aria-hidden="true"><span class="bgm__note bgm__note--1">♪</span><span class="bgm__note bgm__note--2">♫</span><span class="bgm__note bgm__note--3">♩</span></span>
+    <span class="bgm__off" aria-hidden="true">♪</span>
+  </button>
 
   <div class="fontbar" id="fontbar">
     <label>이름·문장 <select id="fontName">
@@ -551,6 +1232,7 @@
       <button type="button" id="fontbarHide">패널 닫기</button>
     </div>
   </div>
+  <script src="../../node_modules/swiper/swiper-bundle.min.js"></script>
   <script>
     (function () {
       var root = document.documentElement;
@@ -622,6 +1304,7 @@
         };
         var imgs = [];
         introParts.forEach(function (el) { imgs = imgs.concat(Array.prototype.slice.call(el.querySelectorAll('img'))); });
+        imgs = imgs.concat(Array.prototype.slice.call(cover.querySelectorAll('img')));   // 커버(편지지)의 홀 사진 · 두 사람도 기다립니다(T124). 그림이 오기 전에 시작하면 카드가 비어 봉투가 비칩니다
         Promise.all(imgs.map(function (im) { return im.decode ? im.decode().catch(function () {}) : Promise.resolve(); })).then(startIntro);
         setTimeout(startIntro, 2500);
         cover.addEventListener('animationend', function (e) { if (e.animationName === 'intro-card-rise') finishIntro(); });
@@ -649,23 +1332,190 @@
         notes.forEach(function (el) { el.classList.add('is-in'); });
       }
 
+      // 덮개(뷰어) 공통(T102 · T103). 열면 뒤 페이지 스크롤을 막고(html.is-viewer + 덮개 안 touchmove 막음) Esc로 닫으며, 닫으면 연 버튼으로 초점을 돌립니다. 한 번에 하나만 엽니다
+      var overlayOpen = null, overlayOpener = null, onOverlayClose = null;
+      var onOverlayMove = function (e) { e.preventDefault(); };
+      var openOverlay = function (el, opener, focusEl, onClose) {
+        overlayOpen = el; overlayOpener = opener; onOverlayClose = onClose || null;
+        el.hidden = false; root.classList.add('is-viewer');
+        el.addEventListener('touchmove', onOverlayMove, { passive: false });
+        if (focusEl) focusEl.focus({ preventScroll: true });
+      };
+      var closeOverlay = function () {
+        if (!overlayOpen) return;
+        overlayOpen.hidden = true; overlayOpen.removeEventListener('touchmove', onOverlayMove);
+        root.classList.remove('is-viewer');
+        if (onOverlayClose) onOverlayClose();
+        if (overlayOpener) overlayOpener.focus({ preventScroll: true });
+        overlayOpen = null; overlayOpener = null; onOverlayClose = null;
+      };
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeOverlay(); });
+
+      // 만화 뷰어(T102). 만화 종이를 누르면 화면 전체를 바탕색으로 덮고 만화를 90° 돌려 화면에 맞춥니다(CSS). 그림 상자 치수는 뷰어의 실제 크기를 재어 넣습니다(인앱 브라우저는 vh가 툴바에 따라 다릅니다). 닫기는 × · 어디든 탭 · Esc
+      var viewer = document.getElementById('comicViewer');
+      var viewerOpenButton = document.getElementById('comicOpen');
+      var viewerCloseButton = document.getElementById('comicClose');
+      var sizeViewer = function () { if (viewer.hidden) return; viewer.style.setProperty('--viewer-w', viewer.clientWidth + 'px'); viewer.style.setProperty('--viewer-h', viewer.clientHeight + 'px'); };
+      viewerOpenButton.addEventListener('click', function () { openOverlay(viewer, viewerOpenButton, viewerCloseButton); sizeViewer(); });
+      window.addEventListener('resize', sizeViewer);
+      viewer.addEventListener('click', closeOverlay);   // 어디를 탭해도 닫힙니다. 돌린 그림 상자가 화면 전체라 바탕만 골라 탭할 수 없습니다
+
+      // 사진 뷰어(T103 · T105 · T122). 타일을 누르면 그 사진부터 Swiper로 봅니다. Swiper는 처음 열 때 만들고(숨긴 채로는 크기를 못 잽니다) 다음부터는 자리만 옮깁니다. 키보드 화살표는 열려 있을 때만
+      var gallery = document.getElementById('galleryViewer');
+      var galleryGrid = document.getElementById('galleryGrid');
+      var galleryClose = document.getElementById('galleryClose');
+      var gallerySwiper = null;
+      var galleryCount = document.getElementById('galleryCount');
+      var galleryTotal = gallery.querySelectorAll('.swiper-slide').length;
+      var updateCount = function (sw) { galleryCount.textContent = (sw.activeIndex + 1) + ' / ' + galleryTotal; };   // 장수는 슬라이드 밖 고정(T122). 만들 때 slideChange가 인스턴스 대입보다 먼저 오므로 인자를 씁니다
+      var sizeGallery = function () { if (gallery.hidden) return; gallery.style.setProperty('--viewer-h', gallery.clientHeight + 'px'); };   // 인화지 크기 계산용(인앱 브라우저는 vh가 툴바에 따라 다릅니다)
+      window.addEventListener('resize', sizeGallery);
+      galleryGrid.addEventListener('click', function (e) {
+        var tile = e.target.closest('.gallery__tile');
+        if (!tile) return;
+        var index = Number(tile.dataset.index);
+        openOverlay(gallery, tile, galleryClose, function () { gallerySwiper.keyboard.disable(); });
+        sizeGallery();
+        if (!gallerySwiper) {
+          gallerySwiper = new Swiper('#gallerySwiper', {
+            initialSlide: index, lazyPreloadPrevNext: 2,
+            navigation: { prevEl: '#galleryPrev', nextEl: '#galleryNext' },   // 우리 단추(T105). 양 끝에서 swiper-button-disabled를 붙입니다
+            keyboard: { enabled: true },
+            on: { slideChange: updateCount },
+          });
+        } else {
+          gallerySwiper.slideTo(index, 0);
+          gallerySwiper.keyboard.enable();
+        }
+        updateCount(gallerySwiper);
+      });
+      galleryClose.addEventListener('click', closeOverlay);
+
+      // 복사(T110). data-copy가 있는 단추(계좌 행 · 주소 복사)를 누르면 그 값을 클립보드에 넣고 data-toast 알림을 띄웁니다. clipboard API가 없으면(http · 옛 브라우저) 숨긴 textarea로 복사합니다
+      var toast = document.getElementById('toast');
+      var toastTimer = null;
+      var showToast = function (text) { toast.textContent = text; toast.classList.add('is-shown'); clearTimeout(toastTimer); toastTimer = setTimeout(function () { toast.classList.remove('is-shown'); }, 1600); };
+      var copyText = function (text) {
+        if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+        var ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        ta.remove();
+        return ok ? Promise.resolve() : Promise.reject(new Error('copy'));
+      };
+      Array.prototype.forEach.call(document.querySelectorAll('[data-copy]'), function (el) {
+        el.addEventListener('click', function () {
+          copyText(el.dataset.copy).then(function () { showToast(el.dataset.toast || '복사했습니다'); }, function () { showToast('복사하지 못했습니다. 길게 눌러 복사해 주세요'); });
+        });
+      });
+
+      // 마지막 장면(T121 · T123). 봉투 · 편지지 치수를 구획 크기에서 계산해 --c-* 변수에 넣고, 구획이 60% 보이면 한 번 재생합니다. 움직임 줄이기면 편지지만
+      var closing = document.getElementById('closing');
+      var applyClosingMetrics = function () {
+        var w = closing.clientWidth, h = closing.clientHeight;
+        var envW = Math.min(w, 430) * 0.92, z1 = envW / 600;   // 봉투 폭 = 화면 폭(페이지 폭 430까지)의 92%
+        var envTop = h / 2 - 200 * z1;                          // 가운데 선 봉투 윗변
+        var lw = envW * 0.92, lh = 440 * z1;                    // 편지지 = 봉투 폭의 92% × 봉투 좌표 440
+        var tys = h / 2 - lh / 2;                               // 처음 자리(구획 가운데)
+        var ty0 = envTop + 14 * z1;                             // 주머니 안(봉투 윗변 바로 아래)
+        var ty1 = ty0 - lh * 0.62;                              // 다시 열었을 때(제 높이의 62%만큼 위로)
+        var drop1 = Math.max(0, tys + lh - 70 - envTop);        // 봉투가 나타나는 자리(윗변이 편지지 아랫변 70px 위)까지 내려간 거리
+        closing.style.setProperty('--c-z1', z1);
+        closing.style.setProperty('--c-drop1', (drop1 / z1) + 'px');
+        closing.style.setProperty('--c-lw', lw + 'px');
+        closing.style.setProperty('--c-lh', lh + 'px');
+        closing.style.setProperty('--c-tys', tys + 'px');
+        closing.style.setProperty('--c-ty0', ty0 + 'px');
+        closing.style.setProperty('--c-ty1', ty1 + 'px');
+      };
+      applyClosingMetrics();
+      window.addEventListener('resize', applyClosingMetrics);
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+        var closingObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) { if (entry.isIntersecting) { closing.classList.add('is-closing'); closingObserver.disconnect(); } });
+        }, { threshold: 0.6 });
+        closingObserver.observe(closing);
+        // 다시 열고 닫기(T122). 첫 재생이 끝나면(뚜껑 닫힘 애니메이션 끝) is-settled를 붙이고, 그 뒤 구획이 보이는 동안 스크롤을 올리면 is-open, 내리면 뗍니다. 페이지 끝의 튕김(iOS)은 scrollY가 최대를 넘었다 돌아오는 것이라 최대 근처 값은 무시합니다
+        var closingSettled = false, closingLastY = window.scrollY;
+        closing.addEventListener('animationend', function (e) { if (e.animationName === 'closing-flap') { closingSettled = true; closing.classList.add('is-settled'); } });
+        window.addEventListener('scroll', function () {
+          var y = window.scrollY, dy = y - closingLastY;
+          closingLastY = y;
+          if (!closingSettled) return;
+          var max = document.documentElement.scrollHeight - window.innerHeight;
+          if (y < 0 || y >= max - 1) return;
+          var r = closing.getBoundingClientRect(), vh = window.innerHeight;
+          var seen = (Math.min(r.bottom, vh) - Math.max(r.top, 0)) / vh;   // 구획이 화면을 차지하는 비율
+          if (dy < -1 && seen >= 0.3) closing.classList.add('is-open');
+          else if (dy > 1 && seen >= 0.85) closing.classList.remove('is-open');   // 닫힘은 거의 다 내려왔을 때(T125. 전에는 조금만 보여도 닫혀 너무 위에서 닫혔음)
+        }, { passive: true });
+      }
+
       var fab = document.getElementById('fab');
       var button = document.getElementById('fabButton');
       var menu = document.getElementById('fabMenu');
-      var iconOpen = button.querySelector('.icon-open');
-      var iconClose = button.querySelector('.icon-close');
+      var label = document.getElementById('fabLabel');
       var setOpen = function (open) {
         fab.dataset.open = open ? 'true' : 'false';
         button.setAttribute('aria-expanded', open ? 'true' : 'false');
         button.setAttribute('aria-label', open ? '메뉴 닫기' : '바로 가기 메뉴');
-        iconOpen.style.display = open ? 'none' : '';
-        iconClose.style.display = open ? '' : 'none';
+        label.textContent = open ? '×' : '···';   // 쪽지의 기호가 바뀝니다(T132 · T135 · T141)
         menu.hidden = !open;
       };
       button.addEventListener('click', function () { setOpen(menu.hidden); });
       menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+      // 공유하기(T132). 조립본은 카카오톡 공유(JS SDK, 키 · 도메인 등록이 필요)를 흉내 내지 않고 기기 공유 창 → 주소 복사만 합니다. Next.js(page.tsx)가 정본입니다
+      document.getElementById('fabShare').addEventListener('click', function () {
+        setOpen(false);
+        var url = location.href.split('#')[0];
+        if (navigator.share) { navigator.share({ title: document.title, url: url }).catch(function () {}); return; }
+        copyText(url).then(function () { showToast('주소를 복사했습니다'); }, function () { showToast('복사하지 못했습니다'); });
+      });
       document.addEventListener('click', function (e) { if (!fab.contains(e.target)) setOpen(false); });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+
+      // 배경 음악(T137). 열 때 한 번 재생을 시도하고, 막히면 첫 동작(터치 · 스크롤 끝 · 키)에서 시작합니다. 스티커를 누르면 끄고 켭니다. 끈 것은 이 방문 동안 기억합니다
+      var audio = document.getElementById('bgm');
+      var bgmToggle = document.getElementById('bgmToggle');
+      var bgmWanted = true;
+      try { bgmWanted = sessionStorage.getItem('bgm') !== 'off'; } catch (e) {}
+      var fadeRaf = 0;
+      var fadeIn = function () {
+        cancelAnimationFrame(fadeRaf);   // 겹쳐 시작하면 앞 것을 취소(T139)
+        try { audio.volume = 0; } catch (e) { return; }
+        if (audio.volume !== 0) return;   // iOS는 volume을 못 바꿉니다
+        var start = performance.now();
+        var step = function (t) { var k = Math.min(1, Math.max(0, (t - start) / 1200)); audio.volume = k; if (k < 1) fadeRaf = requestAnimationFrame(step); };   // rAF 시각이 start보다 앞설 수 있어 0 아래를 막습니다(T139. 음수 volume은 예외)
+        fadeRaf = requestAnimationFrame(step);
+      };
+      var setBgmUi = function (on) { bgmToggle.classList.toggle('is-on', on); bgmToggle.setAttribute('aria-pressed', on ? 'true' : 'false'); bgmToggle.setAttribute('aria-label', on ? '배경 음악 끄기' : '배경 음악 켜기'); };
+      var firstEvents = ['pointerdown', 'touchend', 'keydown'];
+      var onFirst = function (e) { if (e.target && e.target.closest && e.target.closest('.bgm')) return; tryPlay(); };
+      var disarm = function () { firstEvents.forEach(function (t) { document.removeEventListener(t, onFirst, true); }); };
+      var arm = function () { firstEvents.forEach(function (t) { document.addEventListener(t, onFirst, { capture: true, passive: true }); }); };
+      var tryPlay = function () {
+        if (!bgmWanted) return Promise.resolve(false);
+        fadeIn();
+        return audio.play().then(function () { setBgmUi(true); disarm(); return true; }, function () { return false; });
+      };
+      tryPlay().then(function (ok) { if (!ok && bgmWanted) { audio.preload = 'auto'; audio.load(); arm(); } });   // 막혔으면 미리 받아 두어 첫 동작에서 바로 나옵니다
+      bgmToggle.addEventListener('click', function () {
+        if (bgmWanted && !audio.paused) {
+          audio.pause(); bgmWanted = false; setBgmUi(false);
+          try { sessionStorage.setItem('bgm', 'off'); } catch (e) {}
+        } else {
+          bgmWanted = true; disarm();
+          try { sessionStorage.removeItem('bgm'); } catch (e) {}
+          fadeIn(); audio.play().then(function () { setBgmUi(true); }, function () { setBgmUi(false); });
+        }
+      });
+      var pausedByHide = false;
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) { if (!audio.paused) { audio.pause(); pausedByHide = true; } }
+        else if (pausedByHide) { pausedByHide = false; audio.play().catch(function () {}); }
+      });
     })();
   </script>
 </body>

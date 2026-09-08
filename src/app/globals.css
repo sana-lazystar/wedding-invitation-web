@@ -46,6 +46,7 @@ body {
   padding: calc(56px + env(safe-area-inset-top)) 24px 48px;   /* 아래 여백은 배경(커버 상자 = 고정 높이) 아랫변 기준 48px. 안전 영역을 더하지 않습니다(T50) */
   overflow: hidden;
   isolation: isolate;   /* 커버 안의 층 순서를 커버 안에서 닫습니다(T66) */
+  background: var(--paper-bg);   /* 홀 사진이 오기 전에도 불투명하게(T124). 진입 장면에서 카드가 비치지 않도록 */
 }
 /* 무대(T75). 홀 사진·두 사람·그늘은 폭 기준 고정 크기 상자(폭 106%, 홀 사진 비율)에 있고 커버 아랫변에 붙습니다. 인앱 브라우저(카카오톡)는 주소창이 사라질 때 창 높이 자체가 바뀌어 svh까지 변하므로 높이 기준이면 그림이 늘었다 줄었다 합니다. 폭 기준이면 크기는 그대로이고 위쪽 커튼이 더 잘리거나 덜 잘릴 뿐입니다. 폭 106%(좌우 3%씩 잘림)는 세로 비율 0.444까지 폰 화면을 채웁니다. 두 사람 값은 390×844에서 전(높이 기준 27% · 22%)과 같은 크기·자리가 되도록 환산했습니다 */
 .cover-bg { position: absolute; left: 50%; bottom: 0; width: 106%; aspect-ratio: 860 / 1829; transform: translateX(-50%); z-index: 0; overflow: hidden; }
@@ -175,41 +176,272 @@ body {
 #part1-bride .note--memo { margin-bottom: calc(10.26 * min(1vw, 4.3px)); }   /* 390px에서 40(T100) */
 #part2-groom { padding-top: 70px; }   /* Scene6 위는 30에 20px 더(T94), 다시 20px 더(T96) */
 
-/* 떠 있는 바로 가기 버튼 */
+/* 9. 초대(와이어프레임 10쪽, T127). 이산하가 준 참고 그림(docs/design/scene9/scene-9-reference.png, 390×980)을 그대로 옮긴 것입니다. 크림 바탕에 종이 없이 글만 가운데 정렬이고, 왼쪽 위에 백합 한 송이, 오른쪽 아래에 꽃잎 둘이 스티커로 걸칩니다(그림은 public/scene9/. 흰 테두리는 그림에 있고 그늘만 CSS). 스티커는 구획 밖으로 잘립니다(overflow hidden. 참고 그림에서도 왼쪽 · 오른쪽 변에서 잘림). 글은 고운바탕이고 굵은 줄(17px · 700) · 옅은 줄(16px · 400) · 작은 줄(11.5~12px)의 세 단계이며 줄바꿈은 참고 그림대로 고정합니다. 세로 자리는 참고 그림의 글줄 위치를 px로 옮긴 것이라 화면 폭과 무관하고, 스티커는 모서리에 붙습니다. 스티커의 크기 · 각도 · 자리는 참고 그림에 그림 마스크를 겹쳐 맞춘 값입니다 */
+.invite { position: relative; overflow: hidden; padding: 315px 24px 134px; text-align: center; font-family: var(--font-name); word-break: keep-all; }
+.invite__text { position: relative; z-index: 1; }
+.invite__strong { margin: 0; font-size: 17px; font-weight: 700; line-height: 32px; color: #4A3828; }
+.invite__light { margin: 25px 0 0; font-size: 16px; line-height: 29px; color: #7C6A58; }
+.invite__verse { margin: 38px 0 0; }
+.invite__verse strong { display: block; font-size: 17px; font-weight: 700; line-height: 32px; color: #4A3828; }
+.invite__verse span { display: block; font-size: 11.5px; line-height: 20px; color: #A0907C; }
+.invite__verse + .invite__light { margin-top: 39px; }
+.invite__names { margin: 41px 0 0; font-size: 15px; font-weight: 700; line-height: 31px; color: #4A3828; }
+.invite__role { margin: 0 0.6em; }
+.invite__from { margin: 14px 0 0; font-size: 12px; line-height: 22px; letter-spacing: 0.1em; text-indent: 0.1em; color: #A0907C; }
+.invite__sticker { position: absolute; height: auto; pointer-events: none; filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.14)) drop-shadow(0 6px 8px rgba(70, 48, 24, 0.16)); }
+.invite__lily { width: 154px; left: 8px; top: 52px; transform: rotate(62deg); }
+.invite__petal--1 { width: 70px; right: 3px; bottom: 19px; transform: rotate(-55deg); }   /* 오른쪽 것. 밑동이 오른쪽 변에 닿고 왼쪽 꽃잎 위에 겹칩니다(T129. 처음엔 반대였음) */
+.invite__petal--2 { width: 84px; right: 67px; bottom: 39px; transform: rotate(-96deg); }   /* 왼쪽 것. 오른쪽 꽃잎 아래입니다 */
+
+/* 10. 추신 + 만화(와이어프레임 11쪽 위 절반, T102). 편지(Scene9 초대) 뒤에 붙는 추신입니다. 마스킹테이프로 바탕에 붙인 쪽지 한 장에 "P.S. …" 한 줄이 있고, 그 아래 네 컷 만화(이산하가 준 그림 한 장, 1664×1087)를 사진 종이처럼 흰 테두리에 붙였습니다. 추신은 이야기 구간의 메모지와 같은 부품(.note)이라 같은 종이 · 글꼴 · 나타나기이고, 테이프만 더해 "나중에 덧붙인 것"으로 읽힙니다. 만화 종이는 버튼이라 누르면 뷰어가 열립니다 */
+.comic { padding-top: 30px; }
+.note--ps { --tilt: -1.2deg; padding: 14px 18px 14px 16px; }   /* 한 줄이라 위아래 여백은 14px */
+.note__tape { position: absolute; top: -9px; left: 14px; width: 72px; height: auto; transform: rotate(-3deg); pointer-events: none; }   /* 테이프 그림(public/paper/tape.png, 원본 assets/masking-tape.svg). 쪽지 왼쪽 위 변에 걸칩니다 */
+.comic__paper {
+  width: 100%; align-self: center; margin: 0; border: 0; padding: 4px; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+  transform: none; -webkit-tap-highlight-color: transparent;   /* 사진 종이(-0.7°)와 달리 기울이지 않습니다(T103. T102에는 0.5°) */
+}
+.comic__paper:focus-visible { outline: 2px solid var(--oak); outline-offset: 4px; }
+.comic__hint {   /* 오른쪽 위. 오른쪽 아래는 떠 있는 메뉴 버튼(고정)에 가려집니다 */
+  position: absolute; right: 12px; top: 12px; z-index: 1; display: inline-flex; align-items: center; gap: 4px; padding: 6px 10px 6px 8px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88); box-shadow: 0 1px 3px rgba(70, 48, 24, 0.28);
+  font-family: var(--font-ui); font-size: 11px; font-weight: 500; line-height: 1; letter-spacing: 0.02em; color: var(--ink-soft);
+}
+/* 만화 뷰어. 화면 전체를 바탕색(베이지)으로 덮고 만화를 90° 돌려(시계 방향. 폰을 왼쪽으로 눕히면 바로 읽힙니다) 화면에 맞춥니다. 비율은 그대로이고 남는 위아래는 바탕색입니다. 그림 상자는 돌리기 전 기준으로 폭 = 화면 높이 · 높이 = 화면 폭이라(스크립트가 --viewer-w · --viewer-h로 잰 값) 돌린 뒤 화면을 꼭 채우고, object-fit: contain이 비율을 지킵니다. 화면이 이미 가로(폰을 돌린 상태)면 돌리지 않습니다. 닫기는 × · 어디든 탭 · Esc. 열려 있는 동안 뒤 페이지는 스크롤되지 않습니다(html.is-viewer) */
+.comic-viewer { position: fixed; inset: 0; z-index: 45; overflow: hidden; background: var(--paper-bg); touch-action: none; animation: viewer-in 0.22s ease-out both; }
+.comic-viewer[hidden] { display: none; }
+.comic-viewer__img {
+  position: absolute; left: 50%; top: 50%; width: var(--viewer-h, 100vh); height: var(--viewer-w, 100vw); max-width: none; object-fit: contain;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+@media (orientation: landscape) { .comic-viewer__img { width: var(--viewer-w, 100vw); height: var(--viewer-h, 100vh); transform: translate(-50%, -50%); } }
+.comic-viewer__close {
+  position: absolute; top: calc(12px + env(safe-area-inset-top)); right: calc(12px + env(safe-area-inset-right)); width: 44px; height: 44px; border-radius: 50%; border: 0; padding: 0;
+  display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.78); color: var(--ink); box-shadow: 0 2px 8px rgba(70, 48, 24, 0.22); cursor: pointer;
+}
+.comic-viewer__close:focus-visible { outline: 2px solid var(--oak); outline-offset: 3px; }
+.is-viewer { overflow: hidden; }
+@keyframes viewer-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .comic-viewer { animation: none; } }
+
+/* 사진첩(와이어프레임 11쪽 아래 절반, T103 · T107 · T108). 흰 바탕 구획에 왼쪽 정렬한 굵은 제목 "사진첩"(노토 산스), 그 아래 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 9번째 사진을 흐리게 깔고 나머지 장수(+N개)를 씁니다. 타일은 테두리 없는 네모(모서리 4px, 사이 6px)이고 기울이지 않습니다. 어느 타일을 눌러도 그 사진부터 뷰어가 열립니다.
+   T104~T106의 나무 틀과 표지판은 동화 느낌이 나서 T107에 지웠습니다(마지막 모습은 커밋 a8487a0. 에셋 wood-frame · wood-sign도 함께 지움). T103~T104의 테이프 쪽지 제목도 같습니다 */
+/* 흰 바탕 구획(T108). 사진첩이 씁니다(이산하 지시. T110에 오시는 길 · 마음 전하는 곳도 썼다가 T111에 종이 한 장으로 되돌림). 제목은 가운데 정렬한 고운바탕 400 · 짙은 갈색(T117. T108~T116에는 왼쪽 굵은 노토 산스, T105~T107에는 가운데 500) */
+.plain { background: #FFFFFF; }
+.plain__title { margin: 0; text-align: center; font-family: var(--font-name); font-size: 18px; font-weight: 700; letter-spacing: 0.12em; text-indent: 0.12em; color: #2A1A0E; }   /* 고운바탕 18px · 700(T118. T117에는 16px · 400) · 짙은 갈색(Scene2 날짜와 같은 색) · 가운데(T117. T108~T116에는 노토 산스 700 왼쪽) */
+.gallery__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.gallery__tile {
+  display: block; position: relative; width: 100%; aspect-ratio: 1; margin: 0; padding: 0; border: 0; border-radius: 4px; overflow: hidden;
+  background: var(--rule); cursor: pointer; -webkit-tap-highlight-color: transparent;   /* 바탕색은 사진이 오기 전 자리 */
+}
+.gallery__tile:focus-visible { outline: 2px solid var(--oak); outline-offset: 3px; }
+.gallery__thumb { display: block; width: 100%; height: 100%; object-fit: cover; }
+.gallery__tile--more .gallery__thumb { filter: blur(3px); transform: scale(1.08); }   /* 흐림의 가장자리가 비치지 않게 조금 키웁니다 */
+.gallery__more { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(47, 42, 37, 0.45); color: #fff; font-family: var(--font-ui); font-size: 17px; font-weight: 500; letter-spacing: 0.02em; }
+/* 사진 뷰어(T103 · T104 · T105). 어두운 반투명 바탕(뒤 페이지가 비칩니다) 위에 Swiper(설치한 라이브러리. 조립본은 node_modules의 번들, Next.js는 swiper/react)가 사진을 한 장씩 보여 주고, 좌우로 밀거나 화살표 · 키보드로 넘깁니다. 닫기는 오른쪽 위 × · Esc.
+   테마(T104 제안 · T105 손질). 사진은 페이지의 사진 종이처럼 흰 테두리 4px의 인화지(.gallery-viewer__print. T106. 전에는 6)이고 위 가운데에 마스킹테이프 한 장이 가로로 붙어 있습니다(T122. T109에는 세로, T105에는 7°, T104에는 양 모서리에 얇은 것 둘). 장수 "3 / 44"는 아래 가운데에 고정된 노토 산스 15px(T122. T105~T121에는 슬라이드마다 사진 아래라 넘길 때 따라갔음). 화살표는 ×와 같은 크기 · 굵기(원 40px, 선 1.6px)의 크림색 종이 단추이고 전체가 반투명합니다(T105). 화살표 단추는 Swiper 기본 단추 대신 우리 단추를 넘깁니다(navigation prevEl · nextEl).
+   인화지 크기는 폭 = min(화면 폭, 남는 높이 × 비율)이고 aspect-ratio가 높이를 정합니다(--ar = 폭/높이, 슬라이드마다 인라인). 남는 높이는 스크립트가 잰 뷰어 높이(--viewer-h)에서 위(닫기) · 아래(장수 줄 포함) 여백을 뺀 것입니다. 사진은 그 안 가운데에 옵니다(가로 사진도). 테두리 4px이 비율에 들어가므로 사진은 cover로 4px쯤 잘립니다 */
+.gallery-viewer { position: fixed; inset: 0; z-index: 45; background: rgba(38, 30, 22, 0.9); animation: viewer-in 0.22s ease-out both; --gv-top: calc(60px + env(safe-area-inset-top)); --gv-bottom: calc(66px + env(safe-area-inset-bottom)); }   /* 아래 여백 66 = 장수 줄 28 + 아래 22 + 사이 16(T122) */
+.gallery-viewer[hidden] { display: none; }
+.gallery-viewer .gallery-viewer__swiper { position: absolute; inset: 0; }   /* 선택자를 둘로 두어 Swiper CSS(.swiper { position: relative })를 이깁니다. Next.js에서는 swiper/css가 globals.css 뒤에 실리므로 같은 우선순위면 밀립니다(T104) */
+.gallery-viewer .swiper-slide { display: flex; align-items: center; justify-content: center; padding: var(--gv-top) 16px var(--gv-bottom); }
+.gallery-viewer__print {
+  position: relative; margin: 0; padding: 4px; background: #fff; aspect-ratio: var(--ar);   /* 흰 테두리 4px(T106. T104~T105에는 6) */
+  width: min(100%, calc((var(--viewer-h, 100vh) - var(--gv-top) - var(--gv-bottom)) * var(--ar)));
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 18px 32px -12px rgba(0, 0, 0, 0.55);
+}
+.gallery-viewer__img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+.gallery-viewer__tape { position: absolute; top: -15px; left: 50%; width: 76px; height: auto; transform: translateX(-50%) rotate(-3deg); pointer-events: none; }   /* 짧은 테이프 그림(public/paper/tape-short.png, 120×48)을 76px 폭 · 두께 30px으로 위 가운데에 가로로(T122. T109에는 세로, T105에는 7°). 살짝 -3° */
+.gallery-viewer__count { position: absolute; left: 0; right: 0; bottom: calc(22px + env(safe-area-inset-bottom)); z-index: 1; margin: 0; text-align: center; font-family: var(--font-ui); font-size: 15px; font-weight: 500; line-height: 28px; letter-spacing: 0.1em; color: #FBF7EF; pointer-events: none; }   /* 노토 산스(T109). 슬라이드 밖에 하나만 두어 넘겨도 제자리(T122. T105~T121에는 슬라이드마다 사진 아래). 스크립트가 slideChange에 갱신 */
+.gallery-viewer__nav {
+  position: absolute; top: 50%; z-index: 2; width: 40px; height: 40px; margin-top: -20px; border-radius: 50%; border: 0; padding: 0;
+  display: flex; align-items: center; justify-content: center; background: rgba(251, 247, 239, 0.9); color: var(--oak); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); opacity: 0.55; cursor: pointer;
+}
+.gallery-viewer__nav--prev { left: 8px; }
+.gallery-viewer__nav--next { right: 8px; }
+.gallery-viewer__nav.swiper-button-disabled { opacity: 0.2; pointer-events: none; }   /* Swiper가 양 끝에서 붙이는 클래스 */
+.gallery-viewer__nav.swiper-button-lock { display: none; }
+.gallery-viewer__nav:focus-visible { outline: 2px solid #FBF7EF; outline-offset: 3px; }
+.gallery-viewer__close {
+  position: absolute; top: calc(12px + env(safe-area-inset-top)); right: calc(12px + env(safe-area-inset-right)); z-index: 2; width: 40px; height: 40px; border-radius: 50%; border: 0; padding: 0;
+  display: flex; align-items: center; justify-content: center; background: rgba(251, 247, 239, 0.92); color: var(--oak); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); cursor: pointer;
+}
+.gallery-viewer__close:focus-visible { outline: 2px solid #FBF7EF; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .gallery-viewer { animation: none; } }
+
+/* 종이 한 장(T111). 초대 뒤의 안내 장면(오시는 길 · 하객 안내 · 마음 전하는 곳)은 크림색 바탕 위에 놓인 흰 종이 한 장씩입니다. 쪽지와 같은 종이 결, 기울임 없음(위 가운데 테이프는 T112에 뺌), 머리에 봉투의 장미 봉인(T119. T111~T118에는 Scene2의 올리브 가지)과 고운바탕 제목. 캐릭터는 없습니다(격식 구간). T110의 흰 띠 · 굵은 노토 산스 제목은 정보 페이지처럼 보여 테마와 어긋났습니다 */
+.sheet { position: relative; padding: 34px 22px 28px; border-radius: 3px; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35); }
+.sheet__head { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 0 0 20px; }
+.sheet__mark { width: 29px; height: 29px; filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.2)); }   /* 봉투의 장미 봉인(public/intro/rose-seal.png). 마음 전하는 곳 오른쪽 위에 44px로 있던 것을 2/3로 줄여 세 종이의 머리로(T119. T111~T118에는 올리브 가지 28px) */
+.sheet__title { margin: 0; font-family: var(--font-name); font-size: 18px; font-weight: 700; line-height: 1.4; letter-spacing: 0.12em; text-indent: 0.12em; color: var(--ink); }
+.sheet__body { position: relative; display: flex; flex-direction: column; gap: 20px; }
+.sheet__text { margin: 0; font-size: 15px; line-height: 1.8; color: var(--ink-soft); word-break: keep-all; }
+.sheet__text--center { text-align: center; }
+.sheet__text--light { font-size: 14px; font-weight: 300; }   /* 하객 안내 둘째 문단(화환 사양). 얇고 작게(T112). 노토 산스 300은 이 때문에 실었습니다 */
+.sheet__rule { height: 1px; margin: 0; border: 0; background: var(--rule); }
+/* 작은 표제(주차 · 지하철 · 버스 · 신랑 측 · 신부 측). 고운바탕에 앞의 오크색 점(떠 있는 메뉴의 점과 같은 것) */
+.sheet__label { display: flex; align-items: center; gap: 8px; margin: 0; font-family: var(--font-name); font-size: 15px; font-weight: 700; line-height: 1.5; color: var(--ink); }
+.sheet__label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--oak); }
+/* 11. 오시는 길(와이어프레임 12쪽, T110 · T111). 식장 이름 · 주소, 지도(흰 테두리 사진 종이 안의 카카오맵, T112. 기울임 없음, T115), 알약 셋(네이버 지도 · 카카오맵은 식장 이름 검색 링크, 주소 복사), 주차 · 지하철 · 버스(주차가 맨 앞). 노선은 색 알약(7호선 올리브 · 수인분당선 노랑 · 간선 파랑 · 지선 초록) */
+.venue { text-align: center; }
+.venue__name { margin: 0; font-family: var(--font-name); font-size: 15px; font-weight: 700; line-height: 1.6; color: var(--ink); }
+.venue__addr { margin: 2px 0 0; font-size: 14px; line-height: 1.6; color: var(--muted); }
+.map-paper { position: relative; z-index: 1; padding: 4px; border-radius: 3px; background: #fff; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35); }   /* 기울이지 않습니다(T115. T111에는 -0.6°) */
+.map-paper__inner { position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper-bg); }
+.map-paper__map { position: absolute; inset: 0; }   /* 카카오맵이 그리는 자리(Next.js. 키는 NEXT_PUBLIC_KAKAO_MAP_KEY). 조립본은 file://라 SDK를 못 써 자리표시만 */
+.map-paper__note { position: relative; padding: 0 16px; font-family: var(--font-name); font-size: 14px; line-height: 1.6; letter-spacing: 0.1em; text-align: center; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.chip { display: inline-flex; align-items: center; height: 34px; margin: 0; padding: 0 14px; border: 1px solid rgba(185, 142, 94, 0.55); border-radius: 999px; background: var(--paper); font-family: var(--font-ui); font-size: 13px; font-weight: 500; line-height: 1; color: var(--ink); text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.chip:active { background: var(--rule); }
+.chip:focus-visible { outline: 2px solid var(--oak); outline-offset: 2px; }
+.route { display: flex; flex-direction: column; gap: 6px; }
+.route__text { margin: 0; padding-left: 14px; font-size: 15px; line-height: 1.75; color: var(--ink-soft); word-break: keep-all; }
+.line { display: inline-block; margin-right: 6px; padding: 0 7px; border-radius: 999px; font-family: var(--font-ui); font-size: 12px; font-weight: 700; line-height: 20px; color: #fff; vertical-align: 1px; }
+.line + .line { margin-left: -2px; }
+.line--7 { background: #747F00; }
+.line--bundang { background: #F5A200; }
+.line--trunk { background: #3D5BAB; }
+.line--branch { background: #5BB025; }
+/* 12. 하객 안내(와이어프레임 13쪽, 0.6화면, T110 · T111). 종이 한 장에 가운데 정렬 격식체 두 문단과 사이 가는 줄. 신부대기실 시각은 추정(U-5) */
+/* 13. 마음 전하는 곳(와이어프레임 14쪽, 1.3화면, T110 · T111). 계좌 여섯은 접지 않고 늘 펼쳐 두고 행 전체가 복사 단추(계좌번호만, 은행명 없이. 복사되는 값은 하이픈 없는 숫자, 표시는 하이픈. T120). 행은 크림색 종이 조각. 관계를 이름 앞에. 성함 · 계좌번호는 이산하가 준 실값(T112 · T120. 자리표시였던 디자인 결정 6은 폐기). 오른쪽 위 봉인(T111)은 T119에 머리로 옮김. 부모님 성함은 T112에 이산하가 준 실명 */
+.gift__group { display: flex; flex-direction: column; gap: 8px; }
+.gift__group .sheet__label { margin-bottom: 2px; }
+.account {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; margin: 0; padding: 12px 16px;
+  border: 0; border-radius: 6px; background: var(--paper-bg); font: inherit; color: inherit; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.account:active { background: var(--rule); }
+.account:focus-visible { outline: 2px solid var(--oak); outline-offset: 2px; }
+.account__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+/* 행은 세 줄(T130 · T131). "신랑 아버지"(관계, 가장 굵음) · 계좌번호 · "은행 성함"의 순서이고 아래 두 줄은 얇게 같은 크기. T130에는 관계 · 성함 · 은행 + 번호, 그 전에는 "관계 · 성함" 한 줄과 번호 한 줄 */
+.account__role { font-size: 15px; font-weight: 700; line-height: 1.5; color: var(--ink); }
+.account__num, .account__holder { font-size: 14px; font-weight: 300; line-height: 1.5; color: var(--ink-soft); }
+.account__num { letter-spacing: 0.02em; }
+.account__copy { flex: none; display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-ui); font-size: 13px; line-height: 1; color: var(--oak); }
+/* 복사 알림(T110). 화면 아래 가운데, 떠 있는 메뉴 단추 위. 1.6초 뒤 사라집니다 */
+.toast { position: fixed; left: 50%; bottom: calc(92px + env(safe-area-inset-bottom)); z-index: 12; transform: translateX(-50%); padding: 10px 16px; border-radius: 999px; background: rgba(47, 42, 37, 0.9); color: #FBF7EF; font-family: var(--font-ui); font-size: 14px; line-height: 1.4; white-space: nowrap; opacity: 0; transition: opacity 0.25s ease-out; pointer-events: none; }
+.toast.is-shown { opacity: 1; }
+
+/* 14. 마지막(와이어프레임 15쪽, T121 · T123). 봉투 크기의 편지지 카드(폭 = 봉투 폭의 92%, 높이 = 봉투 좌표 440)가 화면 가운데에 있고 "고마움을 봉해 보냅니다."가 그 위쪽(높이의 38%)에 있습니다. 구획이 60% 보이면 진입 장면을 거꾸로 돌립니다. 0~0.3초 내려가 있던 봉투가 스르륵 나타나고(윗변이 편지지 아랫변 70px 위), 0.3~1.2초 봉투가 가운데로 올라오는 것과 동시에 편지지가 주머니 자리로 내려가 담기고, 1.2~3.2초 뚜껑이 봉인을 단 채 그림자를 드리우며 닫힙니다(옆면 2.09초에 면 · 층 교체, 125° 1.9초에 그림자 층 교체). 끝은 닫힌 봉투가 가운데에 선 채이고 확대(포커스인)는 없습니다. T121에는 편지지가 화면 전체였다가 줄어들었는데 너무 커서 봉투 크기로 바꿨습니다(T123).
+   층 구조 · 배율 계산은 진입 장면과 같습니다(변수 --c-*는 스크립트가 구획 크기에서 계산). 화면 고정이 아니라 구획 안 절대 위치라 스크롤과 함께 움직입니다. 봉투 · 뚜껑 · 봉인 · 그림자 부품(.intro__*)은 진입 장면 것을 그대로 쓰고, 시작 상태(뚜껑 열림 · 안쪽면 · 봉인 뒷면 · 봉투 투명 · 내려간 자리)만 여기서 덮어씁니다. 편지지 아랫부분이 봉투 밑으로 삐져나오는 것은 앞판 층의 바닥(.closing__floor, 구획 바탕색)이 가립니다. 움직임 줄이기면 편지지만 보입니다 */
+.closing { position: relative; overflow: hidden; isolation: isolate; background: var(--paper-bg); }
+/* 구획 아래 만든 이 표기(T133. 나중에 사업화할 수도 있어 이산하가 넣음). 코모런트 작은 글자 두 줄, 봉투 아래. 떠 있는 메뉴(아래 20 + 46px)와 겹치지 않게 그 위입니다. 층은 봉투 층들(26~36) 위 */
+.closing__credit { position: absolute; left: 0; right: 0; bottom: calc(76px + env(safe-area-inset-bottom)); z-index: 40; margin: 0; text-align: center; font-family: var(--font-latin); font-size: 11px; font-weight: 500; line-height: 1.6; letter-spacing: 0.08em; color: var(--muted); pointer-events: none; }
+.closing__letter { position: absolute; left: 50%; top: 0; z-index: 30; width: var(--c-lw, 330px); height: var(--c-lh, 263px); margin-left: calc(var(--c-lw, 330px) / -2); border-radius: 3px; overflow: hidden; background: #FBF7EF; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35); transform: translateY(var(--c-tys, 290px)); }   /* 바탕색은 종이 그림이 오기 전에도 불투명하게(T124) */
+.closing__text { position: absolute; left: 16px; right: 16px; top: 38%; transform: translateY(-50%); text-align: center; }   /* 위쪽에 두어 다시 열었을 때(편지지가 62% 나옴) 봉투 위로 보입니다 */
+.closing__big { margin: 0; font-family: var(--font-name); font-size: 20px; font-weight: 700; line-height: 1.6; letter-spacing: 0.06em; color: #2A1A0E; }
+.closing__date { margin: 10px 0 0; font-family: var(--font-latin); font-size: 16px; line-height: 1.4; letter-spacing: 0.16em; color: var(--ink-soft); }
+.closing__layer { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.closing__layer--back { z-index: 26; }
+.closing__layer--front { z-index: 35; }
+.closing__layer--cast { z-index: 27; }   /* 뚜껑이 열려 있을 때는 카드 뒤. 125°를 지나며 35로 */
+.closing__layer--flap { z-index: 28; }   /* 열린 뚜껑은 카드 뒤. 옆면(90°)을 지나며 36으로 */
+.closing__zoom { position: absolute; left: 50%; top: 50%; width: 600px; height: 400px; margin: -200px 0 0 -300px; transform: scale(var(--c-z1, 0.57)); }
+.closing__floor { position: absolute; left: -1000px; top: 400px; width: 2600px; height: 2000px; background: var(--paper-bg); }
+.closing .intro__env { opacity: 0; transform: translateY(var(--c-drop1, 0px)); }
+.closing .intro__flap { transform: rotateX(180deg); }
+.closing .intro__cast { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(180deg); }
+.closing .intro__flap-out, .closing .intro__seal { opacity: 0; }
+.closing .intro__flap-in, .closing .intro__seal-back { opacity: 1; }
+.closing.is-closing .closing__letter { animation: closing-letter-tuck 0.9s cubic-bezier(0.45, 0.05, 0.3, 1) 0.3s both; }
+.closing.is-closing .intro__env { animation: closing-env-in 0.3s ease-in-out 0s both, closing-env-rise 0.9s cubic-bezier(0.45, 0.05, 0.3, 1) 0.3s forwards; }
+.closing.is-closing .intro__flap { animation: closing-flap 2s cubic-bezier(0.55, 0, 0.3, 1) 1.2s both; }
+.closing.is-closing .intro__cast { animation: closing-cast 2s cubic-bezier(0.55, 0, 0.3, 1) 1.2s both; }
+.closing.is-closing .intro__cast-img { animation: intro-cast-sharp 2s ease-in-out 1.2s both; }
+.closing.is-closing .intro__cast-img--soft { animation: intro-cast-soft 2s ease-in-out 1.2s both; }
+.closing.is-closing .intro__flap-out, .closing.is-closing .intro__seal { animation: intro-show 1ms linear 2.09s both; }
+.closing.is-closing .intro__flap-in, .closing.is-closing .intro__seal-back { animation: intro-hide 1ms linear 2.09s both; }
+.closing.is-closing .closing__layer--flap { animation: closing-flap-layer 1ms linear 2.09s both; }
+.closing.is-closing .closing__layer--cast { animation: closing-cast-layer 1ms linear 1.9s both; }
+@keyframes closing-letter-tuck { from { transform: translateY(var(--c-tys)); } to { transform: translateY(var(--c-ty0)); } }
+@keyframes closing-env-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes closing-env-rise { from { transform: translateY(var(--c-drop1)); } to { transform: translateY(0); } }
+@keyframes closing-flap { from { transform: rotateX(180deg); } to { transform: rotateX(0deg); } }
+@keyframes closing-cast { from { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(180deg); } to { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(0deg); } }
+@keyframes closing-flap-layer { from { z-index: 28; } to { z-index: 36; } }
+@keyframes closing-cast-layer { from { z-index: 27; } to { z-index: 35; } }
+/* 다시 열고 닫기(T122 · T123). 첫 재생이 끝나면(is-settled) 키프레임을 끄고 끝 상태를 기본값으로 둔 채 transition으로 움직입니다. 구획이 보이는 동안 스크롤을 올리면(is-open) 뚜껑이 열리고(1.4초) 편지지가 제 높이의 62%만큼 나와(0.9초 뒤 0.7초) 글이 봉투 위로 보이며, 내리면 편지지가 먼저 들어가고(0.7초) 뚜껑이 닫힙니다(0.4초 뒤 1.4초). 봉투는 그대로. 면 · 층 교체는 뚜껑이 옆면(90°)을 지나는 시각(전이 1.4초의 44.4% = 0.62초 + 지연)에 맞춘 1ms 전이입니다. transition이라 도중에 방향을 바꿔도 이어서 움직입니다 */
+.closing.is-settled .closing__letter { animation: none; transform: translateY(var(--c-ty0)); transition: transform 0.7s cubic-bezier(0.45, 0.05, 0.3, 1) 0s; }
+.closing.is-settled .intro__env { animation: none; opacity: 1; transform: translateY(0); }
+.closing.is-settled .intro__flap { animation: none; transform: rotateX(0deg); transition: transform 1.4s cubic-bezier(0.55, 0, 0.3, 1) 0.4s; }
+.closing.is-settled .intro__cast { animation: none; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(0deg); transition: transform 1.4s cubic-bezier(0.55, 0, 0.3, 1) 0.4s; }
+.closing.is-settled .intro__cast-img { animation: none; opacity: 0.3; }
+.closing.is-settled .intro__cast-img--soft { animation: none; opacity: 0; }
+.closing.is-settled .intro__flap-out, .closing.is-settled .intro__seal { animation: none; opacity: 1; transition: opacity 1ms linear 1.02s; }
+.closing.is-settled .intro__flap-in, .closing.is-settled .intro__seal-back { animation: none; opacity: 0; transition: opacity 1ms linear 1.02s; }
+.closing.is-settled .closing__layer--flap { animation: none; z-index: 36; transition: z-index 1ms linear 1.02s; }
+.closing.is-settled .closing__layer--cast { animation: none; z-index: 35; transition: z-index 1ms linear 0.9s; }
+.closing.is-settled.is-open .closing__letter { transform: translateY(var(--c-ty1)); transition-delay: 0.9s; }
+.closing.is-settled.is-open .intro__flap { transform: rotateX(180deg); transition-delay: 0s; }
+.closing.is-settled.is-open .intro__cast { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(180deg); transition-delay: 0s; }
+.closing.is-settled.is-open .intro__flap-out, .closing.is-settled.is-open .intro__seal { opacity: 0; transition-delay: 0.62s; }
+.closing.is-settled.is-open .intro__flap-in, .closing.is-settled.is-open .intro__seal-back { opacity: 1; transition-delay: 0.62s; }
+.closing.is-settled.is-open .closing__layer--flap { z-index: 28; transition-delay: 0.62s; }
+.closing.is-settled.is-open .closing__layer--cast { z-index: 27; transition-delay: 0.74s; }
+@media (prefers-reduced-motion: reduce) { .closing .closing__layer { display: none; } .closing.is-closing .closing__letter { animation: none; } }
+
+/* 떠 있는 바로 가기(T132 · T134 · T135. 전에는 오크색 동그라미에 ≡ 아이콘이라 흔한 앱 단추 같았음). 테이프로 붙인 작은 쪽지에 손글씨 "메뉴"가 있고 열리면 "닫기"로 바뀝니다. 누르면 그 위로(사이 14px) 쪽지 한 장(테이프 없이, 기울이지 않음)이 8px 내려앉으며 나타나고 네 항목(오시는 길 · 사진첩 · 마음 전하는 곳 · 공유하기)이 고운바탕으로, 사이는 가는 줄입니다(T134에 열린 쪽지에도 있던 테이프 · 오크색 점 · 손글씨를 뺌. T134의 닫기 줄과 작은 쪽지 숨김은 T135에 되돌림). 종이 결 · 그늘은 이야기 구간 쪽지와 같은 부품입니다. 공유하기는 Next.js에서 카카오톡 공유(JS SDK)이고 조립본은 기기 공유 창 · 주소 복사만 합니다 */
 .fab {
   position: fixed;
   right: max(20px, calc((100vw - 430px) / 2 + 20px));
   bottom: calc(20px + env(safe-area-inset-bottom));
   z-index: 10;
-  display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
-  font-family: var(--font-ui);
+  display: flex; flex-direction: column; align-items: flex-end; gap: 14px;
+  font-family: var(--font-name);
 }
 .fab__menu {
-  width: 176px;
-  display: flex; flex-direction: column;
-  background: var(--paper);
-  border-radius: 14px;
-  box-shadow: 0 16px 32px -12px rgba(70, 48, 24, 0.45);
-  overflow: hidden;
-}
-.fab__menu a {
-  display: flex; align-items: center; justify-content: space-between;
-  height: 48px; padding: 0 18px;
-  font-size: 15px; font-weight: 500;
-  color: var(--ink); text-decoration: none;
+  position: relative; width: 172px; display: flex; flex-direction: column; padding: 4px 0;
+  border-radius: 3px; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
+  animation: fab-in 0.25s ease-out both;
 }
 .fab__menu[hidden] { display: none; }   /* 조립본에는 Tailwind 초기화가 없어 hidden 속성을 display: flex가 이깁니다 */
-.fab__menu a + a { border-top: 1px solid var(--rule); }
-.fab__menu a::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--oak); }
-.fab__menu a:focus-visible { outline: 2px solid var(--oak); outline-offset: -4px; }
-.fab__button {
-  width: 52px; height: 52px; border-radius: 50%; border: 0; padding: 0;
-  background: var(--oak); color: var(--paper);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 10px 20px -8px rgba(70, 48, 24, 0.55);
-  cursor: pointer;
+@keyframes fab-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .fab__menu { animation: none; } }
+.fab__item {
+  position: relative; display: flex; align-items: center; height: 46px; margin: 0 16px; padding: 0 4px;
+  border: 0; background: none; font: inherit; font-size: 15px; letter-spacing: 0.02em; line-height: 1; color: var(--ink); text-decoration: none; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
+.fab__item + .fab__item { border-top: 1px solid var(--rule); }
+.fab__item:focus-visible { outline: 2px solid var(--oak); outline-offset: -2px; border-radius: 3px; }
+.fab__button {
+  position: relative; width: 64px; height: 46px; margin: 0; padding: 8px 0 0; border: 0; border-radius: 3px; background: none;
+  box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
+  transform: rotate(2deg); font-family: var(--font-memo); font-size: 18px; line-height: 1; color: var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.fab__button:active { transform: rotate(2deg) scale(0.97); }
 .fab__button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.fab__tape { position: absolute; top: -7px; left: 50%; width: 44px; height: auto; transform: translateX(-50%) rotate(4deg); pointer-events: none; }
+.fab__label { position: relative; font-family: var(--font-ui); font-size: 20px; font-weight: 700; letter-spacing: 0.1em; text-indent: 0.1em; }   /* 글자 "메뉴" · "닫기" 대신 기호(T141). 닫힘 = 가운뎃점 셋 ···, 열림 = ×. 개구의 점은 네모나서 노토 산스 */
+/* 배경 음악(T137 · T138 · T140). 오른쪽 위 작은 원 영역. 재생 중엔 음표 셋(♪ ♫ ♩)이 아래에서 위로 살랑이며 지나가고(2.6초, 시간을 어긋나게, 위아래는 마스크로 흐림), 끄면 음표 하나가 옅어지고 짧은 빗금이 갑니다. 색은 흰 글자에 difference 블렌드라 밝은 바탕에서는 검게, 어두운 바탕(사진)에서는 희게 저절로 뒤집힙니다(T140). 열 때 재생을 시도하고, 폰 브라우저가 막으면(소리 있는 자동재생은 사용자 동작 뒤에만) 첫 터치 · 스크롤 끝 · 키에서 시작합니다. 끄면 그 방문(sessionStorage) 동안 꺼진 채입니다. 진입 장면 동안은 숨깁니다. T137에는 36px 둥근 종이 스티커, T138에 종이를 빼고 3/4로 */
+.bgm {
+  position: fixed; top: calc(12px + env(safe-area-inset-top)); right: max(12px, calc((100vw - 430px) / 2 + 12px)); z-index: 10;
+  width: 34px; height: 34px; padding: 0; border: 0; background: none; color: #FFFFFF; mix-blend-mode: difference;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; transition: opacity 0.4s ease-out;
+}
+.bgm__notes { position: absolute; inset: 0; overflow: hidden; border-radius: 50%; mask-image: linear-gradient(to bottom, transparent 0, #000 24%, #000 76%, transparent 100%); }
+.bgm__note { position: absolute; left: 50%; bottom: -8px; font-family: var(--font-name); font-size: 15px; line-height: 1; transform: translateX(-50%); opacity: 0; }
+.bgm__note--1 { margin-left: -7px; }
+.bgm__note--2 { margin-left: 5px; font-size: 13px; }
+.bgm__note--3 { margin-left: -1px; font-size: 12px; }
+.bgm.is-on .bgm__note { animation: bgm-drift 2.6s linear infinite; }
+.bgm.is-on .bgm__note--2 { animation-delay: -0.9s; }
+.bgm.is-on .bgm__note--3 { animation-delay: -1.8s; }
+@keyframes bgm-drift {
+  0% { transform: translate(-50%, 0) rotate(-6deg); opacity: 0; }
+  18% { opacity: 1; }
+  50% { transform: translate(calc(-50% + 3px), -22px) rotate(6deg); }
+  82% { opacity: 1; }
+  100% { transform: translate(-50%, -44px) rotate(-6deg); opacity: 0; }
+}
+.bgm__off { position: relative; display: block; font-family: var(--font-name); font-size: 20px; line-height: 34px; opacity: 0.55; }
+.bgm.is-on .bgm__off { display: none; }
+.bgm::after { content: ''; position: absolute; left: 50%; top: 50%; width: 14px; height: 1.5px; margin: -1px 0 0 -7px; background: currentColor; transform: rotate(-45deg); opacity: 0.6; }   /* 꺼짐 빗금. 음표 너비만큼(T138) */
+.bgm.is-on::after { display: none; }
+.is-intro .bgm { opacity: 0; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {   /* 움직임 줄이기면 지나가는 음표 대신 정지한 음표 하나 */
+  .bgm.is-on .bgm__notes { display: none; }
+  .bgm.is-on .bgm__off { display: block; opacity: 1; }
+}
 
 
 /* 0. 진입 장면(로딩). 편지봉투가 화면 높이의 2/3로 확대돼 있다가(좌우가 잘림) 물러나 폭이 화면의 92%가 된 뒤 0.3초 멈추고, 뚜껑이 열리고, 뚜껑이 80% 열렸을 때부터 편지지(커버 자체)가 올라오는 것과 동시에 봉투가 아래로 내려가 편지지가 거의 다 보이며, 이어서 편지지가 화면 전체로 커지는 것과 동시에 봉투가 0.3초에 흐려져 사라져 Scene1이 됩니다(디자인 논의 T36~T49 · T76). 5.0초.
@@ -230,9 +462,9 @@ body {
 .intro__env { position: relative; width: 600px; height: 400px; perspective: 1400px; }
 .intro__back, .intro__front { position: absolute; left: 0; top: 0; width: 600px; height: 400px; }
 .intro__floor { position: absolute; left: -1000px; top: 400px; width: 2600px; height: 2000px; background: #E9E1D2; }
-/* 그림자. 광원은 봉투 기준 우측 상단 45°, 높이 45°(T76). 봉투가 탁자에 드리우는 그림자는 바닥(.intro__floor) 위에 그려져야 봉투 아랫변 아래에도 보이므로 앞판 층의 상자(.intro__table)로 두고, 앞판 자체는 카드에 닿는 얇은 그림자만 둡니다 */
+/* 그림자. 광원은 봉투 기준 우측 상단 45°, 높이 45°(T76). 봉투가 탁자에 드리우는 그림자는 바닥(.intro__floor) 위에 그려져야 봉투 아랫변 아래에도 보이므로 앞판 층의 상자(.intro__table)로 둡니다(앞판 자체의 얇은 그림자는 T124에 뺌) */
 .intro__table { position: absolute; left: 0; top: 0; width: 600px; height: 400px; border-radius: 3px; box-shadow: -13px 13px 20px rgba(70, 48, 24, 0.26), -2px 2px 4px rgba(70, 48, 24, 0.18); }
-.intro__front { filter: drop-shadow(-1.5px 1.5px 2px rgba(70, 48, 24, 0.26)); }
+/* 앞판에는 그림자 필터를 걸지 않습니다(T124). T76에 "카드에 닿는 얇은 그림자"로 drop-shadow를 걸었더니 날개의 사선 가장자리를 따라 편지지 위에 흐린 선이 그려져 봉투가 비치는 것처럼 보였습니다(진입 장면 · 마지막 장면 둘 다). 종이와 봉투 그림은 불투명하고 주머니 창의 알파는 0입니다 */
 .intro__flap { position: absolute; left: -20px; top: 0; width: 640px; height: 264px; transform-origin: 50% 0; filter: drop-shadow(0 0 2.4px rgba(74, 54, 32, 0.22)); }
 /* 뚜껑 그림자. 뚜껑과 봉인의 어두운 실루엣(.intro__cast)이 뚜껑과 같은 회전(rotateX)을 하고, 같은 transform 목록 앞의 matrix3d가 그 3D 결과를 광원 방향으로 봉투 면(z=0)에 투영합니다(z를 x로 -0.7071, y로 +0.7071 옮기고 z는 0.001로 눌러 평평하게). 뚜껑이 세워질수록 그림자가 왼쪽 아래로 길어지고, 125°에서 선으로 접힌 뒤 윗변 위로 넘어갑니다. 회전 애니메이션이 같은 곡선·시각이라 어긋나지 않습니다.
    투영과 회전은 한 요소의 transform 목록에 함께 둡니다. 바깥 요소(preserve-3d)에 투영을 두고 안쪽에서 회전하면 WebKit이 투영을 무시합니다(T76 실험. Chromium은 됩니다).

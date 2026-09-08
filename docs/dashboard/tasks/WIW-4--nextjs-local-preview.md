@@ -27,7 +27,7 @@ related: []
 - 이미지는 `docs/design/canvas/`의 축소본을 `public/scene1/`로 복사해 씁니다.
 - 로컬 `next dev`로 띄워 이산하가 확인합니다.
 
-처음에는 코드를 커밋하지 않는 로컬 확인용이었습니다. 2026-09-06 이산하가 배포해 보겠다며 "커밋 안 된 것만 넣어 달라"고 지시해(디자인 논의 T28) 범위를 넓혔습니다. 임시 적용 코드와 이미지를 develop에 커밋하고, develop → main PR과 배포는 이산하가 합니다. 정식 이식은 시안이 확정된 뒤 story 아래 task로 다시 합니다. Vercel 설정을 건드리지 않습니다. 이미지 파이프라인(`docs/scripts/images.mjs`)을 만들지 않습니다.
+처음에는 코드를 커밋하지 않는 로컬 확인용이었습니다. 2026-09-06 이산하가 배포해 보겠다며 "커밋 안 된 것만 넣어 달라"고 지시해(디자인 논의 T28) 범위를 넓혔습니다. 임시 적용 코드와 이미지를 develop에 커밋하고, develop → main PR과 배포는 이산하가 합니다. 정식 이식은 시안이 확정된 뒤 story 아래 task로 다시 합니다. Vercel 설정을 건드리지 않습니다. 이미지 파이프라인(`docs/scripts/images.mjs`)을 만들지 않습니다. 사진첩(디자인 논의 T103)은 이산하 지시로 `swiper`를 의존성에 더했고(디자인 결정 12), 사진은 잠정 스크립트 `docs/scripts/gallery-jpeg.py`(JPEG · 정사각 썸네일 · 매니페스트 `src/content/gallery.json`)로 만듭니다. 정식 파이프라인은 그대로 정식 이식 때 만듭니다.
 
 ## 주의할 점
 
@@ -164,3 +164,65 @@ related: []
 2026-09-08 20:12:18 · develop · e8c914e · 신랑 컷아웃 오른쪽 걸침 30(화면 안) · html overflow-x clip(디자인 논의 T101). `src/app/globals.css`.
 
 2026-09-08 20:13:37 · develop · 0f07318 · 신랑 컷아웃 위 0(디자인 논의 T101 보완). `src/app/globals.css`.
+
+2026-09-08 20:54:45 · develop · b4e7e13 · Scene10 추신·만화 뷰어 · 사진첩 나무 틀 · Swiper 뷰어(디자인 논의 T102~T104). `src/app/page.tsx` `src/app/globals.css` `src/content/gallery.json` `package.json` `package-lock.json` `public/scene10/` `public/paper/tape.png` `public/gallery/`.
+
+2026-09-08 21:03:13 · develop · b6d63f4 · 사진첩 제목 · 뷰어 장수 아래 · 위 가운데 테이프 · 반투명 화살표 단추(디자인 논의 T105). `src/app/page.tsx` `src/app/globals.css` `public/paper/tape-short.png`.
+
+2026-09-08 21:09:00 · develop · a8487a0 · 사진첩 나무 표지판 · 뷰어 인화지 테두리 4px(디자인 논의 T106). `src/app/page.tsx` `src/app/globals.css` `public/scene10/wood-sign.png`.
+
+2026-09-08 21:11:39 · develop · d0d3837 · 사진첩 나무 틀 · 표지판 삭제 · 일반적인 격자(디자인 논의 T107). `src/app/page.tsx` `src/app/globals.css` `public/scene10/`(wood-frame · wood-sign 삭제).
+
+2026-09-08 21:18:45 · develop · a50352a · 사진첩 흰 바탕 · 굵은 왼쪽 제목 · 뷰어 장수 노토 산스 · 세로 테이프(디자인 논의 T108 · T109). `src/app/globals.css`.
+
+2026-09-08 21:25:41 · develop · 1be2247 · Scene11 오시는 길 · Scene12 하객 안내 · Scene13 마음 전하는 곳(디자인 논의 T110). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 21:33:19 · develop · 2b5340c · Scene11~13 종이 한 장 구성(디자인 논의 T111). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 22:33:16 · develop · 4d42596 · Scene11~13 테이프 제거 · 카카오맵 SDK · 화환 문단 얇게 · 부모님 성함(디자인 논의 T112). `src/app/page.tsx` `src/app/layout.tsx` `src/app/globals.css`.
+
+2026-09-08 22:37:08 · develop · a338279 · 카카오맵 SDK 실패 시 안내 문구(디자인 논의 T113). `src/app/page.tsx`.
+
+2026-09-08 22:47:50 · develop · 2ceeb00 · 지도 상자 기울임 제거(디자인 논의 T115). `src/app/globals.css`.
+
+2026-09-08 22:50:20 · develop · 618403b · 사진첩 제목 고운바탕 400 · 짙은 갈색 · 가운데(디자인 논의 T117). `src/app/globals.css`.
+
+2026-09-08 22:55:47 · develop · 11e5323 · 사진첩 제목 18px · 700(디자인 논의 T118). `src/app/globals.css`.
+
+2026-09-08 22:59:45 · develop · d9da28e · Scene11~13 종이 머리를 장미 봉인으로(디자인 논의 T119). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 23:14:00 · develop · 5e6d460 · 마음 전하는 곳 실제 계좌번호 · 복사는 숫자만(디자인 논의 T120). `src/app/page.tsx`.
+
+2026-09-08 23:14:20 · develop · b24e250 · globals.css 재생성(T120 조립본 주석 반영). `src/app/globals.css`.
+
+2026-09-08 23:23:19 · develop · e29415d · Scene14 마지막(봉투 닫힘) · 사진첩 원본 44장 · 연락처 메뉴 삭제(디자인 논의 T121). `src/app/page.tsx` `src/app/globals.css` `src/content/gallery.json` `public/gallery/`.
+
+2026-09-08 23:32:14 · develop · cb28862 · 뷰어 장수 고정 · 테이프 가로 · Scene14 다시 열고 닫기(디자인 논의 T122). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 23:43:09 · develop · ec19ef6 · Scene14 봉투 크기 편지지 · 앞판 그림자 제거 · 다시 닫힘 임계(디자인 논의 T123~T125). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 23:44:59 · develop · 8861d83 · 카카오맵 SDK를 오시는 길 300px 앞에서 싣기(디자인 논의 T126). `src/app/page.tsx`.
+
+2026-09-09 00:13:17 · develop · 42e2557 · Scene9 초대(백합) 신설 · Scene8 수달 4 · 토끼 6 · 문구 교체(디자인 논의 T128). `src/app/page.tsx` `src/app/globals.css` `public/character/` `public/scene9/`.
+
+2026-09-09 00:19:31 · develop · 7164532 · Scene14 마지막 장면 효과 되살림(T126에 유실) · 꽃잎 오른쪽이 위 · 계좌 행 세 줄(디자인 논의 T129 · T130). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-09 00:21:36 · develop · 6900d61 · 계좌 행을 "신랑 아버지" · 계좌번호 · 은행 성함 순서로(디자인 논의 T131). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-09 00:35:43 · develop · 9c99be3 · 떠 있는 메뉴를 쪽지로 · 카카오톡 공유 · OG 메타(디자인 논의 T132). `src/app/page.tsx` `src/app/layout.tsx` `src/app/globals.css` `public/og/share.jpg`.
+
+2026-09-09 00:45:07 · develop · 6b37fe5 · Scene14 만든 이 표기 · 떠 있는 메뉴를 쪽지 한 장으로(디자인 논의 T133 · T134). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-09 00:48:22 · develop · fa96cc3 · 떠 있는 메뉴를 메뉴 ↔ 닫기 토글로, 열린 쪽지는 평행하게 위에(디자인 논의 T135). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-09 00:50:33 · develop · 4d5545f · 사이트 아이콘을 장미 인장 묶음으로 교체(디자인 논의 T136). `src/app/favicon.ico` `src/app/icon1~4.png` `src/app/apple-icon.png` `public/android-icon-*.png` `public/ms-icon-*.png`.
+
+2026-09-09 01:00:02 · develop · 2d82746 · 배경 음악 · 첫 동작에서 시작 · 음표 스티커(디자인 논의 T137). `src/app/page.tsx` `src/app/globals.css` `public/audio/bgm.mp3`.
+
+2026-09-09 01:01:41 · develop · 16fef28 · 음악 단추를 종이 없이 음표만 · 28px · 빗금 14px(디자인 논의 T138). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-09 01:03:21 · develop · f3646cd · 음악 페이드인 진행도 0~1 · 겹친 페이드 취소(디자인 논의 T139). `src/app/page.tsx`.
+
+2026-09-09 01:12:08 · develop · 3828b73 · 음악 단추 · 지나가는 음표 셋 · difference 블렌드(디자인 논의 T140). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-09 01:14:20 · develop · bc6a648 · 떠 있는 쪽지 기호 ··· / ×(디자인 논의 T141). `src/app/page.tsx` `src/app/globals.css`.

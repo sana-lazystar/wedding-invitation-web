@@ -5,9 +5,140 @@
 // 마크업은 조립본과 같은 구조이고 이미지 경로만 다릅니다(조립본 ../design/… · ../../public/…, 여기 /…).
 // 진입 장면(로딩)은 편지봉투입니다(디자인 논의 T36~T49). 편지지는 커버 자체이고, 봉투 안에서 봉투 폭의 92%로 있다가 봉투가 내려가는 것과 동시에 올라오고, 이어서 화면 전체로 커집니다. 층(바탕 < 뒷판 < 커버 < 앞판 < 뚜껑)이고, 배율과 카드 값은 화면 크기에서 계산해 CSS 변수로 넣고, 봉투 그림이 준비되면 시작합니다. 어디를 탭해도 건너뜁니다.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Keyboard, Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import gallery from "@/content/gallery.json";
+
+// 사진첩(디자인 논의 T103 · T104). 매니페스트 순서가 표시 순서이고 앞 8장이 타일, 9번째 타일은 나머지 장수(+N개)입니다. 사진은 docs/scripts/gallery-jpeg.py의 잠정 산출이고 어느 8장을 보일지는 이산하가 나중에 고릅니다
+const GALLERY_PREVIEW = 8;
+const galleryMore = gallery.length - GALLERY_PREVIEW;
+type Viewer = { kind: "comic" } | { kind: "gallery"; index: number };
+
+// 마음 전하는 곳(디자인 논의 T110 · T112 · T120). 성함 · 계좌번호는 이산하가 준 실값. 표시는 하이픈, 복사는 숫자만. 관계를 이름 앞에 씁니다
+const ACCOUNTS: { side: string; rows: { role: string; name: string; bank: string; num: string }[] }[] = [
+  {
+    side: "신랑 측",
+    rows: [
+      { role: "신랑 아버지", name: "이종노", bank: "하나", num: "468-910199-62707" },
+      { role: "신랑 어머니", name: "이은경", bank: "국민", num: "879602-01-133871" },
+      { role: "신랑", name: "이산하", bank: "토스뱅크", num: "1001-6105-5173" },
+    ],
+  },
+  {
+    side: "신부 측",
+    rows: [
+      { role: "신부 아버지", name: "송영봉", bank: "삼성증권", num: "7084-1174-8301" },
+      { role: "신부 어머니", name: "임인화", bank: "삼성증권", num: "7082-4708-9301" },
+      { role: "신부", name: "송시야", bank: "국민", num: "879201-00-010006" },
+    ],
+  },
+];
+const VENUE_ADDRESS = "서울 강남구 선릉로 757";
+const VENUE_SEARCH = encodeURIComponent("더채플앳청담");
+
+// 카카오맵(디자인 논의 T112. 스택 논의의 외부 의존 메모대로 JS SDK, 무료). 키는 Kakao Developers 앱의 JavaScript 키를 NEXT_PUBLIC_KAKAO_MAP_KEY에 두고, 앱의 Web 플랫폼에 localhost:3000과 배포 도메인을 등록합니다. 키가 없으면 자리표시만 보입니다.
+// 중심은 대략값으로 시작하고 SDK의 지오코더가 주소로 바로잡습니다
+const KAKAO_MAP_KEY = process.env.NEXT_PUBLIC_KAKAO_MAP_KEY; // 지도와 카카오톡 공유가 같이 쓰는 앱의 JavaScript 키(디자인 논의 T112 · T132)
+
+// 카카오톡 공유(디자인 논의 T132). SDK는 메뉴를 열 때 미리 싣고, 공유하기를 누르면 피드 템플릿(사진 · 제목 · 날짜 · 단추 둘)으로 보냅니다. 키가 없거나 SDK를 못 실으면 기기 공유 창(navigator.share), 그것도 없으면 주소 복사입니다. 단추 · 이미지 URL은 앱에 등록한 도메인이어야 하므로 현재 origin을 씁니다
+const SITE_TITLE = "이산하 ♥ 송시야 결혼합니다.";
+const SITE_DESCRIPTION = "26년 10월 9일 금요일 오후 6시 30분\n더채플앳청담";
+const KAKAO_SDK_URL = "https://t1.kakaocdn.net/kakao_js_sdk/2.8.3/kakao.min.js";
+const KAKAO_SDK_INTEGRITY = "sha384-oroumrnFVE0xtgqyDZJARgERibXg2C28380uaUZz2kHDS5CR7tu20eGiOU6GkTpy"; // 2.8.3 파일에서 잰 값(2026-09-09)
+type KakaoSdk = { isInitialized: () => boolean; init: (key: string) => void; Share: { sendDefault: (settings: Record<string, unknown>) => void } };
+let kakaoSdkPromise: Promise<KakaoSdk> | null = null;
+function loadKakaoSdk(): Promise<KakaoSdk> {
+  if (window.Kakao) return Promise.resolve(window.Kakao);
+  if (!kakaoSdkPromise) {
+    kakaoSdkPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = KAKAO_SDK_URL;
+      script.integrity = KAKAO_SDK_INTEGRITY;
+      script.crossOrigin = "anonymous";
+      script.async = true;
+      script.onload = () => (window.Kakao ? resolve(window.Kakao) : reject(new Error("Kakao SDK missing")));
+      script.onerror = () => {
+        kakaoSdkPromise = null;
+        reject(new Error("Kakao SDK load failed"));
+      };
+      document.head.appendChild(script);
+    });
+  }
+  return kakaoSdkPromise;
+}
+
+// 배경 음악(디자인 논의 T137 · T139). iOS는 media 요소의 volume을 못 바꾸므로 페이드인은 되는 브라우저에서만. rAF가 주는 시각이 start보다 앞설 수 있어 0 아래를 막고(음수 volume은 예외가 남), 겹쳐 시작하면 앞 것을 취소합니다
+let fadeRaf = 0;
+function fadeInAudio(audio: HTMLAudioElement) {
+  cancelAnimationFrame(fadeRaf);
+  try {
+    audio.volume = 0;
+  } catch {
+    return;
+  }
+  if (audio.volume !== 0) return;
+  const start = performance.now();
+  const step = (t: number) => {
+    const k = Math.min(1, Math.max(0, (t - start) / 1200));
+    audio.volume = k;
+    if (k < 1) fadeRaf = requestAnimationFrame(step);
+  };
+  fadeRaf = requestAnimationFrame(step);
+}
+const VENUE_ROUGH = { lat: 37.5205, lng: 127.041 };
+type KakaoLatLng = { getLat: () => number; getLng: () => number };
+type KakaoMaps = {
+  load: (cb: () => void) => void;
+  LatLng: new (lat: number, lng: number) => KakaoLatLng;
+  Map: new (el: HTMLElement, opts: { center: KakaoLatLng; level: number }) => { setCenter: (c: KakaoLatLng) => void; setLevel: (l: number) => void };
+  Marker: new (opts: { position: KakaoLatLng; map: unknown }) => { setPosition: (c: KakaoLatLng) => void };
+  services: {
+    Geocoder: new () => { addressSearch: (address: string, cb: (result: { x: string; y: string }[], status: string) => void) => void };
+    Status: { OK: string };
+  };
+};
+declare global {
+  interface Window {
+    kakao?: { maps: KakaoMaps };
+    Kakao?: KakaoSdk;
+  }
+}
+
+// 복사(디자인 논의 T110). clipboard API가 없으면(http · 옛 브라우저) 숨긴 textarea로 복사합니다
+async function copyText(text: string) {
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.setAttribute("readonly", "");
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  let ok = false;
+  try {
+    ok = document.execCommand("copy");
+  } catch {
+    ok = false;
+  }
+  ta.remove();
+  if (!ok) throw new Error("copy");
+}
+
+function CopyIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M9.5 4.5V3a1.5 1.5 0 0 0-1.5-1.5H3A1.5 1.5 0 0 0 1.5 3v5A1.5 1.5 0 0 0 3 9.5h1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export default function Home() {
   const fabRef = useRef<HTMLElement>(null);
+  const bgmRef = useRef<HTMLAudioElement>(null);
+  const bgmWantedRef = useRef(true);
+  const [bgmOn, setBgmOn] = useState(false);
   const introRef = useRef<HTMLDivElement>(null);
   const introBackRef = useRef<HTMLDivElement>(null);
   const introFrontRef = useRef<HTMLDivElement>(null);
@@ -17,6 +148,30 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [introDone, setIntroDone] = useState(false);
   const vhLockedRef = useRef(false);
+  const comicViewerRef = useRef<HTMLDivElement>(null);
+  const galleryViewerRef = useRef<HTMLDivElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);   // 덮개를 연 버튼. 닫으면 초점을 돌립니다
+  const [viewer, setViewer] = useState<Viewer | null>(null);
+  const [galleryIndex, setGalleryIndex] = useState(0);   // 뷰어 장수 표시(슬라이드 밖 고정, 디자인 논의 T122)
+  const mapRef = useRef<HTMLDivElement>(null);
+  const closingRef = useRef<HTMLElement>(null);
+  const [mapReady, setMapReady] = useState(false);
+  const [mapFailed, setMapFailed] = useState(false);   // SDK를 못 실었거나(401 = 앱에 도메인 미등록 · 카카오맵 API 미활성) 10초 안에 안 그려짐
+  const [toast, setToast] = useState("");
+  const [toastShown, setToastShown] = useState(false);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const showToast = (text: string) => {
+    setToast(text);
+    setToastShown(true);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToastShown(false), 1600);
+  };
+  const copy = (text: string, message: string) => {
+    copyText(text).then(
+      () => showToast(message),
+      () => showToast("복사하지 못했습니다. 길게 눌러 복사해 주세요"),
+    );
+  };
 
   // 화면 높이 고정 · 확대 막기(디자인 논의 T83). 카카오톡 인앱 브라우저는 스크롤로 주소창이 사라질 때 창 높이 자체가 바뀌어 svh까지 변하므로, 처음 잰 높이를 --vh-fixed(px)로 박습니다. 폭이 바뀌면(회전 · 창 크기 조절) 다시 재고 높이만 바뀌는 것(툴바)은 무시합니다. 인앱 브라우저는 열린 직후 툴바를 자리 잡으며 높이가 한 번 더 바뀌므로, 첫 터치 전(진입 장면 중)에는 높이 변화도 받습니다. iOS는 메타의 user-scalable=no를 무시하므로 손가락 두 개 움직임과 제스처 이벤트도 막습니다
   useEffect(() => {
@@ -110,7 +265,7 @@ export default function Home() {
       root.classList.add("is-intro-shown");
       safety = window.setTimeout(finishIntro, 7800);
     };
-    const imgs = layers.flatMap((el) => Array.from(el!.querySelectorAll("img")));
+    const imgs = [...layers.flatMap((el) => Array.from(el!.querySelectorAll("img"))), ...Array.from(cover.querySelectorAll("img"))]; // 커버(편지지)의 그림도 기다립니다(디자인 논의 T124)
     Promise.all(imgs.map((im) => (im.decode ? im.decode().catch(() => undefined) : Promise.resolve()))).then(startIntro);
     const fallback = window.setTimeout(startIntro, 2500);
     const onAnimationEnd = (e: AnimationEvent) => {
@@ -137,6 +292,143 @@ export default function Home() {
     document.documentElement.classList.remove("is-intro", "is-intro-shown");
   }, [introDone]);
 
+  // 카카오맵(디자인 논의 T112 · T113 · T126). 키가 있으면 오시는 길이 가까워질 때 SDK를 한 번 싣고, 대략 중심에 지도와 표식을 놓은 뒤 지오코더가 주소로 바로잡습니다. 지도 컨테이너는 React가 채우지 않는 빈 div라 SDK가 마음대로 그립니다. SDK가 안 실리면(401. 앱의 Web 플랫폼에 도메인이 없거나 카카오맵 API가 꺼져 있음) 아래 지도 앱 링크로 안내합니다
+  useEffect(() => {
+    const el = mapRef.current;
+    if (!KAKAO_MAP_KEY || !el) return;
+    const init = () => {
+      const maps = window.kakao?.maps;
+      if (!maps) return;
+      maps.load(() => {
+        const rough = new maps.LatLng(VENUE_ROUGH.lat, VENUE_ROUGH.lng);
+        const map = new maps.Map(el, { center: rough, level: 4 });
+        const marker = new maps.Marker({ position: rough, map });
+        new maps.services.Geocoder().addressSearch(VENUE_ADDRESS, (result, status) => {
+          if (status !== maps.services.Status.OK || !result[0]) return;
+          const pos = new maps.LatLng(Number(result[0].y), Number(result[0].x));
+          map.setCenter(pos);
+          map.setLevel(3);
+          marker.setPosition(pos);
+        });
+        setMapReady(true);
+      });
+    };
+    // SDK는 오시는 길이 가까워질 때(구획 300px 앞) 싣습니다(디자인 논의 T126). 처음 열 때 바로 받으면 진입 장면과 겹쳐 무겁습니다
+    let script: HTMLScriptElement | null = null;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const fail = () => setMapFailed(true);
+    const load = () => {
+      if (window.kakao?.maps) {
+        init();
+        return;
+      }
+      const existing = document.querySelector<HTMLScriptElement>("script[data-kakao-map]");
+      script = existing ?? document.createElement("script");
+      if (!existing) {
+        script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_KEY}&libraries=services&autoload=false`;
+        script.async = true;
+        script.dataset.kakaoMap = "1";
+        document.head.appendChild(script);
+      }
+      timer = setTimeout(fail, 10000);
+      script.addEventListener("load", init);
+      script.addEventListener("error", fail);
+    };
+    let observer: IntersectionObserver | null = null;
+    if ("IntersectionObserver" in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          observer?.disconnect();
+          observer = null;
+          load();
+        },
+        { rootMargin: "300px 0px" },
+      );
+      observer.observe(el);
+    } else {
+      load();
+    }
+    return () => {
+      observer?.disconnect();
+      if (timer) clearTimeout(timer);
+      script?.removeEventListener("load", init);
+      script?.removeEventListener("error", fail);
+    };
+  }, []);
+
+  // 마지막 장면(디자인 논의 T121 · T123). 봉투 · 편지지 치수를 구획 크기에서 계산해 --c-* 변수에 넣고, 구획이 60% 보이면 한 번 재생합니다(is-closing). 움직임 줄이기면 편지지만
+  useEffect(() => {
+    const closing = closingRef.current;
+    if (!closing) return;
+    const apply = () => {
+      const w = closing.clientWidth;
+      const h = closing.clientHeight;
+      const envW = Math.min(w, 430) * 0.92; // 봉투 폭 = 화면 폭(페이지 폭 430까지)의 92%
+      const z1 = envW / 600;
+      const envTop = h / 2 - 200 * z1; // 가운데 선 봉투 윗변
+      const lw = envW * 0.92; // 편지지 = 봉투 폭의 92% × 봉투 좌표 440
+      const lh = 440 * z1;
+      const tys = h / 2 - lh / 2; // 처음 자리(구획 가운데)
+      const ty0 = envTop + 14 * z1; // 주머니 안(봉투 윗변 바로 아래)
+      const ty1 = ty0 - lh * 0.62; // 다시 열었을 때(제 높이의 62%만큼 위로)
+      const drop1 = Math.max(0, tys + lh - 70 - envTop); // 봉투가 나타나는 자리까지 내려간 거리
+      closing.style.setProperty("--c-z1", String(z1));
+      closing.style.setProperty("--c-drop1", `${drop1 / z1}px`);
+      closing.style.setProperty("--c-lw", `${lw}px`);
+      closing.style.setProperty("--c-lh", `${lh}px`);
+      closing.style.setProperty("--c-tys", `${tys}px`);
+      closing.style.setProperty("--c-ty0", `${ty0}px`);
+      closing.style.setProperty("--c-ty1", `${ty1}px`);
+    };
+    apply();
+    window.addEventListener("resize", apply);
+    let observer: IntersectionObserver | null = null;
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              closing.classList.add("is-closing");
+              observer?.disconnect();
+            }
+          });
+        },
+        { threshold: 0.6 },
+      );
+      observer.observe(closing);
+    }
+    // 다시 열고 닫기(디자인 논의 T122). 첫 재생이 끝나면(뚜껑 닫힘 애니메이션 끝) is-settled를 붙이고, 그 뒤 구획이 보이는 동안 스크롤을 올리면 is-open, 내리면 뗍니다. 페이지 끝의 튕김(iOS)은 scrollY가 최대를 넘었다 돌아오는 것이라 최대 근처 값은 무시합니다
+    let settled = false;
+    let lastY = window.scrollY;
+    const onAnimationEnd = (e: AnimationEvent) => {
+      if (e.animationName !== "closing-flap") return;
+      settled = true;
+      closing.classList.add("is-settled");
+    };
+    const onScroll = () => {
+      const y = window.scrollY;
+      const dy = y - lastY;
+      lastY = y;
+      if (!settled) return;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (y < 0 || y >= max - 1) return;
+      const r = closing.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const seen = (Math.min(r.bottom, vh) - Math.max(r.top, 0)) / vh; // 구획이 화면을 차지하는 비율
+      if (dy < -1 && seen >= 0.3) closing.classList.add("is-open");
+      else if (dy > 1 && seen >= 0.85) closing.classList.remove("is-open"); // 닫힘은 거의 다 내려왔을 때(디자인 논의 T125)
+    };
+    closing.addEventListener("animationend", onAnimationEnd);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("resize", apply);
+      window.removeEventListener("scroll", onScroll);
+      closing.removeEventListener("animationend", onAnimationEnd);
+      observer?.disconnect();
+    };
+  }, []);
+
   // 쪽지는 화면에 들어올 때 한 번 내려앉으며 나타납니다(디자인 논의 T51). 움직임 줄이기면 CSS가 바로 보이게 합니다
   useEffect(() => {
     const notes = Array.from(document.querySelectorAll<HTMLElement>(".note, .note-wrap"));
@@ -158,6 +450,156 @@ export default function Home() {
     notes.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
+
+  // 덮개(뷰어) 공통(디자인 논의 T102 · T103). 열면 뒤 페이지 스크롤을 막고(html.is-viewer + 덮개 안 touchmove 막음) Esc로 닫으며, 닫으면 연 버튼으로 초점을 돌립니다. 덮개의 실제 높이 · 폭을 --viewer-h · --viewer-w로 넣어 만화(90° 회전 상자)와 인화지 크기 계산에 씁니다(인앱 브라우저는 vh가 툴바에 따라 다릅니다). 만화 뷰어는 어디를 탭해도 닫히고(돌린 그림 상자가 화면 전체라 바탕만 골라 탭할 수 없습니다), 사진 뷰어는 × · Esc로만 닫힙니다(탭은 넘기기)
+  useEffect(() => {
+    const el = viewer?.kind === "comic" ? comicViewerRef.current : viewer?.kind === "gallery" ? galleryViewerRef.current : null;
+    if (!viewer || !el) return;
+    const root = document.documentElement;
+    const opener = openerRef.current;
+    const size = () => {
+      el.style.setProperty("--viewer-w", `${el.clientWidth}px`);
+      el.style.setProperty("--viewer-h", `${el.clientHeight}px`);
+    };
+    const onMove = (e: TouchEvent) => e.preventDefault();
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setViewer(null);
+    };
+    size();
+    root.classList.add("is-viewer");
+    window.addEventListener("resize", size);
+    el.addEventListener("touchmove", onMove, { passive: false });
+    document.addEventListener("keydown", onKeyDown);
+    el.querySelector<HTMLButtonElement>(".comic-viewer__close, .gallery-viewer__close")?.focus({ preventScroll: true });
+    return () => {
+      root.classList.remove("is-viewer");
+      window.removeEventListener("resize", size);
+      el.removeEventListener("touchmove", onMove);
+      document.removeEventListener("keydown", onKeyDown);
+      opener?.focus({ preventScroll: true });
+    };
+  }, [viewer]);
+
+  // 배경 음악(디자인 논의 T137). 열 때 한 번 재생을 시도하고, 폰 브라우저가 막으면(소리 있는 자동재생은 사용자 동작 뒤에만) 첫 동작(터치 · 스크롤 끝 · 키)에서 시작합니다. 끈 것은 이 방문(sessionStorage) 동안 기억합니다. 화면을 벗어나면 멈추고 돌아오면 다시 켭니다
+  useEffect(() => {
+    const audio = bgmRef.current;
+    if (!audio) return;
+    let disposed = false;
+    let pausedByHide = false;
+    try {
+      bgmWantedRef.current = sessionStorage.getItem("bgm") !== "off";
+    } catch {
+      // 저장소를 못 쓰는 브라우저
+    }
+    const events = ["pointerdown", "touchend", "keydown"] as const;
+    const onFirst = (e: Event) => {
+      if ((e.target as Element | null)?.closest?.(".bgm")) return; // 스티커 자체의 누름은 토글이 맡습니다
+      void tryPlay();
+    };
+    const disarm = () => events.forEach((t) => document.removeEventListener(t, onFirst, true));
+    const arm = () => events.forEach((t) => document.addEventListener(t, onFirst, { capture: true, passive: true }));
+    const tryPlay = async () => {
+      if (!bgmWantedRef.current || disposed) return false;
+      try {
+        fadeInAudio(audio);
+        await audio.play();
+        setBgmOn(true);
+        disarm();
+        return true;
+      } catch {
+        return false;
+      }
+    };
+    void tryPlay().then((ok) => {
+      if (!ok && bgmWantedRef.current && !disposed) {
+        audio.preload = "auto"; // 막혔으면 미리 받아 두어 첫 동작에서 바로 나옵니다
+        audio.load();
+        arm();
+      }
+    });
+    const onVisibility = () => {
+      if (document.hidden) {
+        if (!audio.paused) {
+          audio.pause();
+          pausedByHide = true;
+        }
+      } else if (pausedByHide) {
+        pausedByHide = false;
+        audio.play().catch(() => {});
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      disposed = true;
+      disarm();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+  const toggleBgm = () => {
+    const audio = bgmRef.current;
+    if (!audio) return;
+    if (bgmWantedRef.current && !audio.paused) {
+      audio.pause();
+      bgmWantedRef.current = false;
+      setBgmOn(false);
+      try {
+        sessionStorage.setItem("bgm", "off");
+      } catch {
+        // 저장소를 못 쓰는 브라우저
+      }
+    } else {
+      bgmWantedRef.current = true;
+      try {
+        sessionStorage.removeItem("bgm");
+      } catch {
+        // 저장소를 못 쓰는 브라우저
+      }
+      fadeInAudio(audio);
+      audio
+        .play()
+        .then(() => setBgmOn(true))
+        .catch(() => setBgmOn(false));
+    }
+  };
+
+  // 공유하기(디자인 논의 T132). SDK가 이미 실려 있으면 기다리지 않아 사용자 동작 안에서 카카오톡 창이 열립니다
+  const share = async () => {
+    setMenuOpen(false);
+    const url = `${window.location.origin}/`;
+    if (KAKAO_MAP_KEY) {
+      try {
+        const Kakao = window.Kakao ?? (await loadKakaoSdk());
+        if (!Kakao.isInitialized()) Kakao.init(KAKAO_MAP_KEY);
+        Kakao.Share.sendDefault({
+          objectType: "feed",
+          content: {
+            title: SITE_TITLE,
+            description: SITE_DESCRIPTION,
+            imageUrl: `${window.location.origin}/og/share.jpg`,
+            imageWidth: 1600,
+            imageHeight: 800,
+            link: { mobileWebUrl: url, webUrl: url },
+          },
+          buttons: [
+            { title: "청첩장 보기", link: { mobileWebUrl: url, webUrl: url } },
+            { title: "위치 보기", link: { mobileWebUrl: `${url}#directions`, webUrl: `${url}#directions` } },
+          ],
+        });
+        return;
+      } catch {
+        // SDK를 못 실었거나 도메인이 등록되지 않았을 때. 아래 기기 공유로
+      }
+    }
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: SITE_TITLE, text: SITE_DESCRIPTION, url });
+      } catch {
+        // 사용자가 공유 창을 닫음
+      }
+      return;
+    }
+    copy(url, "주소를 복사했습니다");
+  };
 
   useEffect(() => {
     const onDocumentClick = (e: MouseEvent) => {
@@ -358,27 +800,347 @@ export default function Home() {
               <img className="note__paper" src="/paper/note.png" alt="" />
               <p className="note__text">어른이 되고는 꿈을 꾸지 않던 제가, 이 사람을 만나 다시 꿈꾸게 됐어요. 사랑도 많아졌고요.</p>
             </div>
-            <img className="note__who note-wrap__who" src="/character/otter-3.png" width={223} height={240} alt="" />
+            <img className="note__who note-wrap__who" src="/character/otter-4.png" width={240} height={207} alt="" />
           </div>
           <div className="note note--left note--memo">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/rabbit-5.png" width={240} height={184} alt="" />
+            <img className="note__who" src="/character/rabbit-6.png" width={240} height={177} alt="" />
             <p className="note__text">마음이 여렸던 저는 이 사람 덕분에 많이 단단해졌어요! 누군가에게 기대는 법도 배웠고요!</p>
           </div>
           <div className="note note--right note--memo">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/hug.png" width={240} height={189} alt="" />
-            <p className="note__text">MBTI 궁합이 &apos;파국&apos;으로 나올 만큼 성향이 다르지만, 달랐기에 서로의 빈틈을 채우고, 장점은 더 빛낼 수 있었어요.</p>
+            <p className="note__text">그런 저희가 이제 하나가 됩니다.</p>
           </div>
         </section>
-        {/* 9쪽(초대)부터 여기 아래에 이어 붙입니다 */}
+        {/* 9. 초대(와이어프레임 10쪽, 디자인 논의 T127). 참고 그림 docs/design/scene9/scene-9-reference.png를 옮긴 것. 백합 · 꽃잎은 이산하가 준 그림 */}
+        <section id="invite" className="block invite">
+          <img className="invite__sticker invite__lily" src="/scene9/lily.png" width={577} height={900} alt="" />
+          <div className="invite__text">
+            <p className="invite__strong">서로에게 사랑을 덧입히며<br />두 마음을 하나로 엮어 왔습니다.</p>
+            <p className="invite__light">혼자였다면 오지 못했을 자리에<br />둘이라서 도착했고, 그 매듭에는<br />여러분이 함께 계셨습니다.</p>
+            <p className="invite__verse"><strong>사랑은 온전하게 연결하는 띠입니다.</strong><span>골로새서 3장 14절</span></p>
+            <p className="invite__light">훗날 이날의 사진첩을 꺼내볼 때,<br />그 안에 저희와 함께 웃고 있는<br />여러분이 계셨으면 좋겠습니다.</p>
+            <p className="invite__names">이종노 · 이은경<span className="invite__role">의 아들</span>이산하<br />송영봉 · 임인화<span className="invite__role">의 딸</span>송시야</p>
+            <p className="invite__from">올림</p>
+          </div>
+          <img className="invite__sticker invite__petal--2" src="/scene9/petal-2.png" width={395} height={450} alt="" />
+          <img className="invite__sticker invite__petal--1" src="/scene9/petal-1.png" width={358} height={450} alt="" />
+        </section>
+        {/* 10. 추신 + 만화(와이어프레임 11쪽 위 절반, 디자인 논의 T102). 사진첩(같은 쪽 아래 절반)은 다음 구획입니다(T103) */}
+        <section id="comic" className="block story comic">
+          <div className="note note--left note--memo note--ps">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="note__tape" src="/paper/tape.png" alt="" />
+            <p className="note__text">P.S. 저희가 결혼을 언제 결심했냐면요!</p>
+          </div>
+          <button
+            type="button"
+            className="photo-paper comic__paper"
+            id="comicOpen"
+            aria-haspopup="dialog"
+            aria-controls="comicViewer"
+            aria-label="만화 크게 보기"
+            onClick={(e) => {
+              openerRef.current = e.currentTarget;
+              setViewer({ kind: "comic" });
+            }}
+          >
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <img className="photo-paper__photo" src="/scene10/comic.jpg" width={1664} height={1087} alt="네 컷 만화. 결혼을 결심한 이야기" loading="lazy" />
+            <span className="comic__hint" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M7.5 1.5h3v3M4.5 10.5h-3v-3M10.5 1.5L7 5M1.5 10.5L5 7" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              크게 보기
+            </span>
+          </button>
+        </section>
+        {/* 사진첩(와이어프레임 11쪽 아래 절반, 디자인 논의 T103~T107). 가운데 제목 "사진첩", 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 흐린 사진 위에 나머지 장수. 나무 틀 · 표지판(T104~T106)은 T107에 지웠습니다 */}
+        <section id="gallery" className="block story plain">
+          <h2 className="plain__title">사진첩</h2>
+          <ul className="gallery__grid" id="galleryGrid">
+            {gallery.slice(0, GALLERY_PREVIEW + 1).map((item, i) => {
+              const more = i === GALLERY_PREVIEW;
+              return (
+                <li key={item.id}>
+                  <button
+                    type="button"
+                    className={more ? "gallery__tile gallery__tile--more" : "gallery__tile"}
+                    data-index={i}
+                    aria-label={more ? `사진 ${i + 1}부터 크게 보기. ${galleryMore}장 더` : `사진 ${i + 1} 크게 보기`}
+                    onClick={(e) => {
+                      openerRef.current = e.currentTarget;
+                      setGalleryIndex(i);
+                      setViewer({ kind: "gallery", index: i });
+                    }}
+                  >
+                    <img className="gallery__thumb" src={`/gallery/${item.id}-thumb.jpg`} width={480} height={480} alt="" loading="lazy" />
+                    {more && (
+                      <span className="gallery__more" aria-hidden="true">
+                        +{galleryMore}개
+                      </span>
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+        {/* 11. 오시는 길(와이어프레임 12쪽, 디자인 논의 T110~T112 · T119). 크림색 바탕 위 종이 한 장(.sheet. 머리는 봉투의 장미 봉인). 지도는 카카오맵 JS SDK(키가 있을 때). 지도 링크는 식장 이름 검색이라 좌표가 없어도 됩니다 */}
+        <section id="directions" className="block story">
+          <div className="sheet">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <div className="sheet__head">
+              <img className="sheet__mark" src="/intro/rose-seal.png" width={84} height={84} alt="" />
+              <h2 className="sheet__title">오시는 길</h2>
+            </div>
+            <div className="sheet__body">
+              <div className="venue">
+                <p className="venue__name">더채플앳청담 3층 커티지홀</p>
+                <p className="venue__addr">{VENUE_ADDRESS}</p>
+              </div>
+              <div className="map-paper">
+                <div className="map-paper__inner">
+                  <div className="map-paper__map" ref={mapRef} role="img" aria-label="더채플앳청담 지도" aria-hidden={!mapReady} />
+                  {!mapReady && (
+                    <span className="map-paper__note">
+                      {!KAKAO_MAP_KEY ? "지도 (카카오맵 키를 등록하면 표시)" : mapFailed ? "지도를 불러오지 못했습니다. 아래 지도 앱으로 열어 주세요" : "지도를 불러오는 중"}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="chips">
+                <a className="chip" href={`https://map.naver.com/p/search/${VENUE_SEARCH}`} target="_blank" rel="noopener">
+                  네이버 지도
+                </a>
+                <a className="chip" href={`https://map.kakao.com/link/search/${VENUE_SEARCH}`} target="_blank" rel="noopener">
+                  카카오맵
+                </a>
+                <button type="button" className="chip" onClick={() => copy(VENUE_ADDRESS, "주소를 복사했습니다")}>
+                  주소 복사
+                </button>
+              </div>
+              <div className="route">
+                <h3 className="sheet__label">주차</h3>
+                <p className="route__text">주차는 웨딩홀 앞으로 오셔서 주차 직원의 안내를 받으신 후 이동해 주시기 바랍니다. 1시간 30분 무료 주차가 가능합니다.</p>
+              </div>
+              <div className="route">
+                <h3 className="sheet__label">지하철</h3>
+                <p className="route__text">
+                  <span className="line line--7">7호선</span>
+                  <span className="line line--bundang">수인분당선</span>강남구청역 3번 출구
+                  <br />
+                  <span className="line line--bundang">수인분당선</span>압구정로데오역 5번 출구
+                  <br />
+                  강남구청역에서 셔틀버스 10분 간격
+                </p>
+              </div>
+              <div className="route">
+                <h3 className="sheet__label">버스</h3>
+                <p className="route__text">
+                  <span className="line line--trunk">간선</span>301, 342, 472
+                  <br />
+                  <span className="line line--branch">지선</span>3011, 4412
+                  <br />
+                  영동고교 앞 정류장 하차
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 12. 하객 안내(와이어프레임 13쪽, 디자인 논의 T110 · T111). 종이 한 장에 격식체. 신부대기실 시각은 추정(U-5) */}
+        <section id="guide" className="block story">
+          <div className="sheet">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <div className="sheet__head">
+              <img className="sheet__mark" src="/intro/rose-seal.png" width={84} height={84} alt="" />
+              <h2 className="sheet__title">하객 안내</h2>
+            </div>
+            <div className="sheet__body">
+              <p className="sheet__text sheet__text--center">신부대기실은 6시 10분경 정리될 예정입니다. 신부와 사진을 남기고 싶으신 분들께서는 참고해 주시면 감사하겠습니다.</p>
+              <hr className="sheet__rule" />
+              <p className="sheet__text sheet__text--center sheet__text--light">축하 화환은 정중히 사양합니다. 오셔서 축복해 주시는 것만으로 충분히 감사합니다.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* 13. 마음 전하는 곳(와이어프레임 14쪽, 디자인 논의 T110 · T111 · T119 · T120). 종이 한 장. 행을 누르면 계좌번호(숫자만)가 복사됩니다 */}
+        <section id="gift" className="block story">
+          <div className="sheet">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <div className="sheet__head">
+              <img className="sheet__mark" src="/intro/rose-seal.png" width={84} height={84} alt="" />
+              <h2 className="sheet__title">마음 전하는 곳</h2>
+            </div>
+            <div className="sheet__body">
+              <p className="sheet__text sheet__text--center">참석이 어려우신 분들을 위해 안내드립니다.</p>
+              {ACCOUNTS.map((group) => (
+                <div className="gift__group" key={group.side}>
+                  <h3 className="sheet__label">{group.side}</h3>
+                  {group.rows.map((row) => (
+                    <button
+                      type="button"
+                      className="account"
+                      key={row.name}
+                      aria-label={`${row.role} ${row.bank} ${row.name} ${row.num} 복사`}
+                      onClick={() => copy(row.num.replace(/-/g, ""), "계좌번호를 복사했습니다")}
+                    >
+                      <span className="account__text">
+                        <span className="account__role">{row.role}</span>
+                        <span className="account__num">{row.num}</span>
+                        <span className="account__holder">
+                          {row.bank} {row.name}
+                        </span>
+                      </span>
+                      <span className="account__copy" aria-hidden="true">
+                        <CopyIcon />
+                        복사
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        {/* 14. 마지막(와이어프레임 15쪽, 디자인 논의 T121 · T123). 봉투 크기의 편지지 카드에 "고마움을 봉해 보냅니다." 구획이 보이면 진입 장면을 거꾸로: 봉투가 올라와 편지지를 담고 뚜껑이 닫힙니다. 봉투 그림은 진입 장면 것 */}
+        <section id="closing" className="block block--fixed closing" ref={closingRef}>
+          <div className="closing__letter">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <div className="closing__text">
+              <p className="closing__big">고마움을 봉해 보냅니다.</p>
+              <p className="closing__date">2026. 10. 09</p>
+            </div>
+          </div>
+          <div className="closing__layer closing__layer--back" aria-hidden="true">
+            <div className="closing__zoom">
+              <div className="intro__env">
+                <img className="intro__back" src="/intro/envelope-back.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div className="closing__layer closing__layer--front" aria-hidden="true">
+            <div className="closing__zoom">
+              <div className="intro__env">
+                <div className="closing__floor" />
+                <div className="intro__table" />
+                <img className="intro__front" src="/intro/envelope-front.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div className="closing__layer closing__layer--cast" aria-hidden="true">
+            <div className="closing__zoom">
+              <div className="intro__env">
+                <div className="intro__cast">
+                  <img className="intro__cast-img" src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--seal" src="/intro/rose-seal.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--soft" src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--seal intro__cast-img--soft" src="/intro/rose-seal.png" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="closing__layer closing__layer--flap" aria-hidden="true">
+            <div className="closing__zoom">
+              <div className="intro__env">
+                <div className="intro__flap">
+                  <img className="intro__seal-back" src="/intro/rose-seal-back.png" alt="" />
+                  <img className="intro__flap-in" src="/intro/envelope-flap-inside.png" alt="" />
+                  <img className="intro__flap-out" src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__seal" src="/intro/rose-seal.png" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="closing__credit">
+            Designed &amp; Created by Sanha &amp; Siya
+            <br />© 2026. All rights reserved.
+          </p>
+        </section>
+      </div>
+
+      {/* 만화 뷰어(디자인 논의 T102). 그림은 같은 파일이라 다시 내려받지 않습니다 */}
+      <div
+        className="comic-viewer"
+        id="comicViewer"
+        ref={comicViewerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="만화 크게 보기"
+        hidden={viewer?.kind !== "comic"}
+        onClick={() => setViewer(null)}
+      >
+        <img className="comic-viewer__img" src="/scene10/comic.jpg" width={1664} height={1087} alt="네 컷 만화. 결혼을 결심한 이야기" />
+        <button type="button" className="comic-viewer__close" aria-label="닫기">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M6 6l10 10M16 6L6 16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      {/* 사진 뷰어(디자인 논의 T103~T105). 타일을 누르면 그 사진부터 Swiper로 봅니다. Swiper는 열려 있을 때만 그려 initialSlide가 먹게 합니다. 사진은 흰 테두리 인화지에 위 가운데 테이프, 장수는 아래 가운데 고정(T122), 화살표는 우리 단추(×와 같은 크기, 반투명)를 Swiper에 넘깁니다 */}
+      <div className="gallery-viewer" id="galleryViewer" ref={galleryViewerRef} role="dialog" aria-modal="true" aria-label="사진첩" hidden={viewer?.kind !== "gallery"}>
+        {viewer?.kind === "gallery" && (
+          <Swiper
+            className="gallery-viewer__swiper"
+            modules={[Navigation, Keyboard]}
+            navigation={{ prevEl: "#galleryPrev", nextEl: "#galleryNext" }}
+            keyboard={{ enabled: true }}
+            initialSlide={viewer.index}
+            lazyPreloadPrevNext={2}
+            onSlideChange={(s) => setGalleryIndex(s.activeIndex)}
+          >
+            {gallery.map((item, i) => (
+              <SwiperSlide key={item.id}>
+                <figure className="gallery-viewer__print" style={{ "--ar": `${item.width} / ${item.height}` } as React.CSSProperties}>
+                  <img className="gallery-viewer__img" src={`/gallery/${item.id}.jpg`} width={item.width} height={item.height} alt={`사진 ${i + 1}`} loading="lazy" />
+                  <img className="gallery-viewer__tape" src="/paper/tape-short.png" alt="" />
+                </figure>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
+        <div className="gallery-viewer__count" aria-live="polite">
+          {galleryIndex + 1} / {gallery.length}
+        </div>
+        <button type="button" className="gallery-viewer__nav gallery-viewer__nav--prev" id="galleryPrev" aria-label="이전 사진">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M13.5 5.5L8 11l5.5 5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <button type="button" className="gallery-viewer__nav gallery-viewer__nav--next" id="galleryNext" aria-label="다음 사진">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M8.5 5.5L14 11l-5.5 5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <button type="button" className="gallery-viewer__close" aria-label="닫기" onClick={() => setViewer(null)}>
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M6 6l10 10M16 6L6 16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      <div className={toastShown ? "toast is-shown" : "toast"} role="status" aria-live="polite">
+        {toast}
       </div>
 
       <nav className="fab" ref={fabRef} data-open={menuOpen ? "true" : "false"} aria-label="바로 가기">
-        <div className="fab__menu" id="fabMenu" hidden={!menuOpen} onClick={() => setMenuOpen(false)}>
-          <a href="#directions">오시는 길</a>
-          <a href="#contact">연락처</a>
-          <a href="#gift">마음 전하는 곳</a>
+        <div className="fab__menu" id="fabMenu" hidden={!menuOpen}>
+          <img className="note__paper" src="/paper/note.png" alt="" />
+          <a className="fab__item" href="#directions" onClick={() => setMenuOpen(false)}>
+            오시는 길
+          </a>
+          <a className="fab__item" href="#gallery" onClick={() => setMenuOpen(false)}>
+            사진첩
+          </a>
+          <a className="fab__item" href="#gift" onClick={() => setMenuOpen(false)}>
+            마음 전하는 곳
+          </a>
+          <button type="button" className="fab__item" onClick={share}>
+            공유하기
+          </button>
         </div>
         <button
           type="button"
@@ -386,19 +1148,28 @@ export default function Home() {
           aria-expanded={menuOpen}
           aria-controls="fabMenu"
           aria-label={menuOpen ? "메뉴 닫기" : "바로 가기 메뉴"}
-          onClick={() => setMenuOpen((open) => !open)}
+          onClick={() => {
+            setMenuOpen((open) => !open);
+            if (KAKAO_MAP_KEY) loadKakaoSdk().catch(() => {}); // 공유하기를 누르기 전에 미리 싣습니다
+          }}
         >
-          {menuOpen ? (
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-              <path d="M6 6l10 10M16 6L6 16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
-          ) : (
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-              <path d="M4 6.5h14M4 11h14M4 15.5h14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
-          )}
+          <img className="note__paper" src="/paper/note.png" alt="" />
+          <img className="fab__tape" src="/paper/tape-short.png" alt="" />
+          <span className="fab__label">{menuOpen ? "×" : "···"}</span>
         </button>
       </nav>
+      {/* 배경 음악(디자인 논의 T137). 음원은 이산하가 준 것(원본 docs/design/audio/, git 제외) */}
+      <audio ref={bgmRef} src="/audio/bgm.mp3" loop preload="none" />
+      <button type="button" className={bgmOn ? "bgm is-on" : "bgm"} aria-pressed={bgmOn} aria-label={bgmOn ? "배경 음악 끄기" : "배경 음악 켜기"} onClick={toggleBgm}>
+        <span className="bgm__notes" aria-hidden="true">
+          <span className="bgm__note bgm__note--1">♪</span>
+          <span className="bgm__note bgm__note--2">♫</span>
+          <span className="bgm__note bgm__note--3">♩</span>
+        </span>
+        <span className="bgm__off" aria-hidden="true">
+          ♪
+        </span>
+      </button>
     </>
   );
 }
