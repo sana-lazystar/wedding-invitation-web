@@ -146,6 +146,7 @@ body {
 .note-wrap.is-in .note-wrap__who { opacity: 1; }
 .note-wrap--right .note-wrap__who { right: -8px; transform: rotate(6deg); }
 .note-wrap--left .note-wrap__who { left: -9px; transform: rotate(-5deg); }
+#part3 .note-wrap__who { top: -19px; }   /* Scene8 첫 메모지 아이콘은 4px 아래(T99) */
 @media (prefers-reduced-motion: reduce) { .note-wrap__who { opacity: 1; transition: none; } }
 /* 폭 변형(T87. 틀 규칙 뒤에 두어 틀의 fit-content를 이깁니다). 지금의 4/5로 줄인 메모지. Scene6 첫 메모지는 글만큼(85%)의 4/5인 68%, Scene7 첫 메모지는 전체의 4/5인 80% */
 .note--w68 { width: 68%; }
