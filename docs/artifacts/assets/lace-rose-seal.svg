@@ -11,7 +11,7 @@
       <feComposite in="hSoft" in2="grainN" operator="arithmetic" k2="1" k3="0.04" result="h"/>
       <feDiffuseLighting in="h" surfaceScale="3.6" diffuseConstant="1" lighting-color="#ffffff" result="diff"><feDistantLight azimuth="315" elevation="50"/></feDiffuseLighting>
       <feSpecularLighting in="h" surfaceScale="3.6" specularConstant="0.14" specularExponent="6" lighting-color="#FFFFFF" result="spec"><feDistantLight azimuth="315" elevation="40"/></feSpecularLighting>
-      <feFlood flood-color="#DAD4C8" result="col"/>
+      <feFlood flood-color="#E9E5DC" result="col"/>
       <feComposite in="col" in2="shape" operator="in" result="colIn"/>
       <feComposite in="colIn" in2="diff" operator="arithmetic" k1="0.46" k2="0.6" k3="0" k4="0" result="lit"/>
       <feComposite in="spec" in2="lit" operator="arithmetic" k2="0.8" k3="1" k4="0" result="shiny"/>
