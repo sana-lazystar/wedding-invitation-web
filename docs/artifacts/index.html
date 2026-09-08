@@ -337,6 +337,8 @@
     /* 14. 마지막(와이어프레임 15쪽, T121 · T123). 봉투 크기의 편지지 카드(폭 = 봉투 폭의 92%, 높이 = 봉투 좌표 440)가 화면 가운데에 있고 "고마움을 봉해 보냅니다."가 그 위쪽(높이의 38%)에 있습니다. 구획이 60% 보이면 진입 장면을 거꾸로 돌립니다. 0~0.3초 내려가 있던 봉투가 스르륵 나타나고(윗변이 편지지 아랫변 70px 위), 0.3~1.2초 봉투가 가운데로 올라오는 것과 동시에 편지지가 주머니 자리로 내려가 담기고, 1.2~3.2초 뚜껑이 봉인을 단 채 그림자를 드리우며 닫힙니다(옆면 2.09초에 면 · 층 교체, 125° 1.9초에 그림자 층 교체). 끝은 닫힌 봉투가 가운데에 선 채이고 확대(포커스인)는 없습니다. T121에는 편지지가 화면 전체였다가 줄어들었는데 너무 커서 봉투 크기로 바꿨습니다(T123).
        층 구조 · 배율 계산은 진입 장면과 같습니다(변수 --c-*는 스크립트가 구획 크기에서 계산). 화면 고정이 아니라 구획 안 절대 위치라 스크롤과 함께 움직입니다. 봉투 · 뚜껑 · 봉인 · 그림자 부품(.intro__*)은 진입 장면 것을 그대로 쓰고, 시작 상태(뚜껑 열림 · 안쪽면 · 봉인 뒷면 · 봉투 투명 · 내려간 자리)만 여기서 덮어씁니다. 편지지 아랫부분이 봉투 밑으로 삐져나오는 것은 앞판 층의 바닥(.closing__floor, 구획 바탕색)이 가립니다. 움직임 줄이기면 편지지만 보입니다 */
     .closing { position: relative; overflow: hidden; isolation: isolate; background: var(--paper-bg); }
+    /* 구획 아래 만든 이 표기(T133. 나중에 사업화할 수도 있어 이산하가 넣음). 코모런트 작은 글자 두 줄, 봉투 아래. 떠 있는 메뉴(아래 20 + 46px)와 겹치지 않게 그 위입니다. 층은 봉투 층들(26~36) 위 */
+    .closing__credit { position: absolute; left: 0; right: 0; bottom: calc(76px + env(safe-area-inset-bottom)); z-index: 40; margin: 0; text-align: center; font-family: var(--font-latin); font-size: 11px; font-weight: 500; line-height: 1.6; letter-spacing: 0.08em; color: var(--muted); pointer-events: none; }
     .closing__letter { position: absolute; left: 50%; top: 0; z-index: 30; width: var(--c-lw, 330px); height: var(--c-lh, 263px); margin-left: calc(var(--c-lw, 330px) / -2); border-radius: 3px; overflow: hidden; background: #FBF7EF; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35); transform: translateY(var(--c-tys, 290px)); }   /* 바탕색은 종이 그림이 오기 전에도 불투명하게(T124) */
     .closing__text { position: absolute; left: 16px; right: 16px; top: 38%; transform: translateY(-50%); text-align: center; }   /* 위쪽에 두어 다시 열었을 때(편지지가 62% 나옴) 봉투 위로 보입니다 */
     .closing__big { margin: 0; font-family: var(--font-name); font-size: 20px; font-weight: 700; line-height: 1.6; letter-spacing: 0.06em; color: #2A1A0E; }
@@ -390,38 +392,39 @@
     .closing.is-settled.is-open .closing__layer--cast { z-index: 27; transition-delay: 0.74s; }
     @media (prefers-reduced-motion: reduce) { .closing .closing__layer { display: none; } .closing.is-closing .closing__letter { animation: none; } }
 
-    /* 떠 있는 바로 가기(T132. 전에는 오크색 동그라미에 ≡ 아이콘이라 흔한 앱 단추 같았음). 테이프로 붙인 작은 쪽지 "메뉴"를 누르면 그 위로 쪽지 한 장이 나타나고 네 항목(오시는 길 · 사진첩 · 마음 전하는 곳 · 공유하기)이 손글씨로 있습니다. 종이 결(note.png) · 테이프 · 그늘 · 기울기는 이야기 구간의 쪽지와 같은 문법입니다. 공유하기는 Next.js에서 카카오톡 공유(JS SDK)이고 조립본은 기기 공유 창 · 주소 복사만 합니다 */
+    /* 떠 있는 바로 가기(T132 · T134. 전에는 오크색 동그라미에 ≡ 아이콘이라 흔한 앱 단추 같았음). 닫힌 상태는 테이프로 붙인 작은 쪽지에 손글씨 "메뉴"입니다. 누르면 그 자리에 쪽지 한 장(테이프 없이, -1°)이 8px 내려앉으며 나타나고 네 항목(오시는 길 · 사진첩 · 마음 전하는 곳 · 공유하기)과 "닫기" 줄이 한 장에 고운바탕으로, 사이는 가는 줄입니다. 작은 쪽지는 열린 동안 숨깁니다(T134. T132에는 열린 쪽지에도 테이프 · 오크색 점 · 손글씨가 있어 난잡했음). 종이 결 · 그늘은 이야기 구간 쪽지와 같은 부품입니다. 공유하기는 Next.js에서 카카오톡 공유(JS SDK)이고 조립본은 기기 공유 창 · 주소 복사만 합니다 */
     .fab {
       position: fixed;
       right: max(20px, calc((100vw - 430px) / 2 + 20px));
       bottom: calc(20px + env(safe-area-inset-bottom));
       z-index: 10;
-      display: flex; flex-direction: column; align-items: flex-end; gap: 16px;
-      font-family: var(--font-memo);
+      display: flex; flex-direction: column; align-items: flex-end;
+      font-family: var(--font-name);
     }
     .fab__menu {
-      position: relative; width: 168px; display: flex; flex-direction: column; padding: 18px 16px 12px;
+      position: relative; width: 172px; display: flex; flex-direction: column; padding: 4px 0 0;
       border-radius: 3px; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
-      transform: rotate(-1.5deg); animation: fab-in 0.25s ease-out both;
+      transform: rotate(-1deg); animation: fab-in 0.25s ease-out both;
     }
     .fab__menu[hidden] { display: none; }   /* 조립본에는 Tailwind 초기화가 없어 hidden 속성을 display: flex가 이깁니다 */
-    @keyframes fab-in { from { opacity: 0; transform: translateY(8px) rotate(-1.5deg); } to { opacity: 1; transform: translateY(0) rotate(-1.5deg); } }
+    @keyframes fab-in { from { opacity: 0; transform: translateY(8px) rotate(-1deg); } to { opacity: 1; transform: translateY(0) rotate(-1deg); } }
     @media (prefers-reduced-motion: reduce) { .fab__menu { animation: none; } }
-    .fab__tape { position: absolute; top: -9px; left: 50%; width: 72px; height: auto; transform: translateX(-50%) rotate(-3deg); pointer-events: none; }
-    .fab__tape--small { top: -7px; width: 44px; transform: translateX(-50%) rotate(4deg); }
     .fab__item {
-      position: relative; display: flex; align-items: center; gap: 10px; height: 40px; margin: 0; padding: 0 4px;
-      border: 0; background: none; font: inherit; font-size: 18px; line-height: 1; color: var(--ink); text-decoration: none; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
+      position: relative; display: flex; align-items: center; height: 46px; margin: 0 16px; padding: 0 4px;
+      border: 0; background: none; font: inherit; font-size: 15px; letter-spacing: 0.02em; line-height: 1; color: var(--ink); text-decoration: none; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
     }
-    .fab__item::before { content: ''; flex: none; width: 5px; height: 5px; border-radius: 50%; background: var(--oak); }
+    .fab__item + .fab__item { border-top: 1px solid var(--rule); }
+    .fab__close { justify-content: center; height: 40px; font-size: 13px; color: var(--muted); }
     .fab__item:focus-visible { outline: 2px solid var(--oak); outline-offset: -2px; border-radius: 3px; }
     .fab__button {
       position: relative; width: 64px; height: 46px; margin: 0; padding: 8px 0 0; border: 0; border-radius: 3px; background: none;
       box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
-      transform: rotate(2deg); font: inherit; font-size: 18px; line-height: 1; color: var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent;
+      transform: rotate(2deg); font-family: var(--font-memo); font-size: 18px; line-height: 1; color: var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent;
     }
+    .fab[data-open="true"] .fab__button { display: none; }
     .fab__button:active { transform: rotate(2deg) scale(0.97); }
     .fab__button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+    .fab__tape { position: absolute; top: -7px; left: 50%; width: 44px; height: auto; transform: translateX(-50%) rotate(4deg); pointer-events: none; }
     .fab__label { position: relative; }
 
 
@@ -853,6 +856,7 @@
           <img class="intro__seal" src="../../public/intro/rose-seal.png" alt="">
         </div></div></div>
       </div>
+      <p class="closing__credit">Designed &amp; Created by Sanha &amp; Siya<br>© 2026. All rights reserved.</p>
     </section>
 
 
@@ -1145,16 +1149,16 @@
   <nav class="fab" id="fab" data-open="false" aria-label="바로 가기">
     <div class="fab__menu" id="fabMenu" hidden>
       <img class="note__paper" src="../../public/paper/note.png" alt="">
-      <img class="fab__tape" src="../../public/paper/tape.png" alt="">
       <a class="fab__item" href="#directions">오시는 길</a>
       <a class="fab__item" href="#gallery">사진첩</a>
       <a class="fab__item" href="#gift">마음 전하는 곳</a>
       <button type="button" class="fab__item" id="fabShare">공유하기</button>
+      <button type="button" class="fab__item fab__close" id="fabClose">닫기</button>
     </div>
     <button type="button" class="fab__button" id="fabButton" aria-expanded="false" aria-controls="fabMenu" aria-label="바로 가기 메뉴">
       <img class="note__paper" src="../../public/paper/note.png" alt="">
-      <img class="fab__tape fab__tape--small" src="../../public/paper/tape-short.png" alt="">
-      <span class="fab__label" id="fabLabel">메뉴</span>
+      <img class="fab__tape" src="../../public/paper/tape-short.png" alt="">
+      <span class="fab__label">메뉴</span>
     </button>
   </nav>
 
@@ -1419,16 +1423,14 @@
       var fab = document.getElementById('fab');
       var button = document.getElementById('fabButton');
       var menu = document.getElementById('fabMenu');
-      var label = document.getElementById('fabLabel');
       var setOpen = function (open) {
         fab.dataset.open = open ? 'true' : 'false';
         button.setAttribute('aria-expanded', open ? 'true' : 'false');
-        button.setAttribute('aria-label', open ? '메뉴 닫기' : '바로 가기 메뉴');
-        label.textContent = open ? '닫기' : '메뉴';   // 쪽지의 손글씨가 바뀝니다(T132)
         menu.hidden = !open;
       };
       button.addEventListener('click', function () { setOpen(menu.hidden); });
       menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+      document.getElementById('fabClose').addEventListener('click', function () { setOpen(false); button.focus({ preventScroll: true }); });   // 닫기 줄(T134). 작은 쪽지가 다시 보이며 초점을 받습니다
       // 공유하기(T132). 조립본은 카카오톡 공유(JS SDK, 키 · 도메인 등록이 필요)를 흉내 내지 않고 기기 공유 창 → 주소 복사만 합니다. Next.js(page.tsx)가 정본입니다
       document.getElementById('fabShare').addEventListener('click', function () {
         setOpen(false);
