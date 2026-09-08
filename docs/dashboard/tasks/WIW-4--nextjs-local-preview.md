@@ -198,3 +198,5 @@ related: []
 2026-09-08 23:23:19 · develop · e29415d · Scene14 마지막(봉투 닫힘) · 사진첩 원본 44장 · 연락처 메뉴 삭제(디자인 논의 T121). `src/app/page.tsx` `src/app/globals.css` `src/content/gallery.json` `public/gallery/`.
 
 2026-09-08 23:32:14 · develop · cb28862 · 뷰어 장수 고정 · 테이프 가로 · Scene14 다시 열고 닫기(디자인 논의 T122). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 23:43:09 · develop · ec19ef6 · Scene14 봉투 크기 편지지 · 앞판 그림자 제거 · 다시 닫힘 임계(디자인 논의 T123~T125). `src/app/page.tsx` `src/app/globals.css`.
