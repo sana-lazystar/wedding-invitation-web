@@ -154,9 +154,8 @@ body {
 .note--right .note__who--inner { right: 46px; transform: rotate(-4deg); }
 .photo-paper--center { align-self: center; transform: rotate(0.4deg); }
 .photo-paper--wide { width: 90%; }   /* 가로 사진(Scene7 · 8)은 폭 9/10(T83). 자리표시(T65)는 웨딩 사진 셋이 들어와 지웠습니다 */
-/* 컷아웃 스티커(T61 · T62 · T67 · T87). 메모지의 마지막 문장을 칸(.note__row)에 넣고 그 옆에 고정 크기 셀(.note__stamp-cell)을 두어 글이 셀을 피해 흐릅니다(사각 영역, T62). 컷아웃은 셀의 오른쪽 아래에 절대 위치로 붙어 셀 밖으로 오른쪽 34px · 아래 64px 삐져나옵니다. 그래서 메모지 높이는 글(과 셀)만큼이고 컷아웃은 종이 아래로 44px 걸칩니다(T87. 전에는 float라 메모지가 컷아웃 높이까지 커졌습니다). 글이 셀보다 길어도 셀이 칸 아래에 붙어 컷아웃이 글을 덮지 않습니다 */
-.note__row { position: relative; display: flex; align-items: flex-end; gap: 8px; }   /* 글과 컷아웃 사이 8px(16의 반, T87) */
-.note__row .note__text { flex: 1 1 auto; min-width: 0; }
+/* 컷아웃 스티커(T61 · T62 · T67 · T87 · T88). 글은 이산하가 정한 줄바꿈(<br>) 그대로 전체 폭이고, 그 아래 칸(.note__row)에 고정 크기 셀(.note__stamp-cell)만 있습니다. 컷아웃은 셀의 오른쪽 아래에 절대 위치로 붙어 셀 밖으로 오른쪽 34px · 아래 64px 삐져나옵니다. 셀이 글 아래에 있어 겹침이 없고, 메모지 높이는 글 + 셀 + 여백입니다(T88. T87에서는 마지막 문장이 셀 옆 열에서 흘렀는데, 정한 줄바꿈이 폭을 다 써서 옆 열이 없어졌습니다. 셀 높이는 T87의 메모지 높이를 유지하도록 잡았습니다). 전에는 float라 메모지가 컷아웃 높이까지 커졌습니다(T61 · T62 · T67) */
+.note__row { position: relative; display: flex; justify-content: flex-end; }
 .note__stamp-cell { flex: none; position: relative; width: 164px; height: 96px; }   /* 컷아웃 198×160 중 안에 드는 부분 */
 .note__stamp {
   position: absolute; right: -34px; bottom: -64px; z-index: 1; height: 160px; width: auto;   /* 144px에서 키움(T87) */
@@ -165,11 +164,10 @@ body {
 }
 /* 5. Part 1 신부(와이어프레임 6쪽). Scene4와 좌우 대칭입니다(T58). 사진 종이는 왼쪽, 메모지는 수달(신랑)이 오른쪽 위에, 신부 컷아웃이 왼쪽 아래에 */
 .photo-paper--left { align-self: flex-start; transform: rotate(0.7deg); }
-/* 신부 메모지(T60 · T61). 본문은 24px 오른쪽으로. 신부 컷아웃은 1.5배(216px)로 왼쪽에 서고 셋째 줄부터 글이 오른쪽으로 비켜 흐릅니다 */
-.note--bride .note__text { padding-left: 24px; }
-.note__row--left { flex-direction: row-reverse; gap: 16px; }   /* 신부는 컷아웃이 왼쪽, 글과의 사이 16px */
-.note__stamp-cell--left { width: 75px; height: 152px; }   /* 컷아웃 87×216 중 안에 드는 부분 */
-.note__stamp--left { right: auto; left: -12px; transform: rotate(-4deg); height: 216px; }   /* 왼쪽으로 12px 걸침(T62) */
+/* 신부 메모지(T60 · T61 · T88). 신부 컷아웃은 1.5배(216px)로 글 아래 왼쪽에 서고 종이 아래로 걸칩니다. 본문 24px 들여쓰기는 T88에 뺐습니다(컷아웃이 글 옆에 없어서) */
+.note__row--left { justify-content: flex-start; }   /* 신부는 컷아웃이 왼쪽 */
+.note__stamp-cell--left { width: 75px; height: 122px; }   /* 컷아웃 87×216 중 안에 드는 부분. 메모지 높이 335px 유지(T88) */
+.note__stamp--left { right: auto; left: -12px; bottom: -94px; transform: rotate(-4deg); height: 216px; }   /* 왼쪽으로 12px 걸침(T62). 아래로 94px(셀 122 + 94 = 216이라 윗변이 칸 윗변에 맞아 마지막 줄을 덮지 않습니다. 종이 아래 74px, T88) */
 
 /* 떠 있는 바로 가기 버튼 */
 .fab {
