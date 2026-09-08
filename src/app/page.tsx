@@ -950,6 +950,10 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <p className="closing__credit">
+            Designed &amp; Created by Sanha &amp; Siya
+            <br />© 2026. All rights reserved.
+          </p>
         </section>
       </div>
 
@@ -1021,7 +1025,6 @@ export default function Home() {
       <nav className="fab" ref={fabRef} data-open={menuOpen ? "true" : "false"} aria-label="바로 가기">
         <div className="fab__menu" id="fabMenu" hidden={!menuOpen}>
           <img className="note__paper" src="/paper/note.png" alt="" />
-          <img className="fab__tape" src="/paper/tape.png" alt="" />
           <a className="fab__item" href="#directions" onClick={() => setMenuOpen(false)}>
             오시는 길
           </a>
@@ -1034,21 +1037,31 @@ export default function Home() {
           <button type="button" className="fab__item" onClick={share}>
             공유하기
           </button>
+          <button
+            type="button"
+            className="fab__item fab__close"
+            onClick={() => {
+              setMenuOpen(false);
+              requestAnimationFrame(() => fabRef.current?.querySelector<HTMLButtonElement>(".fab__button")?.focus({ preventScroll: true })); // 작은 쪽지가 다시 보이면 초점을 돌려줍니다(디자인 논의 T134)
+            }}
+          >
+            닫기
+          </button>
         </div>
         <button
           type="button"
           className="fab__button"
           aria-expanded={menuOpen}
           aria-controls="fabMenu"
-          aria-label={menuOpen ? "메뉴 닫기" : "바로 가기 메뉴"}
+          aria-label="바로 가기 메뉴"
           onClick={() => {
-            setMenuOpen((open) => !open);
+            setMenuOpen(true);
             if (KAKAO_MAP_KEY) loadKakaoSdk().catch(() => {}); // 공유하기를 누르기 전에 미리 싣습니다
           }}
         >
           <img className="note__paper" src="/paper/note.png" alt="" />
-          <img className="fab__tape fab__tape--small" src="/paper/tape-short.png" alt="" />
-          <span className="fab__label">{menuOpen ? "닫기" : "메뉴"}</span>
+          <img className="fab__tape" src="/paper/tape-short.png" alt="" />
+          <span className="fab__label">메뉴</span>
         </button>
       </nav>
     </>
