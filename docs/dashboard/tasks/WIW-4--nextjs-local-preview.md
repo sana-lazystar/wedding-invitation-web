@@ -200,3 +200,5 @@ related: []
 2026-09-08 23:32:14 · develop · cb28862 · 뷰어 장수 고정 · 테이프 가로 · Scene14 다시 열고 닫기(디자인 논의 T122). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-08 23:43:09 · develop · ec19ef6 · Scene14 봉투 크기 편지지 · 앞판 그림자 제거 · 다시 닫힘 임계(디자인 논의 T123~T125). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 23:44:59 · develop · 8861d83 · 카카오맵 SDK를 오시는 길 300px 앞에서 싣기(디자인 논의 T126). `src/app/page.tsx`.
