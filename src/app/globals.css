@@ -411,7 +411,7 @@ body {
 .fab__button:active { transform: rotate(2deg) scale(0.97); }
 .fab__button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .fab__tape { position: absolute; top: -7px; left: 50%; width: 44px; height: auto; transform: translateX(-50%) rotate(4deg); pointer-events: none; }
-.fab__label { position: relative; }
+.fab__label { position: relative; font-family: var(--font-ui); font-size: 20px; font-weight: 700; letter-spacing: 0.1em; text-indent: 0.1em; }   /* 글자 "메뉴" · "닫기" 대신 기호(T141). 닫힘 = 가운뎃점 셋 ···, 열림 = ×. 개구의 점은 네모나서 노토 산스 */
 /* 배경 음악(T137 · T138 · T140). 오른쪽 위 작은 원 영역. 재생 중엔 음표 셋(♪ ♫ ♩)이 아래에서 위로 살랑이며 지나가고(2.6초, 시간을 어긋나게, 위아래는 마스크로 흐림), 끄면 음표 하나가 옅어지고 짧은 빗금이 갑니다. 색은 흰 글자에 difference 블렌드라 밝은 바탕에서는 검게, 어두운 바탕(사진)에서는 희게 저절로 뒤집힙니다(T140). 열 때 재생을 시도하고, 폰 브라우저가 막으면(소리 있는 자동재생은 사용자 동작 뒤에만) 첫 터치 · 스크롤 끝 · 키에서 시작합니다. 끄면 그 방문(sessionStorage) 동안 꺼진 채입니다. 진입 장면 동안은 숨깁니다. T137에는 36px 둥근 종이 스티커, T138에 종이를 빼고 3/4로 */
 .bgm {
   position: fixed; top: calc(12px + env(safe-area-inset-top)); right: max(12px, calc((100vw - 430px) / 2 + 12px)); z-index: 10;

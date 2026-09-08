@@ -1155,7 +1155,7 @@ export default function Home() {
         >
           <img className="note__paper" src="/paper/note.png" alt="" />
           <img className="fab__tape" src="/paper/tape-short.png" alt="" />
-          <span className="fab__label">{menuOpen ? "닫기" : "메뉴"}</span>
+          <span className="fab__label">{menuOpen ? "×" : "···"}</span>
         </button>
       </nav>
       {/* 배경 음악(디자인 논의 T137). 음원은 이산하가 준 것(원본 docs/design/audio/, git 제외) */}
