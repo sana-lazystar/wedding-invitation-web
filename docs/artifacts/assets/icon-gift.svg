@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+<!-- 마음 전하는 곳 머리 그림(디자인 논의 T112 제안). 올리브 가지와 같은 도장 실루엣. 봉투에서 하트가 나오는 모양. 봉투 뚜껑 선은 종이색으로 파냅니다. 종이 머리에 26px쯤으로 놓습니다 -->
+<defs>
+  <filter id="stamp" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.9" result="a"/>
+    <feComposite in="SourceGraphic" in2="a" operator="in"/>
+  </filter>
+</defs>
+<g filter="url(#stamp)">
+  <rect x="24" y="84" width="152" height="90" rx="8" fill="#3E3230"/>
+  <path d="M30 92 L100 142 L170 92" fill="none" stroke="#FBF7EF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M100 84 C100 84 58 58 58 36 A21 21 0 0 1 100 26 A21 21 0 0 1 142 36 C142 58 100 84 100 84 Z" fill="#3E3230" stroke="#FBF7EF" stroke-width="6" stroke-linejoin="round"/>
+</g>
+</svg>

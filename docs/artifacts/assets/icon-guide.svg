@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+<!-- 하객 안내 머리 그림(디자인 논의 T112 제안). 올리브 가지와 같은 도장 실루엣. 안내 종(손종)과 양옆의 울림 두 호. 종이 머리에 26px쯤으로 놓습니다 -->
+<defs>
+  <filter id="stamp" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.9" result="a"/>
+    <feComposite in="SourceGraphic" in2="a" operator="in"/>
+  </filter>
+</defs>
+<g fill="#3E3230" filter="url(#stamp)">
+  <path d="M100 22 C92 22 88 27 88 33 V42 C62 50 50 74 50 104 V132 L34 152 H166 L150 132 V104 C150 74 138 50 112 42 V33 C112 27 108 22 100 22 Z"/>
+  <path d="M82 160 H118 C118 172 110 180 100 180 C90 180 82 172 82 160 Z"/>
+  <path d="M30 78 C18 92 18 112 30 128 L22 134 C7 116 7 88 22 70 Z"/>
+  <path d="M170 78 C182 92 182 112 170 128 L178 134 C193 116 193 88 178 70 Z"/>
+</g>
+</svg>

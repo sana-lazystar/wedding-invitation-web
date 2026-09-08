@@ -44,7 +44,7 @@ TypeScript·Next.js·React로 만든 정적 모바일 청첩장을 GitHub 레포
 
 | 용도 | 후보 | 비용 · 조건 |
 | --- | --- | --- |
-| 지도 | Kakao Map JS SDK | 무료. 앱 키 + 도메인 등록 |
+| 지도 | Kakao Map JS SDK | 무료. 앱 키 + 도메인 등록. 키는 환경 변수 `NEXT_PUBLIC_KAKAO_MAP_KEY`(로컬 `.env.local`, 배포는 Vercel 프로젝트 환경 변수. 디자인 논의 T112) |
 | 공유 | Kakao JS SDK | 무료. 앱 키 |
 | 폰트 | CDN(이산하 선호) 또는 next/font 자체 호스팅 | 둘 다 무료. 한도 영향 없음. 디자인 논의에서 고릅니다 |
 | 분석 | Vercel Web Analytics | Hobby 5만 이벤트/월. 초과 시 수집만 중단 |
