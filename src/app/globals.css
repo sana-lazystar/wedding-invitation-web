@@ -251,25 +251,27 @@ body {
 .gallery-viewer__close:focus-visible { outline: 2px solid #FBF7EF; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .gallery-viewer { animation: none; } }
 
-/* 종이 한 장(T111). 초대 뒤의 안내 장면(오시는 길 · 하객 안내 · 마음 전하는 곳)은 크림색 바탕 위에 놓인 흰 종이 한 장씩입니다. 쪽지와 같은 종이 결, 기울임 없음, 위 가운데에 마스킹테이프(사진 뷰어 인화지와 같은 짧은 것, 살짝 기울여), 머리에 올리브 가지(Scene2 핵심 정보와 같은 그림)와 고운바탕 제목. 캐릭터는 없습니다(격식 구간). T110의 흰 띠 · 굵은 노토 산스 제목은 정보 페이지처럼 보여 테마와 어긋났습니다 */
+/* 종이 한 장(T111). 초대 뒤의 안내 장면(오시는 길 · 하객 안내 · 마음 전하는 곳)은 크림색 바탕 위에 놓인 흰 종이 한 장씩입니다. 쪽지와 같은 종이 결, 기울임 없음(위 가운데 테이프는 T112에 뺌), 머리에 올리브 가지(Scene2 핵심 정보와 같은 그림)와 고운바탕 제목. 캐릭터는 없습니다(격식 구간). T110의 흰 띠 · 굵은 노토 산스 제목은 정보 페이지처럼 보여 테마와 어긋났습니다 */
 .sheet { position: relative; padding: 34px 22px 28px; border-radius: 3px; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35); }
-.sheet__tape { position: absolute; top: 0; left: 50%; width: 76px; height: auto; transform: translate(-50%, -50%) rotate(-4deg); pointer-events: none; }
 .sheet__head { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 0 0 20px; }
 .sheet__branch { width: 28px; height: auto; }
 .sheet__title { margin: 0; font-family: var(--font-name); font-size: 18px; font-weight: 700; line-height: 1.4; letter-spacing: 0.12em; text-indent: 0.12em; color: var(--ink); }
 .sheet__body { position: relative; display: flex; flex-direction: column; gap: 20px; }
 .sheet__text { margin: 0; font-size: 15px; line-height: 1.8; color: var(--ink-soft); word-break: keep-all; }
 .sheet__text--center { text-align: center; }
+.sheet__text--light { font-size: 14px; font-weight: 300; }   /* 하객 안내 둘째 문단(화환 사양). 얇고 작게(T112). 노토 산스 300은 이 때문에 실었습니다 */
 .sheet__rule { height: 1px; margin: 0; border: 0; background: var(--rule); }
 /* 작은 표제(주차 · 지하철 · 버스 · 신랑 측 · 신부 측). 고운바탕에 앞의 오크색 점(떠 있는 메뉴의 점과 같은 것) */
 .sheet__label { display: flex; align-items: center; gap: 8px; margin: 0; font-family: var(--font-name); font-size: 15px; font-weight: 700; line-height: 1.5; color: var(--ink); }
 .sheet__label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--oak); }
-/* 11. 오시는 길(와이어프레임 12쪽, T110 · T111). 식장 이름 · 주소, 약도(흰 테두리 사진 종이처럼. 이산하가 그림을 주면 교체, Q11), 알약 셋(네이버 지도 · 카카오맵은 식장 이름 검색 링크, 주소 복사), 주차 · 지하철 · 버스(주차가 맨 앞). 노선은 색 알약(7호선 올리브 · 수인분당선 노랑 · 간선 파랑 · 지선 초록) */
+/* 11. 오시는 길(와이어프레임 12쪽, T110 · T111). 식장 이름 · 주소, 지도(흰 테두리 사진 종이 안의 카카오맵, T112), 알약 셋(네이버 지도 · 카카오맵은 식장 이름 검색 링크, 주소 복사), 주차 · 지하철 · 버스(주차가 맨 앞). 노선은 색 알약(7호선 올리브 · 수인분당선 노랑 · 간선 파랑 · 지선 초록) */
 .venue { text-align: center; }
 .venue__name { margin: 0; font-family: var(--font-name); font-size: 15px; font-weight: 700; line-height: 1.6; color: var(--ink); }
 .venue__addr { margin: 2px 0 0; font-size: 14px; line-height: 1.6; color: var(--muted); }
 .map-paper { position: relative; z-index: 1; padding: 4px; border-radius: 3px; background: #fff; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35); transform: rotate(-0.6deg); }
-.map-paper__inner { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 3; background: var(--paper-bg); font-family: var(--font-name); font-size: 14px; letter-spacing: 0.1em; color: var(--muted); }
+.map-paper__inner { position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper-bg); }
+.map-paper__map { position: absolute; inset: 0; }   /* 카카오맵이 그리는 자리(Next.js. 키는 NEXT_PUBLIC_KAKAO_MAP_KEY). 조립본은 file://라 SDK를 못 써 자리표시만 */
+.map-paper__note { position: relative; padding: 0 16px; font-family: var(--font-name); font-size: 14px; line-height: 1.6; letter-spacing: 0.1em; text-align: center; color: var(--muted); }
 .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 .chip { display: inline-flex; align-items: center; height: 34px; margin: 0; padding: 0 14px; border: 1px solid rgba(185, 142, 94, 0.55); border-radius: 999px; background: var(--paper); font-family: var(--font-ui); font-size: 13px; font-weight: 500; line-height: 1; color: var(--ink); text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .chip:active { background: var(--rule); }
@@ -283,7 +285,7 @@ body {
 .line--trunk { background: #3D5BAB; }
 .line--branch { background: #5BB025; }
 /* 12. 하객 안내(와이어프레임 13쪽, 0.6화면, T110 · T111). 종이 한 장에 가운데 정렬 격식체 두 문단과 사이 가는 줄. 신부대기실 시각은 추정(U-5) */
-/* 13. 마음 전하는 곳(와이어프레임 14쪽, 1.3화면, T110 · T111). 계좌 여섯은 접지 않고 늘 펼쳐 두고 행 전체가 복사 단추(계좌번호만, 은행명 없이). 행은 크림색 종이 조각. 관계를 이름 앞에. 성함 · 계좌번호는 자리표시(디자인 결정 6). 오른쪽 위에 봉투의 장미 봉인(T111. 마음을 봉투에 담는다는 뜻) */
+/* 13. 마음 전하는 곳(와이어프레임 14쪽, 1.3화면, T110 · T111). 계좌 여섯은 접지 않고 늘 펼쳐 두고 행 전체가 복사 단추(계좌번호만, 은행명 없이). 행은 크림색 종이 조각. 관계를 이름 앞에. 성함 · 계좌번호는 자리표시(디자인 결정 6). 오른쪽 위에 봉투의 장미 봉인(T111. 마음을 봉투에 담는다는 뜻). 부모님 성함은 T112에 이산하가 준 실명 */
 .gift__seal { position: absolute; top: 14px; right: 14px; z-index: 1; width: 44px; height: 44px; transform: rotate(8deg); filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.2)); pointer-events: none; }
 .gift__group { display: flex; flex-direction: column; gap: 8px; }
 .gift__group .sheet__label { margin-bottom: 2px; }

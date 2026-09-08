@@ -15,27 +15,48 @@ const GALLERY_PREVIEW = 8;
 const galleryMore = gallery.length - GALLERY_PREVIEW;
 type Viewer = { kind: "comic" } | { kind: "gallery"; index: number };
 
-// 마음 전하는 곳(디자인 논의 T110). 성함 · 계좌번호는 자리표시(디자인 결정 6). 관계를 이름 앞에 씁니다
+// 마음 전하는 곳(디자인 논의 T110 · T112). 부모님 성함은 이산하가 준 실명(T112), 계좌번호는 자리표시(디자인 결정 6). 관계를 이름 앞에 씁니다
 const ACCOUNTS: { side: string; rows: { who: string; bank: string; num: string }[] }[] = [
   {
     side: "신랑 측",
     rows: [
-      { who: "아버지 · 이OO", bank: "농협", num: "000-0000-0000" },
-      { who: "어머니 · 문OO", bank: "국민", num: "000-00-0000-000" },
+      { who: "아버지 · 이종노", bank: "농협", num: "000-0000-0000" },
+      { who: "어머니 · 이은경", bank: "국민", num: "000-00-0000-000" },
       { who: "신랑 · 이산하", bank: "카카오뱅크", num: "0000-00-000000" },
     ],
   },
   {
     side: "신부 측",
     rows: [
-      { who: "아버지 · 송OO", bank: "농협", num: "000-0000-0000" },
-      { who: "어머니 · 장OO", bank: "신한", num: "000-000-000000" },
+      { who: "아버지 · 송영봉", bank: "농협", num: "000-0000-0000" },
+      { who: "어머니 · 임인화", bank: "신한", num: "000-000-000000" },
       { who: "신부 · 송시야", bank: "농협", num: "000-0000-0000" },
     ],
   },
 ];
 const VENUE_ADDRESS = "서울 강남구 선릉로 757";
 const VENUE_SEARCH = encodeURIComponent("더채플앳청담");
+
+// 카카오맵(디자인 논의 T112. 스택 논의의 외부 의존 메모대로 JS SDK, 무료). 키는 Kakao Developers 앱의 JavaScript 키를 NEXT_PUBLIC_KAKAO_MAP_KEY에 두고, 앱의 Web 플랫폼에 localhost:3000과 배포 도메인을 등록합니다. 키가 없으면 자리표시만 보입니다.
+// 중심은 대략값으로 시작하고 SDK의 지오코더가 주소로 바로잡습니다
+const KAKAO_MAP_KEY = process.env.NEXT_PUBLIC_KAKAO_MAP_KEY;
+const VENUE_ROUGH = { lat: 37.5205, lng: 127.041 };
+type KakaoLatLng = { getLat: () => number; getLng: () => number };
+type KakaoMaps = {
+  load: (cb: () => void) => void;
+  LatLng: new (lat: number, lng: number) => KakaoLatLng;
+  Map: new (el: HTMLElement, opts: { center: KakaoLatLng; level: number }) => { setCenter: (c: KakaoLatLng) => void; setLevel: (l: number) => void };
+  Marker: new (opts: { position: KakaoLatLng; map: unknown }) => { setPosition: (c: KakaoLatLng) => void };
+  services: {
+    Geocoder: new () => { addressSearch: (address: string, cb: (result: { x: string; y: string }[], status: string) => void) => void };
+    Status: { OK: string };
+  };
+};
+declare global {
+  interface Window {
+    kakao?: { maps: KakaoMaps };
+  }
+}
 
 // 복사(디자인 논의 T110). clipboard API가 없으면(http · 옛 브라우저) 숨긴 textarea로 복사합니다
 async function copyText(text: string) {
@@ -81,6 +102,8 @@ export default function Home() {
   const galleryViewerRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);   // 덮개를 연 버튼. 닫으면 초점을 돌립니다
   const [viewer, setViewer] = useState<Viewer | null>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [mapReady, setMapReady] = useState(false);
   const [toast, setToast] = useState("");
   const [toastShown, setToastShown] = useState(false);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -215,6 +238,43 @@ export default function Home() {
     if (!introDone) return;
     document.documentElement.classList.remove("is-intro", "is-intro-shown");
   }, [introDone]);
+
+  // 카카오맵(디자인 논의 T112). 키가 있으면 SDK를 한 번 싣고, 대략 중심에 지도와 표식을 놓은 뒤 지오코더가 주소로 바로잡습니다. 지도 컨테이너는 React가 채우지 않는 빈 div라 SDK가 마음대로 그립니다
+  useEffect(() => {
+    const el = mapRef.current;
+    if (!KAKAO_MAP_KEY || !el) return;
+    const init = () => {
+      const maps = window.kakao?.maps;
+      if (!maps) return;
+      maps.load(() => {
+        const rough = new maps.LatLng(VENUE_ROUGH.lat, VENUE_ROUGH.lng);
+        const map = new maps.Map(el, { center: rough, level: 4 });
+        const marker = new maps.Marker({ position: rough, map });
+        new maps.services.Geocoder().addressSearch(VENUE_ADDRESS, (result, status) => {
+          if (status !== maps.services.Status.OK || !result[0]) return;
+          const pos = new maps.LatLng(Number(result[0].y), Number(result[0].x));
+          map.setCenter(pos);
+          map.setLevel(3);
+          marker.setPosition(pos);
+        });
+        setMapReady(true);
+      });
+    };
+    if (window.kakao?.maps) {
+      init();
+      return;
+    }
+    const existing = document.querySelector<HTMLScriptElement>("script[data-kakao-map]");
+    const script = existing ?? document.createElement("script");
+    if (!existing) {
+      script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_KEY}&libraries=services&autoload=false`;
+      script.async = true;
+      script.dataset.kakaoMap = "1";
+      document.head.appendChild(script);
+    }
+    script.addEventListener("load", init);
+    return () => script.removeEventListener("load", init);
+  }, []);
 
   // 쪽지는 화면에 들어올 때 한 번 내려앉으며 나타납니다(디자인 논의 T51). 움직임 줄이기면 CSS가 바로 보이게 합니다
   useEffect(() => {
@@ -539,11 +599,10 @@ export default function Home() {
             })}
           </ul>
         </section>
-        {/* 11. 오시는 길(와이어프레임 12쪽, 디자인 논의 T110 · T111). 크림색 바탕 위 종이 한 장(.sheet). 약도는 이산하가 그림을 주면 교체합니다. 지도 링크는 식장 이름 검색이라 좌표가 없어도 됩니다 */}
+        {/* 11. 오시는 길(와이어프레임 12쪽, 디자인 논의 T110~T112). 크림색 바탕 위 종이 한 장(.sheet). 지도는 카카오맵 JS SDK(키가 있을 때). 지도 링크는 식장 이름 검색이라 좌표가 없어도 됩니다 */}
         <section id="directions" className="block story">
           <div className="sheet">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="sheet__tape" src="/paper/tape-short.png" alt="" />
             <div className="sheet__head">
               <img className="sheet__branch" src="/scene2/branch.png" width={240} height={139} alt="" />
               <h2 className="sheet__title">오시는 길</h2>
@@ -554,8 +613,9 @@ export default function Home() {
                 <p className="venue__addr">{VENUE_ADDRESS}</p>
               </div>
               <div className="map-paper">
-                <div className="map-paper__inner" role="img" aria-label="약도 자리">
-                  약도
+                <div className="map-paper__inner">
+                  <div className="map-paper__map" ref={mapRef} role="img" aria-label="더채플앳청담 지도" aria-hidden={!mapReady} />
+                  {!mapReady && <span className="map-paper__note">{KAKAO_MAP_KEY ? "지도를 불러오는 중" : "지도 (카카오맵 키를 등록하면 표시)"}</span>}
                 </div>
               </div>
               <div className="chips">
@@ -602,7 +662,6 @@ export default function Home() {
         <section id="guide" className="block story">
           <div className="sheet">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="sheet__tape" src="/paper/tape-short.png" alt="" />
             <div className="sheet__head">
               <img className="sheet__branch" src="/scene2/branch.png" width={240} height={139} alt="" />
               <h2 className="sheet__title">하객 안내</h2>
@@ -610,7 +669,7 @@ export default function Home() {
             <div className="sheet__body">
               <p className="sheet__text sheet__text--center">신부대기실은 6시 10분경 정리될 예정입니다. 신부와 사진을 남기고 싶으신 분들께서는 참고해 주시면 감사하겠습니다.</p>
               <hr className="sheet__rule" />
-              <p className="sheet__text sheet__text--center">축하 화환은 정중히 사양합니다. 오셔서 축복해 주시는 것만으로 충분히 감사합니다.</p>
+              <p className="sheet__text sheet__text--center sheet__text--light">축하 화환은 정중히 사양합니다. 오셔서 축복해 주시는 것만으로 충분히 감사합니다.</p>
             </div>
           </div>
         </section>
@@ -619,7 +678,6 @@ export default function Home() {
         <section id="gift" className="block story">
           <div className="sheet">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="sheet__tape" src="/paper/tape-short.png" alt="" />
             <div className="sheet__head">
               <img className="sheet__branch" src="/scene2/branch.png" width={240} height={139} alt="" />
               <h2 className="sheet__title">마음 전하는 곳</h2>
