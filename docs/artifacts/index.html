@@ -233,20 +233,20 @@
     .gallery__tile--more .gallery__thumb { filter: blur(3px); transform: scale(1.08); }   /* 흐림의 가장자리가 비치지 않게 조금 키웁니다 */
     .gallery__more { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(47, 42, 37, 0.45); color: #fff; font-family: var(--font-ui); font-size: 17px; font-weight: 500; letter-spacing: 0.02em; }
     /* 사진 뷰어(T103 · T104 · T105). 어두운 반투명 바탕(뒤 페이지가 비칩니다) 위에 Swiper(설치한 라이브러리. 조립본은 node_modules의 번들, Next.js는 swiper/react)가 사진을 한 장씩 보여 주고, 좌우로 밀거나 화살표 · 키보드로 넘깁니다. 닫기는 오른쪽 위 × · Esc.
-       테마(T104 제안 · T105 손질). 사진은 페이지의 사진 종이처럼 흰 테두리 4px의 인화지(.gallery-viewer__print. T106. 전에는 6)이고 위 가운데에 마스킹테이프 한 장이 세로로 붙어 있습니다(T109. T105에는 7° 기운 가로, T104에는 양 모서리에 얇은 것 둘). 장수 "3 / 20"은 사진 아래 노토 산스 15px(T109. 전에는 개구)이고 슬라이드마다 제 것을 가집니다(T105. T104에는 위 가운데). 화살표는 ×와 같은 크기 · 굵기(원 40px, 선 1.6px)의 크림색 종이 단추이고 전체가 반투명합니다(T105). 화살표 단추는 Swiper 기본 단추 대신 우리 단추를 넘깁니다(navigation prevEl · nextEl).
-       인화지 크기는 폭 = min(화면 폭, 남는 높이 × 비율)이고 aspect-ratio가 높이를 정합니다(--ar = 폭/높이, 슬라이드마다 인라인). 남는 높이는 스크립트가 잰 뷰어 높이(--viewer-h)에서 위(닫기) · 아래 여백과 장수 줄(--gv-caption)을 뺀 것입니다. 슬라이드는 세로 flex라 사진과 장수가 함께 가운데에 옵니다(가로 사진도). 테두리 4px이 비율에 들어가므로 사진은 cover로 4px쯤 잘립니다 */
-    .gallery-viewer { position: fixed; inset: 0; z-index: 45; background: rgba(38, 30, 22, 0.9); animation: viewer-in 0.22s ease-out both; --gv-top: calc(60px + env(safe-area-inset-top)); --gv-bottom: calc(36px + env(safe-area-inset-bottom)); --gv-caption: 42px; }
+       테마(T104 제안 · T105 손질). 사진은 페이지의 사진 종이처럼 흰 테두리 4px의 인화지(.gallery-viewer__print. T106. 전에는 6)이고 위 가운데에 마스킹테이프 한 장이 가로로 붙어 있습니다(T122. T109에는 세로, T105에는 7°, T104에는 양 모서리에 얇은 것 둘). 장수 "3 / 44"는 아래 가운데에 고정된 노토 산스 15px(T122. T105~T121에는 슬라이드마다 사진 아래라 넘길 때 따라갔음). 화살표는 ×와 같은 크기 · 굵기(원 40px, 선 1.6px)의 크림색 종이 단추이고 전체가 반투명합니다(T105). 화살표 단추는 Swiper 기본 단추 대신 우리 단추를 넘깁니다(navigation prevEl · nextEl).
+       인화지 크기는 폭 = min(화면 폭, 남는 높이 × 비율)이고 aspect-ratio가 높이를 정합니다(--ar = 폭/높이, 슬라이드마다 인라인). 남는 높이는 스크립트가 잰 뷰어 높이(--viewer-h)에서 위(닫기) · 아래(장수 줄 포함) 여백을 뺀 것입니다. 사진은 그 안 가운데에 옵니다(가로 사진도). 테두리 4px이 비율에 들어가므로 사진은 cover로 4px쯤 잘립니다 */
+    .gallery-viewer { position: fixed; inset: 0; z-index: 45; background: rgba(38, 30, 22, 0.9); animation: viewer-in 0.22s ease-out both; --gv-top: calc(60px + env(safe-area-inset-top)); --gv-bottom: calc(66px + env(safe-area-inset-bottom)); }   /* 아래 여백 66 = 장수 줄 28 + 아래 22 + 사이 16(T122) */
     .gallery-viewer[hidden] { display: none; }
     .gallery-viewer .gallery-viewer__swiper { position: absolute; inset: 0; }   /* 선택자를 둘로 두어 Swiper CSS(.swiper { position: relative })를 이깁니다. Next.js에서는 swiper/css가 globals.css 뒤에 실리므로 같은 우선순위면 밀립니다(T104) */
-    .gallery-viewer .swiper-slide { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: var(--gv-top) 16px var(--gv-bottom); }
+    .gallery-viewer .swiper-slide { display: flex; align-items: center; justify-content: center; padding: var(--gv-top) 16px var(--gv-bottom); }
     .gallery-viewer__print {
       position: relative; margin: 0; padding: 4px; background: #fff; aspect-ratio: var(--ar);   /* 흰 테두리 4px(T106. T104~T105에는 6) */
-      width: min(100%, calc((var(--viewer-h, 100vh) - var(--gv-top) - var(--gv-bottom) - var(--gv-caption)) * var(--ar)));
+      width: min(100%, calc((var(--viewer-h, 100vh) - var(--gv-top) - var(--gv-bottom)) * var(--ar)));
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 18px 32px -12px rgba(0, 0, 0, 0.55);
     }
     .gallery-viewer__img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; }
-    .gallery-viewer__tape { position: absolute; top: 0; left: 50%; width: 76px; height: auto; transform: translate(-50%, -50%) rotate(97deg); pointer-events: none; }   /* 짧은 테이프 그림(public/paper/tape-short.png, 120×48)을 76px 폭 · 두께 30px으로 놓고 세로로 세워(T109. T105의 7°에서 90° 더) 가운데가 인화지 윗변에 오게 합니다. 반은 위로 나가고 반은 사진 위에 */
-    .gallery-viewer__count { margin: 0; font-family: var(--font-ui); font-size: 15px; font-weight: 500; line-height: 28px; letter-spacing: 0.1em; color: #FBF7EF; }   /* 노토 산스(T109. T104~T108에는 개구 21px) */
+    .gallery-viewer__tape { position: absolute; top: -15px; left: 50%; width: 76px; height: auto; transform: translateX(-50%) rotate(-3deg); pointer-events: none; }   /* 짧은 테이프 그림(public/paper/tape-short.png, 120×48)을 76px 폭 · 두께 30px으로 위 가운데에 가로로(T122. T109에는 세로, T105에는 7°). 살짝 -3° */
+    .gallery-viewer__count { position: absolute; left: 0; right: 0; bottom: calc(22px + env(safe-area-inset-bottom)); z-index: 1; margin: 0; text-align: center; font-family: var(--font-ui); font-size: 15px; font-weight: 500; line-height: 28px; letter-spacing: 0.1em; color: #FBF7EF; pointer-events: none; }   /* 노토 산스(T109). 슬라이드 밖에 하나만 두어 넘겨도 제자리(T122. T105~T121에는 슬라이드마다 사진 아래). 스크립트가 slideChange에 갱신 */
     .gallery-viewer__nav {
       position: absolute; top: 50%; z-index: 2; width: 40px; height: 40px; margin-top: -20px; border-radius: 50%; border: 0; padding: 0;
       display: flex; align-items: center; justify-content: center; background: rgba(251, 247, 239, 0.9); color: var(--oak); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); opacity: 0.55; cursor: pointer;
@@ -351,6 +351,24 @@
     @keyframes closing-cast { from { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(180deg); } to { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(0deg); } }
     @keyframes closing-flap-layer { from { z-index: 28; } to { z-index: 36; } }
     @keyframes closing-cast-layer { from { z-index: 27; } to { z-index: 35; } }
+    /* 다시 열고 닫기(T122). 첫 재생이 끝나면(is-settled) 키프레임을 끄고 끝 상태를 기본값으로 둔 채 transition으로 움직입니다. 구획이 보이는 동안 스크롤을 올리면(is-open) 뚜껑이 열리고(1.4초) 편지지가 제 높이의 35%만큼 나오며(0.9초 뒤 0.7초), 내리면 편지지가 먼저 들어가고(0.7초) 뚜껑이 닫힙니다(0.4초 뒤 1.4초). 봉투는 그대로(내려가지 않음). 면 · 층 교체는 뚜껑이 옆면(90°)을 지나는 시각(전이 1.4초의 44.4% = 0.62초 + 지연)에 맞춘 1ms 전이입니다. transition이라 도중에 방향을 바꿔도 이어서 움직입니다 */
+    .closing.is-settled .closing__letter { animation: none; transform: translateY(var(--c-ty0)) scale(var(--c-s0)); transition: transform 0.7s cubic-bezier(0.45, 0.05, 0.3, 1) 0s; }
+    .closing.is-settled .intro__env { animation: none; opacity: 1; transform: translateY(0); }
+    .closing.is-settled .intro__flap { animation: none; transform: rotateX(0deg); transition: transform 1.4s cubic-bezier(0.55, 0, 0.3, 1) 0.4s; }
+    .closing.is-settled .intro__cast { animation: none; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(0deg); transition: transform 1.4s cubic-bezier(0.55, 0, 0.3, 1) 0.4s; }
+    .closing.is-settled .intro__cast-img { animation: none; opacity: 0.3; }
+    .closing.is-settled .intro__cast-img--soft { animation: none; opacity: 0; }
+    .closing.is-settled .intro__flap-out, .closing.is-settled .intro__seal { animation: none; opacity: 1; transition: opacity 1ms linear 1.02s; }
+    .closing.is-settled .intro__flap-in, .closing.is-settled .intro__seal-back { animation: none; opacity: 0; transition: opacity 1ms linear 1.02s; }
+    .closing.is-settled .closing__layer--flap { animation: none; z-index: 36; transition: z-index 1ms linear 1.02s; }
+    .closing.is-settled .closing__layer--cast { animation: none; z-index: 35; transition: z-index 1ms linear 0.9s; }
+    .closing.is-settled.is-open .closing__letter { transform: translateY(var(--c-ty1)) scale(var(--c-s0)); transition-delay: 0.9s; }
+    .closing.is-settled.is-open .intro__flap { transform: rotateX(180deg); transition-delay: 0s; }
+    .closing.is-settled.is-open .intro__cast { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, -0.7071, 0.7071, 0.001, 0, 0, 0, 0, 1) translateZ(4px) rotateX(180deg); transition-delay: 0s; }
+    .closing.is-settled.is-open .intro__flap-out, .closing.is-settled.is-open .intro__seal { opacity: 0; transition-delay: 0.62s; }
+    .closing.is-settled.is-open .intro__flap-in, .closing.is-settled.is-open .intro__seal-back { opacity: 1; transition-delay: 0.62s; }
+    .closing.is-settled.is-open .closing__layer--flap { z-index: 28; transition-delay: 0.62s; }
+    .closing.is-settled.is-open .closing__layer--cast { z-index: 27; transition-delay: 0.74s; }
     @media (prefers-reduced-motion: reduce) { .closing .closing__layer { display: none; } .closing.is-closing .closing__letter { animation: none; } }
 
     /* 떠 있는 바로 가기 버튼 */
@@ -826,311 +844,268 @@
             <img class="gallery-viewer__img" src="../../public/gallery/01.jpg" width="1067" height="1600" alt="사진 1" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">1 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1066 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/02.jpg" width="1066" height="1600" alt="사진 2" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">2 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/03.jpg" width="1067" height="1600" alt="사진 3" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">3 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/04.jpg" width="1067" height="1600" alt="사진 4" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">4 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1280 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/05.jpg" width="1280" height="1600" alt="사진 5" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">5 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
             <img class="gallery-viewer__img" src="../../public/gallery/06.jpg" width="1600" height="1067" alt="사진 6" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">6 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/07.jpg" width="1067" height="1600" alt="사진 7" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">7 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1066 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/08.jpg" width="1066" height="1600" alt="사진 8" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">8 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/09.jpg" width="1067" height="1600" alt="사진 9" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">9 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
             <img class="gallery-viewer__img" src="../../public/gallery/10.jpg" width="1600" height="1067" alt="사진 10" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">10 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
             <img class="gallery-viewer__img" src="../../public/gallery/11.jpg" width="1600" height="1067" alt="사진 11" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">11 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/12.jpg" width="1067" height="1600" alt="사진 12" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">12 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1280 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/13.jpg" width="1280" height="1600" alt="사진 13" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">13 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1280 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/14.jpg" width="1280" height="1600" alt="사진 14" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">14 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1280 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/15.jpg" width="1280" height="1600" alt="사진 15" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">15 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1200 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/16.jpg" width="1200" height="1600" alt="사진 16" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">16 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/17.jpg" width="1067" height="1600" alt="사진 17" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">17 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1080 / 1440;">
             <img class="gallery-viewer__img" src="../../public/gallery/18.jpg" width="1080" height="1440" alt="사진 18" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">18 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1066 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/19.jpg" width="1066" height="1600" alt="사진 19" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">19 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1066 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/20.jpg" width="1066" height="1600" alt="사진 20" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">20 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1066 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/21.jpg" width="1066" height="1600" alt="사진 21" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">21 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/22.jpg" width="1067" height="1600" alt="사진 22" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">22 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/23.jpg" width="1067" height="1600" alt="사진 23" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">23 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1056 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/24.jpg" width="1056" height="1600" alt="사진 24" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">24 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
             <img class="gallery-viewer__img" src="../../public/gallery/25.jpg" width="1600" height="1067" alt="사진 25" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">25 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/26.jpg" width="1067" height="1600" alt="사진 26" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">26 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
             <img class="gallery-viewer__img" src="../../public/gallery/27.jpg" width="1600" height="1067" alt="사진 27" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">27 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/28.jpg" width="1067" height="1600" alt="사진 28" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">28 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/29.jpg" width="1067" height="1600" alt="사진 29" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">29 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/30.jpg" width="1067" height="1600" alt="사진 30" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">30 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1280 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/31.jpg" width="1280" height="1600" alt="사진 31" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">31 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
             <img class="gallery-viewer__img" src="../../public/gallery/32.jpg" width="1600" height="1067" alt="사진 32" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">32 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
             <img class="gallery-viewer__img" src="../../public/gallery/33.jpg" width="1600" height="1067" alt="사진 33" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">33 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/34.jpg" width="1067" height="1600" alt="사진 34" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">34 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/35.jpg" width="1067" height="1600" alt="사진 35" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">35 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/36.jpg" width="1067" height="1600" alt="사진 36" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">36 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/37.jpg" width="1067" height="1600" alt="사진 37" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">37 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/38.jpg" width="1067" height="1600" alt="사진 38" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">38 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/39.jpg" width="1067" height="1600" alt="사진 39" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">39 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/40.jpg" width="1067" height="1600" alt="사진 40" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">40 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
             <img class="gallery-viewer__img" src="../../public/gallery/41.jpg" width="1600" height="1067" alt="사진 41" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">41 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1600 / 1067;">
             <img class="gallery-viewer__img" src="../../public/gallery/42.jpg" width="1600" height="1067" alt="사진 42" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">42 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1080 / 1440;">
             <img class="gallery-viewer__img" src="../../public/gallery/43.jpg" width="1080" height="1440" alt="사진 43" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">43 / 44</p>
         </div>
         <div class="swiper-slide">
           <figure class="gallery-viewer__print" style="--ar: 1067 / 1600;">
             <img class="gallery-viewer__img" src="../../public/gallery/44.jpg" width="1067" height="1600" alt="사진 44" loading="lazy">
             <img class="gallery-viewer__tape" src="../../public/paper/tape-short.png" alt="">
           </figure>
-          <p class="gallery-viewer__count">44 / 44</p>
         </div>
       </div>
     </div>
+    <div class="gallery-viewer__count" id="galleryCount" aria-live="polite">1 / 44</div>
     <button type="button" class="gallery-viewer__nav gallery-viewer__nav--prev" id="galleryPrev" aria-label="이전 사진"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M13.5 5.5L8 11l5.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
     <button type="button" class="gallery-viewer__nav gallery-viewer__nav--next" id="galleryNext" aria-label="다음 사진"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M8.5 5.5L14 11l-5.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
     <button type="button" class="gallery-viewer__close" id="galleryClose" aria-label="닫기"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M6 6l10 10M16 6L6 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg></button>
@@ -1313,11 +1288,14 @@
       window.addEventListener('resize', sizeViewer);
       viewer.addEventListener('click', closeOverlay);   // 어디를 탭해도 닫힙니다. 돌린 그림 상자가 화면 전체라 바탕만 골라 탭할 수 없습니다
 
-      // 사진 뷰어(T103 · T105). 타일을 누르면 그 사진부터 Swiper로 봅니다. Swiper는 처음 열 때 만들고(숨긴 채로는 크기를 못 잽니다) 다음부터는 자리만 옮깁니다. 키보드 화살표는 열려 있을 때만. 장수는 슬라이드마다 마크업에 있어 갱신하지 않습니다
+      // 사진 뷰어(T103 · T105 · T122). 타일을 누르면 그 사진부터 Swiper로 봅니다. Swiper는 처음 열 때 만들고(숨긴 채로는 크기를 못 잽니다) 다음부터는 자리만 옮깁니다. 키보드 화살표는 열려 있을 때만
       var gallery = document.getElementById('galleryViewer');
       var galleryGrid = document.getElementById('galleryGrid');
       var galleryClose = document.getElementById('galleryClose');
       var gallerySwiper = null;
+      var galleryCount = document.getElementById('galleryCount');
+      var galleryTotal = gallery.querySelectorAll('.swiper-slide').length;
+      var updateCount = function (sw) { galleryCount.textContent = (sw.activeIndex + 1) + ' / ' + galleryTotal; };   // 장수는 슬라이드 밖 고정(T122). 만들 때 slideChange가 인스턴스 대입보다 먼저 오므로 인자를 씁니다
       var sizeGallery = function () { if (gallery.hidden) return; gallery.style.setProperty('--viewer-h', gallery.clientHeight + 'px'); };   // 인화지 크기 계산용(인앱 브라우저는 vh가 툴바에 따라 다릅니다)
       window.addEventListener('resize', sizeGallery);
       galleryGrid.addEventListener('click', function (e) {
@@ -1331,11 +1309,13 @@
             initialSlide: index, lazyPreloadPrevNext: 2,
             navigation: { prevEl: '#galleryPrev', nextEl: '#galleryNext' },   // 우리 단추(T105). 양 끝에서 swiper-button-disabled를 붙입니다
             keyboard: { enabled: true },
+            on: { slideChange: updateCount },
           });
         } else {
           gallerySwiper.slideTo(index, 0);
           gallerySwiper.keyboard.enable();
         }
+        updateCount(gallerySwiper);
       });
       galleryClose.addEventListener('click', closeOverlay);
 
@@ -1382,6 +1362,20 @@
           entries.forEach(function (entry) { if (entry.isIntersecting) { closing.classList.add('is-closing'); closingObserver.disconnect(); } });
         }, { threshold: 0.6 });
         closingObserver.observe(closing);
+        // 다시 열고 닫기(T122). 첫 재생이 끝나면(뚜껑 닫힘 애니메이션 끝) is-settled를 붙이고, 그 뒤 구획이 보이는 동안 스크롤을 올리면 is-open, 내리면 뗍니다. 페이지 끝의 튕김(iOS)은 scrollY가 최대를 넘었다 돌아오는 것이라 최대 근처 값은 무시합니다
+        var closingSettled = false, closingLastY = window.scrollY;
+        closing.addEventListener('animationend', function (e) { if (e.animationName === 'closing-flap') { closingSettled = true; closing.classList.add('is-settled'); } });
+        window.addEventListener('scroll', function () {
+          var y = window.scrollY, dy = y - closingLastY;
+          closingLastY = y;
+          if (!closingSettled) return;
+          var max = document.documentElement.scrollHeight - window.innerHeight;
+          if (y < 0 || y >= max - 1) return;
+          var r = closing.getBoundingClientRect();
+          if (r.bottom <= 0 || r.top >= window.innerHeight) return;
+          if (dy < -1) closing.classList.add('is-open');
+          else if (dy > 1) closing.classList.remove('is-open');
+        }, { passive: true });
       }
 
       var fab = document.getElementById('fab');
