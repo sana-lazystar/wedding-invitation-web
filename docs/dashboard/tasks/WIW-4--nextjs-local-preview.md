@@ -222,3 +222,5 @@ related: []
 2026-09-09 01:01:41 · develop · 16fef28 · 음악 단추를 종이 없이 음표만 · 28px · 빗금 14px(디자인 논의 T138). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-09 01:03:21 · develop · f3646cd · 음악 페이드인 진행도 0~1 · 겹친 페이드 취소(디자인 논의 T139). `src/app/page.tsx`.
+
+2026-09-09 01:12:08 · develop · 3828b73 · 음악 단추 · 지나가는 음표 셋 · difference 블렌드(디자인 논의 T140). `src/app/page.tsx` `src/app/globals.css`.
