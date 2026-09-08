@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<!-- 핵심 정보(Scene2) 바탕 종이(디자인 논의 T86). 순백 바탕에 결이 굵게 보이는 종이. 쪽지 종이(note-paper.svg)는 결이 1px 단위라 구획 크기로 늘리면 뭉개져 따로 만들었습니다.
+     세기는 처음 판의 1/8쯤입니다(첫 판은 회색 회벽처럼 보였고, 1/4로 줄인 뒤 다시 반으로). 층: (1) 요철 결. 굵은 노이즈에 빛을 비춰 평평한 곳은 흰색, 골은 회색. (2) 섬유. 가로·세로로 긴 노이즈를 문턱으로 잘라 가는 실. (3) 얼룩. 넓은 회색 구름. (4) 티끌. 노이즈 봉우리만 남긴 작은 점.
+     구획(폭 390~430 × 높이 236)에 object-fit: cover로 깔리고 2배로 뽑아 3배 화면에서도 결이 선명합니다. 투명도가 없고 결이 온통 노이즈라 PNG는 1.7MB가 되어 JPEG로 둡니다. 렌더: node docs/scripts/render-asset.mjs docs/artifacts/assets/info-paper.svg /tmp/info-paper.png 1.5 && sips -s format jpeg -s formatOptions 82 /tmp/info-paper.png --out public/paper/info.jpg -->
+<defs>
+  <filter id="tooth" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="2" seed="7" result="n"/>
+    <feDiffuseLighting in="n" surfaceScale="1.5" diffuseConstant="1" lighting-color="#fff" result="l">
+      <feDistantLight azimuth="315" elevation="58"/>
+    </feDiffuseLighting>
+    <feComponentTransfer in="l" result="soft">
+      <feFuncR type="linear" slope="0.14" intercept="0.9"/>
+      <feFuncG type="linear" slope="0.14" intercept="0.9"/>
+      <feFuncB type="linear" slope="0.14" intercept="0.9"/>
+    </feComponentTransfer>
+    <feComposite in="soft" in2="SourceAlpha" operator="in" result="t"/>
+    <feBlend in="SourceGraphic" in2="t" mode="multiply"/>
+  </filter>
+  <filter id="fibers" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.55" numOctaves="2" seed="21" result="h"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.55 0.012" numOctaves="2" seed="22" result="v"/>
+    <feComposite in="h" in2="v" operator="arithmetic" k2="0.5" k3="0.5" result="hv"/>
+    <feColorMatrix in="hv" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 -0.66" result="thr"/>
+    <feComponentTransfer in="thr" result="mask"><feFuncA type="linear" slope="6" intercept="0"/></feComponentTransfer>
+    <feFlood flood-color="#B9B3AA" flood-opacity="0.1" result="col"/>
+    <feComposite in="col" in2="mask" operator="in"/>
+  </filter>
+  <filter id="mottle" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.007" numOctaves="3" seed="11"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.52  0 0 0 0 0.48  0 0 0 0 0.42  0 0 0 0.018 0"/>
+  </filter>
+  <filter id="flecks" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="1" seed="31" result="f"/>
+    <feColorMatrix in="f" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 9 -6.3" result="pk"/>
+    <feFlood flood-color="#7E766B" flood-opacity="0.15" result="c"/>
+    <feComposite in="c" in2="pk" operator="in"/>
+  </filter>
+</defs>
+<rect width="900" height="520" fill="#FFFFFF" filter="url(#tooth)"/>
+<rect width="900" height="520" filter="url(#fibers)"/>
+<rect width="900" height="520" filter="url(#mottle)"/>
+<rect width="900" height="520" filter="url(#flecks)"/>
+</svg>

@@ -126,3 +126,35 @@ related: []
 2026-09-07 02:05:53 · develop · 87a1a52 · Scene1 두 사람 컷아웃 새 원본으로 교체(디자인 논의 T74). `public/scene1/couple.png`.
 
 2026-09-07 02:15:22 · develop · 369e2d1 · 커버 그림 폭 기준 고정 크기 무대, 흐림 띠 커버 기준(디자인 논의 T75). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 15:26:27 · develop · 64563b7 · 진입 장면 뚜껑·봉투 그림자(광원 우측 상단 45°) · 물러난 뒤 0.3초 멈춤(디자인 논의 T76). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 15:59:53 · develop · 48f4ef4 · 진입 장면 봉투를 레이스 봉투로 대체(디자인 논의 T77~T82). `public/intro/*.png` `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 16:15:32 · develop · fd966d6 · 확대 막기 · 커버 높이 고정 · Scene2 올리브 가지 · 두 사람 컷아웃 · Scene4 사진 · 웨딩 사진 셋(디자인 논의 T83). `src/app/layout.tsx` `src/app/page.tsx` `src/app/globals.css` `public/scene1/couple.png` `public/scene2/branch.png` `public/scene4/groom-child.jpg` `public/scene6/groom.jpg` `public/scene7/bride.jpg` `public/scene8/couple.jpg`.
+
+2026-09-08 16:17:00 · develop · 71d701d · Scene2 바탕을 흰 종이로(디자인 논의 T84). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 16:18:02 · develop · cae2cc5 · Scene2 가지 하나 · 간격 21px · 날짜 글자 18px 짙은 갈색(디자인 논의 T85). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 16:22:48 · develop · 59aca06 · Scene2 전용 흰 종이 결 · 높이 295px(디자인 논의 T86). `public/paper/info.jpg` `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 16:46:37 · develop · 23b0420 · 메모지 높이는 글 기준 · 컷아웃 걸침 · 사진 위 아이콘 틀 · 4/5 폭 · 장면 간격 1.5배(디자인 논의 T87). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 16:55:07 · develop · cc3572d · Scene4 · 5 첫 메모지 줄바꿈 지정 · 컷아웃 셀을 글 아래로(디자인 논의 T88). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 17:04:01 · develop · 33ea4a9 · Scene4 · 5 메모지를 글 높이로 · 컷아웃 1.5배 · 신부 글은 컷아웃 옆 열(디자인 논의 T89). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 17:07:08 · develop · 9fb07d6 · 컷아웃 가로 눌림 해제 · Scene7 신부 사진 교체(디자인 논의 T90). `public/scene7/bride.jpg` `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 17:08:23 · develop · 834b4c1 · 신랑 컷아웃 2/3 · 오른쪽 10px(디자인 논의 T91). `src/app/globals.css`.
+
+2026-09-08 17:10:15 · develop · f961dcc · 신랑 컷아웃 오른쪽·위 10px · 신부 컷아웃 3/4(디자인 논의 T92 · T93). `src/app/globals.css`.
+
+2026-09-08 17:12:57 · develop · 1459073 · Scene6 위 여백 20px 더(디자인 논의 T94). `src/app/globals.css`.
+
+2026-09-08 17:14:18 · develop · 121eadf · 신랑 컷아웃 오른쪽 16 · 위 10px · Scene6 위 여백 20px 더(디자인 논의 T95 · T96). `src/app/globals.css`.
+
+2026-09-08 17:16:19 · develop · 1d84360 · 신랑 컷아웃 위 10 · 오른쪽 4px 더(디자인 논의 T97 · T98). `src/app/globals.css`.
+
+2026-09-08 17:17:20 · develop · ed8e61e · Scene8 첫 메모지 아이콘 4px 아래(디자인 논의 T99). `src/app/globals.css`.

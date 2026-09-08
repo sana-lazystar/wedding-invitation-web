@@ -11,15 +11,49 @@ export default function Home() {
   const introRef = useRef<HTMLDivElement>(null);
   const introBackRef = useRef<HTMLDivElement>(null);
   const introFrontRef = useRef<HTMLDivElement>(null);
+  const introCastRef = useRef<HTMLDivElement>(null);
   const introFlapRef = useRef<HTMLDivElement>(null);
   const coverRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [introDone, setIntroDone] = useState(false);
+  const vhLockedRef = useRef(false);
+
+  // 화면 높이 고정 · 확대 막기(디자인 논의 T83). 카카오톡 인앱 브라우저는 스크롤로 주소창이 사라질 때 창 높이 자체가 바뀌어 svh까지 변하므로, 처음 잰 높이를 --vh-fixed(px)로 박습니다. 폭이 바뀌면(회전 · 창 크기 조절) 다시 재고 높이만 바뀌는 것(툴바)은 무시합니다. 인앱 브라우저는 열린 직후 툴바를 자리 잡으며 높이가 한 번 더 바뀌므로, 스크롤하기 전(진입 장면 중)에는 높이 변화도 받습니다. iOS는 메타의 user-scalable=no를 무시하므로 손가락 두 개 움직임과 제스처 이벤트도 막습니다
+  useEffect(() => {
+    const root = document.documentElement;
+    let width = 0;
+    const fix = () => {
+      width = window.innerWidth;
+      root.style.setProperty("--vh-fixed", `${window.innerHeight}px`);
+    };
+    const onResize = () => {
+      if (window.innerWidth !== width || !vhLockedRef.current) fix();
+    };
+    const onScroll = () => {
+      if (window.scrollY > 0) vhLockedRef.current = true;
+    };
+    const onGesture = (e: Event) => e.preventDefault();
+    const onPinch = (e: TouchEvent) => {
+      if (e.touches.length > 1) e.preventDefault();
+    };
+    fix();
+    window.addEventListener("resize", onResize);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("gesturestart", onGesture);
+    document.addEventListener("touchmove", onPinch, { passive: false });
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("gesturestart", onGesture);
+      document.removeEventListener("touchmove", onPinch);
+      root.style.removeProperty("--vh-fixed");
+    };
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
     const cover = coverRef.current;
-    const layers = [introRef.current, introBackRef.current, introFrontRef.current, introFlapRef.current];
+    const layers = [introRef.current, introBackRef.current, introFrontRef.current, introCastRef.current, introFlapRef.current];
     if (!cover || layers.some((el) => !el)) return;
     let finished = false;
     const onIntroTouchMove = (e: TouchEvent) => e.preventDefault();
@@ -67,7 +101,7 @@ export default function Home() {
       if (started || finished) return;
       started = true;
       root.classList.add("is-intro-shown");
-      safety = window.setTimeout(finishIntro, 6500);
+      safety = window.setTimeout(finishIntro, 7800);
     };
     const imgs = layers.flatMap((el) => Array.from(el!.querySelectorAll("img")));
     Promise.all(imgs.map((im) => (im.decode ? im.decode().catch(() => undefined) : Promise.resolve()))).then(startIntro);
@@ -98,7 +132,7 @@ export default function Home() {
 
   // 쪽지는 화면에 들어올 때 한 번 내려앉으며 나타납니다(디자인 논의 T51). 움직임 줄이기면 CSS가 바로 보이게 합니다
   useEffect(() => {
-    const notes = Array.from(document.querySelectorAll<HTMLElement>(".note"));
+    const notes = Array.from(document.querySelectorAll<HTMLElement>(".note, .note-wrap"));
     if (!("IntersectionObserver" in window)) {
       notes.forEach((el) => el.classList.add("is-in"));
       return;
@@ -152,7 +186,20 @@ export default function Home() {
             <div className="intro__zoom">
               <div className="intro__env">
                 <div className="intro__floor" />
+                <div className="intro__table" />
                 <img className="intro__front" src="/intro/envelope-front.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div className="intro-layer intro-layer--cast" ref={introCastRef} aria-hidden="true">
+            <div className="intro__zoom">
+              <div className="intro__env">
+                <div className="intro__cast">
+                  <img className="intro__cast-img" src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--seal" src="/intro/rose-seal.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--soft" src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--seal intro__cast-img--soft" src="/intro/rose-seal.png" alt="" />
+                </div>
               </div>
             </div>
           </div>
@@ -160,10 +207,10 @@ export default function Home() {
             <div className="intro__zoom">
               <div className="intro__env">
                 <div className="intro__flap">
-                  <img className="intro__seal-back" src="/intro/wax-seal-back.png" alt="" />
+                  <img className="intro__seal-back" src="/intro/rose-seal-back.png" alt="" />
                   <img className="intro__flap-in" src="/intro/envelope-flap-inside.png" alt="" />
                   <img className="intro__flap-out" src="/intro/envelope-flap.png" alt="" />
-                  <img className="intro__seal" src="/intro/wax-seal.png" alt="" />
+                  <img className="intro__seal" src="/intro/rose-seal.png" alt="" />
                 </div>
               </div>
             </div>
@@ -190,16 +237,15 @@ export default function Home() {
             <div className="names__name">송시야</div>
           </div>
         </section>
-        <section id="info" className="block block--fixed">
-          <div className="frame">
-            <img className="frame__art" src="/scene2/frame.png" alt="" />
-            <div className="frame__text">
-              <div className="frame__big">2026년 10월 9일</div>
-              <div className="frame__big">금요일 오후 6시 30분</div>
-              <div className="frame__gap" />
-              <div className="frame__small">더채플앳청담 3층 커티지홀</div>
-              <div className="frame__small">강남구 선릉로 757</div>
-            </div>
+        <section id="info" className="block">
+          <img className="info__paper" src="/paper/info.jpg" alt="" />
+          <img className="info__branch" src="/scene2/branch.png" width={240} height={139} alt="" />
+          <div className="info__text">
+            <div className="info__big">2026년 10월 9일</div>
+            <div className="info__big">금요일 오후 6시 30분</div>
+            <div className="info__gap" />
+            <div className="info__small">더채플앳청담 3층 커티지홀</div>
+            <div className="info__small">강남구 선릉로 757</div>
           </div>
         </section>
         <section id="greeting" className="block greeting">
@@ -221,18 +267,20 @@ export default function Home() {
         <section id="part1-groom" className="block story">
           <div className="photo-paper">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="photo-paper__photo" src="/scene4/groom-child.jpg" width={650} height={900} alt="신랑 어릴 적 사진" />
+            <img className="photo-paper__photo" src="/scene4/groom-child.jpg" width={641} height={900} alt="신랑 어릴 적 사진" />
           </div>
           <div className="note note--left note--memo note--tuck">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/rabbit-1.png" width={240} height={164} alt="" />
             <p className="note__text">
-              <span className="note__push" />
-              <img className="note__stamp" src="/scene4/groom-child-ride.png" width={401} height={324} alt="" />
-              제 신랑은 어릴 때 시를 써서 상도 받던 문학소년이었대요. 무협지를 좋아해서 작가를 꿈꾸기도 했고요. 그랬던 아이는 커서 냉철하고 이성적인
-              개발자가 됐어요!
+              제 신랑은 어릴 때 시를 써서 상도 받던<br />문학소년이었대요. 무협지를 좋아해서 작가를<br />꿈꾸기도 했고요. 그랬던 아이는 커서<br />냉철하고 이성적인 개발자가 됐어요!
             </p>
-          </div>
+            <div className="note__row">
+              <div className="note__stamp-cell">
+                <img className="note__stamp" src="/scene4/groom-child-ride.png" width={401} height={324} alt="" />
+              </div>
+            </div>
+            </div>
         </section>
         <section id="part1-bride" className="block story">
           <div className="photo-paper photo-paper--left">
@@ -243,15 +291,18 @@ export default function Home() {
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/otter-basic.png" width={240} height={194} alt="" />
             <p className="note__text">
-              <span className="note__push note__push--left" />
-              <img className="note__stamp note__stamp--left" src="/scene5/bride-child-cutout.png" width={130} height={324} alt="" />
-              제 신부는 다섯 살 때 빗소리가 좋다며 혼자 우산 쓰고 동네를 걷던 아이였대요. 글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고 다녔고요. 그랬던 아이는
-              커서 상황을 분석하고 길을 찾는 사업전략가가 됐어요. 그래도 여전히 꿈을 꾸는 사람이고요.
+              제 신부는 다섯 살 때 빗소리가 좋다며 혼자<br />우산 쓰고 동네를 걷던 아이였대요.
             </p>
+            <div className="note__row note__row--left">
+              <div className="note__stamp-cell note__stamp-cell--left">
+                <img className="note__stamp note__stamp--left" src="/scene5/bride-child-cutout.png" width={130} height={324} alt="" />
+              </div>
+              <p className="note__text">글 쓰는 걸 좋아해서 수첩과 펜을 늘 들고 다녔고요. 그랬던 아이는 커서 상황을 분석하고 길을 찾는 사업전략가가 됐어요. 여전히 꿈을 꾸는 사람이고요.</p>
+            </div>
           </div>
         </section>
         <section id="part2-groom" className="block story">
-          <div className="note note--right note--memo">
+          <div className="note note--left note--memo note--who-right note--w68">
             <img className="note__paper" src="/paper/note.png" alt="" />
             <img className="note__who" src="/character/otter-basic.png" width={240} height={194} alt="" />
             <img className="note__who note__who--inner" src="/character/rabbit-2.png" width={240} height={198} alt="" />
@@ -259,9 +310,7 @@ export default function Home() {
           </div>
           <div className="photo-paper photo-paper--right">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <div className="photo-paper__blank">
-              <span>신랑 웨딩 사진</span>
-            </div>
+            <img className="photo-paper__photo" src="/scene6/groom.jpg" width={688} height={900} alt="신랑 웨딩 사진" />
           </div>
           <div className="note note--left note--memo note--tuck">
             <img className="note__paper" src="/paper/note.png" alt="" />
@@ -277,14 +326,14 @@ export default function Home() {
         <section id="part2-bride" className="block story">
           <div className="photo-paper photo-paper--left">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <div className="photo-paper__blank">
-              <span>신부 웨딩 사진</span>
-            </div>
+            <img className="photo-paper__photo" src="/scene7/bride.jpg" width={769} height={1100} alt="신부 웨딩 사진" />
           </div>
-          <div className="note note--right note--memo note--tuck">
-            <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/otter-1.png" width={240} height={183} alt="" />
-            <p className="note__text">사실 저는 그때 연애 생각이 없었어요. 당분간 일에만 집중하자는 마음이었죠. 그런데 이 사람이 자꾸 제 주변을 맴돌더라고요.</p>
+          <div className="note-wrap note-wrap--right note-wrap--tuck note--w80">
+            <div className="note note--right note--memo">
+              <img className="note__paper" src="/paper/note.png" alt="" />
+              <p className="note__text">사실 저는 그때 연애 생각이 없었어요. 당분간 일에만 집중하자는 마음이었죠. 그런데 이 사람이 자꾸 제 주변을 맴돌더라고요.</p>
+            </div>
+            <img className="note__who note-wrap__who" src="/character/otter-1.png" width={240} height={183} alt="" />
           </div>
           <div className="note note--right note--memo note--indent note--who-left">
             <img className="note__paper" src="/paper/note.png" alt="" />
@@ -293,16 +342,16 @@ export default function Home() {
           </div>
         </section>
         <section id="part3" className="block story">
-          <div className="photo-paper photo-paper--center">
+          <div className="photo-paper photo-paper--center photo-paper--wide">
             <img className="note__paper" src="/paper/note.png" alt="" />
-            <div className="photo-paper__blank">
-              <span>함께 있는 컷</span>
-            </div>
+            <img className="photo-paper__photo" src="/scene8/couple.jpg" width={1100} height={733} alt="이산하와 송시야" />
           </div>
-          <div className="note note--right note--memo note--tuck note--indent">
-            <img className="note__paper" src="/paper/note.png" alt="" />
-            <img className="note__who" src="/character/otter-3.png" width={223} height={240} alt="" />
-            <p className="note__text">어른이 되고는 꿈을 꾸지 않던 제가, 이 사람을 만나 다시 꿈꾸게 됐어요. 사랑도 많아졌고요.</p>
+          <div className="note-wrap note-wrap--right note-wrap--tuck note--indent">
+            <div className="note note--right note--memo">
+              <img className="note__paper" src="/paper/note.png" alt="" />
+              <p className="note__text">어른이 되고는 꿈을 꾸지 않던 제가, 이 사람을 만나 다시 꿈꾸게 됐어요. 사랑도 많아졌고요.</p>
+            </div>
+            <img className="note__who note-wrap__who" src="/character/otter-3.png" width={223} height={240} alt="" />
           </div>
           <div className="note note--left note--memo">
             <img className="note__paper" src="/paper/note.png" alt="" />
