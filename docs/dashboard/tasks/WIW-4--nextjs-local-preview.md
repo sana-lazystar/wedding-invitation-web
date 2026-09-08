@@ -192,3 +192,5 @@ related: []
 2026-09-08 22:59:45 · develop · d9da28e · Scene11~13 종이 머리를 장미 봉인으로(디자인 논의 T119). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-08 23:14:00 · develop · 5e6d460 · 마음 전하는 곳 실제 계좌번호 · 복사는 숫자만(디자인 논의 T120). `src/app/page.tsx`.
+
+2026-09-08 23:14:20 · develop · b24e250 · globals.css 재생성(T120 조립본 주석 반영). `src/app/globals.css`.
