@@ -12,7 +12,7 @@ export const THEME_COLOR = "#F3ECDF";
 // OG_IMAGE는 주소를 붙여넣었을 때의 미리보기용입니다. 카카오가 800×400으로 자르므로 처음부터 2:1로 두 사람이 다 들어가게 잘라 둡니다.
 // SHARE_IMAGE는 카카오톡 공유 메시지(피드 템플릿)용입니다. 세로로 크게 뜨도록 3:4이고, 카카오가 얼굴 기준으로 다시 자르지 않도록 두 사람을 가운데에 두고 미리 잘라 둡니다
 export const OG_IMAGE = { url: "/og/share.jpg", width: 1600, height: 800, alt: "이산하와 송시야" };
-export const SHARE_IMAGE = { url: "/og/share-tall.jpg", width: 1200, height: 1600, alt: "이산하와 송시야" };
+export const SHARE_IMAGE = { url: "/og/share-tall.jpeg", width: 2595, height: 3460, alt: "이산하와 송시야" }; // 파일 이름을 바꿀 때 이 줄도 같이 고칩니다. 경로가 어긋나면 카드에 그림이 통째로 빠집니다(T148)
 
 export const VENUE = {
   name: "더채플앳청담 3층 커티지홀",
