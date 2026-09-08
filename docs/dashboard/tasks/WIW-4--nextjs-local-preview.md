@@ -178,3 +178,5 @@ related: []
 2026-09-08 21:25:41 · develop · 1be2247 · Scene11 오시는 길 · Scene12 하객 안내 · Scene13 마음 전하는 곳(디자인 논의 T110). `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-08 21:33:19 · develop · 2b5340c · Scene11~13 종이 한 장 구성(디자인 논의 T111). `src/app/page.tsx` `src/app/globals.css`.
+
+2026-09-08 22:33:16 · develop · 4d42596 · Scene11~13 테이프 제거 · 카카오맵 SDK · 화환 문단 얇게 · 부모님 성함(디자인 논의 T112). `src/app/page.tsx` `src/app/layout.tsx` `src/app/globals.css`.
