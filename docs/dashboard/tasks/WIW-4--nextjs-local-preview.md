@@ -188,3 +188,5 @@ related: []
 2026-09-08 22:50:20 · develop · 618403b · 사진첩 제목 고운바탕 400 · 짙은 갈색 · 가운데(디자인 논의 T117). `src/app/globals.css`.
 
 2026-09-08 22:55:47 · develop · 11e5323 · 사진첩 제목 18px · 700(디자인 논의 T118). `src/app/globals.css`.
+
+2026-09-08 22:59:45 · develop · d9da28e · Scene11~13 종이 머리를 장미 봉인으로(디자인 논의 T119). `src/app/page.tsx` `src/app/globals.css`.
