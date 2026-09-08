@@ -1439,6 +1439,17 @@ jira:
 - T70과 같은 배정으로 바꿔 끼웠다. `src/app/favicon.ico`(← favicon.ico) · `icon1~4.png`(← favicon 16 · 32 · 96, android 192) · `apple-icon.png`(← apple-icon 180), `public/android-icon-*`(36 · 48 · 72 · 96 · 144 · 192) · `ms-icon-*`(70 · 144 · 150 · 310). 열여섯 파일. 생성기의 `manifest.json`("App", 흰색)과 `browserconfig.xml`(흰 타일색)은 쓰지 않고 우리 `manifest.ts` · `browserconfig.xml`(크림색)을 그대로 둔다. 생성기가 준 `<link>` 목록은 Next.js 파일 규약이 같은 것을 만들어 따로 넣지 않는다(apple-touch-icon 여러 크기 대신 180 하나, iOS는 이것으로 충분).
 - 확인: 열여섯 파일 크기 · 그림(장미 인장, 크림 바탕)을 한 줄로 늘어놓아 봄. dev 서버 `<head>`에 favicon.ico · icon 16 · 32 · 96 · 192 · apple-touch-icon 180 · manifest가 새 해시로 붙음.
 
+### 2026-09-09 01:00:01 이전 · 이산하 (T137)
+
+- 페이지가 열렸을 때 음악이 자동재생되게 하고 싶다. 어떻게 하는 것이 좋은가. 끄는 단추도 어딘가 있어야 할 것 같으니 추천해 달라.
+- (답을 듣고) 음원 `빌립보서 2장 2절.mp3`를 주며 A(열 때 시도 · 막히면 첫 동작에서 시작)로 하자.
+
+### 2026-09-09 01:00:01 · Claude (T137)
+
+- 판단. iOS Safari · Chrome · 카카오톡 인앱 모두 사용자 동작 전의 소리 있는 자동재생을 막는다(무음 영상만 예외). 스크롤도 손을 떼는 순간(touchend)이 동작으로 인정되므로 첫 터치 · 스크롤 · 탭에서 시작하면 열자마자 나오는 것처럼 보인다. A(열 때 시도 → 막히면 첫 동작) · B(진입 장면을 "봉투를 눌러 열기"로 바꿔 그 탭에 묶기) 중 A를 권했고 이산하가 A를 골랐다. 끄는 단추는 오른쪽 위 작은 종이 스티커(음표)로, 떠 있는 메뉴 안은 매번 열어야 해서 뺐다.
+- 구현. `<audio loop preload="none">`(`public/audio/bgm.mp3`, 2.4MB · 2분 26초 · 128kbps. 원본은 `docs/design/audio/`, git 제외). 열 때 `play()`를 한 번 시도하고, 거부되면 미리 받아 두고(`preload = auto` · `load()`) `pointerdown` · `touchend` · `keydown`(capture) 첫 번째에서 재생한다. 페이드인 1.2초(iOS는 volume을 못 바꿔 건너뜀). 스티커(`.bgm`, 36px 둥근 종이, 오른쪽 위 14px + 안전 영역)는 재생 중 음표가 살랑이고(1.6초, 움직임 줄이기면 없음) 끄면 옅어지며 빗금. 진입 장면 동안은 숨긴다(`.is-intro .bgm`). 끄면 `sessionStorage`에 적어 그 방문 동안 다시 켜지지 않는다. 스티커 자체의 누름은 첫 동작 감지에서 제외한다(토글이 맡음). 화면을 벗어나면 멈추고 돌아오면 다시 켠다(visibilitychange).
+- 확인(WebKit 390, Next.js · 조립본): 진입 장면 동안 스티커 불투명도 0 · 자동재생 거부(paused), 첫 탭 뒤 재생 · `is-on`, 스티커 누르면 멈춤 · sessionStorage "off", 다시 누르면 재생(페이드 중 volume 0.66). 음원 206(부분 요청). 오류 0. tsc · eslint 통과.
+
 ## 결정
 
 행의 내용은 불변입니다. 상태 칸만 갱신할 수 있습니다.
