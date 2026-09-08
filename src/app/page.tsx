@@ -443,11 +443,14 @@ export default function Home() {
             </span>
           </button>
         </section>
-        {/* 사진첩(와이어프레임 11쪽 아래 절반, 디자인 논의 T103~T105). 가운데 제목 "사진첩", 나무 틀 안에 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 흐린 사진 위에 나머지 장수 */}
+        {/* 사진첩(와이어프레임 11쪽 아래 절반, 디자인 논의 T103~T106). 나무 틀 위에 세운 표지판 "사진첩", 틀 안에 3×3 타일. 앞 8장은 미리보기, 9번째 타일은 흐린 사진 위에 나머지 장수 */}
         <section id="gallery" className="block story gallery">
-          <h2 className="gallery__title">사진첩</h2>
           <div className="gallery__board">
             <img className="gallery__frame" src="/scene10/wood-frame.png" width={800} height={800} alt="" />
+            <div className="gallery__sign">
+              <img className="gallery__sign-wood" src="/scene10/wood-sign.png" width={480} height={128} alt="" />
+              <h2 className="gallery__title">사진첩</h2>
+            </div>
             <ul className="gallery__grid" id="galleryGrid">
               {gallery.slice(0, GALLERY_PREVIEW + 1).map((item, i) => {
                 const more = i === GALLERY_PREVIEW;
