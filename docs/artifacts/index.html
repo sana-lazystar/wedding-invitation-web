@@ -168,9 +168,9 @@
     /* 컷아웃 스티커(T61 · T62 · T67 · T87 · T88 · T89). 메모지는 글 높이만큼이고 컷아웃은 종이 밖으로 걸칩니다. 신랑(Scene4): 글은 정한 줄바꿈(<br>) 넉 줄이 폭을 다 써서 컷아웃(198×160. T89 1.5배 뒤 T91에 2/3)이 설 옆 열이 없으므로, 글 아래 높이 0인 셀(.note__stamp-cell)에 윗변을 맞춰 붙입니다. 종이와는 아래 여백 20px만 겹치고 약 150px가 종이 밖입니다. 그래서 그 메모지에 아래 여백 116px을 주어 다음 장면 사진에 닿지 않게 합니다(T89 · T91). 신부(Scene5): 앞 두 줄은 전체 폭, 나머지 글은 셀 옆 열에서 흐르고(네모 영역, T62), 컷아웃(98×243. T89 1.5배 뒤 T93에 3/4)은 셀 왼쪽 아래에 붙어 왼쪽 18px · 아래 101px 삐져나옵니다(종이 아래 81px). 셀 높이 150 + 101 = 251 = 243 + 8이라 컷아웃 윗변이 칸 윗변 8px 아래에 있고, 글이 셀보다 길면 셀이 칸 아래에 붙어 컷아웃이 내려갑니다. 전에는 float라 메모지가 컷아웃 높이까지 커졌습니다(T61 · T62 · T67) */
     .note__row { position: relative; display: flex; align-items: flex-end; justify-content: flex-end; }
     .note__row .note__text { flex: 1 1 auto; min-width: 0; }
-    .note__stamp-cell { flex: none; position: relative; width: 142px; height: 0; }   /* 컷아웃 198×160 중 안에 드는 폭(오른쪽 56px은 밖) */
+    .note__stamp-cell { flex: none; position: relative; width: 138px; height: 0; }   /* 컷아웃 198×160 중 안에 드는 폭(오른쪽 60px은 밖) */
     .note__stamp {
-      position: absolute; right: -56px; top: -10px; z-index: 1; height: 160px; width: auto; max-width: none;   /* T89의 240에서 2/3인 160(T91), 오른쪽 걸침 30(T91) → 40(T92) → 56px, 위 10 → 0(T92) → -10px(T95). 마지막 줄 오른쪽 끝 위로 10px 올라오지만 그 자리는 그림의 왼쪽 위 모서리라 투명합니다. max-width: none은 Next.js 기본 스타일(img max-width 100%)이 셀 폭에 가로를 잡아 눌리는 것을 막습니다(T90) */
+      position: absolute; right: -60px; top: -20px; z-index: 1; height: 160px; width: auto; max-width: none;   /* T89의 240에서 2/3인 160(T91), 오른쪽 걸침 30(T91) → 40(T92) → 56(T95) → 60px(T98), 위 10 → 0(T92) → -10(T95) → -20px(T97). 마지막 줄 오른쪽 끝 위로 20px 올라오지만 그 자리는 그림의 왼쪽 위 모서리라 투명합니다. max-width: none은 Next.js 기본 스타일(img max-width 100%)이 셀 폭에 가로를 잡아 눌리는 것을 막습니다(T90) */
       transform: rotate(5deg);
       filter: drop-shadow(0 1px 1px rgba(70, 48, 24, 0.22)) drop-shadow(0 6px 10px rgba(70, 48, 24, 0.28));
     }
