@@ -148,3 +148,5 @@ related: []
 2026-09-08 17:07:08 · develop · 9fb07d6 · 컷아웃 가로 눌림 해제 · Scene7 신부 사진 교체(디자인 논의 T90). `public/scene7/bride.jpg` `src/app/page.tsx` `src/app/globals.css`.
 
 2026-09-08 17:08:23 · develop · 834b4c1 · 신랑 컷아웃 2/3 · 오른쪽 10px(디자인 논의 T91). `src/app/globals.css`.
+
+2026-09-08 17:10:15 · develop · f961dcc · 신랑 컷아웃 오른쪽·위 10px · 신부 컷아웃 3/4(디자인 논의 T92 · T93). `src/app/globals.css`.
