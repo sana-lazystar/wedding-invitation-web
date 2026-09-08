@@ -103,6 +103,7 @@ export default function Home() {
   const openerRef = useRef<HTMLElement | null>(null);   // 덮개를 연 버튼. 닫으면 초점을 돌립니다
   const [viewer, setViewer] = useState<Viewer | null>(null);
   const mapRef = useRef<HTMLDivElement>(null);
+  const closingRef = useRef<HTMLElement>(null);
   const [mapReady, setMapReady] = useState(false);
   const [mapFailed, setMapFailed] = useState(false);   // SDK를 못 실었거나(401 = 앱에 도메인 미등록 · 카카오맵 API 미활성) 10초 안에 안 그려짐
   const [toast, setToast] = useState("");
@@ -281,6 +282,49 @@ export default function Home() {
       clearTimeout(timer);
       script.removeEventListener("load", init);
       script.removeEventListener("error", fail);
+    };
+  }, []);
+
+  // 마지막 장면(디자인 논의 T121). 진입 장면의 계산을 구획 크기로 다시 해 --c-* 변수에 넣고, 구획이 60% 보이면 한 번 재생합니다(is-closing). 움직임 줄이기면 편지지만
+  useEffect(() => {
+    const closing = closingRef.current;
+    if (!closing) return;
+    const apply = () => {
+      const w = closing.clientWidth;
+      const h = closing.clientHeight;
+      const envW = Math.min(w, 430) * 0.92;
+      const z1 = envW / 600;
+      const envTop = h / 2 - 200 * z1;
+      const ty0 = envTop + 14 * z1;
+      const s0 = (envW * 0.92) / w;
+      const ty1 = ty0 - h * s0 * 0.35;
+      const drop1 = Math.max(0, ty1 + h * s0 - 70 - envTop);
+      closing.style.setProperty("--c-z1", String(z1));
+      closing.style.setProperty("--c-drop1", `${drop1 / z1}px`);
+      closing.style.setProperty("--c-ty0", `${ty0}px`);
+      closing.style.setProperty("--c-ty1", `${ty1}px`);
+      closing.style.setProperty("--c-s0", String(s0));
+    };
+    apply();
+    window.addEventListener("resize", apply);
+    let observer: IntersectionObserver | null = null;
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              closing.classList.add("is-closing");
+              observer?.disconnect();
+            }
+          });
+        },
+        { threshold: 0.6 },
+      );
+      observer.observe(closing);
+    }
+    return () => {
+      window.removeEventListener("resize", apply);
+      observer?.disconnect();
     };
   }, []);
 
@@ -724,7 +768,57 @@ export default function Home() {
             </div>
           </div>
         </section>
-        {/* 15쪽(마지막, Scene14)부터 여기 아래에 이어 붙입니다. 10쪽 초대(Scene9)는 Scene8과 Scene10 사이 */}
+        {/* 14. 마지막(와이어프레임 15쪽, 디자인 논의 T121). 화면 전체 편지지에 "고마움을 봉해 보냅니다." 구획이 보이면 진입 장면을 거꾸로: 편지지가 줄어 봉투에 담기고 뚜껑이 닫힙니다. 봉투 그림은 진입 장면 것 */}
+        <section id="closing" className="block block--fixed closing" ref={closingRef}>
+          <div className="closing__letter">
+            <img className="note__paper" src="/paper/note.png" alt="" />
+            <div className="closing__text">
+              <p className="closing__big">고마움을 봉해 보냅니다.</p>
+              <p className="closing__date">2026. 10. 09</p>
+            </div>
+          </div>
+          <div className="closing__layer closing__layer--back" aria-hidden="true">
+            <div className="closing__zoom">
+              <div className="intro__env">
+                <img className="intro__back" src="/intro/envelope-back.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div className="closing__layer closing__layer--front" aria-hidden="true">
+            <div className="closing__zoom">
+              <div className="intro__env">
+                <div className="closing__floor" />
+                <div className="intro__table" />
+                <img className="intro__front" src="/intro/envelope-front.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div className="closing__layer closing__layer--cast" aria-hidden="true">
+            <div className="closing__zoom">
+              <div className="intro__env">
+                <div className="intro__cast">
+                  <img className="intro__cast-img" src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--seal" src="/intro/rose-seal.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--soft" src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__cast-img intro__cast-img--seal intro__cast-img--soft" src="/intro/rose-seal.png" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="closing__layer closing__layer--flap" aria-hidden="true">
+            <div className="closing__zoom">
+              <div className="intro__env">
+                <div className="intro__flap">
+                  <img className="intro__seal-back" src="/intro/rose-seal-back.png" alt="" />
+                  <img className="intro__flap-in" src="/intro/envelope-flap-inside.png" alt="" />
+                  <img className="intro__flap-out" src="/intro/envelope-flap.png" alt="" />
+                  <img className="intro__seal" src="/intro/rose-seal.png" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* 10쪽 초대(Scene9)는 Scene8과 Scene10 사이에 끼웁니다 */}
       </div>
 
       {/* 만화 뷰어(디자인 논의 T102). 그림은 같은 파일이라 다시 내려받지 않습니다 */}
@@ -794,7 +888,6 @@ export default function Home() {
       <nav className="fab" ref={fabRef} data-open={menuOpen ? "true" : "false"} aria-label="바로 가기">
         <div className="fab__menu" id="fabMenu" hidden={!menuOpen} onClick={() => setMenuOpen(false)}>
           <a href="#directions">오시는 길</a>
-          <a href="#contact">연락처</a>
           <a href="#gift">마음 전하는 곳</a>
         </div>
         <button
