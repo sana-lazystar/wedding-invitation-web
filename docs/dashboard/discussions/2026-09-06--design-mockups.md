@@ -1193,6 +1193,16 @@ jira:
 - 확인(WebKit 390, Next.js): 테이프 0, 지도 자리표시 문구, 둘째 문단 300 · 14px, 성함 넷, 가로 스크롤 없음, 오류 0. tsc · eslint 통과. 카카오맵 실제 표시는 키가 없어 확인하지 못했다.
 - 되물음: 카카오 JavaScript 키. developers.kakao.com → 내 애플리케이션 → 앱 만들기 → 앱 키의 "JavaScript 키"를 주고, 같은 앱의 플랫폼 → Web에 `http://localhost:3000`과 `https://wedding-invitation-web-mu.vercel.app`을 등록. 로컬은 `.env.local`(git 제외)에 `NEXT_PUBLIC_KAKAO_MAP_KEY=키`, 배포는 Vercel 프로젝트 환경 변수.
 
+### 2026-09-08 22:37:08 이전 · 이산하 (T113)
+
+- 카카오맵 JavaScript 키를 줬다.
+
+### 2026-09-08 22:37:08 · Claude (T113)
+
+- 키는 `.env.local`(git 제외)에 `NEXT_PUBLIC_KAKAO_MAP_KEY`로 넣었다. 문서 · 커밋에는 적지 않는다. 배포에는 Vercel 프로젝트 환경 변수에 같은 이름으로 넣어야 한다(이산하).
+- 로컬 확인: `next dev`가 키를 바로 읽어 SDK 스크립트 태그는 붙었으나 `dapi.kakao.com/v2/maps/sdk.js`가 401을 돌려줬다. 앱의 Web 플랫폼에 `http://localhost:3000`이 없거나, Kakao Developers의 "카카오맵" API가 켜져 있지 않은 것이다(둘 다 콘솔에서 이산하가 한다). 그래서 지도는 아직 못 봤다.
+- 그 사이 SDK가 안 실릴 때의 처리: 스크립트 error 또는 10초 안에 못 그리면 자리표시가 "지도를 불러오지 못했습니다. 아래 지도 앱으로 열어 주세요"로 바뀐다(전에는 "불러오는 중"에 머묾). 확인(WebKit): 401 뒤 문구 바뀜, 오류는 401 하나. tsc · eslint 통과.
+
 ## 결정
 
 행의 내용은 불변입니다. 상태 칸만 갱신할 수 있습니다.
