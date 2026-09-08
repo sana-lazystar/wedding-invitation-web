@@ -168,3 +168,5 @@ related: []
 2026-09-08 20:54:45 · develop · b4e7e13 · Scene10 추신·만화 뷰어 · 사진첩 나무 틀 · Swiper 뷰어(디자인 논의 T102~T104). `src/app/page.tsx` `src/app/globals.css` `src/content/gallery.json` `package.json` `package-lock.json` `public/scene10/` `public/paper/tape.png` `public/gallery/`.
 
 2026-09-08 21:03:13 · develop · b6d63f4 · 사진첩 제목 · 뷰어 장수 아래 · 위 가운데 테이프 · 반투명 화살표 단추(디자인 논의 T105). `src/app/page.tsx` `src/app/globals.css` `public/paper/tape-short.png`.
+
+2026-09-08 21:09:00 · develop · a8487a0 · 사진첩 나무 표지판 · 뷰어 인화지 테두리 4px(디자인 논의 T106). `src/app/page.tsx` `src/app/globals.css` `public/scene10/wood-sign.png`.
