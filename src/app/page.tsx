@@ -102,6 +102,7 @@ export default function Home() {
   const galleryViewerRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);   // 덮개를 연 버튼. 닫으면 초점을 돌립니다
   const [viewer, setViewer] = useState<Viewer | null>(null);
+  const [galleryIndex, setGalleryIndex] = useState(0);   // 뷰어 장수 표시(슬라이드 밖 고정, 디자인 논의 T122)
   const mapRef = useRef<HTMLDivElement>(null);
   const closingRef = useRef<HTMLElement>(null);
   const [mapReady, setMapReady] = useState(false);
@@ -322,8 +323,32 @@ export default function Home() {
       );
       observer.observe(closing);
     }
+    // 다시 열고 닫기(디자인 논의 T122). 첫 재생이 끝나면(뚜껑 닫힘 애니메이션 끝) is-settled를 붙이고, 그 뒤 구획이 보이는 동안 스크롤을 올리면 is-open, 내리면 뗍니다. 페이지 끝의 튕김(iOS)은 scrollY가 최대를 넘었다 돌아오는 것이라 최대 근처 값은 무시합니다
+    let settled = false;
+    let lastY = window.scrollY;
+    const onAnimationEnd = (e: AnimationEvent) => {
+      if (e.animationName !== "closing-flap") return;
+      settled = true;
+      closing.classList.add("is-settled");
+    };
+    const onScroll = () => {
+      const y = window.scrollY;
+      const dy = y - lastY;
+      lastY = y;
+      if (!settled) return;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (y < 0 || y >= max - 1) return;
+      const r = closing.getBoundingClientRect();
+      if (r.bottom <= 0 || r.top >= window.innerHeight) return;
+      if (dy < -1) closing.classList.add("is-open");
+      else if (dy > 1) closing.classList.remove("is-open");
+    };
+    closing.addEventListener("animationend", onAnimationEnd);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("resize", apply);
+      window.removeEventListener("scroll", onScroll);
+      closing.removeEventListener("animationend", onAnimationEnd);
       observer?.disconnect();
     };
   }, []);
@@ -636,6 +661,7 @@ export default function Home() {
                     aria-label={more ? `사진 ${i + 1}부터 크게 보기. ${galleryMore}장 더` : `사진 ${i + 1} 크게 보기`}
                     onClick={(e) => {
                       openerRef.current = e.currentTarget;
+                      setGalleryIndex(i);
                       setViewer({ kind: "gallery", index: i });
                     }}
                   >
@@ -840,7 +866,7 @@ export default function Home() {
         </button>
       </div>
 
-      {/* 사진 뷰어(디자인 논의 T103~T105). 타일을 누르면 그 사진부터 Swiper로 봅니다. Swiper는 열려 있을 때만 그려 initialSlide가 먹게 합니다. 사진은 흰 테두리 인화지에 위 가운데 테이프, 장수는 사진 아래 손글씨(슬라이드마다), 화살표는 우리 단추(×와 같은 크기, 반투명)를 Swiper에 넘깁니다 */}
+      {/* 사진 뷰어(디자인 논의 T103~T105). 타일을 누르면 그 사진부터 Swiper로 봅니다. Swiper는 열려 있을 때만 그려 initialSlide가 먹게 합니다. 사진은 흰 테두리 인화지에 위 가운데 테이프, 장수는 아래 가운데 고정(T122), 화살표는 우리 단추(×와 같은 크기, 반투명)를 Swiper에 넘깁니다 */}
       <div className="gallery-viewer" id="galleryViewer" ref={galleryViewerRef} role="dialog" aria-modal="true" aria-label="사진첩" hidden={viewer?.kind !== "gallery"}>
         {viewer?.kind === "gallery" && (
           <Swiper
@@ -850,6 +876,7 @@ export default function Home() {
             keyboard={{ enabled: true }}
             initialSlide={viewer.index}
             lazyPreloadPrevNext={2}
+            onSlideChange={(s) => setGalleryIndex(s.activeIndex)}
           >
             {gallery.map((item, i) => (
               <SwiperSlide key={item.id}>
@@ -857,13 +884,13 @@ export default function Home() {
                   <img className="gallery-viewer__img" src={`/gallery/${item.id}.jpg`} width={item.width} height={item.height} alt={`사진 ${i + 1}`} loading="lazy" />
                   <img className="gallery-viewer__tape" src="/paper/tape-short.png" alt="" />
                 </figure>
-                <p className="gallery-viewer__count">
-                  {i + 1} / {gallery.length}
-                </p>
               </SwiperSlide>
             ))}
           </Swiper>
         )}
+        <div className="gallery-viewer__count" aria-live="polite">
+          {galleryIndex + 1} / {gallery.length}
+        </div>
         <button type="button" className="gallery-viewer__nav gallery-viewer__nav--prev" id="galleryPrev" aria-label="이전 사진">
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
             <path d="M13.5 5.5L8 11l5.5 5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
