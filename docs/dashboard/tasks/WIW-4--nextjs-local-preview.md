@@ -158,3 +158,5 @@ related: []
 2026-09-08 17:16:19 · develop · 1d84360 · 신랑 컷아웃 위 10 · 오른쪽 4px 더(디자인 논의 T97 · T98). `src/app/globals.css`.
 
 2026-09-08 17:17:20 · develop · ed8e61e · Scene8 첫 메모지 아이콘 4px 아래(디자인 논의 T99). `src/app/globals.css`.
+
+2026-09-08 20:06:42 · develop · ef8cf60 · 컷아웃 vw 비례 · 커버 높이는 첫 터치에 잠금(디자인 논의 T100). `src/app/page.tsx` `src/app/globals.css`.
