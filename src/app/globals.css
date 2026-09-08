@@ -380,36 +380,34 @@ body {
 .closing.is-settled.is-open .closing__layer--cast { z-index: 27; transition-delay: 0.74s; }
 @media (prefers-reduced-motion: reduce) { .closing .closing__layer { display: none; } .closing.is-closing .closing__letter { animation: none; } }
 
-/* 떠 있는 바로 가기(T132 · T134. 전에는 오크색 동그라미에 ≡ 아이콘이라 흔한 앱 단추 같았음). 닫힌 상태는 테이프로 붙인 작은 쪽지에 손글씨 "메뉴"입니다. 누르면 그 자리에 쪽지 한 장(테이프 없이, -1°)이 8px 내려앉으며 나타나고 네 항목(오시는 길 · 사진첩 · 마음 전하는 곳 · 공유하기)과 "닫기" 줄이 한 장에 고운바탕으로, 사이는 가는 줄입니다. 작은 쪽지는 열린 동안 숨깁니다(T134. T132에는 열린 쪽지에도 테이프 · 오크색 점 · 손글씨가 있어 난잡했음). 종이 결 · 그늘은 이야기 구간 쪽지와 같은 부품입니다. 공유하기는 Next.js에서 카카오톡 공유(JS SDK)이고 조립본은 기기 공유 창 · 주소 복사만 합니다 */
+/* 떠 있는 바로 가기(T132 · T134 · T135. 전에는 오크색 동그라미에 ≡ 아이콘이라 흔한 앱 단추 같았음). 테이프로 붙인 작은 쪽지에 손글씨 "메뉴"가 있고 열리면 "닫기"로 바뀝니다. 누르면 그 위로(사이 14px) 쪽지 한 장(테이프 없이, 기울이지 않음)이 8px 내려앉으며 나타나고 네 항목(오시는 길 · 사진첩 · 마음 전하는 곳 · 공유하기)이 고운바탕으로, 사이는 가는 줄입니다(T134에 열린 쪽지에도 있던 테이프 · 오크색 점 · 손글씨를 뺌. T134의 닫기 줄과 작은 쪽지 숨김은 T135에 되돌림). 종이 결 · 그늘은 이야기 구간 쪽지와 같은 부품입니다. 공유하기는 Next.js에서 카카오톡 공유(JS SDK)이고 조립본은 기기 공유 창 · 주소 복사만 합니다 */
 .fab {
   position: fixed;
   right: max(20px, calc((100vw - 430px) / 2 + 20px));
   bottom: calc(20px + env(safe-area-inset-bottom));
   z-index: 10;
-  display: flex; flex-direction: column; align-items: flex-end;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 14px;
   font-family: var(--font-name);
 }
 .fab__menu {
-  position: relative; width: 172px; display: flex; flex-direction: column; padding: 4px 0 0;
+  position: relative; width: 172px; display: flex; flex-direction: column; padding: 4px 0;
   border-radius: 3px; box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
-  transform: rotate(-1deg); animation: fab-in 0.25s ease-out both;
+  animation: fab-in 0.25s ease-out both;
 }
 .fab__menu[hidden] { display: none; }   /* 조립본에는 Tailwind 초기화가 없어 hidden 속성을 display: flex가 이깁니다 */
-@keyframes fab-in { from { opacity: 0; transform: translateY(8px) rotate(-1deg); } to { opacity: 1; transform: translateY(0) rotate(-1deg); } }
+@keyframes fab-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .fab__menu { animation: none; } }
 .fab__item {
   position: relative; display: flex; align-items: center; height: 46px; margin: 0 16px; padding: 0 4px;
   border: 0; background: none; font: inherit; font-size: 15px; letter-spacing: 0.02em; line-height: 1; color: var(--ink); text-decoration: none; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
 .fab__item + .fab__item { border-top: 1px solid var(--rule); }
-.fab__close { justify-content: center; height: 40px; font-size: 13px; color: var(--muted); }
 .fab__item:focus-visible { outline: 2px solid var(--oak); outline-offset: -2px; border-radius: 3px; }
 .fab__button {
   position: relative; width: 64px; height: 46px; margin: 0; padding: 8px 0 0; border: 0; border-radius: 3px; background: none;
   box-shadow: 0 1px 2px rgba(70, 48, 24, 0.16), 0 12px 20px -10px rgba(70, 48, 24, 0.35);
   transform: rotate(2deg); font-family: var(--font-memo); font-size: 18px; line-height: 1; color: var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
-.fab[data-open="true"] .fab__button { display: none; }
 .fab__button:active { transform: rotate(2deg) scale(0.97); }
 .fab__button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .fab__tape { position: absolute; top: -7px; left: 50%; width: 44px; height: auto; transform: translateX(-50%) rotate(4deg); pointer-events: none; }
